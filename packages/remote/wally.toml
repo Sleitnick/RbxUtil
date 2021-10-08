@@ -1,0 +1,12 @@
+[package]
+name = "sleitnick/remote"
+description = "Remote classes"
+version = "1.0.0"
+license = "MIT"
+authors = ["Stephen Leitnick"]
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]
+Ser = "sleitnick/ser@1.0.0"
+Signal = "sleitnick/signal@1.0.0"
