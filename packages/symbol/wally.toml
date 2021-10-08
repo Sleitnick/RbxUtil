@@ -1,0 +1,8 @@
+[package]
+name = "sleitnick/symbol"
+description = "Symbol class"
+version = "1.0.0"
+license = "MIT"
+authors = ["Stephen Leitnick"]
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
