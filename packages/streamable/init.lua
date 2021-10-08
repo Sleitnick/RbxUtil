@@ -4,6 +4,6 @@
 
 
 return {
-    Streamable = require(script.Streamable);
-    StreamableUtil = require(script.StreamableUtil);
+	Streamable = require(script.Streamable);
+	StreamableUtil = require(script.StreamableUtil);
 }
