@@ -35,7 +35,7 @@ type Args = {
 }
 
 
-local Option = require(script.Parent.Packages.Option)
+local Option = require(script.Parent.Option)
 
 local Ser = {}
 

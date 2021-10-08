@@ -18,8 +18,8 @@ type StreamableWithInstance = {
 	[any]: any,
 }
 
-local Janitor = require(script.Parent.Janitor)
-local Signal = require(script.Parent.Signal)
+local Janitor = require(script.Parent.Parent.Janitor)
+local Signal = require(script.Parent.Parent.Signal)
 
 
 local Streamable = {}

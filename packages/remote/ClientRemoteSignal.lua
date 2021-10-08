@@ -16,7 +16,7 @@
 
 local IS_SERVER = game:GetService("RunService"):IsServer()
 
-local Ser = require(script.Parent.Parent.Packages.Ser)
+local Ser = require(script.Parent.Parent.Ser)
 
 --------------------------------------------------------------
 -- Connection

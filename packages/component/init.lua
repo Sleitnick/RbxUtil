@@ -79,10 +79,10 @@
 --]]
 
 
-local Janitor = require(script.Parent.Packages.Janitor)
-local Signal = require(script.Parent.Packages.Signal)
-local Promise = require(script.Parent.Packages.Promise)
-local TableUtil = require(script.Parent.Packages.TableUtil)
+local Janitor = require(script.Parent.Janitor)
+local Signal = require(script.Parent.Signal)
+local Promise = require(script.Parent.Promise)
+local TableUtil = require(script.Parent.TableUtil)
 
 local CollectionService = game:GetService("CollectionService")
 local RunService = game:GetService("RunService")

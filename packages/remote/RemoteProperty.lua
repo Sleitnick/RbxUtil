@@ -16,7 +16,7 @@
 --]]
 
 
-local Signal = require(script.Parent.Parent.Packages.Signal)
+local Signal = require(script.Parent.Parent.Signal)
 
 local IS_SERVER = game:GetService("RunService"):IsServer()
 

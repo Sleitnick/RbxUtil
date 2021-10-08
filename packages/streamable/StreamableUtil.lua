@@ -24,7 +24,7 @@
 --]]
 
 
-local Janitor = require(script.Parent.Parent.Packages.Janitor)
+local Janitor = require(script.Parent.Parent.Janitor)
 local _Streamable = require(script.Parent.Streamable)
 
 

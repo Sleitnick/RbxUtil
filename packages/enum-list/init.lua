@@ -22,7 +22,7 @@
 
 type EnumNames = {string}
 
-local Symbol = require(script.Parent.Packages.Symbol)
+local Symbol = require(script.Parent.Symbol)
 
 local EnumList = {}
 

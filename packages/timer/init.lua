@@ -36,7 +36,7 @@
 type CallbackFunc = () -> nil
 type TimeFunc = () -> number
 
-local Signal = require(script.Parent.Packages.Signal)
+local Signal = require(script.Parent.Signal)
 
 local RunService = game:GetService("RunService")
 
