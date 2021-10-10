@@ -16,3 +16,5 @@ jobs:
           node-version: "14"
       - run: npm i -g moonwave@latest
       - run: moonwave build --publish --code packages
+        env:
+          GITHUB_TOKEN: ${{ SECRETS.GITHUB_TOKEN }}
