@@ -232,7 +232,7 @@ end
 	@within TableUtil
 	@function Map
 	@param tbl table
-	@param predicate (key: any, value: any, tbl: table) -> newValue: any
+	@param predicate (value: any, key: any, tbl: table) -> newValue: any
 	@return table
 
 	Performs a map operation against the given table, which can be used to
@@ -263,7 +263,7 @@ end
 	@within TableUtil
 	@function Filter
 	@param tbl table
-	@param predicate (key: any, value: any, tbl: table) -> keep: boolean
+	@param predicate (value: any, key: any, tbl: table) -> keep: boolean
 	@return table
 
 	Performs a filter operation against the given table, which can be used to

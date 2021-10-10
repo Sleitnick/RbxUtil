@@ -95,6 +95,10 @@ local ATTRIBUTE_ID_NAME = "ComponentServerId"
 -- Components will only work on instances parented under these descendants:
 local DESCENDANT_WHITELIST = {workspace, Players}
 
+--[=[
+	@class Component
+	Extends functionality of an instance based on the CollectionService tags of the instance.
+]=]
 local Component = {}
 Component.__index = Component
 
@@ -114,11 +118,23 @@ local function IsDescendantOfWhitelist(instance)
 end
 
 
+--[=[
+	@param tag string
+	@return Component?
+	Returns a component previously constructed by the tag. Returns
+	`nil` if no component is found.
+]=]
 function Component.FromTag(tag)
 	return componentsByTag[tag]
 end
 
 
+--[=[
+	@param tag string
+	@param observer (component: Component, janitor: Jantior) -> nil
+	@return Janitor
+	Observes the existence of a component.
+]=]
 function Component.ObserveFromTag(tag, observer)
 	local janitor = Janitor.new()
 	local observeJanitor = Janitor.new()
@@ -145,19 +161,29 @@ function Component.ObserveFromTag(tag, observer)
 end
 
 
-function Component.Auto(folder)
+--[=[
+	@param parent Instance
+	@return RBXScriptConnection
+
+	Scans all descendants of `parent` and loads any ModuleScripts found, then
+	calls `Component.new` on those loaded modules.
+
+	Each component module class must have a `Tag` string property to map it
+	to the proper tag.
+]=]
+function Component.Auto(parent)
 	local function Setup(moduleScript)
 		local m = require(moduleScript)
 		assert(type(m) == "table", "Expected table for component")
 		assert(type(m.Tag) == "string", "Expected .Tag property")
 		Component.new(m.Tag, m, m.RenderPriority, m.RequiredComponents)
 	end
-	for _,v in ipairs(folder:GetDescendants()) do
+	for _,v in ipairs(parent:GetDescendants()) do
 		if v:IsA("ModuleScript") then
 			Setup(v)
 		end
 	end
-	folder.DescendantAdded:Connect(function(v)
+	return parent.DescendantAdded:Connect(function(v)
 		if v:IsA("ModuleScript") then
 			Setup(v)
 		end
@@ -165,6 +191,15 @@ function Component.Auto(folder)
 end
 
 
+--[=[
+	@param tag string
+	@param class table
+	@param renderPriority number?
+	@param requireComponents {string}?
+	@return Component
+
+	Constructs a new component class.
+]=]
 function Component.new(tag, class, renderPriority, requireComponents)
 
 	assert(type(tag) == "string", "Argument #1 (tag) should be a string; got " .. type(tag))
@@ -405,16 +440,30 @@ function Component:_instanceRemoved(instance)
 end
 
 
+--[=[
+	@return {componentInstances}
+	Returns an array of all component instances.
+]=]
 function Component:GetAll()
 	return TableUtil.CopyShallow(self._objects)
 end
 
 
+--[=[
+	@param instance Instance
+	@return component?
+	Returns a component instance from the given Roblox instance.
+]=]
 function Component:GetFromInstance(instance)
 	return self._instancesToObjects[instance]
 end
 
 
+--[=[
+	@param id string
+	@return component?
+	Returns a component instance from the given ID.
+]=]
 function Component:GetFromID(id)
 	for _,v in ipairs(self._objects) do
 		if v._id == id then
@@ -425,11 +474,22 @@ function Component:GetFromID(id)
 end
 
 
-function Component:Filter(filterFunc)
-	return TableUtil.Filter(self._objects, filterFunc)
+--[=[
+	@param filterFn (value: componentInstance) -> keep: boolean
+	@return {componentInstance}
+	Filters out all component instances based on the `filterFn` function predicate.
+]=]
+function Component:Filter(filterFn)
+	return TableUtil.Filter(self._objects, filterFn)
 end
 
 
+--[=[
+	@param instance Instance
+	@param timeout number?
+	@return Promise<componentInstance>
+	Waits for a component instance to exist on the given Roblox instance.
+]=]
 function Component:WaitFor(instance, timeout)
 	local isName = (type(instance) == "string")
 	local function IsInstanceValid(obj)
@@ -437,19 +497,25 @@ function Component:WaitFor(instance, timeout)
 	end
 	for _,obj in ipairs(self._objects) do
 		if IsInstanceValid(obj) then
-			return Promise.Resolve(obj)
+			return Promise.resolve(obj)
 		end
 	end
 	local lastObj = nil
-	return Promise.FromEvent(self.Added, function(obj)
+	return Promise.fromEvent(self.Added, function(obj)
 		lastObj = obj
 		return IsInstanceValid(obj)
-	end):Then(function()
+	end):andThen(function()
 		return lastObj
-	end):Timeout(timeout or DEFAULT_WAIT_FOR_TIMEOUT)
+	end):timeout(timeout or DEFAULT_WAIT_FOR_TIMEOUT)
 end
 
 
+--[=[
+	@param instance Instance
+	@param observer (component: componentInstance, janitor: Janitor) -> nil
+	@return Janitor
+	Observes the existence of a component instance on the given Roblox instance.
+]=]
 function Component:Observe(instance, observer)
 	local janitor = Janitor.new()
 	local observeJanitor = Janitor.new()
@@ -474,6 +540,9 @@ function Component:Observe(instance, observer)
 end
 
 
+--[=[
+	Destroys the component class.
+]=]
 function Component:Destroy()
 	self._janitor:Destroy()
 end
