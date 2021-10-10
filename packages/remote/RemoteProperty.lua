@@ -34,16 +34,34 @@ local typeClassMap = {
 	["nil"] = "ObjectValue";
 }
 
-
+--[=[
+	@class RemoteProperty
+	@server
+	Replicates a value to all clients.
+	```lua
+	local RemoteProperty = require(packages.Remote).RemoteProperty
+	```
+]=]
 local RemoteProperty = {}
 RemoteProperty.__index = RemoteProperty
 
 
+--[=[
+	@param object any
+	@return boolean
+	Returns `true` if `object` is a RemoteProperty.
+]=]
 function RemoteProperty.Is(object)
 	return type(object) == "table" and getmetatable(object) == RemoteProperty
 end
 
 
+--[=[
+	@param value any
+	@param overrideClass string?
+	@return RemoteProperty
+	Constructs a new RemoteProperty.
+]=]
 function RemoteProperty.new(value, overrideClass)
 
 	assert(IS_SERVER, "RemoteProperty can only be created on the server")
@@ -83,6 +101,12 @@ function RemoteProperty.new(value, overrideClass)
 end
 
 
+--[=[
+	Forces the value to be replicated. This is only necessary when
+	the value is a table, because the RemoteProperty does not
+	know when changes to the table are made. Other value types
+	are automatically replicated when changed.
+]=]
 function RemoteProperty:Replicate()
 	if self._isTable then
 		self:Set(self._value)
@@ -90,6 +114,10 @@ function RemoteProperty:Replicate()
 end
 
 
+--[=[
+	@param value any
+	Sets the value. This value is immediately replicated to all clients.
+]=]
 function RemoteProperty:Set(value)
 	if self._isTable then
 		self._object:FireAllClients(value)
@@ -101,11 +129,18 @@ function RemoteProperty:Set(value)
 end
 
 
+--[=[
+	@return value: any
+	Returns the current value held by the RemoteProperty.
+]=]
 function RemoteProperty:Get()
 	return self._value
 end
 
 
+--[=[
+	Destroys the RemoteProperty.
+]=]
 function RemoteProperty:Destroy()
 	self._object:Destroy()
 end

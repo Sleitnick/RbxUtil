@@ -37,8 +37,39 @@ type Args = {
 
 local Option = require(script.Parent.Option)
 
+--[=[
+	@class Ser
+
+	Library for serializing and deserializing data.
+
+	See the `Classes` property for information on extending the use
+	of the Ser library to include other classes.
+
+]=]
 local Ser = {}
 
+--[=[
+	@within Ser
+	@prop Classes table
+
+	A dictionary of classes along with a Serialize and Deserialize function.
+	For instance, the default class added is the Option class, which looks
+	like the following:
+
+	```lua
+	Ser.Classes.Option = {
+		Serialize = function(opt) return opt:Serialize() end;
+		Deserialize = Option.Deserialize;
+	}
+	```
+
+	Add to this table in order to extend what classes are automatically
+	serialized/deserialized.
+
+	The Ser library checks every object's `ClassName` field in both serialized
+	and deserialized data in order to map it to the correct function within
+	the Classes table.
+]=]
 Ser.Classes = {
 	Option = {
 		Serialize = function(opt) return opt:Serialize() end;
@@ -47,6 +78,11 @@ Ser.Classes = {
 }
 
 
+--[=[
+	@param ... any
+	@return args: table
+	Serializes the arguments and returns the serialized values in a table.
+]=]
 function Ser.SerializeArgs(...: any): Args
 	local args = table.pack(...)
 	for i,arg in ipairs(args) do
@@ -61,12 +97,22 @@ function Ser.SerializeArgs(...: any): Args
 end
 
 
+--[=[
+	@param ... any
+	@return args: ...any
+	Serializes the arguments and returns the serialized values.
+]=]
 function Ser.SerializeArgsAndUnpack(...: any): ...any
 	local args = Ser.SerializeArgs(...)
 	return table.unpack(args, 1, args.n)
 end
 
 
+--[=[
+	@param ... any
+	@return args: table
+	Deserializes the arguments and returns the deserialized values in a table.
+]=]
 function Ser.DeserializeArgs(...: any): Args
 	local args = table.pack(...)
 	for i,arg in ipairs(args) do
@@ -81,12 +127,22 @@ function Ser.DeserializeArgs(...: any): Args
 end
 
 
+--[=[
+	@param ... any
+	@return args: table
+	Deserializes the arguments and returns the deserialized values.
+]=]
 function Ser.DeserializeArgsAndUnpack(...: any): ...any
 	local args = Ser.DeserializeArgs(...)
 	return table.unpack(args, 1, args.n)
 end
 
 
+--[=[
+	@param value any
+	@return any
+	Serializes the given value.
+]=]
 function Ser.Serialize(value: any): any
 	if type(value) == "table" then
 		local ser = Ser.Classes[value.ClassName]
@@ -98,6 +154,11 @@ function Ser.Serialize(value: any): any
 end
 
 
+--[=[
+	@param value any
+	@return any
+	Deserializes the given value.
+]=]
 function Ser.Deserialize(value: any): any
 	if type(value) == "table" then
 		local ser = Ser.Classes[value.ClassName]
@@ -109,6 +170,11 @@ function Ser.Deserialize(value: any): any
 end
 
 
+--[=[
+	@param value any
+	@return any
+	Unpacks the arguments returned by either `SerializeArgs` or `DeserializeArgs`.
+]=]
 function Ser.UnpackArgs(args: Args): ...any
 	return table.unpack(args, 1, args.n)
 end

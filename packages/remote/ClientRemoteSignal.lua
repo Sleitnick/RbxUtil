@@ -64,15 +64,30 @@ Connection.Destroy = Connection.Disconnect
 -- ------------------------------------------------------------
 -- ClientRemoteSignal
 
+--[=[
+	@class ClientRemoteSignal
+	@client
+	Represents a RemoteSignal on the client.
+]=]
 local ClientRemoteSignal = {}
 ClientRemoteSignal.__index = ClientRemoteSignal
 
 
+--[=[
+	@param object any
+	@return boolean
+	Returns `true` if `object` is a ClientRemoteSignal.
+]=]
 function ClientRemoteSignal.Is(object)
 	return type(object) == "table" and getmetatable(object) == ClientRemoteSignal
 end
 
 
+--[=[
+	@param remoteEvent RemoteEvent
+	@return ClientRemoteSignal
+	Constructs a ClientRemoteSignal which wraps a RemoteEvent instance.
+]=]
 function ClientRemoteSignal.new(remoteEvent)
 	assert(not IS_SERVER, "ClientRemoteSignal can only be created on the client")
 	assert(typeof(remoteEvent) == "Instance", "Argument #1 (RemoteEvent) expected Instance; got " .. typeof(remoteEvent))
@@ -85,16 +100,31 @@ function ClientRemoteSignal.new(remoteEvent)
 end
 
 
+--[=[
+	@param ... any
+	Fires the given arguments to the server.
+]=]
 function ClientRemoteSignal:Fire(...)
 	self._remote:FireServer(Ser.SerializeArgsAndUnpack(...))
 end
 
 
+--[=[
+	@yields
+	@return ...: any
+	Waits for the server to fire the signal and returns all the arguments passed.
+]=]
 function ClientRemoteSignal:Wait()
 	return Ser.DeserializeArgsAndUnpack(self._remote.OnClientEvent:Wait())
 end
 
 
+--[=[
+	@param handler (...: any) -> nil
+	@return Connection
+	Connects a function to the signal. The function will be called anytime the
+	server fires the signal.
+]=]
 function ClientRemoteSignal:Connect(handler)
 	local connection = Connection.new(self, self._remote.OnClientEvent:Connect(function(...)
 		handler(Ser.DeserializeArgsAndUnpack(...))
@@ -104,6 +134,9 @@ function ClientRemoteSignal:Connect(handler)
 end
 
 
+--[=[
+	Destroys the ClientRemoteSignal.
+]=]
 function ClientRemoteSignal:Destroy()
 	for _,c in ipairs(self._connections) do
 		if c._conn then

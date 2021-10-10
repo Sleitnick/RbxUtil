@@ -32,9 +32,40 @@ type Streamables = {_Streamable.Streamable}
 type CompoundHandler = (Streamables, any) -> nil
 
 
+--[=[
+	@class StreamableUtil
+	A utility library for the Streamable class.
+
+	```lua
+	local StreamableUtil = require(packages.Streamable).StreamableUtil
+	```
+]=]
 local StreamableUtil = {}
 
 
+--[=[
+	@param streamables {Streamable}
+	@param handler ({[child: string]: Instance}, janitor: Janitor) -> nil
+	@return Janitor
+
+	Creates a compound streamable around all the given streamables. The compound
+	streamable's observer handler will be fired once _all_ the given streamables
+	are in existence, and will be cleaned up when _any_ of the streamables
+	disappear.
+
+	```lua
+	local s1 = Streamable.new(workspace, "Part1")
+	local s2 = Streamable.new(workspace, "Part2")
+
+	local compoundJanitor = StreamableUtil.Compound({S1 = s1, S2 = s2}, function(streamables, janitor)
+		local part1 = streamables.S1.Instance
+		local part2 = streamables.S2.Instance
+		janitor:Add(function()
+			print("Cleanup")
+		end)
+	end)
+	```
+]=]
 function StreamableUtil.Compound(streamables: Streamables, handler: CompoundHandler)
 	local compoundJanitor = Janitor.new()
 	local observeAllJanitor = Janitor.new()

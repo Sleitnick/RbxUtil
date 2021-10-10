@@ -22,6 +22,22 @@ local Janitor = require(script.Parent.Parent.Janitor)
 local Signal = require(script.Parent.Parent.Signal)
 
 
+--[=[
+	@within Streamable
+	@prop Instance Instance
+	The current instance represented by the Streamable. If this
+	is being observed, it will always exist. If not currently
+	being observed, this will be `nil`.
+]=]
+
+--[=[
+	@class Streamable
+	Watches the existence of an instance within a specific parent.
+
+	```lua
+	local Streamable = require(packages.Streamable).Streamable
+	```
+]=]
 local Streamable = {}
 Streamable.__index = Streamable
 
@@ -72,6 +88,16 @@ function Streamable.new(parent: Instance, childName: string)
 end
 
 
+--[=[
+	@param handler (instance: Instance, janitor: Janitor) -> nil
+	@return Connection
+
+	Observes the instance. The handler is called anytime the
+	instance comes into existence, and the janitor given is
+	cleaned up when the instance goes away.
+
+	To stop observing, disconnect the returned connection.
+]=]
 function Streamable:Observe(handler)
 	if self.Instance then
 		task.spawn(handler, self.Instance, self._shownJanitor)
@@ -80,6 +106,9 @@ function Streamable:Observe(handler)
 end
 
 
+--[=[
+	Destroys the Streamable.
+]=]
 function Streamable:Destroy()
 	self._janitor:Destroy()
 end

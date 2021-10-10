@@ -17,18 +17,35 @@
 local IS_SERVER = game:GetService("RunService"):IsServer()
 local Signal = require(script.Parent.Parent.Signal)
 
+--[=[
+	@class ClientRemoteProperty
+	@client
+	Represents a RemoteProperty on the client.
+]=]
 local ClientRemoteProperty = {}
 ClientRemoteProperty.__index = ClientRemoteProperty
 
 
-function ClientRemoteProperty.new(object)
+--[=[
+	@within ClientRemoteProperty
+	@prop Changed Signal
+	A signal which is fired anytime the value changes. The new value is passed to the connected functions.
+]=]
+
+--[=[
+	@param instance Instance
+	@return ClientRemoteProperty
+	Constructs a ClientRemoteProperty that wraps around the instance created by
+	the server-side RemoteProperty.
+]=]
+function ClientRemoteProperty.new(instance)
 
 	assert(not IS_SERVER, "ClientRemoteProperty can only be created on the client")
 
 	local self = setmetatable({
-		_object = object;
+		_instance = instance;
 		_value = nil;
-		_isTable = object:IsA("RemoteEvent");
+		_isTable = instance:IsA("RemoteEvent");
 	}, ClientRemoteProperty)
 
 	local function SetValue(v)
@@ -37,15 +54,15 @@ function ClientRemoteProperty.new(object)
 
 	if self._isTable then
 		self.Changed = Signal.new()
-		self._change = object.OnClientEvent:Connect(function(tbl)
+		self._change = instance.OnClientEvent:Connect(function(tbl)
 			SetValue(tbl)
 			self.Changed:Fire(tbl)
 		end)
-		SetValue(object.TableRequest:InvokeServer())
+		SetValue(instance.TableRequest:InvokeServer())
 	else
-		SetValue(object.Value)
-		self.Changed = object.Changed
-		self._change = object.Changed:Connect(SetValue)
+		SetValue(instance.Value)
+		self.Changed = instance.Changed
+		self._change = instance.Changed:Connect(SetValue)
 	end
 
 	return self
@@ -53,11 +70,18 @@ function ClientRemoteProperty.new(object)
 end
 
 
+--[=[
+	@return value: any
+	Returns the value currently held.
+]=]
 function ClientRemoteProperty:Get()
 	return self._value
 end
 
 
+--[=[
+	Destroys the ClientRemoteProperty
+]=]
 function ClientRemoteProperty:Destroy()
 	self._change:Disconnect()
 	if self._isTable then

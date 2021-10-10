@@ -104,6 +104,17 @@ setmetatable(Connection, {
 	@class Signal
 
 	Signals allow events to be dispatched and handled.
+
+	For example:
+	```lua
+	local signal = Signal.new()
+
+	signal:Connect(function(msg)
+		print("Got message:", msg)
+	end)
+
+	signal:Fire("Hello world!")
+	```
 ]=]
 local Signal = {}
 Signal.__index = Signal

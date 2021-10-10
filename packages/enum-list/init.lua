@@ -8,14 +8,14 @@
 
 	enumList = EnumList.new(name: string, enums: string[])
 
-	enumList:Is(item)
+	enumList:BelongsTo(item): boolean
 
 
 	Example:
 
 		direction = EnumList.new("Direction", {"Up", "Down", "Left", "Right"})
 		leftDir = direction.Left
-		print("IsDirection", direction:Is(leftDir))
+		print("IsDirection", direction:BelongsTo(leftDir))
 
 --]]
 
@@ -24,9 +24,30 @@ type EnumNames = {string}
 
 local Symbol = require(script.Parent.Symbol)
 
+--[=[
+	@class EnumList
+	Defines a new Enum.
+]=]
 local EnumList = {}
 
 
+--[=[
+	@param name string
+	@param enums {string}
+	@return EnumList
+	Constructs a new EnumList.
+
+	```lua
+	local directions = EnumList.new("Directions", {
+		"Up",
+		"Down",
+		"Left",
+		"Right",
+	})
+
+	local direction = directions.Up
+	```
+]=]
 function EnumList.new(name: string, enums: EnumNames)
 	local scope = Symbol.new(name, nil)
 	local enumItems: {[string]: Symbol.Symbol} = {}
@@ -53,7 +74,12 @@ function EnumList.new(name: string, enums: EnumNames)
 end
 
 
-function EnumList:Is(obj: any): boolean
+--[=[
+	@param obj any
+	@return boolean
+	Returns `true` if `obj` belongs to the EnumList.
+]=]
+function EnumList:BelongsTo(obj: any): boolean
 	return Symbol.IsInScope(obj, self._scope)
 end
 

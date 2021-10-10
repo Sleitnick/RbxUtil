@@ -1,11 +1,11 @@
 [package]
 name = "sleitnick/enum-list"
 description = "Enum List class"
-version = "1.0.1"
+version = "1.0.2"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
 [dependencies]
-Symbol = "sleitnick/symbol@1.0.0"
+Symbol = "sleitnick/symbol@1.0.1"

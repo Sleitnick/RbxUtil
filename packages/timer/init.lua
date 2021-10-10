@@ -41,11 +41,60 @@ local Signal = require(script.Parent.Signal)
 local RunService = game:GetService("RunService")
 
 
+--[=[
+	@class Timer
+
+	The Timer class allows for code to run periodically at specified intervals.
+
+	```lua
+	local timer = Timer.new(2)
+	timer.Tick:Connect(function()
+		print("Tock")
+	end)
+	timer:Start()
+	```
+]=]
 local Timer = {}
 Timer.__index = Timer
 
 
-function Timer.new(interval: number, janitor)
+--[=[
+	@within Timer
+	@prop Interval number
+	Interval at which the `Tick` event fires.
+]=]
+--[=[
+	@within Timer
+	@prop UpdateSignal RBXScriptSignal | Signal
+	The signal which updates the timer internally.
+]=]
+--[=[
+	@within Timer
+	@prop TimeFunction () -> number
+	The function which gets the current time.
+]=]
+--[=[
+	@within Timer
+	@prop AllowDrift boolean
+	Flag which indicates if the timer is allowed to drift. This
+	is set to `true` by default. This flag must be set before
+	calling `Start` or `StartNow`. This flag should only be set
+	to `false` if it is necessary for drift to be eliminated.
+]=]
+--[=[
+	@within Timer
+	@prop Tick RBXScriptSignal | Signal
+	The event which is fired every time the timer hits its interval.
+]=]
+
+
+--[=[
+	@param interval number
+	@return Timer
+	
+	Creates a new timer.
+]=]
+function Timer.new(interval: number)
 	assert(type(interval) == "number", "Argument #1 to Timer.new must be a number; got " .. type(interval))
 	assert(interval >= 0, "Argument #1 to Timer.new must be greater or equal to 0; got " .. tostring(interval))
 	local self = setmetatable({}, Timer)
@@ -55,13 +104,20 @@ function Timer.new(interval: number, janitor)
 	self.TimeFunction = time
 	self.AllowDrift = true
 	self.Tick = Signal.new()
-	if janitor then
-		janitor:Add(self)
-	end
 	return self
 end
 
 
+--[=[
+	@param interval number
+	@param callback () -> nil
+	@param startNow boolean?
+	@param updateSignal RBXScriptSignal? | Signal?
+	@param timeFunc () -> number
+	@return RBXScriptConnection
+
+	Creates a simplified timer which just fires off a callback function at the given interval.
+]=]
 function Timer.Simple(interval: number, callback: CallbackFunc, startNow: boolean?, updateSignal: RBXScriptSignal?, timeFunc: TimeFunc?)
 	local update = updateSignal or RunService.Heartbeat
 	local t = timeFunc or time
@@ -79,6 +135,12 @@ function Timer.Simple(interval: number, callback: CallbackFunc, startNow: boolea
 end
 
 
+--[=[
+	@param obj any
+	@return boolean
+
+	Returns `true` if the given object is a Timer.
+]=]
 function Timer.Is(obj: any): boolean
 	return type(obj) == "table" and getmetatable(obj) == Timer
 end
@@ -114,6 +176,9 @@ function Timer:_startTimerNoDrift()
 end
 
 
+--[=[
+	Starts the timer.
+]=]
 function Timer:Start()
 	if self._runHandle then return end
 	if self.AllowDrift then
@@ -124,6 +189,9 @@ function Timer:Start()
 end
 
 
+--[=[
+	Starts the timer and fires off the Tick event immediately.
+]=]
 function Timer:StartNow()
 	if self._runHandle then return end
 	self.Tick:Fire()
@@ -131,6 +199,9 @@ function Timer:StartNow()
 end
 
 
+--[=[
+	Stops the timer.
+]=]
 function Timer:Stop()
 	if not self._runHandle then return end
 	self._runHandle:Disconnect()
@@ -138,6 +209,9 @@ function Timer:Stop()
 end
 
 
+--[=[
+	Destroys the timer.
+]=]
 function Timer:Destroy()
 	self.Tick:Destroy()
 	self:Stop()
