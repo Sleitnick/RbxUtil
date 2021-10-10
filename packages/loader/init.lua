@@ -13,13 +13,23 @@
 
 --]]
 
+--[=[
+	@class Loader
 
+	The Loader module will require all children or descendant ModuleScripts.
+]=]
 local Loader = {}
 
 type Module = {}
 type Modules = {Module}
 
 
+--[=[
+	Requires all children ModuleScripts
+
+	@param parent Instance -- Parent to scan
+	@return {ModuleScript} -- Array of required modules
+]=]
 function Loader.LoadChildren(parent: Instance): Modules
 	local modules: Modules = {}
 	for _,child in ipairs(parent:GetChildren()) do
@@ -32,6 +42,12 @@ function Loader.LoadChildren(parent: Instance): Modules
 end
 
 
+--[=[
+	Requires all descendant ModuleScripts
+
+	@param parent Instance -- Parent to scan
+	@return {ModuleScript} -- Array of required modules
+]=]
 function Loader.LoadDescendants(parent: Instance): Modules
 	local modules: Modules = {}
 	for _,descendant in ipairs(parent:GetDescendants()) do

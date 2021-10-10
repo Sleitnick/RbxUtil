@@ -1,4 +1,4 @@
---------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
 --               Batched Yield-Safe Signal Implementation                     --
 -- This is a Signal class which has effectively identical behavior to a       --
 -- normal RBXScriptSignal, with the only difference being a couple extra      --
@@ -22,7 +22,7 @@
 -- Authors:                                                                   --
 --   stravant - July 31st, 2021 - Created the file.                           --
 --   sleitnick - August 3rd, 2021 - Modified for Knit.                        --
---------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
 
 -- The currently idle thread to run the next handler on
 local freeRunnerThread = nil
@@ -100,26 +100,44 @@ setmetatable(Connection, {
 })
 
 
--- Signal class
+--[=[
+	@class Signal
+
+	Signals allow events to be dispatched and handled.
+]=]
 local Signal = {}
 Signal.__index = Signal
 
+--[=[
+	Constructs a new Signal
 
-function Signal.new(janitor)
+	@return Signal
+]=]
+function Signal.new()
 	local self = setmetatable({
 		_handlerListHead = false,
 		_proxyHandler = nil,
 	}, Signal)
-	if janitor then
-		janitor:Add(self)
-	end
 	return self
 end
 
 
-function Signal.Wrap(rbxScriptSignal, janitor)
+--[=[
+	Constructs a new Signal that wraps around an RBXScriptSignal.
+
+	@param rbxScriptSignal RBXScriptSignal -- Existing RBXScriptSignal to wrap
+	@return Signal
+
+	For example:
+	```lua
+	local signal = Signal.Wrap(workspace.ChildAdded)
+	signal:Connect(function(part) print(part.Name .. " added") end)
+	Instance.new("Part").Parent = workspace
+	```
+]=]
+function Signal.Wrap(rbxScriptSignal)
 	assert(typeof(rbxScriptSignal) == "RBXScriptSignal", "Argument #1 to Signal.Wrap must be a RBXScriptSignal; got " .. typeof(rbxScriptSignal))
-	local signal = Signal.new(janitor)
+	local signal = Signal.new()
 	signal._proxyHandler = rbxScriptSignal:Connect(function(...)
 		signal:Fire(...)
 	end)
@@ -127,11 +145,23 @@ function Signal.Wrap(rbxScriptSignal, janitor)
 end
 
 
+--[=[
+	Checks if the given object is a Signal.
+
+	@param obj any -- Object to check
+	@return boolean -- `true` if the object is a Signal.
+]=]
 function Signal.Is(obj)
 	return type(obj) == "table" and getmetatable(obj) == Signal
 end
 
 
+--[=[
+	Connects a function to the signal, which will be called anytime the signal is fired.
+
+	@param fn (...any) -> nil
+	@return Connection -- A connection to the signal
+]=]
 function Signal:Connect(fn)
 	local connection = Connection.new(self, fn)
 	if self._handlerListHead then
@@ -157,6 +187,9 @@ end
 
 -- Disconnect all handlers. Since we use a linked list it suffices to clear the
 -- reference to the head handler.
+--[=[
+	Disconnects all connections from the signal.
+]=]
 function Signal:DisconnectAll()
 	self._handlerListHead = false
 end
@@ -166,6 +199,11 @@ end
 -- coRunnerThread, and any time the resulting thread yielded without returning
 -- to us, that means that it yielded to the Roblox scheduler and has been taken
 -- over by Roblox scheduling, meaning we have to make a new coroutine runner.
+--[=[
+	Fire the signal, which will call all of the connected functions with the given arguments.
+
+	@param ... any -- Arguments to pass to the connected functions
+]=]
 function Signal:Fire(...)
 	local item = self._handlerListHead
 	while item do
@@ -180,8 +218,11 @@ function Signal:Fire(...)
 end
 
 
--- Similar to Signal:Fire(...), but uses deferred. It does not reuse the
--- same coroutine like Fire.
+--[=[
+	Same as `Fire`, but uses `task.defer` internally & doesn't take advantage of thread reuse.
+
+	@param ... any -- Arguments to pass to the connected functions
+]=]
 function Signal:FireDeferred(...)
 	local item = self._handlerListHead
 	while item do
@@ -191,8 +232,12 @@ function Signal:FireDeferred(...)
 end
 
 
--- Implement Signal:Wait() in terms of a temporary connection using
--- a Signal:Connect() which disconnects itself.
+--[=[
+	Yields the current thread until the signal is fired, and returns the arguments fired from the signal.
+
+	@return ... any -- Arguments passed to the signal when it was fired
+	@yields
+]=]
 function Signal:Wait()
 	local waitingCoroutine = coroutine.running()
 	local cn
@@ -204,6 +249,9 @@ function Signal:Wait()
 end
 
 
+--[=[
+	Cleans up the signal.
+]=]
 function Signal:Destroy()
 	self:DisconnectAll()
 	local proxyHandler = rawget(self, "_proxyHandler")

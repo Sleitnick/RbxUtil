@@ -16,10 +16,22 @@
 
 local CLASSNAME = "Symbol"
 
+
+--[=[
+	@class Symbol
+
+	Symbols are simply unique objects that can be used as unique identifiers.
+]=]
 local Symbol = {}
 Symbol.__index = Symbol
 
+--[=[
+	Constructs a new symbol
 
+	@param id any -- Identifier for the symbol (usually a string)
+	@param scope Symbol? -- Optional symbol scope
+	@return boolean -- Returns `true` if the `obj` parameter is a Symbol
+]=]
 function Symbol.new(id: any, scope: any)
 	assert(id ~= nil, "Symbol ID cannot be nil")
 	if scope ~= nil then
@@ -34,11 +46,25 @@ function Symbol.new(id: any, scope: any)
 end
 
 
+--[=[
+	Checks if the given object is a Symbol.
+
+	@param obj any -- Anything
+	@return boolean -- Returns `true` if the `obj` parameter is a Symbol
+]=]
 function Symbol.Is(obj: any): boolean
 	return type(obj) == "table" and getmetatable(obj) == Symbol
 end
 
 
+
+--[=[
+	Checks if the given object is a Symbol an in the given scope
+
+	@param obj any -- Anything
+	@param scope Symbol -- Scope symbol
+	@return boolean -- Returns `true` if the `obj` parameter is a Symbol and in the given scope
+]=]
 function Symbol.IsInScope(obj: any, scope: Symbol): boolean
 	return Symbol.Is(obj) and obj._scope == scope
 end
