@@ -15,8 +15,11 @@ jobs:
         with:
           node-version: "14"
       - run: npm i -g moonwave@latest
-      - run: |
+      - name: Publish
+        run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          git config --global user.email "support+actions@github.com"
+          git config --global user.name "github-actions-bot"
           moonwave build --publish --code packages
         env:
-          GITHUB_TOKEN: ${{ SECRETS.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
