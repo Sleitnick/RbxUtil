@@ -28,7 +28,7 @@ def build():
 			match_display_name = display_name_pattern.match(name)
 			display_name = pretty_display_name(match_display_name.group(1))
 			dependency = f"{display_name} = \"{name}@{version}\""
-			readme.append(f"| [{display_name}](https://sleitnick.github.io/RbxUtil/api/{display_name}) | {dependency} | {description} |")
+			readme.append(f"| [{display_name}](https://sleitnick.github.io/RbxUtil/api/{display_name}) | `{dependency}` | {description} |")
 
 	with open("README.md", "w") as readme_file:
 		readme_file.write("\n".join(readme))
