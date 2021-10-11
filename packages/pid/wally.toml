@@ -1,6 +1,6 @@
 [package]
 name = "sleitnick/pid"
-description = "Requires all modules within a given instance"
+description = "PID Controller class"
 version = "1.0.0"
 license = "MIT"
 authors = ["Stephen Leitnick"]
