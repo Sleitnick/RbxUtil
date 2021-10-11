@@ -7,7 +7,7 @@
 | [Input](https://sleitnick.github.io/RbxUtil/api/Input) | `Input = "sleitnick/input@1.0.1"` | Basic input classes |
 | [Loader](https://sleitnick.github.io/RbxUtil/api/Loader) | `Loader = "sleitnick/loader@1.0.2"` | Requires all modules within a given instance |
 | [Option](https://sleitnick.github.io/RbxUtil/api/Option) | `Option = "sleitnick/option@1.0.1"` | Represent optional values in Lua |
-| [Pid](https://sleitnick.github.io/RbxUtil/api/Pid) | `Pid = "sleitnick/pid@1.0.1"` | PID Controller class |
+| [PID](https://sleitnick.github.io/RbxUtil/api/PID) | `PID = "sleitnick/pid@1.0.1"` | PID Controller class |
 | [Remote](https://sleitnick.github.io/RbxUtil/api/Remote) | `Remote = "sleitnick/remote@1.0.3"` | Remote classes |
 | [Ser](https://sleitnick.github.io/RbxUtil/api/Ser) | `Ser = "sleitnick/ser@1.0.2"` | Ser class for serialization and deserialization |
 | [Signal](https://sleitnick.github.io/RbxUtil/api/Signal) | `Signal = "sleitnick/signal@1.0.1"` | Signal class |

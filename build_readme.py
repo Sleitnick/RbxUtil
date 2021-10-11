@@ -1,7 +1,13 @@
 from pathlib import Path
 import re
 
+force_name = {
+	"pid": "PID"
+}
+
 def pretty_display_name(str: str):
+	if str in force_name:
+		return force_name[str]
 	split = str.split("-")
 	split = list(map(lambda s: s[0:1].upper() + s[1:], split))
 	return "".join(split)
