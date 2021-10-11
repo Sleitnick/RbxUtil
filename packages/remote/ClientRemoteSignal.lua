@@ -68,6 +68,9 @@ Connection.Destroy = Connection.Disconnect
 	@class ClientRemoteSignal
 	@client
 	Represents a RemoteSignal on the client.
+	```lua
+	local ClientRemoteSignal = require(packages.Remote).ClientRemoteSignal
+	```
 ]=]
 local ClientRemoteSignal = {}
 ClientRemoteSignal.__index = ClientRemoteSignal

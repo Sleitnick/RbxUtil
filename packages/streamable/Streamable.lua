@@ -48,7 +48,7 @@ function Streamable.new(parent: Instance, childName: string)
 	setmetatable(self, Streamable)
 
 	self._janitor = Janitor.new()
-	self._shown = Signal.new(self._janitor)
+	self._shown = self._janitor:Add(Signal.new())
 	self._shownJanitor = Janitor.new()
 	self._janitor:Add(self._shownJanitor)
 

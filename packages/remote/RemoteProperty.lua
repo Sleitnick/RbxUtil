@@ -91,7 +91,7 @@ function RemoteProperty.new(value, overrideClass)
 		end
 		self.Changed = Signal.new()
 	else
-		self.Changed = self._object.Changed
+		self.Changed = Signal.Proxy(self._object.Changed)
 	end
 
 	self:Set(value)
@@ -143,6 +143,7 @@ end
 ]=]
 function RemoteProperty:Destroy()
 	self._object:Destroy()
+	self.Changed:Destroy()
 end
 
 

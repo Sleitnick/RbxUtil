@@ -226,8 +226,8 @@ function Component.new(tag, class, renderPriority, requireComponents)
 	self._lifecycle = false
 	self._nextId = 0
 
-	self.Added = Signal.new(self._janitor)
-	self.Removed = Signal.new(self._janitor)
+	self.Added = self._janitor:Add(Signal.new())
+	self.Removed = self._janitor:Add(Signal.new())
 
 	local observeJanitor = Janitor.new()
 	self._janitor:Add(observeJanitor)

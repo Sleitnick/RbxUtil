@@ -21,6 +21,9 @@ local Signal = require(script.Parent.Parent.Signal)
 	@class ClientRemoteProperty
 	@client
 	Represents a RemoteProperty on the client.
+	```lua
+	local ClientRemoteProperty = require(packages.Remote).ClientRemoteProperty
+	```
 ]=]
 local ClientRemoteProperty = {}
 ClientRemoteProperty.__index = ClientRemoteProperty
@@ -61,8 +64,8 @@ function ClientRemoteProperty.new(instance)
 		SetValue(instance.TableRequest:InvokeServer())
 	else
 		SetValue(instance.Value)
-		self.Changed = instance.Changed
-		self._change = instance.Changed:Connect(SetValue)
+		self.Changed = Signal.Proxy(instance.Changed)
+		self._change = self.Changed:Connect(SetValue)
 	end
 
 	return self
@@ -84,9 +87,7 @@ end
 ]=]
 function ClientRemoteProperty:Destroy()
 	self._change:Disconnect()
-	if self._isTable then
-		self.Changed:Destroy()
-	end
+	self.Changed:Destroy()
 end
 
 
