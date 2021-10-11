@@ -1,0 +1,8 @@
+[package]
+name = "sleitnick/pid"
+description = "Requires all modules within a given instance"
+version = "1.0.0"
+license = "MIT"
+authors = ["Stephen Leitnick"]
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
