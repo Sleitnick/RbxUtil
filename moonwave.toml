@@ -1,3 +1,14 @@
+[[classOrder]]
+classes = ["Signal", "TableUtil", "Component"]
+
+[[classOrder]]
+section = "Input"
+classes = ["Input", "PreferredInput", "Keyboard", "Mouse", "Touch"]
+
+[[classOrder]]
+section = "Remote"
+classes = ["Remote", "RemoteSignal", "RemoteProperty", "ClientRemoteSignal", "ClientRemoteProperty"]
+
 [home]
 enabled = true
 includeReadme = true
