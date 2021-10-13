@@ -2,3 +2,4 @@
 packages/*/Packages
 /build
 /Packages
+/test/Packages
