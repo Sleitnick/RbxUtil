@@ -1,13 +1,13 @@
 [package]
 name = "sleitnick/input"
 description = "Basic input classes"
-version = "1.0.1"
+version = "1.0.2"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
 [dependencies]
-Signal = "sleitnick/signal@1.0.1"
-EnumList = "sleitnick/enum-list@1.0.2"
-Janitor = "howmanysmall/janitor@1.13.12"
+Signal = "sleitnick/signal@^1.0"
+EnumList = "sleitnick/enum-list@^1.0"
+Janitor = "howmanysmall/janitor@^1.13"

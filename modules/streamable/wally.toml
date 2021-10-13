@@ -1,12 +1,12 @@
 [package]
 name = "sleitnick/streamable"
 description = "Streamable class and StreamableUtil"
-version = "1.0.5"
+version = "1.0.6"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
 [dependencies]
-Janitor = "howmanysmall/janitor@1.13.12"
-Signal = "sleitnick/signal@1.0.1"
+Janitor = "howmanysmall/janitor@^1.13"
+Signal = "sleitnick/signal@^1.0"

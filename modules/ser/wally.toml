@@ -1,11 +1,11 @@
 [package]
 name = "sleitnick/ser"
 description = "Ser class for serialization and deserialization"
-version = "1.0.2"
+version = "1.0.3"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
 [dependencies]
-Option = "sleitnick/option@1.0.1"
+Option = "sleitnick/option@^1.0"
