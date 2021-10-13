@@ -25,7 +25,7 @@ return function()
 			expect(function()
 				local _item = test.ABC
 			end).never.to.throw()
-			expect(test:Is(test.ABC)).to.equal(true)
+			expect(test:BelongsTo(test.ABC)).to.equal(true)
 		end)
 
 		it("should throw if trying to access non-existing item", function()

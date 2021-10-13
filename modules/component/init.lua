@@ -430,7 +430,7 @@ function Component:_instanceRemoved(instance)
 			self.Removed:Fire(obj)
 			obj:Destroy()
 			obj._destroyed = true
-			TableUtil.FastRemove(self._objects, i)
+			TableUtil.SwapRemove(self._objects, i)
 			break
 		end
 	end
@@ -445,7 +445,7 @@ end
 	Returns an array of all component instances.
 ]=]
 function Component:GetAll()
-	return TableUtil.CopyShallow(self._objects)
+	return TableUtil.Copy(self._objects)
 end
 
 
