@@ -104,8 +104,8 @@ end
 
 
 --[=[
-	@param value any
-	@return Option
+	@param value T
+	@return Option<T>
 
 	Creates an Option instance with the given value. Throws an error
 	if the given value is `nil`.
@@ -117,8 +117,8 @@ end
 
 
 --[=[
-	@param value any
-	@return Option
+	@param value T
+	@return Option<T> | Option<None>
 
 	Safely wraps the given value as an option. If the
 	value is `nil`, returns `Option.None`, otherwise
@@ -135,6 +135,7 @@ end
 
 --[=[
 	@param obj any
+	@return boolean
 	Returns `true` if `obj` is an Option.
 ]=]
 function Option.Is(obj)
@@ -414,6 +415,7 @@ end
 
 
 --[=[
+	@return string
 	Metamethod to transform the option into a string.
 	```lua
 	local optA = Option.Some(64)
@@ -432,6 +434,7 @@ end
 
 
 --[=[
+	@return boolean
 	Metamethod to check equality between two options. Returns `true` if both
 	options hold the same value _or_ both options are None.
 	```lua
