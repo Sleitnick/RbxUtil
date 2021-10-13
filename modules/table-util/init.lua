@@ -49,7 +49,7 @@ type IteratorFunc = (t: Table, k: any) -> (any, any)
 	Tables that only work specifically with arrays or dictionaries are marked as such in the documentation.
 
 	:::info Immutability
-	All functions (_except_ `FastRemove` and `FastRemoveFirstValue`) treat tables as immutable and will return
+	All functions (_except_ `SwapRemove` and `SwapRemoveFirstValue`) treat tables as immutable and will return
 	copies of the given table(s) with the operations performed on the copies.
 ]=]
 local TableUtil = {}
