@@ -13,12 +13,12 @@ def pretty_display_name(str: str):
 	return "".join(split)
 
 def build():
-	readme = ["# RbxUtil\n", "| Package | Dependency | Description |", "| -- | -- | -- |"]
+	readme = ["# RbxUtil\n", "| Module | Dependency | Description |", "| -- | -- | -- |"]
 	name_pattern = re.compile(r"name\s*=\s*\"(.+)\"$")
 	version_pattern = re.compile(r"version\s*=\s*\"(.+)\"$")
 	deescription_pattern = re.compile(r"description\s*=\s*\"(.+)\"$")
 	display_name_pattern = re.compile(r".+/(.+)")
-	for path in Path("./packages").iterdir():
+	for path in Path("./modules").iterdir():
 		with open(Path.joinpath(path, Path("wally.toml")), "r") as f:
 			lines = f.read().splitlines()
 			for line in lines:
@@ -37,7 +37,7 @@ def build():
 			readme.append(f"| [{display_name}](https://sleitnick.github.io/RbxUtil/api/{display_name}) | `{dependency}` | {description} |")
 
 	with open("README.md", "w") as readme_file:
-		readme_file.write("\n".join(readme))
+		readme_file.write("\n".join(readme) + "\n")
 
 if __name__ == "__main__":
 	build()

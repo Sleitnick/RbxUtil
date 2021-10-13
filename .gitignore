@@ -3,3 +3,4 @@ packages/*/Packages
 /build
 /Packages
 /test/Packages
+/test/modules

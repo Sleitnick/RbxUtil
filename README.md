@@ -1,6 +1,6 @@
 # RbxUtil
 
-| Package | Dependency | Description |
+| Module | Dependency | Description |
 | -- | -- | -- |
 | [Component](https://sleitnick.github.io/RbxUtil/api/Component) | `Component = "sleitnick/component@1.0.3"` | Component class |
 | [EnumList](https://sleitnick.github.io/RbxUtil/api/EnumList) | `EnumList = "sleitnick/enum-list@1.0.2"` | Enum List class |
