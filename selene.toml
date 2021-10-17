@@ -1,5 +1,7 @@
 std = "roblox+testez"
 
+[rules]
+multiple_statements = "allow"
+
 [config]
 unused_variable = {allow_unused_self = true}
-multiple_statements = "allow"
