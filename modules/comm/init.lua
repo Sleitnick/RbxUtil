@@ -335,6 +335,7 @@ local Comm = {Server = {}, Client = {}}
 
 --[=[
 	@within Comm
+	@private
 	@interface Server
 	.BindFunction (parent: Instance, name: string, fn: FnBind, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?): RemoteFunction
 	.WrapMethod (parent: Instance, tbl: table, name: string, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?): RemoteFunction
@@ -343,6 +344,7 @@ local Comm = {Server = {}, Client = {}}
 ]=]
 --[=[
 	@within Comm
+	@private
 	@interface Client
 	.GetFunction (parent: Instance, name: string, usePromise: boolean, inboundMiddleware: ClientMiddleware?, outboundMiddleware: ClientMiddleware?): (...: any) -> any
 	.GetSignal (parent: Instance, name: string, inboundMiddleware: ClientMiddleware?, outboundMiddleware: ClientMiddleware?): ClientRemoteFunction
