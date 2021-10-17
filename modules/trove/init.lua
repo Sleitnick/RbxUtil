@@ -159,7 +159,7 @@ end
 ]=]
 function Trove:AttachToInstance(instance: Instance)
 	assert(instance:IsDescendantOf(game), "Instance is not a descendant of the game hierarchy")
-	return self:Connect(instance.AncestryChanged, function(child, parent)
+	return self:Connect(instance.AncestryChanged, function(_child, parent)
 		if not parent then
 			self:Destroy()
 		end
