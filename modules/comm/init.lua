@@ -677,7 +677,7 @@ end
 	```lua
 	-- Server-side:
 	local serverComm = ServerComm.new(someParent)
-	serverComm:BindFunction("MyFunction", function(msg)
+	serverComm:BindFunction("MyFunction", function(player, msg)
 		return msg:upper()
 	end)
 

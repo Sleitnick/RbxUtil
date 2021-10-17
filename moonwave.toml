@@ -5,10 +5,6 @@ classes = ["Signal", "TableUtil", "Component"]
 section = "Input"
 classes = ["Input", "PreferredInput", "Keyboard", "Mouse", "Touch"]
 
-# [[classOrder]]
-# section = "Remote"
-# classes = ["Remote", "RemoteSignal", "RemoteProperty", "ClientRemoteSignal", "ClientRemoteProperty"]
-
 [[classOrder]]
 section = "Remote Comm"
 classes = ["Comm", "ServerComm", "ClientComm", "RemoteSignal", "ClientRemoteSignal"]
