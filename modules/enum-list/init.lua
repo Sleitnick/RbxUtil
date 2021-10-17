@@ -57,6 +57,8 @@ function EnumList.new(name: string, enums: EnumNames)
 	local self = setmetatable({
 		_scope = scope;
 	}, {
+		list = enums,
+
 		__index = function(_t, k)
 			if enumItems[k] then
 				return enumItems[k]
@@ -81,6 +83,14 @@ end
 ]=]
 function EnumList:BelongsTo(obj: any): boolean
 	return Symbol.IsInScope(obj, self._scope)
+end
+
+--[=[
+	@return enums {string}
+	Returns a list of enum names.
+]=]
+function EnumList:GetList(): EnumNames
+	return getmetatable(self).list
 end
 
 
