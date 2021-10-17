@@ -2,7 +2,7 @@
 
 | Module | Dependency | Description |
 | -- | -- | -- |
-| [Comm](https://sleitnick.github.io/RbxUtil/api/Comm) | `Comm = "sleitnick/comm@0.1.0"` | Comm library for remote communication |
+| [Comm](https://sleitnick.github.io/RbxUtil/api/Comm) | `Comm = "sleitnick/comm@0.1.1"` | Comm library for remote communication |
 | [Component](https://sleitnick.github.io/RbxUtil/api/Component) | `Component = "sleitnick/component@1.0.5"` | Component class |
 | [EnumList](https://sleitnick.github.io/RbxUtil/api/EnumList) | `EnumList = "sleitnick/enum-list@1.0.2"` | Enum List class |
 | [Input](https://sleitnick.github.io/RbxUtil/api/Input) | `Input = "sleitnick/input@1.0.2"` | Basic input classes |
