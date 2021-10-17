@@ -221,6 +221,7 @@ end
 
 --[=[
 	@class ClientRemoteSignal
+	@client
 	Created via `ClientComm:GetSignal()`.
 ]=]
 local ClientRemoteSignal = {}
