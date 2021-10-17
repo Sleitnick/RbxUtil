@@ -71,7 +71,11 @@ end
 
 
 function Symbol:__tostring()
-	return ("Symbol<%s>"):format(self._id)
+	if self._scope then
+		return ("%s<%s>"):format(self._scope._id, self._id)
+	else
+		return ("Symbol<%s>"):format(self._id)
+	end
 end
 
 
