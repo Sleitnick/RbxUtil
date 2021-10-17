@@ -9,27 +9,23 @@
 		Comm.Server.BindFunction(parent: Instance, name: string, func: (Instance, ...any) -> ...any, middleware): RemoteFunction
 		Comm.Server.WrapMethod(parent: Instance, tbl: {}, name: string, inbound: ServerMiddleware?, outbound: ServerMiddleware?): RemoteFunction
 		Comm.Server.CreateSignal(parent: Instance, name: string, inbound: ServerMiddleware?, outbound: ServerMiddleware?): RemoteSignal
-		Comm.Server.CreateValue(parent: Instance, name: string, defaultValue: any, inbound: ServerMiddleware?, outbound: ServerMiddleware?): RemoteValue
 
 		Comm.Client.GetFunction(parent: Instance, name: string, usePromise: boolean, middleware: ClientMiddleware?): (...any) -> ...any
 		Comm.Client.GetSignal(parent: Instance, name: string, inbound: ClientMiddleware?, outbound: ClientMiddleware?): ClientRemoteSignal
-		Comm.Client.GetValue(parent: Instance, name: string, inbound: ClientMiddleware?, outbound: ClientMiddleware?): ClientRemoteValue
 
 
 	HELPER CLASSES:
 
-		serverComm = Comm.Server.ForParent(parent: Instance, namespace: string?, janitor: Janitor?): ServerComm
+		serverComm = Comm.Server.ForParent(parent: Instance, namespace: string?): ServerComm
 		serverComm:BindFunction(name: string, func: (Instance, ...any) -> ...any, inbound: ServerMiddleware?, outbound: ServerMiddleware?): RemoteFunction
 		serverComm:WrapMethod(tbl: {}, name: string, inbound: ServerMiddleware?, outbound: ServerMiddleware?): RemoteFunction
 		serverComm:CreateSignal(name: string, inbound: ServerMiddleware?, outbound: ServerMiddleware?): RemoteSignal
-		serverComm:CreateValue(name: string, defaultValue: any, inbound: ServerMiddleware?, outbound: ServerMiddleware?): RemoteValue
 
 		serverComm:Destroy()
 
-		clientComm = Comm.Client.ForParent(parent: Instance, usePromise: boolean, namespace: string?, janitor: Janitor?): ClientComm
+		clientComm = Comm.Client.ForParent(parent: Instance, usePromise: boolean, namespace: string?): ClientComm
 		clientComm:GetFunction(name: string, usePromise: boolean, inbound: ClientMiddleware?, outbound: ClientMiddleware?): (...any) -> ...any
 		clientComm:GetSignal(name: string, inbound: ClientMiddleware?, outbound: ClientMiddleware?): ClientRemoteSignal
-		clientComm:GetValue(name: string, inbound: ClientMiddleware?, outbound: ClientMiddleware?): ClientRemoteValue
 		clientComm:Destroy()
 
 --]]
@@ -711,6 +707,45 @@ end
 ]=]
 function ClientComm:GetSignal(name: string, inboundMiddleware: ClientMiddleware?, outboundMiddleware: ClientMiddleware?)
 	return Comm.Client.GetSignal(self._instancesFolder, name, inboundMiddleware, outboundMiddleware)
+end
+
+--[=[
+	@param inboundMiddleware ClientMiddleware?
+	@param outboundMiddleware ClientMiddleware?
+	@return table
+	Returns an object which maps RemoteFunctions as methods
+	and RemoteEvents as fields.
+	```lua
+	-- Server-side:
+	serverComm:BindFunction("Test", function(player) end)
+	serverComm:CreateSignal("MySignal")
+
+	-- Client-side
+	local obj = clientComm:BuildObject()
+	obj:Test()
+	obj.MySignal:Connect(function() end)
+	```
+]=]
+function ClientComm:BuildObject(inboundMiddleware: ClientMiddleware?, outboundMiddleware: ClientMiddleware?)
+	local obj = {}
+	local rfFolder = self._instancesFolder:FindFirstChild("RF")
+	local reFolder = self._instancesFolder:FindFirstChild("RE")
+	if rfFolder then
+		for _,rf in ipairs(rfFolder:GetChildren()) do
+			if not rf:IsA("RemoteFunction") then continue end
+			local f = self:GetFunction(rf.Name, inboundMiddleware, outboundMiddleware)
+			obj[rf.Name] = function(_self, ...)
+				return f(...)
+			end
+		end
+	end
+	if reFolder then
+		for _,re in ipairs(reFolder:GetChildren()) do
+			if not re:IsA("RemoteEvent") then continue end
+			obj[re.Name] = self:GetSignal(re.Name, inboundMiddleware, outboundMiddleware)
+		end
+	end
+	return obj
 end
 
 --[=[
