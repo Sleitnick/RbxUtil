@@ -1,12 +1,12 @@
 --!strict
 
--- MessageQueue
+-- TaskQueue
 -- Stephen Leitnick
 -- November 20, 2021
 
 
 --[=[
-	@class MessageQueue
+	@class TaskQueue
 	A queue that flushes all objects at the end of the current
 	execution step. This works by scheduling all tasks with
 	`task.defer`.
@@ -16,7 +16,7 @@
 	the same frame.
 
 	```lua
-	local bulletQueue = MessageQueue.new(function(bullets)
+	local bulletQueue = TaskQueue.new(function(bullets)
 		bulletRemoteEvent:FireAllClients(bullets)
 	end)
 
@@ -29,17 +29,17 @@
 	bulletQueue:Add(someBullet)
 	```
 ]=]
-local MessageQueue = {}
-MessageQueue.__index = MessageQueue
+local TaskQueue = {}
+TaskQueue.__index = TaskQueue
 
 
 --[=[
 	@param onFlush ({T}) -> nil
-	@return MessageQueue<T>
-	Constructs a new MessageQueue.
+	@return TaskQueue<T>
+	Constructs a new TaskQueue.
 ]=]
-function MessageQueue.new<T>(onFlush: ({T}) -> nil)
-	local self = setmetatable({}, MessageQueue)
+function TaskQueue.new<T>(onFlush: ({T}) -> nil)
+	local self = setmetatable({}, TaskQueue)
 	self._queue = {}
 	self._flushing = false
 	self._flushingScheduled = false
@@ -52,7 +52,7 @@ end
 	@param object T
 	Add an object to the queue.
 ]=]
-function MessageQueue:Add<T>(object: T)
+function TaskQueue:Add<T>(object: T)
 	table.insert(self._queue, object)
 	if not self._flushingScheduled then
 		self._flushingScheduled = true
@@ -71,7 +71,7 @@ end
 
 
 --[=[
-	Clears the MessageQueue. This will clear any tasks
+	Clears the TaskQueue. This will clear any tasks
 	that were scheduled to be flushed on the current
 	execution frame.
 
@@ -81,7 +81,7 @@ end
 	queue:Clear()
 	```
 ]=]
-function MessageQueue:Clear()
+function TaskQueue:Clear()
 	if self._flushing then return end
 	table.clear(self._queue)
 	self._flushingScheduled = false
@@ -89,11 +89,11 @@ end
 
 
 --[=[
-	Destroys the MessageQueue. Just an alias for `Clear()`.
+	Destroys the TaskQueue. Just an alias for `Clear()`.
 ]=]
-function MessageQueue:Destroy()
+function TaskQueue:Destroy()
 	self:Clear()
 end
 
 
-return MessageQueue
+return TaskQueue
