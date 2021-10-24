@@ -16,5 +16,6 @@
 | [Streamable](https://sleitnick.github.io/RbxUtil/api/Streamable) | `Streamable = "sleitnick/streamable@1.0.6"` | Streamable class and StreamableUtil |
 | [Symbol](https://sleitnick.github.io/RbxUtil/api/Symbol) | `Symbol = "sleitnick/symbol@1.0.1"` | Symbol class |
 | [TableUtil](https://sleitnick.github.io/RbxUtil/api/TableUtil) | `TableUtil = "sleitnick/table-util@1.0.2"` | Table utility functions |
+| [TaskQueue](https://sleitnick.github.io/RbxUtil/api/TaskQueue) | `TaskQueue = "sleitnick/task-queue@0.1.0"` | Batches tasks that occur on the same execution step |
 | [Timer](https://sleitnick.github.io/RbxUtil/api/Timer) | `Timer = "sleitnick/timer@1.0.3"` | Timer class |
 | [Trove](https://sleitnick.github.io/RbxUtil/api/Trove) | `Trove = "sleitnick/trove@0.1.1"` | Trove class for tracking and cleaning up objects |
