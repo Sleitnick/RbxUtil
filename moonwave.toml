@@ -1,3 +1,5 @@
+gitRepoUrl = "https://github.com/Sleitnick/RbxUtil"
+
 [[classOrder]]
 classes = ["Signal", "TableUtil", "Component"]
 
