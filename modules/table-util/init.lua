@@ -317,7 +317,7 @@ end
 
 	```lua
 	local t = {10, 20, 30, 40}
-	local result = TableUtil.Filter(t, function(accum, value)
+	local result = TableUtil.Reduce(t, function(accum, value)
 		return accum + value
 	end)
 	print(result) --> 100
