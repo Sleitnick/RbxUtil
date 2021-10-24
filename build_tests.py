@@ -15,7 +15,7 @@ def pretty_display_name(str: str):
 	return "".join(split)
 
 def build_tests():
-	rmtree("./test/modules")
+	rmtree("./test/modules", ignore_errors=True)
 	copytree("./modules", "./test/modules", dirs_exist_ok=True)
 	for path in Path("./test/modules").iterdir():
 		print("\n" + pretty_display_name(path.name))

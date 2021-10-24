@@ -21,9 +21,9 @@ local function GetObjectCleanupFunction(object, cleanupMethod)
 	elseif t == "RBXScriptConnection" then
 		return "Disconnect"
 	elseif t == "table" then
-		if typeof(t.Destroy) == "function" then
+		if typeof(object.Destroy) == "function" then
 			return "Destroy"
-		elseif typeof(t.Disconnect) == "function" then
+		elseif typeof(object.Disconnect) == "function" then
 			return "Disconnect"
 		end
 	end
