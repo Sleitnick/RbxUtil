@@ -10,17 +10,17 @@ Python that are not present in Lua.
 Tables that only work specifically with arrays or dictionaries are marked as such in the documentation.
 
 :::info Immutability
-All functions (_except_ `SwapRemove`, `SwapRemoveFirstValue`, and `FreezeDeep`) treat tables as immutable and will return
+All functions (_except_ `SwapRemove`, `SwapRemoveFirstValue`, and `Lock`) treat tables as immutable and will return
 copies of the given table(s) with the operations performed on the copies."><meta data-react-helmet="true" property="og:description" content="A collection of helpful table utility functions. Many of these functions are carried over from JavaScript or
 Python that are not present in Lua.
 
 Tables that only work specifically with arrays or dictionaries are marked as such in the documentation.
 
 :::info Immutability
-All functions (_except_ `SwapRemove`, `SwapRemoveFirstValue`, and `FreezeDeep`) treat tables as immutable and will return
+All functions (_except_ `SwapRemove`, `SwapRemoveFirstValue`, and `Lock`) treat tables as immutable and will return
 copies of the given table(s) with the operations performed on the copies."><meta data-react-helmet="true" property="og:url" content="https://Sleitnick.github.io/RbxUtil/api/TableUtil"><meta data-react-helmet="true" name="docusaurus_locale" content="en"><meta data-react-helmet="true" name="docusaurus_tag" content="default"><link data-react-helmet="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/TableUtil"><link data-react-helmet="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/TableUtil" hreflang="en"><link data-react-helmet="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/TableUtil" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.3c0ff9e9.css">
-<link rel="preload" href="/RbxUtil/assets/js/runtime~main.c73344e4.js" as="script">
-<link rel="preload" href="/RbxUtil/assets/js/main.908b6dcf.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/runtime~main.68433de5.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/main.0a803d9f.js" as="script">
 </head>
 <body>
 <script>!function(){function t(t){document.documentElement.setAttribute("data-theme",t)}var e=function(){var t=null;try{t=localStorage.getItem("theme")}catch(t){}return t}();t(null!==e?e:"light")}()</script><div id="__docusaurus">
@@ -38,7 +38,7 @@ copies of the given table(s) with the operations performed on the copies."><meta
   </div>
   <div class="admonition-content">
     <p>
-      All functions (<em>except</em> <code>SwapRemove</code>, <code>SwapRemoveFirstValue</code>, and <code>FreezeDeep</code>) treat tables as immutable and will return
+      All functions (<em>except</em> <code>SwapRemove</code>, <code>SwapRemoveFirstValue</code>, and <code>Lock</code>) treat tables as immutable and will return
       copies of the given table(s) with the operations performed on the copies.
     </p>
   </div>
@@ -1102,13 +1102,13 @@ data <span class="token operator">=</span> TableUtil<span class="token punctuati
     &quot;properties&quot;: [],
     &quot;types&quot;: [],
     &quot;name&quot;: &quot;TableUtil&quot;,
-    &quot;desc&quot;: &quot;A collection of helpful table utility functions. Many of these functions are carried over from JavaScript or\nPython that are not present in Lua.\n\nTables that only work specifically with arrays or dictionaries are marked as such in the documentation.\n\n:::info Immutability\nAll functions (_except_ `SwapRemove`, `SwapRemoveFirstValue`, and `FreezeDeep`) treat tables as immutable and will return\ncopies of the given table(s) with the operations performed on the copies.&quot;,
+    &quot;desc&quot;: &quot;A collection of helpful table utility functions. Many of these functions are carried over from JavaScript or\nPython that are not present in Lua.\n\nTables that only work specifically with arrays or dictionaries are marked as such in the documentation.\n\n:::info Immutability\nAll functions (_except_ `SwapRemove`, `SwapRemoveFirstValue`, and `Lock`) treat tables as immutable and will return\ncopies of the given table(s) with the operations performed on the copies.&quot;,
     &quot;source&quot;: {
         &quot;line&quot;: 55,
         &quot;path&quot;: &quot;modules/table-util/init.lua&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_35-E thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link">Types</a></li><li><a href="#properties" class="table-of-contents__link">Properties</a></li><li><a href="#functions" class="table-of-contents__link">Functions</a><ul><li><a href="#Assign" class="table-of-contents__link">.Assign</a></li><li><a href="#Copy" class="table-of-contents__link">.Copy</a></li><li><a href="#DecodeJSON" class="table-of-contents__link">.DecodeJSON</a></li><li><a href="#EncodeJSON" class="table-of-contents__link">.EncodeJSON</a></li><li><a href="#Every" class="table-of-contents__link">.Every</a></li><li><a href="#Extend" class="table-of-contents__link">.Extend</a></li><li><a href="#Filter" class="table-of-contents__link">.Filter</a></li><li><a href="#Find" class="table-of-contents__link">.Find</a></li><li><a href="#Flat" class="table-of-contents__link">.Flat</a></li><li><a href="#FlatMap" class="table-of-contents__link">.FlatMap</a></li><li><a href="#IsEmpty" class="table-of-contents__link">.IsEmpty</a></li><li><a href="#Keys" class="table-of-contents__link">.Keys</a></li><li><a href="#Lock" class="table-of-contents__link">.Lock</a></li><li><a href="#Map" class="table-of-contents__link">.Map</a></li><li><a href="#Reconcile" class="table-of-contents__link">.Reconcile</a></li><li><a href="#Reduce" class="table-of-contents__link">.Reduce</a></li><li><a href="#Reverse" class="table-of-contents__link">.Reverse</a></li><li><a href="#Sample" class="table-of-contents__link">.Sample</a></li><li><a href="#Shuffle" class="table-of-contents__link">.Shuffle</a></li><li><a href="#Some" class="table-of-contents__link">.Some</a></li><li><a href="#SwapRemove" class="table-of-contents__link">.SwapRemove</a></li><li><a href="#SwapRemoveFirstValue" class="table-of-contents__link">.SwapRemoveFirstValue</a></li><li><a href="#Sync" class="table-of-contents__link">.Sync</a></li><li><a href="#Truncate" class="table-of-contents__link">.Truncate</a></li><li><a href="#Zip" class="table-of-contents__link">.Zip</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2021 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/RbxUtil/assets/js/runtime~main.c73344e4.js"></script>
-<script src="/RbxUtil/assets/js/main.908b6dcf.js"></script>
+<script src="/RbxUtil/assets/js/runtime~main.68433de5.js"></script>
+<script src="/RbxUtil/assets/js/main.0a803d9f.js"></script>
 </body>
 </html>
