@@ -1,4 +1,4 @@
-std = "roblox+testez"
+std = "roblox+testez+future"
 
 [rules]
 multiple_statements = "allow"
