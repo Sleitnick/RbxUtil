@@ -49,7 +49,7 @@ type IteratorFunc = (t: Table, k: any) -> (any, any)
 	Tables that only work specifically with arrays or dictionaries are marked as such in the documentation.
 
 	:::info Immutability
-	All functions (_except_ `SwapRemove` and `SwapRemoveFirstValue`) treat tables as immutable and will return
+	All functions (_except_ `SwapRemove`, `SwapRemoveFirstValue`, and `FreezeDeep`) treat tables as immutable and will return
 	copies of the given table(s) with the operations performed on the copies.
 ]=]
 local TableUtil = {}
@@ -111,7 +111,24 @@ end
 
 	Synchronizes the `srcTbl` based on the `templateTbl`. This will make
 	sure that `srcTbl` has all of the same keys as `templateTbl`, including
-	removing keys in `srcTbl` that are not present in `templateTbl`.
+	removing keys in `srcTbl` that are not present in `templateTbl`. This
+	is a _deep_ operation, so any nested tables will be synchronized as
+	well.
+
+	```lua
+	local template = {kills = 0, deaths = 0, xp = 0}
+	local data = {kills = 10, experience = 12}
+	data = TableUtil.Sync(data, template)
+	print(data) --> {kills = 10, deaths = 0, xp = 0}
+	```
+
+	:::caution Data Loss Warning
+	This is a two-way sync, so the source table will have data
+	_removed_ that isn't found in the template table. This can
+	be problematic if used for player data, where there might
+	be dynamic data added that isn't in the template.
+
+	For player data, use `TableUtil.Reconcile` instead.
 ]=]
 local function Sync(srcTbl: Table, templateTbl: Table): Table
 
@@ -159,6 +176,54 @@ local function Sync(srcTbl: Table, templateTbl: Table): Table
 			end
 		end
 
+	end
+
+	return tbl
+
+end
+
+
+--[=[
+	@within TableUtil
+	@function Reconcile
+	@param source table
+	@param template table
+	@return table
+
+	Performs a one-way sync on the `source` table against the
+	`template` table. Any keys found in `template` that are
+	not found in `source` will be added to `source`. This is
+	useful for syncing player data against data template tables
+	to ensure players have all the necessary keys, while
+	maintaining existing keys that may no longer be in the
+	template.
+
+	```lua
+	-- TODO: Example
+	```
+]=]
+local function Reconcile(src: Table, template: Table): Table
+
+	assert(type(src) == "table", "First argument must be a table")
+	assert(type(template) == "table", "Second argument must be a table")
+
+	local tbl = Copy(src)
+
+	for k,v in pairs(template) do
+		local sv = src[k]
+		if sv == nil then
+			if type(v) == "table" then
+				tbl[k] = Copy(v, true)
+			else
+				tbl[k] = v
+			end
+		elseif type(sv) == "table" then
+			if type(v) == "table" then
+				tbl[k] = Reconcile(sv, v)
+			else
+				tbl[k] = Copy(sv, true)
+			end
+		end
 	end
 
 	return tbl
@@ -677,7 +742,7 @@ end
 
 	```lua
 	local t = {10, 20, 40, 50, 60}
-	
+
 	local someBelowTwenty = TableUtil.Some(t, function(value)
 		return value < 20
 	end)
@@ -780,6 +845,37 @@ end
 
 --[=[
 	@within TableUtil
+	@function Lock
+	@param tbl table
+	@return table
+
+	Locks the table using `table.freeze`, as well as any
+	nested tables within the given table. This will lock
+	the whole deep structure of the table, disallowing any
+	further modifications.
+
+	```lua
+	local tbl = {xyz = {abc = 32}}
+	tbl.xyz.abc = 28 -- Works fine
+	TableUtil.Lock(tbl)
+	tbl.xyz.abc = 64 -- Will throw an error (cannot modify readonly table)
+	```
+]=]
+local function Lock(tbl: Table): Table
+	local function Freeze(t: Table)
+		for k,v in pairs(t) do
+			if type(v) == "table" then
+				t[k] = Freeze(v)
+			end
+		end
+		return table.freeze(t)
+	end
+	return Freeze(tbl)
+end
+
+
+--[=[
+	@within TableUtil
 	@function IsEmpty
 	@param tbl table
 	@return boolean
@@ -789,6 +885,12 @@ end
 	and works for both arrays and dictionaries. This is
 	useful when needing to check if a table is empty but
 	not knowing if it is an array or dictionary.
+
+	```lua
+	TableUtil.IsEmpty({}) -- true
+	TableUtil.IsEmpty({"abc"}) -- false
+	TableUtil.IsEmpty({abc = 32}) -- false
+	```
 ]=]
 local function IsEmpty(tbl)
 	return next(tbl) == nil
@@ -823,6 +925,7 @@ end
 
 TableUtil.Copy = Copy
 TableUtil.Sync = Sync
+TableUtil.Reconcile = Reconcile
 TableUtil.SwapRemove = SwapRemove
 TableUtil.SwapRemoveFirstValue = SwapRemoveFirstValue
 TableUtil.Map = Map
@@ -841,6 +944,7 @@ TableUtil.Every = Every
 TableUtil.Some = Some
 TableUtil.Truncate = Truncate
 TableUtil.Zip = Zip
+TableUtil.Lock = Lock
 TableUtil.IsEmpty = IsEmpty
 TableUtil.EncodeJSON = EncodeJSON
 TableUtil.DecodeJSON = DecodeJSON

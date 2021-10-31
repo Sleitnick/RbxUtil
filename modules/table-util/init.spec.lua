@@ -52,6 +52,29 @@ return function()
 
 	end)
 
+	describe("Reconcile", function()
+		
+		it("should reconcile table", function()
+			local template = {kills = 0, deaths = 0, xp = 10, stuff = {}, stuff2 = "abc", stuff3 = {"data"}}
+			local data = {kills = 10, deaths = 4, stuff = {"abc", "xyz"}, extra = 5, stuff2 = {abc = 10}, stuff3 = true}
+			local reconciled = TableUtil.Reconcile(data, template)
+			expect(reconciled).never.to.equal(data)
+			expect(reconciled).never.to.equal(template)
+			expect(reconciled.kills).to.equal(10)
+			expect(reconciled.deaths).to.equal(4)
+			expect(reconciled.xp).to.equal(10)
+			expect(reconciled.stuff[1]).to.equal("abc")
+			expect(reconciled.stuff[2]).to.equal("xyz")
+			expect(reconciled.extra).to.equal(5)
+			expect(type(reconciled.stuff2)).to.equal("table")
+			expect(reconciled.stuff2).never.to.equal(data.stuff2)
+			expect(reconciled.stuff2.abc).to.equal(10)
+			expect(type(reconciled.stuff3)).to.equal("boolean")
+			expect(reconciled.stuff3).to.equal(true)
+		end)
+
+	end)
+
 	describe("SwapRemove", function()
 
 		it("should swap remove index", function()
@@ -308,6 +331,23 @@ return function()
 			expect(t2[3]).to.equal(t1[3])
 		end)
 		
+	end)
+
+	describe("Lock", function()
+		
+		it("should lock a table", function()
+			local t = {abc = {xyz = {num = 32}}}
+			expect(function()
+				t.abc.xyz.num = 64
+			end).never.to.throw()
+			local t2 = TableUtil.Lock(t)
+			expect(t.abc.xyz.num).to.equal(64)
+			expect(t).to.equal(t2)
+			expect(function()
+				t.abc.xyz.num = 10
+			end).to.throw()
+		end)
+
 	end)
 
 	describe("Zip", function()
