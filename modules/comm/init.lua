@@ -366,10 +366,8 @@ function Comm.Server.BindFunction(parent: Instance, name: string, func: FnBind, 
 		return table.unpack(args, 1, args.n)
 	end
 	if hasInbound and hasOutbound then
-		print("HAS INBOUND AND OUTBOUND")
 		local function OnServerInvoke(player, ...)
 			local args = table.pack(...)
-			print("INVOKE", args)
 			for _,middlewareFunc in ipairs(inboundMiddleware) do
 				local middlewareResult = table.pack(middlewareFunc(player, args))
 				if not middlewareResult[1] then
