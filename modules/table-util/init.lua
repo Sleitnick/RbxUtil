@@ -4,34 +4,6 @@
 -- Stephen Leitnick
 -- September 13, 2017
 
---[[
-
-	TableUtil.Copy(tbl: table, deep: boolean?): table
-	TableUtil.Sync(tbl: table, template: table): void
-	TableUtil.SwapRemove(tbl: table, index: number): void
-	TableUtil.SwapRemoveFirstValue(tbl: table, value: any): (boolean, number)
-	TableUtil.Map(tbl: table, callback: (value: any) -> any): table
-	TableUtil.Filter(tbl: table, callback: (value: any) -> boolean): table
-	TableUtil.Reduce(tbl: table, callback: (accum: any, value: any) -> any [, initialValue: any]): any
-	TableUtil.Assign(target: table, ...sources: table): table
-	TableUtil.Extend(tbl: table, extension: table): table
-	TableUtil.Reverse(tbl: table): table
-	TableUtil.Shuffle(tbl: table [, rng: Random]): table
-	TableUtil.Sample(tbl: table, sampleSize: number, [, rng: Random]): table
-	TableUtil.Flat(tbl: table [, maxDepth: number = 1]): table
-	TableUtil.FlatMap(tbl: callback: (value: any) -> table): table
-	TableUtil.Keys(tbl: table): table
-	TableUtil.Find(tbl: table, callback: (value: any) -> boolean): (any, number)
-	TableUtil.Every(tbl: table, callback: (value: any) -> boolean): boolean
-	TableUtil.Some(tbl: table, callback: (value: any) -> boolean): boolean
-	TableUtil.Truncate(tbl: table, length: number): table
-	TableUtil.Zip(...table): ((table, any) -> (any, any), table, any)
-	TableUtil.IsEmpty(tbl: table): boolean
-	TableUtil.EncodeJSON(tbl: table): string
-	TableUtil.DecodeJSON(json: string): table
-
---]]
-
 
 type Table = {any}
 type MapPredicate = (any, any, Table) -> any
@@ -198,8 +170,15 @@ end
 	maintaining existing keys that may no longer be in the
 	template.
 
+	This is a deep operation, so nested tables will also be
+	properly reconciled.
+
 	```lua
-	-- TODO: Example
+	local template = {kills = 0, deaths = 0, xp = 0}
+	local data = {kills = 10, abc = 20}
+	local correctedData = TableUtil.Reconcile(data, template)
+	
+	print(correctedData) --> {kills = 10, deaths = 0, xp = 0, abc = 30}
 	```
 ]=]
 local function Reconcile(src: Table, template: Table): Table
@@ -519,7 +498,7 @@ end
 local function Shuffle(tbl: Table, rngOverride: Random?): Table
 	assert(type(tbl) == "table", "First argument must be a table")
 	local shuffled = Copy(tbl)
-	local random = rngOverride or rng
+	local random = if typeof(rngOverride) == "Random" then rngOverride else rng
 	for i = #tbl, 2, -1 do
 		local j = random:NextInteger(1, i)
 		shuffled[i], shuffled[j] = shuffled[j], shuffled[i]
@@ -552,7 +531,7 @@ local function Sample(tbl: Table, size: number, rngOverride: Random?): Table
 	assert(type(size) == "number", "Second argument must be a number")
 	local shuffled = Copy(tbl)
 	local sample = table.create(size)
-	local random = rngOverride or rng
+	local random = if typeof(rngOverride) == "Random" then rngOverride else rng
 	local len = #tbl
 	size = math.clamp(size, 1, len)
 	for i = 1,size do
@@ -586,7 +565,7 @@ end
 	This function works on arrays, but not dictionaries.
 ]=]
 local function Flat(tbl: Table, depth: number?): Table
-	local maxDepth: number = depth or 1
+	local maxDepth: number = if type(depth) == "number" then depth else 1
 	local flatTbl = table.create(#tbl)
 	local function Scan(t: Table, d: number)
 		for _,v in ipairs(t) do
