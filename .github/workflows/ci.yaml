@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+jobs:
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - uses: Roblox/setup-foreman@v1
+      name: Install Foreman
+      with:
+          version: "^1.0.0"
+          token: ${{ SECRETS.GITHUB_TOKEN }}
+
+    - name: Lint
+      run: |
+        selene ./modules
+
+  unit-tests:
+    name: Unit Tests
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+          architecture: 'x64'
+
+      - name: Install Roblox Studio
+        uses: OrbitalOwen/roblox-win-installer-action@1.1
+        with:
+          cookie: ${{ secrets.ROBLOSECURITY }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Foreman
+        uses: rojo-rbx/setup-foreman@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build tests
+        run: python build_tests.py
+
+      - name: Build test place
+        run: rojo build default.project.json -o test.rbxl
+
+      - name: Run tests
+        shell: bash
+        run: run-in-roblox --place test.rbxl --script test/RunTests.server.lua > test-out.txt
+        continue-on-error: true
+        
+      - name: Check test status
+        shell: bash
+        run: cat test-out.txt | grep "0 failed, 0 skipped" || (cat test-out.txt && exit 1)

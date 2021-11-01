@@ -1,2 +1,5 @@
 [tools]
 wally = { source = "UpliftGames/wally", version = "0.2.1" }
+selene = { source = "Kampfkarren/selene", version = "x" }
+rojo = { source = "rojo-rbx/rojo", version = "6.2.0" }
+run-in-roblox = { source = "rojo-rbx/run-in-roblox", version = "0.3.0" }
