@@ -2,36 +2,6 @@
 -- Stephen Leitnick
 -- July 28, 2021
 
---[[
-
-	timer = Timer.new(interval: number [, janitor: Janitor])
-	connection = Timer.Simple(interval: number, callback: () -> void [, updateSignal: Signal = Heartbeat, timeFunc: () -> number = time])
-
-	timer.Tick: Signal
-	timer.Interval: number
-	timer.UpdateSignal: Signal
-	timer.TimeFunction: () -> number
-	timer.AllowDrift: boolean
-
-	timer:Start()
-	timer:StartNow()
-	timer:Stop()
-	timer:Destroy()
-
-	------------------------------------
-
-	local timer = Timer.new(2)
-	timer.Tick:Connect(function()
-		print("Tock")
-	end)
-	timer:Start()
-
-	Timer.Simple(2, function()
-		print("Tock")
-	end)
-
---]]
-
 
 type CallbackFunc = () -> nil
 type TimeFunc = () -> number
