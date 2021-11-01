@@ -34,9 +34,9 @@ return function()
 			local streamable = Streamable.new(instanceFolder, "TestImmediate")
 			local observed = 0
 			local cleaned = 0
-			streamable:Observe(function(_instance, janitor)
+			streamable:Observe(function(_instance, trove)
 				observed += 1
-				janitor:Add(function()
+				trove:Add(function()
 					cleaned += 1
 				end)
 			end)
@@ -55,9 +55,9 @@ return function()
 			local streamable = Streamable.new(instanceFolder, "TestImmediate")
 			local observed = 0
 			local cleaned = 0
-			streamable:Observe(function(_instance, janitor)
+			streamable:Observe(function(_instance, trove)
 				observed += 1
-				janitor:Add(function()
+				trove:Add(function()
 					cleaned += 1
 				end)
 			end)

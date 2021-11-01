@@ -35,9 +35,9 @@ return function()
 			local s2 = Streamable.new(instanceFolder, "XYZ")
 			local observe = 0
 			local cleaned = 0
-			StreamableUtil.Compound({S1 = s1; S2 = s2}, function(_streamables, janitor)
+			StreamableUtil.Compound({S1 = s1; S2 = s2}, function(_streamables, trove)
 				observe += 1
-				janitor:Add(function()
+				trove:Add(function()
 					cleaned += 1
 				end)
 			end)

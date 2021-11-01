@@ -4,21 +4,12 @@
 -- Stephen Leitnick
 -- March 03, 2021
 
---[[
-
-	streamable = Streamable.new(parent: Instance, childName: string)
-
-	streamable:Observe(handler: (child: Instance, janitor: Janitor) -> void): Connection
-	streamable:Destroy()
-
---]]
-
 type StreamableWithInstance = {
 	Instance: Instance?,
 	[any]: any,
 }
 
-local Janitor = require(script.Parent.Parent.Janitor)
+local Trove = require(script.Parent.Parent.Trove)
 local Signal = require(script.Parent.Parent.Signal)
 
 
@@ -47,23 +38,23 @@ function Streamable.new(parent: Instance, childName: string)
 	local self: StreamableWithInstance = {}
 	setmetatable(self, Streamable)
 
-	self._janitor = Janitor.new()
-	self._shown = self._janitor:Add(Signal.new())
-	self._shownJanitor = Janitor.new()
-	self._janitor:Add(self._shownJanitor)
+	self._trove = Trove.new()
+	self._shown = self._trove:Construct(Signal)
+	self._shownTrove = Trove.new()
+	self._trove:Add(self._shownTrove)
 
 	self.Instance = parent:FindFirstChild(childName)
 
 	local function OnInstanceSet()
 		local instance = self.Instance
 		if typeof(instance) == "Instance" then
-			self._shown:Fire(instance, self._shownJanitor)
-			self._shownJanitor:Add(instance:GetPropertyChangedSignal("Parent"):Connect(function()
+			self._shown:Fire(instance, self._shownTrove)
+			self._shownTrove:Connect(instance:GetPropertyChangedSignal("Parent"), function()
 				if not instance.Parent then
-					self._shownJanitor:Cleanup()
+					self._shownTrove:Clean()
 				end
-			end))
-			self._shownJanitor:Add(function()
+			end)
+			self._shownTrove:Add(function()
 				if self.Instance == instance then
 					self.Instance = nil
 				end
@@ -78,7 +69,7 @@ function Streamable.new(parent: Instance, childName: string)
 		end
 	end
 
-	self._janitor:Add(parent.ChildAdded:Connect(OnChildAdded))
+	self._trove:Connect(parent.ChildAdded, OnChildAdded)
 	if self.Instance then
 		OnInstanceSet()
 	end
@@ -89,18 +80,18 @@ end
 
 
 --[=[
-	@param handler (instance: Instance, janitor: Janitor) -> nil
+	@param handler (instance: Instance, trove: Trove) -> nil
 	@return Connection
 
 	Observes the instance. The handler is called anytime the
-	instance comes into existence, and the janitor given is
+	instance comes into existence, and the trove given is
 	cleaned up when the instance goes away.
 
 	To stop observing, disconnect the returned connection.
 ]=]
 function Streamable:Observe(handler)
 	if self.Instance then
-		task.spawn(handler, self.Instance, self._shownJanitor)
+		task.spawn(handler, self.Instance, self._shownTrove)
 	end
 	return self._shown:Connect(handler)
 end
@@ -110,7 +101,7 @@ end
 	Destroys the Streamable.
 ]=]
 function Streamable:Destroy()
-	self._janitor:Destroy()
+	self._trove:Destroy()
 end
 
 
