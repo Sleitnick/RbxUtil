@@ -1,7 +1,7 @@
 return function()
 
 	local Component = require(script.Parent)
-	local Janitor = require(script.Parent.Parent.Janitor)
+	local Trove = require(script.Parent.Parent.Trove)
 	local Promise = require(script.Parent.Parent.Promise)
 
 	local CollectionService = game:GetService("CollectionService")
@@ -24,7 +24,7 @@ return function()
 	TestComponentMain.Tag = TAG
 	function TestComponentMain.new(_instance)
 		local self = setmetatable({}, TestComponentMain)
-		self._janitor = Janitor.new()
+		self._trove = Trove.new()
 		return self
 	end
 	function TestComponentMain:HeartbeatUpdate()
@@ -43,7 +43,7 @@ return function()
 		self.DidDeinit = true
 	end
 	function TestComponentMain:Destroy()
-		self._janitor:Destroy()
+		self._trove:Destroy()
 	end
 
 	beforeAll(function()

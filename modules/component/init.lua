@@ -12,7 +12,7 @@
 	component = Component.FromTag(tag: string)
 		-> Retrieves an existing component from the tag name
 
-	Component.ObserveFromTag(tag: string, observer: (component: Component, janitor: Janitor) -> void): Janitor
+	Component.ObserveFromTag(tag: string, observer: (component: Component, trove: Trove) -> void): Trove
 
 	component = Component.new(tag: string, class: table [, renderPriority: RenderPriority, requireComponents: {string}])
 		-> Creates a new component from the tag name, class module, and optional render priority
@@ -22,7 +22,7 @@
 	component:GetFromID(id: number): ComponentInstance | nil
 	component:Filter(filterFunc: (comp: ComponentInstance) -> boolean): ComponentInstance[]
 	component:WaitFor(instanceOrName: Instance | string [, timeout: number = 60]): Promise<ComponentInstance>
-	component:Observe(instance: Instance, observer: (component: ComponentInstance, janitor: Janitor) -> void): Janitor
+	component:Observe(instance: Instance, observer: (component: ComponentInstance, trove: Trove) -> void): Trove
 	component:Destroy()
 
 	component.Added(obj: ComponentInstance)
@@ -79,7 +79,7 @@
 --]]
 
 
-local Janitor = require(script.Parent.Janitor)
+local Trove = require(script.Parent.Trove)
 local Signal = require(script.Parent.Signal)
 local Promise = require(script.Parent.Promise)
 local TableUtil = require(script.Parent.TableUtil)
@@ -131,22 +131,21 @@ end
 
 --[=[
 	@param tag string
-	@param observer (component: Component, janitor: Jantior) -> nil
-	@return Janitor
+	@param observer (component: Component, trove: Trove) -> nil
+	@return Trove
 	Observes the existence of a component.
 ]=]
 function Component.ObserveFromTag(tag, observer)
-	local janitor = Janitor.new()
-	local observeJanitor = Janitor.new()
-	janitor:Add(observeJanitor)
+	local trove = Trove.new()
+	local observeTrove = trove:Construct(Trove)
 	local function OnCreated(component)
 		if component._tag == tag then
-			observer(component, observeJanitor)
+			observer(component, observeTrove)
 		end
 	end
 	local function OnDestroyed(component)
 		if component._tag == tag then
-			observeJanitor:Cleanup()
+			observeTrove:Clean()
 		end
 	end
 	do
@@ -155,9 +154,9 @@ function Component.ObserveFromTag(tag, observer)
 			task.spawn(OnCreated, component)
 		end
 	end
-	janitor:Add(componentByTagCreated:Connect(OnCreated))
-	janitor:Add(componentByTagDestroyed:Connect(OnDestroyed))
-	return janitor
+	trove:Add(componentByTagCreated:Connect(OnCreated))
+	trove:Add(componentByTagDestroyed:Connect(OnDestroyed))
+	return trove
 end
 
 
@@ -210,8 +209,8 @@ function Component.new(tag, class, renderPriority, requireComponents)
 
 	local self = setmetatable({}, Component)
 
-	self._janitor = Janitor.new()
-	self._lifecycleJanitor = Janitor.new()
+	self._trove = Trove.new()
+	self._lifecycleTrove = self._trove:Construct(Trove)
 	self._tag = tag
 	self._class = class
 	self._objects = {}
@@ -226,11 +225,10 @@ function Component.new(tag, class, renderPriority, requireComponents)
 	self._lifecycle = false
 	self._nextId = 0
 
-	self.Added = self._janitor:Add(Signal.new())
-	self.Removed = self._janitor:Add(Signal.new())
+	self.Added = self._trove:Construct(Signal)
+	self.Removed = self._trove:Construct(Signal)
 
-	local observeJanitor = Janitor.new()
-	self._janitor:Add(observeJanitor)
+	local observeTrove = self._trove:Construct(Trove)
 
 	local function ObserveTag()
 
@@ -244,31 +242,31 @@ function Component.new(tag, class, renderPriority, requireComponents)
 			return true
 		end
 
-		observeJanitor:Add(CollectionService:GetInstanceAddedSignal(tag):Connect(function(instance)
+		observeTrove:Connect(CollectionService:GetInstanceAddedSignal(tag), function(instance)
 			if IsDescendantOfWhitelist(instance) and HasRequiredComponents(instance) then
 				self:_instanceAdded(instance)
 			end
-		end))
+		end)
 
-		observeJanitor:Add(CollectionService:GetInstanceRemovedSignal(tag):Connect(function(instance)
+		observeTrove:Connect(CollectionService:GetInstanceRemovedSignal(tag), function(instance)
 			self:_instanceRemoved(instance)
-		end))
+		end)
 
 		for _,reqComp in ipairs(self._requireComponents) do
 			local comp = Component.FromTag(reqComp)
-			observeJanitor:Add(comp.Added:Connect(function(obj)
+			observeTrove:Connect(comp.Added, function(obj)
 				if CollectionService:HasTag(obj.Instance, tag) and HasRequiredComponents(obj.Instance) then
 					self:_instanceAdded(obj.Instance)
 				end
-			end))
-			observeJanitor:Add(comp.Removed:Connect(function(obj)
+			end)
+			observeTrove:Connect(comp.Removed, function(obj)
 				if CollectionService:HasTag(obj.Instance, tag) then
 					self:_instanceRemoved(obj.Instance)
 				end
-			end))
+			end)
 		end
 
-		observeJanitor:Add(function()
+		observeTrove:Add(function()
 			self:_stopLifecycle()
 			for instance in pairs(self._instancesToObjects) do
 				self:_instanceRemoved(instance)
@@ -276,17 +274,13 @@ function Component.new(tag, class, renderPriority, requireComponents)
 		end)
 
 		do
-			local b = Instance.new("BindableEvent")
 			for _,instance in ipairs(CollectionService:GetTagged(tag)) do
 				if IsDescendantOfWhitelist(instance) and HasRequiredComponents(instance) then
-					local c = b.Event:Connect(function()
+					task.defer(function()
 						self:_instanceAdded(instance)
 					end)
-					b:Fire()
-					c:Disconnect()
 				end
 			end
-			b:Destroy()
 		end
 
 	end
@@ -305,16 +299,16 @@ function Component.new(tag, class, renderPriority, requireComponents)
 			ObserveTag()
 		end
 		local function Cleanup()
-			observeJanitor:Cleanup()
+			observeTrove:Clean()
 		end
 		for _,requiredComponent in ipairs(self._requireComponents) do
 			tagsReady[requiredComponent] = false
 		end
 		for _,requiredComponent in ipairs(self._requireComponents) do
-			self._janitor:Add(Component.ObserveFromTag(requiredComponent, function(_component, janitor)
+			self._trove:Add(Component.ObserveFromTag(requiredComponent, function(_component, trove)
 				tagsReady[requiredComponent] = true
 				Check()
-				janitor:Add(function()
+				trove:Add(function()
 					tagsReady[requiredComponent] = false
 					Cleanup()
 				end)
@@ -324,7 +318,7 @@ function Component.new(tag, class, renderPriority, requireComponents)
 
 	componentsByTag[tag] = self
 	componentByTagCreated:Fire(self)
-	self._janitor:Add(function()
+	self._trove:Add(function()
 		componentsByTag[tag] = nil
 		componentByTagDestroyed:Fire(self)
 	end)
@@ -341,7 +335,7 @@ function Component:_startHeartbeatUpdate()
 			v:HeartbeatUpdate(dt)
 		end
 	end)
-	self._lifecycleJanitor:Add(self._heartbeatUpdate)
+	self._lifecycleTrove:Add(self._heartbeatUpdate)
 end
 
 
@@ -352,7 +346,7 @@ function Component:_startSteppedUpdate()
 			v:SteppedUpdate(dt)
 		end
 	end)
-	self._lifecycleJanitor:Add(self._steppedUpdate)
+	self._lifecycleTrove:Add(self._steppedUpdate)
 end
 
 
@@ -364,7 +358,7 @@ function Component:_startRenderUpdate()
 			v:RenderUpdate(dt)
 		end
 	end)
-	self._lifecycleJanitor:Add(function()
+	self._lifecycleTrove:Add(function()
 		RunService:UnbindFromRenderStep(self._renderName)
 	end)
 end
@@ -386,7 +380,7 @@ end
 
 function Component:_stopLifecycle()
 	self._lifecycle = false
-	self._lifecycleJanitor:Cleanup()
+	self._lifecycleTrove:Clean()
 end
 
 
@@ -512,31 +506,30 @@ end
 
 --[=[
 	@param instance Instance
-	@param observer (component: componentInstance, janitor: Janitor) -> nil
-	@return Janitor
+	@param observer (component: componentInstance, trove: Trove) -> nil
+	@return Trove
 	Observes the existence of a component instance on the given Roblox instance.
 ]=]
 function Component:Observe(instance, observer)
-	local janitor = Janitor.new()
-	local observeJanitor = Janitor.new()
-	janitor:Add(observeJanitor)
-	janitor:Add(self.Added:Connect(function(obj)
+	local trove = Trove.new()
+	local observeTrove = trove:Construct(Trove)
+	trove:Connect(self.Added, function(obj)
 		if obj.Instance == instance then
-			observer(obj, observeJanitor)
+			observer(obj, observeTrove)
 		end
-	end))
-	janitor:Add(self.Removed:Connect(function(obj)
+	end)
+	trove:Connect(self.Removed, function(obj)
 		if obj.Instance == instance then
-			observeJanitor:Cleanup()
+			observeTrove:Clean()
 		end
-	end))
+	end)
 	for _,obj in ipairs(self._objects) do
 		if obj.Instance == instance then
-			task.spawn(observer, obj, observeJanitor)
+			task.spawn(observer, obj, observeTrove)
 			break
 		end
 	end
-	return janitor
+	return trove
 end
 
 
@@ -544,7 +537,7 @@ end
 	Destroys the component class.
 ]=]
 function Component:Destroy()
-	self._janitor:Destroy()
+	self._trove:Destroy()
 end
 
 
