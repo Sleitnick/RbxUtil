@@ -51,15 +51,43 @@ end
 
 
 --[=[
-	@param class table
+	@param class table | (...any) -> any
 	@param ... any
 	@return any
-	Calls the `new` constructor function on the given table,
-	adds the constructed object to the trove, and then
-	returns the constructed object.
+	Constructs a new object from either the
+	table or function given.
+
+	If a table is given, the table's `new`
+	function will be called with the given
+	arguments.
+
+	If a function is given, the function will
+	be called with the given arguments.
+	
+	The result from either of the two options
+	will be added to the trove.
+
+	```lua
+	local Signal = require(somewhere.Signal)
+
+	-- All of these are identical:
+	local s = trove:Construct(Signal)
+	local s = trove:Construct(Signal.new)
+	local s = trove:Construct(function() return Signal.new() end)
+	local s = trove:Add(Signal.new())
+
+	-- Even Roblox instances can be created:
+	local part = trove:Construct(Instance, "Part")
+	```
 ]=]
 function Trove:Construct(class, ...)
-	local object = class.new(...)
+	local object = nil
+	local t = type(class)
+	if t == "table" then
+		object = class.new(...)
+	elseif t == "function" then
+		object = class(...)
+	end
 	return self:Add(object)
 end
 
@@ -70,6 +98,12 @@ end
 	@return RBXScriptConnection
 	Connects the function to the signal, adds the connection
 	to the trove, and then returns the connection.
+
+	```lua
+	trove:Connect(workspace.ChildAdded, function(instance)
+		print(instance.Name .. " added to workspace")
+	end)
+	```
 ]=]
 function Trove:Connect(signal, fn)
 	return self:Add(signal:Connect(fn))
@@ -82,6 +116,12 @@ end
 	@param fn (dt: number) -> nil
 	Calls `RunService:BindToRenderStep` and registers a function in the
 	trove that will call `RunService:UnbindFromRenderStep` on cleanup.
+
+	```lua
+	trove:BindToRenderStep("Test", Enum.RenderPriority.Last.Value, function(dt)
+		-- Do something
+	end)
+	```
 ]=]
 function Trove:BindToRenderStep(name: string, priority: number, fn: (dt: number) -> nil)
 	RunService:BindToRenderStep(name, priority, fn)
@@ -97,6 +137,43 @@ end
 	@return object: any
 	Adds an object to the trove. Once the trove is cleaned or
 	destroyed, the object will also be cleaned up.
+
+	The object must be any of the following:
+	- Roblox instance (e.g. Part)
+	- RBXScriptConnection (e.g. `workspace.ChildAdded:Connect(function() end)`)
+	- Function
+	- Table with either a `Destroy` or `Disconnect` method
+	- Table with custom `cleanupMethod` name provided
+
+	Returns the object added.
+
+	```lua
+	-- Add a part to the trove, then destroy the trove,
+	-- which will also destroy the part:
+	local part = Instance.new("Part")
+	trove:Add(part)
+	trove:Destroy()
+
+	-- Add a function to the trove:
+	trove:Add(function()
+		print("Cleanup!")
+	end)
+	trove:Destroy()
+
+	-- Standard cleanup from table:
+	local tbl = {}
+	function tbl:Destroy()
+		print("Cleanup")
+	end
+	trove:Add(tbl)
+
+	-- Custom cleanup from table:
+	local tbl = {}
+	function tbl:DoSomething()
+		print("Do something on cleanup")
+	end
+	trove:Add(tbl, "DoSomething")
+	```
 ]=]
 function Trove:Add(object: any, cleanupMethod: string?): any
 	local cleanup = GetObjectCleanupFunction(object, cleanupMethod)
@@ -108,6 +185,12 @@ end
 --[=[
 	@param object any -- Object to remove
 	Removes the object from the Trove and cleans it up.
+
+	```lua
+	local part = Instance.new("Part")
+	trove:Add(part)
+	trove:Remove(part)
+	```
 ]=]
 function Trove:Remove(object: any): boolean
 	local objects = self._objects
@@ -125,7 +208,9 @@ end
 
 
 --[=[
-	Cleans up all objects in the trove.
+	Cleans up all objects in the trove. This is
+	similar to calling `Remove` on each object
+	within the trove.
 ]=]
 function Trove:Clean()
 	for _,obj in ipairs(self._objects) do
