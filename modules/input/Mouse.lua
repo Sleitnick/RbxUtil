@@ -2,31 +2,8 @@
 -- Stephen Leitnick
 -- November 07, 2020
 
---[[
 
-	mouse = Mouse.new([janitor])
-
-	mouse:IsLeftDown(): boolean
-	mouse:IsRightDown(): boolean
-	mouse:GetPosition(): Vector3
-	mouse:GetDelta(): Vector3
-	mouse:GetRay([overridePosition: Vector2]): Ray
-	mouse:Raycast(raycastParams: RaycastParams [, rayDistance: number = 1000, overridePos: Vector2]): Option<RaycastResult>
-	mouse:Lock(): void
-	mouse:LockCenter(): void
-	mouse:Unlock(): void
-	mouse:Destroy(): void
-
-	mouse.LeftDown()
-	mouse.LeftUp()
-	mouse.RightDown()
-	mouse.RightUp()
-	mouse.Scrolled(amount: number)
-
---]]
-
-
-local Janitor = require(script.Parent.Parent.Janitor)
+local Trove = require(script.Parent.Parent.Trove)
 local Signal = require(script.Parent.Parent.Signal)
 
 local UserInputService = game:GetService("UserInputService")
@@ -89,38 +66,38 @@ function Mouse.new()
 
 	local self = setmetatable({}, Mouse)
 
-	self._janitor = Janitor.new()
+	self._trove = Trove.new()
 
-	self.LeftDown = self._janitor:Add(Signal.new())
-	self.LeftUp = self._janitor:Add(Signal.new())
-	self.RightDown = self._janitor:Add(Signal.new())
-	self.RightUp = self._janitor:Add(Signal.new())
-	self.Scrolled = self._janitor:Add(Signal.new())
+	self.LeftDown = self._trove:Construct(Signal)
+	self.LeftUp = self._trove:Construct(Signal)
+	self.RightDown = self._trove:Construct(Signal)
+	self.RightUp = self._trove:Construct(Signal)
+	self.Scrolled = self._trove:Construct(Signal)
 
-	self._janitor:Add(UserInputService.InputBegan:Connect(function(input, processed)
+	self._trove:Connect(UserInputService.InputBegan, function(input, processed)
 		if processed then return end
 		if input.UserInputType == Enum.UserInputType.MouseButton1 then
 			self.LeftDown:Fire()
 		elseif input.UserInputType == Enum.UserInputType.MouseButton2 then
 			self.RightDown:Fire()
 		end
-	end))
+	end)
 
-	self._janitor:Add(UserInputService.InputEnded:Connect(function(input, processed)
+	self._trove:Connect(UserInputService.InputEnded, function(input, processed)
 		if processed then return end
 		if input.UserInputType == Enum.UserInputType.MouseButton1 then
 			self.LeftUp:Fire()
 		elseif input.UserInputType == Enum.UserInputType.MouseButton2 then
 			self.RightUp:Fire()
 		end
-	end))
+	end)
 
-	self._janitor:Add(UserInputService.InputChanged:Connect(function(input, processed)
+	self._trove:Connect(UserInputService.InputChanged, function(input, processed)
 		if processed then return end
 		if input.UserInputType == Enum.UserInputType.MouseWheel then
 			self.Scrolled:Fire(input.Position.Z)
 		end
-	end))
+	end)
 
 	return self
 
@@ -237,7 +214,7 @@ end
 	Destroys the mouse.
 ]=]
 function Mouse:Destroy()
-	self._janitor:Destroy()
+	self._trove:Destroy()
 end
 
 

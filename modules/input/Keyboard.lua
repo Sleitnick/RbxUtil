@@ -3,7 +3,7 @@
 -- October 10, 2021
 
 
-local Janitor = require(script.Parent.Parent.Janitor)
+local Trove = require(script.Parent.Parent.Trove)
 local Signal = require(script.Parent.Parent.Signal)
 
 local UserInputService = game:GetService("UserInputService")
@@ -57,9 +57,9 @@ Keyboard.__index = Keyboard
 ]=]
 function Keyboard.new()
 	local self = setmetatable({}, Keyboard)
-	self._janitor = Janitor.new()
-	self.KeyDown = self._janitor:Add(Signal.new())
-	self.KeyUp = self._janitor:Add(Signal.new())
+	self._trove = Trove.new()
+	self.KeyDown = self._trove:Construct(Signal)
+	self.KeyUp = self._trove:Construct(Signal)
 	self:_setup()
 	return self
 end
@@ -100,19 +100,19 @@ end
 
 function Keyboard:_setup()
 
-	self._janitor:Add(UserInputService.InputBegan:Connect(function(input, processed)
+	self._trove:Connect(UserInputService.InputBegan, function(input, processed)
 		if processed then return end
 		if input.UserInputType == Enum.UserInputType.Keyboard then
 			self.KeyDown:Fire(input.KeyCode)
 		end
-	end))
+	end)
 
-	self._janitor:Add(UserInputService.InputEnded:Connect(function(input, processed)
+	self._trove:Connect(UserInputService.InputEnded, function(input, processed)
 		if processed then return end
 		if input.UserInputType == Enum.UserInputType.Keyboard then
 			self.KeyUp:Fire(input.KeyCode)
 		end
-	end))
+	end)
 
 end
 
@@ -121,7 +121,7 @@ end
 	Destroy the keyboard input capturer.
 ]=]
 function Keyboard:Destroy()
-	self._janitor:Destroy()
+	self._trove:Destroy()
 end
 
 
