@@ -16,8 +16,8 @@ registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
 [dependencies]
-Signal = "sleitnick/signal@^1.0"
-TableUtil = "sleitnick/table-util@^1.0"
+Signal = "sleitnick/signal@^1"
+TableUtil = "sleitnick/table-util@^1"
 ```
 
 To install these dependencies, run `wally install` within your project. Wally will create a Package folder in your directory with the installed dependencies.
