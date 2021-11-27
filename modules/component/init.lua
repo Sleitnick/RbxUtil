@@ -3,7 +3,6 @@
 -- November 26, 2021
 
 
-
 type AncestorList = {Instance}
 
 --[=[
@@ -110,6 +109,7 @@ local function NextRenderName(): string
 	return "ComponentRender" .. tostring(renderId)
 end
 
+
 local function InvokeExtensionFn(component, extensionList, fnName: string)
 	for _,extension in ipairs(extensionList) do
 		local fn = extension[fnName]
@@ -118,6 +118,7 @@ local function InvokeExtensionFn(component, extensionList, fnName: string)
 		end
 	end
 end
+
 
 --[=[
 	@class Component
@@ -185,7 +186,7 @@ function Component.new(config: ComponentConfig)
 	customComponent._instancesToComponents = {}
 	customComponent._components = {}
 	customComponent._trove = Trove.new()
-	customComponent._extensions = config.Extension or {}
+	customComponent._extensions = config.Extensions or {}
 	customComponent._started = false
 	customComponent.Tag = config.Tag
 	customComponent.Started = customComponent._trove:Construct(Signal)
@@ -244,7 +245,7 @@ function Component:_setup()
 			end)
 		end
 		if hasSteppedUpdate then
-			component._steppedUpdate = RunService.Stepped:Connect(function(dt)
+			component._steppedUpdate = RunService.Stepped:Connect(function(_, dt)
 				component:SteppedUpdate(dt)
 			end)
 		end
