@@ -2,7 +2,7 @@
 
 Testing requires Python, Wally, Rojo, and Roblox Studio.
 
-1. Run `python build_tests.py`
+1. Run `python build_tests.py` (will run in `watch` mode once built)
 2. Run `rojo`
 3. Sync project into a new Roblox Studio place
 4. Run the Roblox Studio place
