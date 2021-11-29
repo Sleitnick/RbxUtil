@@ -100,6 +100,7 @@ local RunService = game:GetService("RunService")
 local Signal = require(script.Parent.Signal)
 local Trove = require(script.Parent.Trove)
 
+local IS_SERVER = RunService:IsServer()
 local DEFAULT_ANCESTORS = {workspace, game:GetService("Players")}
 
 
@@ -249,7 +250,7 @@ function Component:_setup()
 				component:SteppedUpdate(dt)
 			end)
 		end
-		if hasRenderSteppedUpdate then
+		if hasRenderSteppedUpdate and not IS_SERVER then
 			if component.RenderPriority then
 				self._renderName = NextRenderName()
 				RunService:BindToRenderStep(self._renderName, component.RenderPriority, function(dt)
@@ -478,6 +479,7 @@ end
 	@function RenderSteppedUpdate
 	@param dt number
 	@within Component
+	@client
 
 	If this method is present on a component, then it will be
 	automatically connected to `RunService.RenderStepped`. If
