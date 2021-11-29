@@ -1,8 +1,6 @@
 return function()
 
 	local Component = require(script.Parent)
-	local Trove = require(script.Parent.Parent.Trove)
-	local Promise = require(script.Parent.Parent.Promise)
 
 	local CollectionService = game:GetService("CollectionService")
 
@@ -19,35 +17,63 @@ return function()
 		return folder
 	end
 
-	local TestComponentMain = {}
-	TestComponentMain.__index = TestComponentMain
-	TestComponentMain.Tag = TAG
-	function TestComponentMain.new(_instance)
-		local self = setmetatable({}, TestComponentMain)
-		self._trove = Trove.new()
-		return self
+	local ExtensionTest = {}
+	function ExtensionTest.Constructing(component)
+		component.Data = "a"
 	end
-	function TestComponentMain:HeartbeatUpdate()
-		self.DidHeartbeatUpdate = true
+	function ExtensionTest.Constructed(component)
+		component.Data ..= "c"
 	end
-	function TestComponentMain:SteppedUpdate()
-		self.DidSteppedUpdate = true
+	function ExtensionTest.Starting(component)
+		component.Data ..= "d"
 	end
-	function TestComponentMain:RenderUpdate()
-		self.DidRenderUpdate = true
+	function ExtensionTest.Started(component)
+		component.Data ..= "f"
 	end
-	function TestComponentMain:Init()
-		self.DidInit = true
+	function ExtensionTest.Stopping(component)
+		component.Data ..= "g"
 	end
-	function TestComponentMain:Deinit()
-		self.DidDeinit = true
+	function ExtensionTest.Stopped(component)
+		component.Data ..= "i"
 	end
-	function TestComponentMain:Destroy()
-		self._trove:Destroy()
+
+	local TestComponentMain = Component.new({
+		Tag = TAG,
+		Ancestors = {workspace, game:GetService("Lighting")},
+		Extensions = {ExtensionTest}
+	})
+
+	local AnotherComponent = Component.new({Tag = TAG})
+	function AnotherComponent:GetData()
+		return true
+	end
+
+	function TestComponentMain:Construct()
+		self.Data ..= "b"
+	end
+
+	function TestComponentMain:Start()
+		self.Another = self:GetComponent(AnotherComponent)
+		self.Data ..= "e"
+	end
+
+	function TestComponentMain:Stop()
+		self.Data ..= "h"
+	end
+
+	function TestComponentMain:HeartbeatUpdate(_dt)
+		self.DidHeartbeat = true
+	end
+
+	function TestComponentMain:SteppedUpdate(_dt)
+		self.DidStepped = true
+	end
+
+	function TestComponentMain:RenderSteppedUpdate(_dt)
+		self.DidRenderStepped = true
 	end
 
 	beforeAll(function()
-		Component.new(TAG, TestComponentMain)
 		taggedInstanceFolder = Instance.new("Folder")
 		taggedInstanceFolder.Name = "KnitComponentTest"
 		taggedInstanceFolder.Archivable = false
@@ -60,107 +86,58 @@ return function()
 
 	afterAll(function()
 		taggedInstanceFolder:Destroy()
+		TestComponentMain:Destroy()
 	end)
 
 	describe("Component", function()
 
-		it("should be able to get component from tag", function()
-			local TestComponent = Component.FromTag(TAG)
-			expect(TestComponent).to.be.ok()
-		end)
-
-		it("should create and remove a component", function()
-			local TestComponent = Component.FromTag(TAG)
+		it("should capture start and stop events", function()
+			local didStart = 0
+			local didStop = 0
+			local started = TestComponentMain.Started:Connect(function()
+				didStart += 1
+			end)
+			local stopped = TestComponentMain.Stopped:Connect(function()
+				didStop += 1
+			end)
 			local instance = CreateTaggedInstance()
 			task.wait()
-			local all = TestComponent:GetAll()
-			expect(#all).to.equal(1)
-			expect(all[1].Instance).to.equal(instance)
 			instance:Destroy()
 			task.wait()
-			all = TestComponent:GetAll()
-			expect(#all).to.equal(0)
+			started:Disconnect()
+			stopped:Disconnect()
+			expect(didStart).to.equal(1)
+			expect(didStop).to.equal(1)
 		end)
 
-		it("should get component from instance", function()
-			local TestComponent = Component.FromTag(TAG)
+		it("should be able to get component from the instance", function()
 			local instance = CreateTaggedInstance()
 			task.wait()
-			expect(TestComponent:GetFromInstance(instance)).to.be.ok()
+			local component = Component.FromInstance(instance, TestComponentMain)
+			expect(component).to.be.ok()
 		end)
 
-		it("should get component from ID", function()
-			local TestComponent = Component.FromTag(TAG)
+		it("should call lifecycle methods and extension functions", function()
+			local instance = CreateTaggedInstance()
+			task.wait(0.2)
+			local component = Component.FromInstance(instance, TestComponentMain)
+			expect(component).to.be.ok()
+			expect(component.Data).to.equal("abcdef")
+			expect(component.DidHeartbeat).to.equal(true)
+			expect(component.DidStepped).to.equal(true)
+			expect(component.DidRenderStepped).to.never.equal(true)
+			instance:Destroy()
+			task.wait()
+			expect(component.Data).to.equal("abcdefghi")
+		end)
+
+		it("should get another component linked to the same instance", function()
 			local instance = CreateTaggedInstance()
 			task.wait()
-			local id = instance:GetAttribute("ComponentServerId")
-			expect(TestComponent:GetFromID(id)).to.be.ok()
-		end)
-
-		it("should filter", function()
-			local TestComponent = Component.FromTag(TAG)
-			for i = 1,10 do
-				local instance = CreateTaggedInstance()
-				instance:SetAttribute("SomeNumber", i)
-			end
-			task.wait()
-			local aboveFive = TestComponent:Filter(function(component)
-				return component.Instance:GetAttribute("SomeNumber") > 5
-			end)
-			expect(#aboveFive).to.equal(5)
-		end)
-
-		it("should wait for component by instance", function()
-			local TestComponent = Component.FromTag(TAG)
-			local instance = CreateTaggedInstance()
-			local success, obj = TestComponent:WaitFor(instance):await()
-			expect(success).to.equal(true)
-			expect(obj).to.be.ok()
-		end)
-
-		it("should wait for component by name", function()
-			local TestComponent = Component.FromTag(TAG)
-			local instance = CreateTaggedInstance()
-			instance.Name = "SomeUniqueInstanceNameForKnitTest"
-			local success, obj = TestComponent:WaitFor(instance.Name):await()
-			expect(success).to.equal(true)
-			expect(obj).to.be.ok()
-		end)
-
-		it("should run all runtime updates", function()
-			local TestComponent = Component.FromTag(TAG)
-			local instance = CreateTaggedInstance()
-			local success, obj = TestComponent:WaitFor(instance):await()
-			expect(success).to.equal(true)
-			local runtimeSuccess = Promise.new(function(resolve, _reject, onCancel)
-				local handle
-				handle = game:GetService("RunService").Heartbeat:Connect(function()
-					if obj.DidHeartbeatUpdate and obj.DidSteppedUpdate and obj.DidRenderUpdate then
-						resolve()
-					end
-				end)
-				onCancel(function() handle:Disconnect() end)
-			end):timeout(5):await()
-			expect(runtimeSuccess).to.equal(true)
-		end)
-
-		it("should run init and deinit methods", function()
-			local TestComponent = Component.FromTag(TAG)
-			local instance = CreateTaggedInstance()
-			local success, obj = TestComponent:WaitFor(instance):await()
-			expect(success).to.equal(true)
-			local initDeinitSuccess = Promise.new(function(resolve, _reject, onCancel)
-				local handle
-				handle = game:GetService("RunService").Heartbeat:Connect(function()
-					if obj.DidDeinit then
-						resolve()
-					elseif obj.DidInit and instance.Parent then
-						instance:Destroy()
-					end
-				end)
-				onCancel(function() handle:Disconnect() end)
-			end):timeout(5):await()
-			expect(initDeinitSuccess).to.equal(true)
+			local component = Component.FromInstance(instance, TestComponentMain)
+			expect(component).to.be.ok()
+			expect(component.Another).to.be.ok()
+			expect(component.Another:GetData()).to.equal(true)
 		end)
 
 	end)

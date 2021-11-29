@@ -1,541 +1,519 @@
 -- Component
 -- Stephen Leitnick
--- July 25, 2020
-
---[[
-
-	Component.Auto(folder: Instance)
-		-> Create components automatically from descendant modules of this folder
-		-> Each module must have a '.Tag' string property
-		-> Each module optionally can have '.RenderPriority' number property
-
-	component = Component.FromTag(tag: string)
-		-> Retrieves an existing component from the tag name
-
-	Component.ObserveFromTag(tag: string, observer: (component: Component, trove: Trove) -> void): Trove
-
-	component = Component.new(tag: string, class: table [, renderPriority: RenderPriority, requireComponents: {string}])
-		-> Creates a new component from the tag name, class module, and optional render priority
-
-	component:GetAll(): ComponentInstance[]
-	component:GetFromInstance(instance: Instance): ComponentInstance | nil
-	component:GetFromID(id: number): ComponentInstance | nil
-	component:Filter(filterFunc: (comp: ComponentInstance) -> boolean): ComponentInstance[]
-	component:WaitFor(instanceOrName: Instance | string [, timeout: number = 60]): Promise<ComponentInstance>
-	component:Observe(instance: Instance, observer: (component: ComponentInstance, trove: Trove) -> void): Trove
-	component:Destroy()
-
-	component.Added(obj: ComponentInstance)
-	component.Removed(obj: ComponentInstance)
-
-	-----------------------------------------------------------------------
-
-	A component class must look something like this:
-
-		-- DEFINE
-		local MyComponent = {}
-		MyComponent.__index = MyComponent
-
-		-- CONSTRUCTOR
-		function MyComponent.new(instance)
-			local self = setmetatable({}, MyComponent)
-			return self
-		end
-
-		-- FIELDS AFTER CONSTRUCTOR COMPLETES
-		MyComponent.Instance: Instance
-
-		-- OPTIONAL LIFECYCLE HOOKS
-		function MyComponent:Init() end                     -> Called right after constructor
-		function MyComponent:Deinit() end                   -> Called right before deconstructor
-		function MyComponent:HeartbeatUpdate(dt) ... end    -> Updates every heartbeat
-		function MyComponent:SteppedUpdate(dt) ... end      -> Updates every physics step
-		function MyComponent:RenderUpdate(dt) ... end       -> Updates every render step
-
-		-- DESTRUCTOR
-		function MyComponent:Destroy()
-		end
+-- November 26, 2021
 
 
-	A component is then registered like so:
+type AncestorList = {Instance}
 
-		local Component = require(Knit.Util.Component)
-		local MyComponent = require(somewhere.MyComponent)
-		local tag = "MyComponent"
-
-		local myComponent = Component.new(tag, MyComponent)
-
-
-	Components can be listened and queried:
-
-		myComponent.Added:Connect(function(instanceOfComponent)
-			-- New MyComponent constructed
-		end)
-
-		myComponent.Removed:Connect(function(instanceOfComponent)
-			-- New MyComponent deconstructed
-		end)
-
---]]
+--[=[
+	@type ExtensionFn (component) -> nil
+	@within Component
+]=]
+type ExtensionFn = (any) -> nil
 
 
-local Trove = require(script.Parent.Trove)
-local Signal = require(script.Parent.Signal)
-local Promise = require(script.Parent.Promise)
-local TableUtil = require(script.Parent.TableUtil)
+--[=[
+	@interface Extension
+	@within Component
+	.Constructing ExtensionFn?
+	.Constructed ExtensionFn?
+	.Starting ExtensionFn?
+	.Started ExtensionFn?
+	.Stopping ExtensionFn?
+	.Stopped ExtensionFn?
+
+	An extension allows the ability to extend the behavior of
+	components. This is useful for adding injection systems or
+	extending the behavior of components.
+
+	For instance, an extension could be created to simply log
+	when the various lifecycle stages run on the component:
+
+	```lua
+	local Logger = {}
+	function Logger.Constructing(component) print("Constructing", component) end
+	function Logger.Constructed(component) print("Constructed", component) end
+	function Logger.Starting(component) print("Starting", component) end
+	function Logger.Started(component) print("Started", component) end
+	function Logger.Stopping(component) print("Stopping", component) end
+	function Logger.Stopped(component) print("Stopped", component) end
+
+	local MyComponent = Component.new({Tag = "MyComponent", Extensions = {Logger}})
+	```
+]=]
+type Extension = {
+	Constructing: ExtensionFn?,
+	Constructed: ExtensionFn?,
+	Starting: ExtensionFn?,
+	Started: ExtensionFn?,
+	Stopping: ExtensionFn?,
+	Stopped: ExtensionFn?,
+}
+
+--[=[
+	@interface ComponentConfig
+	@within Component
+	.Tag string -- CollectionService tag to use
+	.Ancestors {Instance}? -- Optional array of ancestors in which components will be started
+	.Extensions {Extension}? -- Optional array of extension objects
+
+	Component configuration passed to `Component.new`.
+
+	- If no Ancestors option is included, it defaults to `{workspace, game.Players}`.
+	- If no Extensions option is included, it defaults to a blank table `{}`.
+]=]
+type ComponentConfig = {
+	Tag: string,
+	Ancestors: AncestorList?,
+	Extensions: {Extension}?,
+}
+
+--[=[
+	@prop Started Signal
+	@within Component
+
+	Fired when a new instance of a component is started.
+
+	```lua
+	local MyComponent = Component.new({Tag = "MyComponent"})
+
+	MyComponent.Started:Connect(function(component) end)
+	```
+]=]
+
+--[=[
+	@prop Stopped Signal
+	@within Component
+
+	Fired when an instance of a component is stopped.
+
+	```lua
+	local MyComponent = Component.new({Tag = "MyComponent"})
+
+	MyComponent.Stopped:Connect(function(component) end)
+	```
+]=]
 
 local CollectionService = game:GetService("CollectionService")
 local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
+
+local Signal = require(script.Parent.Signal)
+local Trove = require(script.Parent.Trove)
 
 local IS_SERVER = RunService:IsServer()
-local DEFAULT_WAIT_FOR_TIMEOUT = 60
-local ATTRIBUTE_ID_NAME = "ComponentServerId"
+local DEFAULT_ANCESTORS = {workspace, game:GetService("Players")}
 
--- Components will only work on instances parented under these descendants:
-local DESCENDANT_WHITELIST = {workspace, Players}
+
+local renderId = 0
+local function NextRenderName(): string
+	renderId += 1
+	return "ComponentRender" .. tostring(renderId)
+end
+
+
+local function InvokeExtensionFn(component, extensionList, fnName: string)
+	for _,extension in ipairs(extensionList) do
+		local fn = extension[fnName]
+		if type(fn) == "function" then
+			fn(component)
+		end
+	end
+end
+
 
 --[=[
 	@class Component
-	Extends functionality of an instance based on the CollectionService tags of the instance.
+
+	Bind components to Roblox instances using the Component class and CollectionService tags.
 ]=]
 local Component = {}
 Component.__index = Component
 
-local componentsByTag = {}
 
-local componentByTagCreated = Signal.new()
-local componentByTagDestroyed = Signal.new()
+--[=[
+	@param config ComponentConfig
+	@return ComponentClass
 
+	Create a new custom Component class.
 
-local function IsDescendantOfWhitelist(instance)
-	for _,v in ipairs(DESCENDANT_WHITELIST) do
-		if instance:IsDescendantOf(v) then
-			return true
-		end
+	```lua
+	local MyComponent = Component.new({Tag = "MyComponent"})
+	```
+
+	A full example might look like this:
+
+	```lua
+	local MyComponent = Component.new({
+		Tag = "MyComponent",
+		Ancestors = {workspace},
+		Extensions = {Logger}, -- See Logger example within the example for the Extension type
+	})
+
+	local AnotherComponent = require(somewhere.AnotherComponent)
+
+	-- Optional if UpdateRenderStepped should use BindToRenderStep:
+	MyComponent.RenderPriority = Enum.RenderPriority.Camera.Value
+
+	function MyComponent:Construct()
+		self.MyData = "Hello"
 	end
-	return false
+
+	function MyComponent:Start()
+		local another = self:GetComponent(AnotherComponent)
+		another:DoSomething()
+	end
+
+	function MyComponent:Stop()
+		self.MyData = "Goodbye"
+	end
+
+	function MyComponent:HeartbeatUpdate(dt)
+	end
+
+	function MyComponent:SteppedUpdate(dt)
+	end
+	
+	function MyComponent:RenderSteppedUpdate(dt)
+	end
+	```
+]=]
+function Component.new(config: ComponentConfig)
+	local customComponent = {}
+	customComponent.__index = customComponent
+	customComponent.__tostring = function()
+		return "Component<" .. config.Tag .. ">"
+	end
+	customComponent._ancestors = config.Ancestors or DEFAULT_ANCESTORS
+	customComponent._instancesToComponents = {}
+	customComponent._components = {}
+	customComponent._trove = Trove.new()
+	customComponent._extensions = config.Extensions or {}
+	customComponent._started = false
+	customComponent.Tag = config.Tag
+	customComponent.Started = customComponent._trove:Construct(Signal)
+	customComponent.Stopped = customComponent._trove:Construct(Signal)
+	setmetatable(customComponent, Component)
+	customComponent:_setup()
+	return customComponent
 end
 
 
 --[=[
-	@param tag string
+	@param instance Instance
+	@param componentClass ComponentClass
 	@return Component?
-	Returns a component previously constructed by the tag. Returns
-	`nil` if no component is found.
+
+	Gets an instance of a component class given the Roblox instance
+	and the component class. Returns `nil` if not found.
+
+	```lua
+	local MyComponent = require(somewhere.MyComponent)
+
+	local myComponentInstance = Component.FromInstance(workspace.SomeInstance, MyComponent)
+	```
 ]=]
-function Component.FromTag(tag)
-	return componentsByTag[tag]
+function Component.FromInstance(instance: Instance, componentClass)
+	return componentClass._instancesToComponents[instance]
 end
 
 
---[=[
-	@param tag string
-	@param observer (component: Component, trove: Trove) -> nil
-	@return Trove
-	Observes the existence of a component.
-]=]
-function Component.ObserveFromTag(tag, observer)
-	local trove = Trove.new()
-	local observeTrove = trove:Construct(Trove)
-	local function OnCreated(component)
-		if component._tag == tag then
-			observer(component, observeTrove)
-		end
+function Component:_instantiate(instance: Instance)
+	local component = setmetatable({}, self)
+	component.Instance = instance
+	InvokeExtensionFn(component, self._extensions, "Constructing")
+	if type(component.Construct) == "function" then
+		component:Construct()
 	end
-	local function OnDestroyed(component)
-		if component._tag == tag then
-			observeTrove:Clean()
-		end
-	end
-	do
-		local component = Component.FromTag(tag)
-		if component then
-			task.spawn(OnCreated, component)
-		end
-	end
-	trove:Add(componentByTagCreated:Connect(OnCreated))
-	trove:Add(componentByTagDestroyed:Connect(OnDestroyed))
-	return trove
+	InvokeExtensionFn(component, self._extensions, "Constructed")
+	return component
 end
 
 
---[=[
-	@param parent Instance
-	@return RBXScriptConnection
-
-	Scans all descendants of `parent` and loads any ModuleScripts found, then
-	calls `Component.new` on those loaded modules.
-
-	Each component module class must have a `Tag` string property to map it
-	to the proper tag.
-]=]
-function Component.Auto(parent)
-	local function Setup(moduleScript)
-		local m = require(moduleScript)
-		assert(type(m) == "table", "Expected table for component")
-		assert(type(m.Tag) == "string", "Expected .Tag property")
-		Component.new(m.Tag, m, m.RenderPriority, m.RequiredComponents)
-	end
-	for _,v in ipairs(parent:GetDescendants()) do
-		if v:IsA("ModuleScript") then
-			Setup(v)
-		end
-	end
-	return parent.DescendantAdded:Connect(function(v)
-		if v:IsA("ModuleScript") then
-			Setup(v)
-		end
-	end)
-end
-
-
---[=[
-	@param tag string
-	@param class table
-	@param renderPriority number?
-	@param requireComponents {string}?
-	@return Component
-
-	Constructs a new component class.
-]=]
-function Component.new(tag, class, renderPriority, requireComponents)
-
-	assert(type(tag) == "string", "Argument #1 (tag) should be a string; got " .. type(tag))
-	assert(type(class) == "table", "Argument #2 (class) should be a table; got " .. type(class))
-	assert(type(class.new) == "function", "Class must contain a .new constructor function")
-	assert(type(class.Destroy) == "function", "Class must contain a :Destroy function")
-	assert(componentsByTag[tag] == nil, "Component already bound to this tag")
-
-	local self = setmetatable({}, Component)
-
-	self._trove = Trove.new()
-	self._lifecycleTrove = self._trove:Construct(Trove)
-	self._tag = tag
-	self._class = class
-	self._objects = {}
-	self._instancesToObjects = {}
-	self._hasHeartbeatUpdate = (type(class.HeartbeatUpdate) == "function")
-	self._hasSteppedUpdate = (type(class.SteppedUpdate) == "function")
-	self._hasRenderUpdate = (type(class.RenderUpdate) == "function")
-	self._hasInit = (type(class.Init) == "function")
-	self._hasDeinit = (type(class.Deinit) == "function")
-	self._renderPriority = renderPriority or Enum.RenderPriority.Last.Value
-	self._requireComponents = requireComponents or {}
-	self._lifecycle = false
-	self._nextId = 0
-
-	self.Added = self._trove:Construct(Signal)
-	self.Removed = self._trove:Construct(Signal)
-
-	local observeTrove = self._trove:Construct(Trove)
-
-	local function ObserveTag()
-
-		local function HasRequiredComponents(instance)
-			for _,reqComp in ipairs(self._requireComponents) do
-				local comp = Component.FromTag(reqComp)
-				if comp:GetFromInstance(instance) == nil then
-					return false
-				end
-			end
-			return true
-		end
-
-		observeTrove:Connect(CollectionService:GetInstanceAddedSignal(tag), function(instance)
-			if IsDescendantOfWhitelist(instance) and HasRequiredComponents(instance) then
-				self:_instanceAdded(instance)
-			end
-		end)
-
-		observeTrove:Connect(CollectionService:GetInstanceRemovedSignal(tag), function(instance)
-			self:_instanceRemoved(instance)
-		end)
-
-		for _,reqComp in ipairs(self._requireComponents) do
-			local comp = Component.FromTag(reqComp)
-			observeTrove:Connect(comp.Added, function(obj)
-				if CollectionService:HasTag(obj.Instance, tag) and HasRequiredComponents(obj.Instance) then
-					self:_instanceAdded(obj.Instance)
-				end
-			end)
-			observeTrove:Connect(comp.Removed, function(obj)
-				if CollectionService:HasTag(obj.Instance, tag) then
-					self:_instanceRemoved(obj.Instance)
-				end
+function Component:_setup()
+	
+	local watchingInstances = {}
+	
+	local function StartComponent(component)
+		InvokeExtensionFn(component, self._extensions, "Starting")
+		component:Start()
+		InvokeExtensionFn(component, self._extensions, "Started")
+		local hasHeartbeatUpdate = typeof(component.HeartbeatUpdate) == "function"
+		local hasSteppedUpdate = typeof(component.SteppedUpdate) == "function"
+		local hasRenderSteppedUpdate = typeof(component.RenderSteppedUpdate) == "function"
+		if hasHeartbeatUpdate then
+			component._heartbeatUpdate = RunService.Heartbeat:Connect(function(dt)
+				component:HeartbeatUpdate(dt)
 			end)
 		end
-
-		observeTrove:Add(function()
-			self:_stopLifecycle()
-			for instance in pairs(self._instancesToObjects) do
-				self:_instanceRemoved(instance)
-			end
-		end)
-
-		do
-			for _,instance in ipairs(CollectionService:GetTagged(tag)) do
-				if IsDescendantOfWhitelist(instance) and HasRequiredComponents(instance) then
-					task.defer(function()
-						self:_instanceAdded(instance)
-					end)
-				end
-			end
+		if hasSteppedUpdate then
+			component._steppedUpdate = RunService.Stepped:Connect(function(_, dt)
+				component:SteppedUpdate(dt)
+			end)
 		end
-
-	end
-
-	if #self._requireComponents == 0 then
-		ObserveTag()
-	else
-		-- Only observe tag when all required components are available:
-		local tagsReady = {}
-		local function Check()
-			for _,ready in pairs(tagsReady) do
-				if not ready then
-					return
-				end
-			end
-			ObserveTag()
-		end
-		local function Cleanup()
-			observeTrove:Clean()
-		end
-		for _,requiredComponent in ipairs(self._requireComponents) do
-			tagsReady[requiredComponent] = false
-		end
-		for _,requiredComponent in ipairs(self._requireComponents) do
-			self._trove:Add(Component.ObserveFromTag(requiredComponent, function(_component, trove)
-				tagsReady[requiredComponent] = true
-				Check()
-				trove:Add(function()
-					tagsReady[requiredComponent] = false
-					Cleanup()
+		if hasRenderSteppedUpdate and not IS_SERVER then
+			if component.RenderPriority then
+				self._renderName = NextRenderName()
+				RunService:BindToRenderStep(self._renderName, component.RenderPriority, function(dt)
+					component:RenderSteppedUpdate(dt)
 				end)
-			end))
+			else
+				component._renderSteppedUpdate = RunService.RenderStepped:Connect(function(dt)
+					component:RenderSteppedUpdate(dt)
+				end)
+			end
 		end
+		component._started = true
+		self.Started:Fire(component)
 	end
-
-	componentsByTag[tag] = self
-	componentByTagCreated:Fire(self)
-	self._trove:Add(function()
-		componentsByTag[tag] = nil
-		componentByTagDestroyed:Fire(self)
-	end)
-
-	return self
-
-end
-
-
-function Component:_startHeartbeatUpdate()
-	local all = self._objects
-	self._heartbeatUpdate = RunService.Heartbeat:Connect(function(dt)
-		for _,v in ipairs(all) do
-			v:HeartbeatUpdate(dt)
+	
+	local function StopComponent(component)
+		if component._heartbeatUpdate then
+			component._heartbeatUpdate:Disconnect()
 		end
-	end)
-	self._lifecycleTrove:Add(self._heartbeatUpdate)
-end
-
-
-function Component:_startSteppedUpdate()
-	local all = self._objects
-	self._steppedUpdate = RunService.Stepped:Connect(function(_, dt)
-		for _,v in ipairs(all) do
-			v:SteppedUpdate(dt)
+		if component._steppedUpdate then
+			component._steppedUpdate:Disconnect()
 		end
-	end)
-	self._lifecycleTrove:Add(self._steppedUpdate)
-end
-
-
-function Component:_startRenderUpdate()
-	local all = self._objects
-	self._renderName = (self._tag .. "RenderUpdate")
-	RunService:BindToRenderStep(self._renderName, self._renderPriority, function(dt)
-		for _,v in ipairs(all) do
-			v:RenderUpdate(dt)
+		if component._renderSteppedUpdate then
+			component._renderSteppedUpdate:Disconnect()
+		elseif component._renderName then
+			RunService:UnbindFromRenderStep(self._renderName)
 		end
-	end)
-	self._lifecycleTrove:Add(function()
-		RunService:UnbindFromRenderStep(self._renderName)
-	end)
-end
-
-
-function Component:_startLifecycle()
-	self._lifecycle = true
-	if self._hasHeartbeatUpdate then
-		self:_startHeartbeatUpdate()
+		InvokeExtensionFn(component, self._extensions, "Stopping")
+		component:Stop()
+		InvokeExtensionFn(component, self._extensions, "Stopped")
+		self.Stopped:Fire(component)
 	end
-	if self._hasSteppedUpdate then
-		self:_startSteppedUpdate()
-	end
-	if self._hasRenderUpdate then
-		self:_startRenderUpdate()
-	end
-end
-
-
-function Component:_stopLifecycle()
-	self._lifecycle = false
-	self._lifecycleTrove:Clean()
-end
-
-
-function Component:_instanceAdded(instance)
-	if self._instancesToObjects[instance] then return end
-	if not self._lifecycle then
-		self:_startLifecycle()
-	end
-	self._nextId = (self._nextId + 1)
-	local id = (self._tag .. tostring(self._nextId))
-	if IS_SERVER then
-		instance:SetAttribute(ATTRIBUTE_ID_NAME, id)
-	end
-	local obj = self._class.new(instance)
-	obj.Instance = instance
-	obj._id = id
-	self._instancesToObjects[instance] = obj
-	table.insert(self._objects, obj)
-	if self._hasInit then
+	
+	local function TryConstructComponent(instance)
+		if self._instancesToComponents[instance] then return end
+		local component = self:_instantiate(instance)
+		self._instancesToComponents[instance] = component
+		table.insert(self._components, component)
 		task.defer(function()
-			if self._instancesToObjects[instance] ~= obj then return end
-			obj:Init()
+			if self._instancesToComponents[instance] == component then
+				StartComponent(component)
+			end
 		end)
 	end
-	self.Added:Fire(obj)
-	return obj
-end
-
-
-function Component:_instanceRemoved(instance)
-	if not self._instancesToObjects[instance] then return end
-	self._instancesToObjects[instance] = nil
-	for i,obj in ipairs(self._objects) do
-		if obj.Instance == instance then
-			if self._hasDeinit then
-				obj:Deinit()
+	
+	local function TryDeconstructComponent(instance)
+		local component = self._instancesToComponents[instance]
+		if not component then return end
+		self._instancesToComponents[instance] = nil
+		local index = table.find(self._components, component)
+		if index then
+			local n = #self._components
+			self._components[index] = self._components[n]
+			self._components[n] = nil
+		end
+		if component._started then
+			task.spawn(StopComponent, component)
+		end
+	end
+	
+	local function StartWatchingInstance(instance)
+		if watchingInstances[instance] then return end
+		local function IsInAncestorList(): boolean
+			for _,parent in ipairs(self._ancestors) do
+				if instance:IsDescendantOf(parent) then
+					return true
+				end
 			end
-			if IS_SERVER and instance.Parent and instance:GetAttribute(ATTRIBUTE_ID_NAME) ~= nil then
-				instance:SetAttribute(ATTRIBUTE_ID_NAME, nil)
+			return false
+		end
+		local ancestryChangedHandle = self._trove:Connect(instance.AncestryChanged, function(_, parent)
+			if parent and IsInAncestorList() then
+				TryConstructComponent(instance)
+			else
+				TryDeconstructComponent(instance)
 			end
-			self.Removed:Fire(obj)
-			obj:Destroy()
-			obj._destroyed = true
-			TableUtil.SwapRemove(self._objects, i)
-			break
+		end)
+		watchingInstances[instance] = ancestryChangedHandle
+		if IsInAncestorList() then
+			TryConstructComponent(instance)
 		end
 	end
-	if #self._objects == 0 and self._lifecycle then
-		self:_stopLifecycle()
+	
+	local function InstanceTagged(instance: Instance)
+		StartWatchingInstance(instance)
 	end
-end
-
-
---[=[
-	@return {componentInstances}
-	Returns an array of all component instances.
-]=]
-function Component:GetAll()
-	return TableUtil.Copy(self._objects)
-end
-
-
---[=[
-	@param instance Instance
-	@return component?
-	Returns a component instance from the given Roblox instance.
-]=]
-function Component:GetFromInstance(instance)
-	return self._instancesToObjects[instance]
-end
-
-
---[=[
-	@param id string
-	@return component?
-	Returns a component instance from the given ID.
-]=]
-function Component:GetFromID(id)
-	for _,v in ipairs(self._objects) do
-		if v._id == id then
-			return v
+	
+	local function InstanceUntagged(instance: Instance)
+		local watchHandle = watchingInstances[instance]
+		if watchHandle then
+			watchHandle:Disconnect()
+			watchingInstances[instance] = nil
 		end
+		TryDeconstructComponent(instance)
 	end
-	return nil
-end
-
-
---[=[
-	@param filterFn (value: componentInstance) -> keep: boolean
-	@return {componentInstance}
-	Filters out all component instances based on the `filterFn` function predicate.
-]=]
-function Component:Filter(filterFn)
-	return TableUtil.Filter(self._objects, filterFn)
-end
-
-
---[=[
-	@param instance Instance
-	@param timeout number?
-	@return Promise<componentInstance>
-	Waits for a component instance to exist on the given Roblox instance.
-]=]
-function Component:WaitFor(instance, timeout)
-	local isName = (type(instance) == "string")
-	local function IsInstanceValid(obj)
-		return ((isName and obj.Instance.Name == instance) or ((not isName) and obj.Instance == instance))
+	
+	self._trove:Connect(CollectionService:GetInstanceAddedSignal(self.Tag), InstanceTagged)
+	self._trove:Connect(CollectionService:GetInstanceRemovedSignal(self.Tag), InstanceUntagged)
+	
+	local tagged = CollectionService:GetTagged(self.Tag)
+	for _,instance in ipairs(tagged) do
+		task.defer(InstanceTagged, instance)
 	end
-	for _,obj in ipairs(self._objects) do
-		if IsInstanceValid(obj) then
-			return Promise.resolve(obj)
-		end
-	end
-	local lastObj = nil
-	return Promise.fromEvent(self.Added, function(obj)
-		lastObj = obj
-		return IsInstanceValid(obj)
-	end):andThen(function()
-		return lastObj
-	end):timeout(timeout or DEFAULT_WAIT_FOR_TIMEOUT)
+	
 end
 
 
 --[=[
-	@param instance Instance
-	@param observer (component: componentInstance, trove: Trove) -> nil
-	@return Trove
-	Observes the existence of a component instance on the given Roblox instance.
-]=]
-function Component:Observe(instance, observer)
-	local trove = Trove.new()
-	local observeTrove = trove:Construct(Trove)
-	trove:Connect(self.Added, function(obj)
-		if obj.Instance == instance then
-			observer(obj, observeTrove)
-		end
-	end)
-	trove:Connect(self.Removed, function(obj)
-		if obj.Instance == instance then
-			observeTrove:Clean()
-		end
-	end)
-	for _,obj in ipairs(self._objects) do
-		if obj.Instance == instance then
-			task.spawn(observer, obj, observeTrove)
-			break
-		end
+	`Construct` is called before the component is started, and should be used
+	to construct the component instance.
+
+	```lua
+	local MyComponent = Component.new({Tag = "MyComponent"})
+
+	function MyComponent:Construct()
+		self.SomeData = 32
+		self.OtherStuff = "HelloWorld"
 	end
-	return trove
+	```
+]=]
+function Component:Construct()
 end
 
 
 --[=[
-	Destroys the component class.
+	`Start` is called when the component is started. At this point in time, it
+	is safe to grab other components also bound to the same instance.
+
+	```lua
+	local MyComponent = Component.new({Tag = "MyComponent"})
+	local AnotherComponent = require(somewhere.AnotherComponent)
+
+	function MyComponent:Start()
+		-- e.g., grab another component:
+		local another = self:GetComponent(AnotherComponent)
+	end
+	```
 ]=]
+function Component:Start()
+end
+
+
+--[=[
+	`Stop` is called when the component is stopped. This occurs either when the
+	bound instance is removed from one of the whitelisted ancestors _or_ when
+	the matching tag is removed from the instance. This also means that the
+	instance _might_ be destroyed, and thus it is not safe to continue using
+	the bound instance (e.g. `self.Instance`) any longer.
+
+	This should be used to clean up the component.
+
+	```lua
+	local MyComponent = Component.new({Tag = "MyComponent"})
+
+	function MyComponent:Stop()
+		self.SomeStuff:Destroy()
+	end
+	```
+]=]
+function Component:Stop()
+end
+
+
+--[=[
+	@param componentClass ComponentClass
+	@return Component?
+
+	Retrieves another component instance bound to the same
+	Roblox instance.
+
+	```lua
+	local MyComponent = Component.new({Tag = "MyComponent"})
+	local AnotherComponent = require(somewhere.AnotherComponent)
+
+	function MyComponent:Start()
+		local another = self:GetComponent(AnotherComponent)
+	end
+	```
+]=]
+function Component:GetComponent(componentClass)
+	return componentClass._instancesToComponents[self.Instance]
+end
+
+
+--[=[
+	@function HeartbeatUpdate
+	@param dt number
+	@within Component
+
+	If this method is present on a component, then it will be
+	automatically connected to `RunService.Heartbeat`.
+
+	:::note Method
+	This is a method, not a function. This is a limitation
+	of the documentation tool which should be fixed soon.
+	:::
+	
+	```lua
+	local MyComponent = Component.new({Tag = "MyComponent"})
+	
+	function MyComponent:HeartbeatUpdate(dt)
+	end
+	```
+]=]
+--[=[
+	@function SteppedUpdate
+	@param dt number
+	@within Component
+
+	If this method is present on a component, then it will be
+	automatically connected to `RunService.Stepped`.
+
+	:::note Method
+	This is a method, not a function. This is a limitation
+	of the documentation tool which should be fixed soon.
+	:::
+	
+	```lua
+	local MyComponent = Component.new({Tag = "MyComponent"})
+	
+	function MyComponent:SteppedUpdate(dt)
+	end
+	```
+]=]
+--[=[
+	@function RenderSteppedUpdate
+	@param dt number
+	@within Component
+	@client
+
+	If this method is present on a component, then it will be
+	automatically connected to `RunService.RenderStepped`. If
+	the `[Component].RenderPriority` field is found, then the
+	component will instead use `RunService:BindToRenderStep()`
+	to bind the function.
+
+	:::note Method
+	This is a method, not a function. This is a limitation
+	of the documentation tool which should be fixed soon.
+	:::
+	
+	```lua
+	-- Example that uses `RunService.RenderStepped` automatically:
+
+	local MyComponent = Component.new({Tag = "MyComponent"})
+	
+	function MyComponent:RenderSteppedUpdate(dt)
+	end
+	```
+	```lua
+	-- Example that uses `RunService:BindToRenderStep` automatically:
+	
+	local MyComponent = Component.new({Tag = "MyComponent"})
+
+	-- Defining a RenderPriority will force the component to use BindToRenderStep instead
+	MyComponent.RenderPriority = Enum.RenderPriority.Camera.Value
+	
+	function MyComponent:RenderSteppedUpdate(dt)
+	end
+	```
+]=]
+
+
 function Component:Destroy()
 	self._trove:Destroy()
 end
