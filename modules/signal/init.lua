@@ -16,8 +16,8 @@
 --   sig:DisconnectAll()                                                      --
 --   local arg1, arg2, ... = sig:Wait()                                       --
 --                                                                            --
--- Licence:                                                                   --
---   Licenced under the MIT licence.                                          --
+-- License:                                                                   --
+--   Licensed under the MIT license.                                          --
 --                                                                            --
 -- Authors:                                                                   --
 --   stravant - July 31st, 2021 - Created the file.                           --

@@ -5,7 +5,7 @@
 --[=[
 	@class PID
 	The PID class simulates a [PID controller](https://en.wikipedia.org/wiki/PID_controller). PID is an acronym
-	for _proportional, intergral, derivative_. PIDs are input feedback loops that try to reach a specific
+	for _proportional, integral, derivative_. PIDs are input feedback loops that try to reach a specific
 	goal by measuring the difference between the input and the desired value, and then returning a new
 	desired input.
 	
@@ -30,7 +30,7 @@ PID.__index = PID
 	- `false`: The PID applies the proportional calculation on the _measurement_.
 
 	Setting this value to `false` may help the PID move smoother and help
-	elimiate overshoot.
+	eliminate overshoot.
 
 	```lua
 	local pid = PID.new(...)
