@@ -2,6 +2,7 @@ import subprocess
 from pathlib import Path
 from shutil import copytree, rmtree, move
 import os
+import sys
 import time
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
@@ -64,21 +65,29 @@ def build_tests():
 
 if __name__ == "__main__":
 
+	if len(sys.argv) >= 2:
+		has_watch = sys.argv[1].lower() == "watch"
+	else:
+		has_watch = False
+
 	print("Building tests...")
 	build_tests()
 	print("\nTests built")
-	print("Watching for changes...")
 
-	observer = Observer()
-	observer.schedule(WatchHandler(), "./modules", recursive=True)
-	observer.start()
-	
-	try:
-		while True:
-			time.sleep(1)
-	except KeyboardInterrupt:
-		observer.stop()
-	finally:
-		observer.join()
+	if has_watch:
 
-	print("Stopped")
+		print("Watching for changes...")
+
+		observer = Observer()
+		observer.schedule(WatchHandler(), "./modules", recursive=True)
+		observer.start()
+		
+		try:
+			while True:
+				time.sleep(1)
+		except KeyboardInterrupt:
+			observer.stop()
+		finally:
+			observer.join()
+
+		print("Stopped")
