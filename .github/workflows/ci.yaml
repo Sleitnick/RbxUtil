@@ -40,6 +40,9 @@ jobs:
         with:
           python-version: '3.10'
           architecture: 'x64'
+          cache: 'pip'
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
 
       - name: Install Roblox Studio
         uses: OrbitalOwen/roblox-win-installer-action@1.1
