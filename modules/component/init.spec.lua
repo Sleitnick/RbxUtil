@@ -21,6 +21,9 @@ return function()
 	local ExtensionTest = {}
 	function ExtensionTest.Constructing(component)
 		component.Data = "a"
+		component.DidHeartbeat = false
+		component.DidStepped = false
+		component.DidRenderStepped = false
 	end
 	function ExtensionTest.Constructed(component)
 		component.Data ..= "c"
