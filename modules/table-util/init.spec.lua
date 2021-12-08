@@ -1,3 +1,5 @@
+print("Running test for " .. script.Parent.Name)
+
 return function()
 
 	local TableUtil = require(script.Parent)

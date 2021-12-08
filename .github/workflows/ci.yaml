@@ -64,7 +64,7 @@ jobs:
       - name: Run tests
         run: run-in-roblox --place test.rbxl --script ci.lua > test-out.txt
         continue-on-error: true
-        timeout-minutes: 5
+        timeout-minutes: 3
         
       - name: Check test status
         shell: bash

@@ -1,3 +1,5 @@
+print("Running test for " .. script.Parent.Name)
+
 return function()
 
 	local Timer = require(script.Parent)
@@ -22,19 +24,19 @@ return function()
 		end)
 
 		it("should tick appropriately", function()
-			local start = time()
+			local start = os.clock()
 			timer:Start()
 			timer.Tick:Wait()
-			local duration = (time() - start)
+			local duration = (os.clock() - start)
 			expect(duration).to.be.near(duration, 0.02)
 		end)
 
 		it("should start immediately", function()
-			local start = time()
+			local start = os.clock()
 			local stop = nil
 			timer.Tick:Connect(function()
 				if not stop then
-					stop = time()
+					stop = os.clock()
 				end
 			end)
 			timer:StartNow()
