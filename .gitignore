@@ -4,3 +4,5 @@ packages/*/Packages
 /Packages
 /test/Packages
 /test/modules
+*.rbxl
+*.rbxl.lock
