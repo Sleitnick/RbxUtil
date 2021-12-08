@@ -1,5 +1,3 @@
-print("Running test for " .. script.Parent.Name)
-
 return function()
 
 	local Timer = require(script.Parent)
@@ -10,6 +8,7 @@ return function()
 
 		beforeEach(function()
 			timer = Timer.new(0.1)
+			timer.TimeFunction = os.clock
 		end)
 
 		afterEach(function()

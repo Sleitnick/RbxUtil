@@ -1,5 +1,3 @@
-print("Running test for " .. script.Parent.Name)
-
 local function AwaitCondition(predicate, timeout)
 	local start = os.clock()
 	timeout = (timeout or 10)

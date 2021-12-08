@@ -1,0 +1,19 @@
+{
+	"name": "rbx-util",
+	"tree": {
+		"$className": "DataModel",
+		"ReplicatedStorage": {
+			"$className": "ReplicatedStorage",
+			"Test": {
+				"$path": "test"
+			}
+		},
+		"TestService": {
+			"$className": "TestService",
+			"$path": "ci",
+			"$properties": {
+				"ExecuteWithStudioRun": true
+			}
+		}
+	}
+}

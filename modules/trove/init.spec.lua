@@ -1,5 +1,3 @@
-print("Running test for " .. script.Parent.Name)
-
 return function()
 
 	local Trove = require(script.Parent)
