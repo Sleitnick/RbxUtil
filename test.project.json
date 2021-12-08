@@ -7,6 +7,13 @@
 			"Test": {
 				"$path": "test"
 			}
+		},
+		"TestService": {
+			"$className": "TestService",
+			"$path": "ci",
+			"$properties": {
+				"ExecuteWithStudioRun": true
+			}
 		}
 	}
 }

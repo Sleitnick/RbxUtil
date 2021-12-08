@@ -1,3 +1,5 @@
+[![CI](https://github.com/Sleitnick/RbxUtil/actions/workflows/ci.yaml/badge.svg)](https://github.com/Sleitnick/RbxUtil/actions/workflows/ci.yaml)
+
 # RbxUtil
 
 | Module | Dependency | Description |

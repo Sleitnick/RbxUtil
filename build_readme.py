@@ -13,7 +13,7 @@ def pretty_display_name(str: str):
 	return "".join(split)
 
 def build():
-	readme = ["# RbxUtil\n", "| Module | Dependency | Description |", "| -- | -- | -- |"]
+	readme = ["[![CI](https://github.com/Sleitnick/RbxUtil/actions/workflows/ci.yaml/badge.svg)](https://github.com/Sleitnick/RbxUtil/actions/workflows/ci.yaml)\n", "# RbxUtil\n", "| Module | Dependency | Description |", "| -- | -- | -- |"]
 	name_pattern = re.compile(r"name\s*=\s*\"(.+)\"$")
 	version_pattern = re.compile(r"version\s*=\s*\"(.+)\"$")
 	deescription_pattern = re.compile(r"description\s*=\s*\"(.+)\"$")

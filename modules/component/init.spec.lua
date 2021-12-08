@@ -3,6 +3,7 @@ return function()
 	local Component = require(script.Parent)
 
 	local CollectionService = game:GetService("CollectionService")
+	local RunService = game:GetService("RunService")
 
 	local TAG = "__KnitTestComponent__"
 
@@ -20,6 +21,9 @@ return function()
 	local ExtensionTest = {}
 	function ExtensionTest.Constructing(component)
 		component.Data = "a"
+		component.DidHeartbeat = false
+		component.DidStepped = false
+		component.DidRenderStepped = false
 	end
 	function ExtensionTest.Constructed(component)
 		component.Data ..= "c"
@@ -124,7 +128,7 @@ return function()
 			expect(component).to.be.ok()
 			expect(component.Data).to.equal("abcdef")
 			expect(component.DidHeartbeat).to.equal(true)
-			expect(component.DidStepped).to.equal(true)
+			expect(component.DidStepped).to.equal(RunService:IsRunning())
 			expect(component.DidRenderStepped).to.never.equal(true)
 			instance:Destroy()
 			task.wait()
