@@ -4,31 +4,41 @@
 -- Stephen Leitnick
 -- January 08, 2021
 
---[[
-
-	enumList = EnumList.new(name: string, enums: string[])
-
-	enumList:BelongsTo(item): boolean
-
-
-	Example:
-
-		direction = EnumList.new("Direction", {"Up", "Down", "Left", "Right"})
-		leftDir = direction.Left
-		print("IsDirection", direction:BelongsTo(leftDir))
-
---]]
-
 
 type EnumNames = {string}
 
-local Symbol = require(script.Parent.Symbol)
+--[=[
+	@interface EnumItem
+	.Name string
+	.Value number
+	.EnumType EnumList
+	@within EnumList
+]=]
+type EnumItem = {
+	Name: string,
+	Value: number,
+	EnumType: any,
+}
+
+local LIST_KEY = newproxy()
+local NAME_KEY = newproxy()
+
+local function CreateEnumItem(name: string, value: number, enum: any): EnumItem
+	local enumItem = {
+		Name = name;
+		Value = value;
+		EnumType = enum;
+	}
+	table.freeze(enumItem)
+	return enumItem
+end
 
 --[=[
 	@class EnumList
 	Defines a new Enum.
 ]=]
 local EnumList = {}
+EnumList.__index = EnumList
 
 
 --[=[
@@ -49,27 +59,18 @@ local EnumList = {}
 	```
 ]=]
 function EnumList.new(name: string, enums: EnumNames)
-	local scope = Symbol.new(name, nil)
-	local enumItems: {[string]: Symbol.Symbol} = {}
-	for _,enumName in ipairs(enums) do
-		enumItems[enumName] = Symbol.new(enumName, scope)
+	assert(type(name) == "string", "Name string required")
+	assert(type(enums) == "table", "Enums table required")
+	local self = setmetatable({}, EnumList)
+	self[LIST_KEY] = {}
+	self[NAME_KEY] = name
+	for i,enumName in ipairs(enums) do
+		assert(type(enumName) == "string", "Enum name must be a string")
+		local enumItem = CreateEnumItem(enumName, i, self)
+		self[enumName] = enumItem
+		table.insert(self[LIST_KEY], enumItem)
 	end
-	local self = setmetatable({
-		_scope = scope;
-	}, {
-		__index = function(_t, k)
-			if enumItems[k] then
-				return enumItems[k]
-			elseif EnumList[k] then
-				return EnumList[k]
-			else
-				error("Unknown " .. name .. ": " .. tostring(k), 2)
-			end
-		end;
-		__newindex = function()
-			error("Cannot add new " .. name, 2)
-		end;
-	})
+	table.freeze(self)
 	return self
 end
 
@@ -80,7 +81,27 @@ end
 	Returns `true` if `obj` belongs to the EnumList.
 ]=]
 function EnumList:BelongsTo(obj: any): boolean
-	return Symbol.IsInScope(obj, self._scope)
+	return type(obj) == "table" and obj.EnumType == self
+end
+
+
+--[=[
+	Returns an array of all enum items.
+	@return {EnumItem}
+	@since v2.0.0
+]=]
+function EnumList:GetEnumItems()
+	return self[LIST_KEY]
+end
+
+
+--[=[
+	Get the name of the enum.
+	@return string
+	@since v2.0.0
+]=]
+function EnumList:GetName()
+	return self[NAME_KEY]
 end
 
 
