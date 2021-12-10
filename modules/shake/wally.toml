@@ -6,3 +6,6 @@ license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
+
+[dependencies]
+Trove = "sleitnick/trove@^0.1"
