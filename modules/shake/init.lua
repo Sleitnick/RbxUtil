@@ -15,11 +15,78 @@ local Trove = require(script.Parent.Trove)
 
 
 local rng = Random.new()
+local renderId = 0
 
 
 --[=[
 	@class Shake
 	Create realistic shake effects, such as camera or object shakes.
+
+	Creating a shake is very simple with this module. For every shake,
+	simply create a shake instance by calling `Shake.new()`. From
+	there, configure the shake however desired. Once configured,
+	call `shake:Start()` and then bind a function to it with either
+	`shake:OnSignal(...)` or `shake:BindToRenderStep(...)`.
+	
+	The shake will output its values to the connected function, and then
+	automatically stop and clean up its connections once completed.
+
+	Shake instances can be reused indefinitely. However, only one shake
+	operation per instance can be running. If more than one is needed
+	of the same configuration, simply call `shake:Clone()` to duplicate
+	it.
+
+	Example of a simple camera shake:
+	```lua
+	local priority = Enum.RenderPriority.Last.Value
+
+	local shake = Shake.new()
+	shake.FadeInTime = 0
+	shake.Frequency = 0.1
+	shake.Amplitude = 5
+	shake.RotationInfluence = Vector3.new(0.1, 0.1, 0.1)
+
+	shake:Start()
+	shake:BindToRenderStep(Shake.NextRenderName(), priority, function(pos, rot, isDone)
+		camera.CFrame *= CFrame.new(pos) * CFrame.Angles(rot.X, rot.Y, rot.Z)
+	end)
+	```
+
+	Shakes will automatically stop once the shake has been completed. Shakes can
+	also be used continuously if the `Sustain` property is set to `true`.
+
+	Here are some more helpful configuration examples:
+
+	```lua
+	local shake = Shake.new()
+
+	-- The magnitude of the shake. Larger numbers means larger shakes.
+	shake.Amplitude = 5
+
+	-- The speed of the shake. Smaller frequencies mean faster shakes.
+	shake.Frequency = 0.1
+
+	 -- Fade-in time before max amplitude shake. Set to 0 for immediate shake.
+	shake.FadeInTime = 0
+
+	-- Fade-out time. Set to 0 for immediate cutoff.
+	shake.FadeOutTime = 0
+
+	-- How long the shake sustains full amplitude before fading out
+	shake.SustainTime = 1
+
+	-- Set to true to never end the shake. Call shake:StopSustain() to start the fade-out.
+	shake.Sustain = true
+
+	-- Multiplies against the shake vector to control the final amplitude of the position.
+	-- Can be seen internally as: position = shakeVector * fadeInOut * positionInfluence
+	shake.PositionInfluence = Vector3.new(1, 1, 1)
+
+	-- Multiplies against the shake vector to control the final amplitude of the rotation.
+	-- Can be seen internally as: position = shakeVector * fadeInOut * rotationInfluence
+	shake.RotationInfluence = Vector3.new(0.1, 0.1, 0.1)
+
+	```
 ]=]
 local Shake = {}
 Shake.__index = Shake
@@ -99,8 +166,18 @@ Shake.__index = Shake
 	Defaults to `Vector3.one`.
 ]=]
 
+--[=[
+	@within Shake
+	@prop TimeFunction () -> number
+	The function used to get the current time. This defaults to
+	`time` during runtime, and `os.clock` otherwise. Usually this
+	will not need to be set, but it can be optionally configured
+	if desired.
+]=]
+
 
 --[=[
+	@return Shake
 	Construct a new Shake instance.
 ]=]
 function Shake.new()
@@ -117,7 +194,64 @@ function Shake.new()
 	self._timeOffset = rng:NextNumber(-1e9, 1e9)
 	self._startTime = 0
 	self._trove = Trove.new()
+	self._running = false
 	return self
+end
+
+
+--[=[
+	@param vector Vector3
+	@param distance number
+	@return Vector3
+	Apply an inverse square intensity multiplier to the given vector based on the
+	distance away from some source. This can be used to simulate shake intensity
+	based on the distance the shake is occurring from some source.
+
+	For instance, if the shake is caused by an explosion in the game, the shake
+	can be calculated as such:
+
+	```lua
+	local function Explosion(positionOfExplosion: Vector3)
+
+		local cam = workspace.CurrentCamera
+		local renderPriority = Enum.RenderPriority.Last.Value
+
+		local shake = Shake.new()
+		-- Set shake properties here
+
+		local function ExplosionShake(pos: Vector3, rot: Vector3)
+			local distance = (cam.CFrame.Position - positionOfExplosion).Magnitude
+			pos = Shake.InverseSquare(pos, distance)
+			rot = Shake.InverseSquare(rot, distance)
+			cam.CFrame *= CFrame.new(pos) * CFrame.Angles(rot.X, rot.Y, rot.Z)
+		end
+
+		shake:BindToRenderStep("ExplosionShake", renderPriority, ExplosionShake)
+
+	end
+	```
+]=]
+function Shake.InverseSquare(shake: Vector3, distance: number): Vector3
+	if distance < 1 then
+		distance = 1
+	end
+	local intensity = 1 / (distance * distance)
+	return shake * intensity
+end
+
+
+--[=[
+	@return string
+	Returns a unique render name for every call, which can
+	be used with the `BindToRenderStep` method optionally.
+
+	```lua
+	shake:BindToRenderStep(Shake.NextRenderName(), ...)
+	```
+]=]
+function Shake.NextRenderName(): string
+	renderId += 1
+	return ("__shake_%.4i__"):format(renderId)
 end
 
 
@@ -131,6 +265,10 @@ end
 ]=]
 function Shake:Start()
 	self._startTime = self.TimeFunction()
+	self._running = true
+	self._trove:Add(function()
+		self._running = false
+	end)
 end
 
 
@@ -147,13 +285,24 @@ end
 
 
 --[=[
+	@return boolean
+	Returns `true` if the shake instance is currently running,
+	otherwise returns `false`.
+]=]
+function Shake:IsShaking(): boolean
+	return self._running
+end
+
+
+--[=[
 	Schedules a sustained shake to stop. This works by setting the
 	`Sustain` field to `false` and letting the shake effect fade out
 	based on the `FadeOutTime` field.
 ]=]
 function Shake:StopSustain()
+	local now = self.TimeFunction()
 	self.Sustain = false
-	self.SustainTime = self._startTime + self.FadeInTime
+	self.SustainTime = (now - self._startTime) - self.FadeInTime
 end
 
 
@@ -270,43 +419,46 @@ end
 
 
 --[=[
-	@param vector Vector3
-	@param distance number
-	@return Vector3
-	Apply an inverse square intensity multiplier to the given vector based on the
-	distance away from some source. This can be used to simulate shake intensity
-	based on the distance the shake is occurring from some source.
+	@return Shake
+	Creates a new shake with identical properties as
+	this one. This does _not_ clone over playing state,
+	and thus the cloned instance will be in a stopped
+	state.
 
-	For instance, if the shake is caused by an explosion in the game, the shake
-	can be calculated as such:
+	A use-case for using `Clone` would be to create a module
+	with a list of shake presets. These presets can be cloned
+	when desired for use. For instance, there might be presets
+	for explosions, recoil, or earthquakes.
 
 	```lua
-	local function Explosion(positionOfExplosion: Vector3)
+	--------------------------------------
+	-- Example preset module
+	local ShakePresets = {}
 
-		local cam = workspace.CurrentCamera
-		local renderPriority = Enum.RenderPriority.Last.Value
+	local explosion = Shake.new()
+	-- Configure `explosion` shake here
+	ShakePresets.Explosion = explosion
 
-		local shake = Shake.new()
-		-- Set shake properties here
+	return ShakePresets
+	--------------------------------------
 
-		local function ExplosionShake(pos: Vector3, rot: Vector3)
-			local distance = (cam.CFrame.Position - positionOfExplosion).Magnitude
-			pos = Shake.InverseSquare(pos, distance)
-			rot = Shake.InverseSquare(rot, distance)
-			cam.CFrame *= CFrame.new(pos) * CFrame.Angles(rot.X, rot.Y, rot.Z)
-		end
-
-		shake:BindToRenderStep("ExplosionShake", renderPriority, ExplosionShake)
-
-	end
+	-- Use the module:
+	local ShakePresets = require(somewhere.ShakePresets)
+	local explosionShake = ShakePresets.Explosion:Clone()
 	```
 ]=]
-function Shake.InverseSquare(shake: Vector3, distance: number): Vector3
-	if distance < 1 then
-		distance = 1
+function Shake:Clone()
+	local shake = Shake.new()
+	local cloneFields = {
+		"Amplitude", "Frequency", "FadeInTime",
+		"FadeOutTime", "SustainTime", "Sustain",
+		"PositionInfluence", "RotationInfluence",
+		"TimeFunction"
+	}
+	for _,field in ipairs(cloneFields) do
+		shake[field] = self[field]
 	end
-	local intensity = 1 / (distance * distance)
-	return shake * intensity
+	return shake
 end
 
 
