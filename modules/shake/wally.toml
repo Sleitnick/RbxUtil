@@ -1,0 +1,11 @@
+[package]
+name = "sleitnick/shake"
+description = "Shake class for making things shake"
+version = "0.1.0"
+license = "MIT"
+authors = ["Stephen Leitnick"]
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]
+Trove = "sleitnick/trove@^0.1"
