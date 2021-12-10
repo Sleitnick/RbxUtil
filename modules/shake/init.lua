@@ -187,7 +187,7 @@ function Shake:Update(): (Vector3, Vector3, boolean)
 	local now = self.TimeFunction()
 	local dur = now - self._startTime
 
-	local noiseInput = (now + self._timeOffset) / self.Frequency
+	local noiseInput = ((now + self._timeOffset) / self.Frequency) % 1000000
 
 	local multiplierFadeIn = 1
 	local multiplierFadeOut = 1
