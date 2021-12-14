@@ -222,7 +222,10 @@ function Signal:Fire(...)
 			if not freeRunnerThread then
 				freeRunnerThread = coroutine.create(runEventHandlerInFreeThread)
 			end
-			task.spawn(freeRunnerThread, item._fn, ...)
+					
+			if coroutine.status(freeRunnerThread) == "suspended" then
+				task.spawn(freeRunnerThread, item._fn, ...)
+			end
 		end
 		item = item._next
 	end
