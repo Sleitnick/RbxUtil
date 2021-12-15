@@ -33,6 +33,15 @@ local Streamable = {}
 Streamable.__index = Streamable
 
 
+--[=[
+	@return Streamable
+	@param parent Instance
+	@param childName string
+
+	Constructs a Streamable that watches for a direct child of name `childName`
+	within the `parent` Instance. Call `Observe` to observe the existence of
+	the child within the parent.
+]=]
 function Streamable.new(parent: Instance, childName: string)
 
 	local self: StreamableWithInstance = {}
@@ -76,6 +85,44 @@ function Streamable.new(parent: Instance, childName: string)
 
 	return self
 
+end
+
+
+--[=[
+	@return Streamable
+	@param parent Model
+
+	Constructs a streamable that watches for the PrimaryPart of the
+	given `parent` Model.
+]=]
+function Streamable.primary(parent: Model)
+
+	local self: StreamableWithInstance = {}
+	setmetatable(self, Streamable)
+
+	self._trove = Trove.new()
+	self._shown = self._trove:Construct(Signal)
+	self._shownTrove = Trove.new()
+	self._trove:Add(self._shownTrove)
+
+	self.Instance = parent.PrimaryPart
+
+	local function OnPrimaryPartChanged()
+		local primaryPart = parent.PrimaryPart
+		self._shownTrove:Clean()
+		self.Instance = primaryPart
+		if primaryPart then
+			self._shown:Fire(primaryPart, self._shownTrove)
+		end
+	end
+
+	self._trove:Connect(parent:GetPropertyChangedSignal("PrimaryPart"), OnPrimaryPartChanged)
+	if self.Instance then
+		OnPrimaryPartChanged()
+	end
+
+	return self
+	
 end
 
 
