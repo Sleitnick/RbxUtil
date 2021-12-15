@@ -23,11 +23,64 @@ local Signal = require(script.Parent.Parent.Signal)
 
 --[=[
 	@class Streamable
-	Watches the existence of an instance within a specific parent.
+	@client
+	Because parts in StreamingEnabled games can stream in and out of existence at
+	any point in time, it is hard to write code to interact with them. This is
+	where Streamables come into play. Streamables will observe the existence of
+	a given instance, and will signal when the instance exists and does not
+	exist.
+
+	The API is very simple. Create a Streamable that points to a certain parent
+	and looks for a specific child instance (typically a BasePart). Then, call
+	the `Observe` method to observe when the instance streams in and out.
 
 	```lua
 	local Streamable = require(packages.Streamable).Streamable
+
+	-- Models might take a bit to load, but the model instance
+	-- is never removed, thus we can use WaitForChild.
+	local model = workspace:WaitForChild("MyModel")
+
+	-- Watch for a specific part in the model:
+	local partStreamable = Streamable.new(model, "SomePart")
+
+	partStreamable:Observe(function(part, trove)
+		print(part:GetFullName() .. " added")
+		-- Run code on the part here.
+		-- Use the trove to manage cleanup when the part goes away.
+		trove:Add(function()
+			-- General cleanup stuff
+			print(part.Name .. " removed")
+		end)
+	end)
+
+	-- Watch for the PrimaryPart of a model to exist:
+	local primaryStreamable = Streamable.primary(model)
+	primaryStreamable:Observe(function(primary, trove)
+		print("Model now has a PrimaryPart:", primary.Name)
+		trove:Add(function()
+			print("Model's PrimaryPart has been removed")
+		end)
+	end)
+
+	-- At any given point, accessing the Instance field will
+	-- reference the observed part, if it exists:
+	if partStreamable.Instance then
+		print("Streamable has its instance:", partStreamable.Instance)
+	end
+
+	-- When/if done, call Destroy on the streamable, which will
+	-- also clean up any observers:
+	partStreamable:Destroy()
+	primaryStreamable:Destroy()
 	```
+
+	For more information on the mechanics of how StreamingEnabled works
+	and what sort of behavior to expect, see the
+	[Content Streaming](https://developer.roblox.com/en-us/articles/content-streaming#technical-behavior)
+	page. It is important to understand that only BaseParts and their descendants are streamed in/out,
+	whereas other instances are loaded during the initial client load. It is also important to understand
+	that streaming only occurs on the client. The server has immediate access to everything right away.
 ]=]
 local Streamable = {}
 Streamable.__index = Streamable
@@ -145,7 +198,9 @@ end
 
 
 --[=[
-	Destroys the Streamable.
+	Destroys the Streamable. Any observers will be disconnected,
+	which also means that troves within observers will be cleaned
+	up. This should be called when a streamable is no longer needed.
 ]=]
 function Streamable:Destroy()
 	self._trove:Destroy()

@@ -15,6 +15,7 @@ type CompoundHandler = (Streamables, any) -> nil
 
 --[=[
 	@class StreamableUtil
+	@client
 	A utility library for the Streamable class.
 
 	```lua
