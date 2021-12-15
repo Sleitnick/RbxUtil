@@ -111,6 +111,30 @@ return function()
 			expect(observed).to.equal(2)
 			expect(cleaned).to.equal(2)
 		end)
+		
+		it("should detect primary part that is not immediately available", function()
+			local streamable = Streamable.primary(instanceModel)
+			local observed = 0
+			local cleaned = 0
+			streamable:Observe(function(_instance, trove)
+				observed += 1
+				trove:Add(function()
+					cleaned += 1
+				end)
+			end)
+			task.wait(0.1)
+			local testInstance = CreatePrimary()
+			task.wait()
+			testInstance.Parent = nil
+			task.wait()
+			testInstance.Parent = instanceModel
+			instanceModel.PrimaryPart = testInstance
+			task.wait()
+			streamable:Destroy()
+			task.wait()
+			expect(observed).to.equal(2)
+			expect(cleaned).to.equal(2)
+		end)
 
 	end)
 
