@@ -13,8 +13,8 @@ local Streamable = require(packages.Streamable).Streamable
 ```lua
 local Streamable = require(packages.Streamable).Streamable
 ```"><meta data-react-helmet="true" property="og:url" content="https://Sleitnick.github.io/RbxUtil/api/Streamable"><meta data-react-helmet="true" name="docusaurus_locale" content="en"><meta data-react-helmet="true" name="docusaurus_tag" content="default"><link data-react-helmet="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/Streamable"><link data-react-helmet="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/Streamable" hreflang="en"><link data-react-helmet="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/Streamable" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.af7d0217.css">
-<link rel="preload" href="/RbxUtil/assets/js/runtime~main.69f5d04a.js" as="script">
-<link rel="preload" href="/RbxUtil/assets/js/main.13a06588.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/runtime~main.70b1af07.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/main.4a80eab9.js" as="script">
 </head>
 <body>
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -28,17 +28,77 @@ local Streamable = require(packages.Streamable).Streamable
   is being observed, it will always exist. If not currently
   being observed, this will be <code>nil</code>.
 </p>
-</div><h2 class="anchor anchorWithStickyNavbar_31ik" id="functions">Functions<a aria-hidden="true" class="hash-link" href="#functions" title="Direct link to heading">​</a></h2><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Observe"><code style="text-decoration:none">Observe</code><a aria-hidden="true" class="hash-link" href="#Observe" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/streamable/Streamable.lua#L92"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>Streamable<!-- -->:</code><code class="green_3LnD">Observe</code><code>(</code><code>handler<!-- -->: </code><code class="green_3LnD">(</code><div class="inset_2cJr"><code>instance<!-- -->: </code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Instance" target="_blank" rel="noopener noreferrer">Instance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code class="green_3LnD">,</code></div><div class="inset_2cJr"><code>trove<!-- -->: </code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Trove">Trove</a></code></div><code class="green_3LnD">)</code><code class="green_3LnD"> → </code><code class="blue_2Afy">nil</code><code>) → </code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/RemoteSignal#Connection">Connection</a></code></div><div>
+</div><h2 class="anchor anchorWithStickyNavbar_31ik" id="functions">Functions<a aria-hidden="true" class="hash-link" href="#functions" title="Direct link to heading">​</a></h2><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="new"><code style="text-decoration:none">new</code><a aria-hidden="true" class="hash-link" href="#new" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/streamable/Streamable.lua#L45"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>Streamable<!-- -->.</code><code class="green_3LnD">new</code><code>(</code><div class="inset_2cJr"><div><code>parent<!-- -->: </code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Instance" target="_blank" rel="noopener noreferrer">Instance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code>,</code></div><div><code>childName<!-- -->: </code><code class="blue_2Afy">string</code></div></div><code>) → </code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Streamable">Streamable</a></code></div><div>
+<p>
+  Constructs a Streamable that watches for a direct child of name <code>childName</code>
+  within the <code>parent</code> Instance. Call <code>Observe</code> to observe the existence of
+  the child within the parent.
+</p>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="primary"><code style="text-decoration:none">primary</code><a aria-hidden="true" class="hash-link" href="#primary" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/streamable/Streamable.lua#L98"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>Streamable<!-- -->.</code><code class="green_3LnD">primary</code><code>(</code><code>parent<!-- -->: </code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/Model" target="_blank" rel="noopener noreferrer">Model<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code>) → </code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Streamable">Streamable</a></code></div><div>
+<p>
+  Constructs a streamable that watches for the PrimaryPart of the
+  given <code>parent</code> Model.
+</p>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Observe"><code style="text-decoration:none">Observe</code><a aria-hidden="true" class="hash-link" href="#Observe" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/streamable/Streamable.lua#L139"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>Streamable<!-- -->:</code><code class="green_3LnD">Observe</code><code>(</code><code>handler<!-- -->: </code><code class="green_3LnD">(</code><div class="inset_2cJr"><code>instance<!-- -->: </code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Instance" target="_blank" rel="noopener noreferrer">Instance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code class="green_3LnD">,</code></div><div class="inset_2cJr"><code>trove<!-- -->: </code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Trove">Trove</a></code></div><code class="green_3LnD">)</code><code class="green_3LnD"> → </code><code class="blue_2Afy">nil</code><code>) → </code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/RemoteSignal#Connection">Connection</a></code></div><div>
 <p>
   Observes the instance. The handler is called anytime the
   instance comes into existence, and the trove given is
   cleaned up when the instance goes away.
 </p>
 <p>To stop observing, disconnect the returned connection.</p>
-</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Destroy"><code style="text-decoration:none">Destroy</code><a aria-hidden="true" class="hash-link" href="#Destroy" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/streamable/Streamable.lua#L103"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>Streamable<!-- -->:</code><code class="green_3LnD">Destroy</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Destroy"><code style="text-decoration:none">Destroy</code><a aria-hidden="true" class="hash-link" href="#Destroy" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/streamable/Streamable.lua#L150"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>Streamable<!-- -->:</code><code class="green_3LnD">Destroy</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
 <p>Destroys the Streamable.</p>
 </div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
     &quot;functions&quot;: [
+        {
+            &quot;name&quot;: &quot;new&quot;,
+            &quot;desc&quot;: &quot;Constructs a Streamable that watches for a direct child of name `childName`\nwithin the `parent` Instance. Call `Observe` to observe the existence of\nthe child within the parent.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;parent&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Instance&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;childName&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Streamable&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 45,
+                &quot;path&quot;: &quot;modules/streamable/Streamable.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;primary&quot;,
+            &quot;desc&quot;: &quot;Constructs a streamable that watches for the PrimaryPart of the\ngiven `parent` Model.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;parent&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Model&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Streamable&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 98,
+                &quot;path&quot;: &quot;modules/streamable/Streamable.lua&quot;
+            }
+        },
         {
             &quot;name&quot;: &quot;Observe&quot;,
             &quot;desc&quot;: &quot;Observes the instance. The handler is called anytime the\ninstance comes into existence, and the trove given is\ncleaned up when the instance goes away.\n\nTo stop observing, disconnect the returned connection.&quot;,
@@ -57,7 +117,7 @@ local Streamable = require(packages.Streamable).Streamable
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 92,
+                &quot;line&quot;: 139,
                 &quot;path&quot;: &quot;modules/streamable/Streamable.lua&quot;
             }
         },
@@ -68,7 +128,7 @@ local Streamable = require(packages.Streamable).Streamable
             &quot;returns&quot;: [],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 103,
+                &quot;line&quot;: 150,
                 &quot;path&quot;: &quot;modules/streamable/Streamable.lua&quot;
             }
         }
@@ -91,8 +151,8 @@ local Streamable = require(packages.Streamable).Streamable
         &quot;line&quot;: 32,
         &quot;path&quot;: &quot;modules/streamable/Streamable.lua&quot;
     }
-}</pre></details></div><div class="col col--3"><div class="tableOfContents_35-E thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#Instance" class="table-of-contents__link toc-highlight">Instance</a></li></ul></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#Destroy" class="table-of-contents__link toc-highlight">:Destroy</a></li><li><a href="#Observe" class="table-of-contents__link toc-highlight">:Observe</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2021 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/RbxUtil/assets/js/runtime~main.69f5d04a.js"></script>
-<script src="/RbxUtil/assets/js/main.13a06588.js"></script>
+}</pre></details></div><div class="col col--3"><div class="tableOfContents_35-E thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#Instance" class="table-of-contents__link toc-highlight">Instance</a></li></ul></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#Destroy" class="table-of-contents__link toc-highlight">:Destroy</a></li><li><a href="#Observe" class="table-of-contents__link toc-highlight">:Observe</a></li><li><a href="#new" class="table-of-contents__link toc-highlight">.new</a></li><li><a href="#primary" class="table-of-contents__link toc-highlight">.primary</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2021 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
+<script src="/RbxUtil/assets/js/runtime~main.70b1af07.js"></script>
+<script src="/RbxUtil/assets/js/main.4a80eab9.js"></script>
 </body>
 </html>
