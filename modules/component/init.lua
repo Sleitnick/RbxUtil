@@ -115,10 +115,14 @@ local function InvokeExtensionFn(component, extensionList, fnName: string)
 	for _,extension in ipairs(extensionList) do
 		local fn = extension[fnName]
 		if type(fn) == "function" then
-			fn(component)
+		 return fn(component)
 		end
-	end
+	end	
+			
+	return ""
 end
+		
+		
 
 
 --[=[
@@ -220,7 +224,15 @@ end
 function Component:_instantiate(instance: Instance)
 	local component = setmetatable({}, self)
 	component.Instance = instance
-	InvokeExtensionFn(component, self._extensions, "Constructing")
+		
+	local shouldCreate = InvokeExtensionFn(component, self._extensions, "ShouldCreate")
+				
+	if not shouldCreate then
+		-- Cleanup:
+		component.Instance = nil
+		return nil			
+	end
+				
 	if type(component.Construct) == "function" then
 		component:Construct()
 	end
@@ -287,6 +299,8 @@ function Component:_setup()
 	local function TryConstructComponent(instance)
 		if self._instancesToComponents[instance] then return end
 		local component = self:_instantiate(instance)
+		if not component then return end
+					
 		self._instancesToComponents[instance] = component
 		table.insert(self._components, component)
 		task.defer(function()
