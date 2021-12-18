@@ -232,7 +232,8 @@ function Component:_instantiate(instance: Instance)
 		component.Instance = nil
 		return nil			
 	end
-				
+	
+				InvokeExtensionFn(component, self._extensions, "Constructing")
 	if type(component.Construct) == "function" then
 		component:Construct()
 	end
