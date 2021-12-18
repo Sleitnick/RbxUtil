@@ -51,6 +51,8 @@ local Promise = require(script.Parent.Promise)
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
+local None = newproxy()
+
 local IS_SERVER = RunService:IsServer()
 local DEFAULT_COMM_FOLDER_NAME = "__comm__"
 local WAIT_FOR_CHILD_TIMEOUT = 60
@@ -315,14 +317,16 @@ RemoteProperty.__index = RemoteProperty
 
 function RemoteProperty.new(initialValue: any, parent: Instance, name: string, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?)
 	local self = setmetatable({}, RemoteProperty)
-	self._initial = initialValue
 	self._rs = RemoteSignal.new(parent, name, inboundMiddleware, outboundMiddleware)
+	self._initial = initialValue
 	self._perPlayer = {}
 	self._playerRemoving = Players.PlayerRemoving:Connect(function(player)
 		self._perPlayer[player] = nil
 	end)
 	self._rs:Connect(function(player)
-		self._rs:Fire(player, self._initial)
+		local playerValue = self._perPlayer[player]
+		local value = if playerValue == nil then self._inital elseif playerValue == None then nil else playerValue
+		self._rs:Fire(player, value)
 	end)
 	return self
 end
@@ -338,7 +342,7 @@ end
 
 function RemoteProperty:Set(player: Player, value: any)
 	if player.Parent then
-		self._perPlayer[player] = value
+		self._perPlayer[player] = if value ~= nil then value else None
 	end
 	self._rs:Fire(player, value)
 end
@@ -354,9 +358,50 @@ ClientRemoteProperty.__index = ClientRemoteProperty
 
 function ClientRemoteProperty.new(re: RemoteEvent, inboundMiddleware: ClientMiddleware?, outboudMiddleware: ClientMiddleware?)
 	local self = setmetatable({}, ClientRemoteProperty)
+	self._rs = ClientRemoteSignal.new(re, inboundMiddleware, outboudMiddleware)
+	self._ready = false
+	self._value = nil
+	self.Changed = self._rs
+	self._changed = self._rs:Connect(function(value)
+		self._value = value
+	end)
+	self._readyPromise = self:OnReady():andThen(function()
+		self._readyPromise = nil
+	end)
+	self._rs:Fire()
+	return self
+end
+
+function ClientRemoteProperty:Get()
+	return self._value
+end
+
+function ClientRemoteProperty:OnReady()
+	if self._ready then
+		return Promise.resolve(self._value)
+	end
+	return Promise.fromEvent(self._rs, function(value)
+		self._value = value
+		self._ready = true
+		return true
+	end):andThen(function()
+		return self._value
+	end)
+end
+
+function ClientRemoteProperty:Observe(observer: () -> any)
+	if self._ready then
+		task.defer(observer, self._value)
+	end
+	return self.Changed:Connect(observer)
 end
 
 function ClientRemoteProperty:Destroy()
+	self._rs:Destroy()
+	if self._readyPromise then
+		self._readyPromise:cancel()
+	end
+	self._changed:Disconnect()
 end
 
 
