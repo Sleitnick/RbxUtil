@@ -310,6 +310,56 @@ function ClientRemoteSignal:Destroy()
 end
 
 
+local RemoteProperty = {}
+RemoteProperty.__index = RemoteProperty
+
+function RemoteProperty.new(initialValue: any, parent: Instance, name: string, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?)
+	local self = setmetatable({}, RemoteProperty)
+	self._initial = initialValue
+	self._rs = RemoteSignal.new(parent, name, inboundMiddleware, outboundMiddleware)
+	self._perPlayer = {}
+	self._playerRemoving = Players.PlayerRemoving:Connect(function(player)
+		self._perPlayer[player] = nil
+	end)
+	self._rs:Connect(function(player)
+		self._rs:Fire(player, self._initial)
+	end)
+	return self
+end
+
+function RemoteProperty:SetAll(value: any)
+	self._initial = value
+	self._rs:FireAll(value)
+end
+
+function RemoteProperty:SetFilter(predicate: (Player, ...any) -> boolean, ...: any)
+	self._rs:FireFilter(predicate, ...)
+end
+
+function RemoteProperty:Set(player: Player, value: any)
+	if player.Parent then
+		self._perPlayer[player] = value
+	end
+	self._rs:Fire(player, value)
+end
+
+function RemoteProperty:Destroy()
+	self._rs:Destroy()
+	self._playerRemoving:Disconnect()
+end
+
+
+local ClientRemoteProperty = {}
+ClientRemoteProperty.__index = ClientRemoteProperty
+
+function ClientRemoteProperty.new(re: RemoteEvent, inboundMiddleware: ClientMiddleware?, outboudMiddleware: ClientMiddleware?)
+	local self = setmetatable({}, ClientRemoteProperty)
+end
+
+function ClientRemoteProperty:Destroy()
+end
+
+
 --[=[
 	@class Comm
 	Remote communication library.
