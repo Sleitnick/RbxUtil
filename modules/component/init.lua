@@ -34,11 +34,13 @@ type ExtensionConstructFn = (any) -> boolean
 	extending the behavior of components by wrapping around
 	component lifecycle methods.
 
-	A special `ShouldConstruct` method can be used to indicate
+	A special `ShouldConstruct` function can be used to indicate
 	if the component should actually be created. This must
 	return `true` or `false`. A component with multiple
 	`ShouldConstruct` extension functions must have them _all_
 	return `true` in order for the component to be constructed.
+	The `ShouldConstruct` function runs _before_ all other
+	extension functions and component lifecycle methods.
 
 	For instance, an extension could be created to simply log
 	when the various lifecycle stages run on the component:
@@ -53,6 +55,24 @@ type ExtensionConstructFn = (any) -> boolean
 	function Logger.Stopped(component) print("Stopped", component) end
 
 	local MyComponent = Component.new({Tag = "MyComponent", Extensions = {Logger}})
+	```
+
+	Sometimes it is useful for an extension to control whether or
+	not a component should be constructed. For instance, if a
+	component on the client should only be instantiated for the
+	local player, an extension might look like this, assuming the
+	instance has an attribute linking it to the player's UserId:
+
+	```lua
+	local player = game:GetService("Players").LocalPlayer
+
+	local OnlyLocalPlayer = {}
+	function OnlyLocalPlayer.ShouldConstruct(component)
+		local ownerId = component.Instance:GetAttribute("OwnerId")
+		return ownerId == player.UserId
+	end
+
+	local MyComponent = Component.new({Tag = "MyComponent", Extensions = {OnlyLocalPlayer}})
 	```
 ]=]
 type Extension = {
