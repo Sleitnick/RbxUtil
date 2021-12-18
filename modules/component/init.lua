@@ -112,17 +112,22 @@ end
 
 
 local function InvokeExtensionFn(component, extensionList, fnName: string)
-	for _,extension in ipairs(extensionList) do
+	local response 
+	
+	for key,extension in ipairs(extensionList) do
 		local fn = extension[fnName]
+
 		if type(fn) == "function" then
-		 return fn(component)
+			response = fn(component)
+		else
+			response = true
 		end
 	end	
-			
-	return ""
+
+	return response
 end
-		
-		
+
+
 
 
 --[=[
@@ -224,16 +229,14 @@ end
 function Component:_instantiate(instance: Instance)
 	local component = setmetatable({}, self)
 	component.Instance = instance
-		
-	local shouldCreate = InvokeExtensionFn(component, self._extensions, "ShouldCreate")
-				
-	if not shouldCreate then
+
+	if not InvokeExtensionFn(component, self._extensions, "ShouldCreate")then
 		-- Cleanup:
 		component.Instance = nil
 		return nil			
 	end
-	
-				InvokeExtensionFn(component, self._extensions, "Constructing")
+
+	InvokeExtensionFn(component, self._extensions, "Constructing")
 	if type(component.Construct) == "function" then
 		component:Construct()
 	end
@@ -243,9 +246,9 @@ end
 
 
 function Component:_setup()
-	
+
 	local watchingInstances = {}
-	
+
 	local function StartComponent(component)
 		InvokeExtensionFn(component, self._extensions, "Starting")
 		component:Start()
@@ -278,7 +281,7 @@ function Component:_setup()
 		component._started = true
 		self.Started:Fire(component)
 	end
-	
+
 	local function StopComponent(component)
 		if component._heartbeatUpdate then
 			component._heartbeatUpdate:Disconnect()
@@ -296,12 +299,12 @@ function Component:_setup()
 		InvokeExtensionFn(component, self._extensions, "Stopped")
 		self.Stopped:Fire(component)
 	end
-	
+
 	local function TryConstructComponent(instance)
 		if self._instancesToComponents[instance] then return end
 		local component = self:_instantiate(instance)
 		if not component then return end
-					
+
 		self._instancesToComponents[instance] = component
 		table.insert(self._components, component)
 		task.defer(function()
@@ -310,7 +313,7 @@ function Component:_setup()
 			end
 		end)
 	end
-	
+
 	local function TryDeconstructComponent(instance)
 		local component = self._instancesToComponents[instance]
 		if not component then return end
@@ -325,7 +328,7 @@ function Component:_setup()
 			task.spawn(StopComponent, component)
 		end
 	end
-	
+
 	local function StartWatchingInstance(instance)
 		if watchingInstances[instance] then return end
 		local function IsInAncestorList(): boolean
@@ -348,11 +351,11 @@ function Component:_setup()
 			TryConstructComponent(instance)
 		end
 	end
-	
+
 	local function InstanceTagged(instance: Instance)
 		StartWatchingInstance(instance)
 	end
-	
+
 	local function InstanceUntagged(instance: Instance)
 		local watchHandle = watchingInstances[instance]
 		if watchHandle then
@@ -361,15 +364,15 @@ function Component:_setup()
 		end
 		TryDeconstructComponent(instance)
 	end
-	
+
 	self._trove:Connect(CollectionService:GetInstanceAddedSignal(self.Tag), InstanceTagged)
 	self._trove:Connect(CollectionService:GetInstanceRemovedSignal(self.Tag), InstanceUntagged)
-	
+
 	local tagged = CollectionService:GetTagged(self.Tag)
 	for _,instance in ipairs(tagged) do
 		task.defer(InstanceTagged, instance)
 	end
-	
+
 end
 
 
