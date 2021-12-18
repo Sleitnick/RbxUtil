@@ -249,7 +249,7 @@ end
 function Component:_instantiate(instance: Instance)
 	local component = setmetatable({}, self)
 	component.Instance = instance
-	if not ShouldConstruct(component) then
+	if not ShouldConstruct(component, self._extensions) then
 		return nil
 	end
 	InvokeExtensionFn(component, self._extensions, "Constructing")
