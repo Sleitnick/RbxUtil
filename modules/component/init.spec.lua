@@ -19,6 +19,9 @@ return function()
 	end
 
 	local ExtensionTest = {}
+	function ExtensionTest.ShouldConstruct(_component)
+		return true
+	end
 	function ExtensionTest.Constructing(component)
 		component.Data = "a"
 		component.DidHeartbeat = false
@@ -142,6 +145,68 @@ return function()
 			expect(component).to.be.ok()
 			expect(component.Another).to.be.ok()
 			expect(component.Another:GetData()).to.equal(true)
+		end)
+
+		it("should use extension to decide whether or not to construct", function()
+
+			local e1 = {c = true}
+			function e1.ShouldConstruct(_component)
+				return e1.c
+			end
+
+			local e2 = {c = true}
+			function e2.ShouldConstruct(_component)
+				return e2.c
+			end
+
+			local e3 = {c = true}
+			function e3.ShouldConstruct(_component)
+				return e3.c
+			end
+
+			local c1 = Component.new({Tag = TAG, Extensions = {e1}})
+			local c2 = Component.new({Tag = TAG, Extensions = {e1, e2}})
+			local c3 = Component.new({Tag = TAG, Extensions = {e1, e2, e3}})
+
+			local function SetE(a, b, c)
+				e1.c = a
+				e2.c = b
+				e3.c = c
+			end
+
+			local function Check(inst, comp, shouldExist)
+				local c = Component.FromInstance(inst, comp)
+				if shouldExist then
+					expect(c).to.be.ok()
+				else
+					expect(c).to.never.be.ok()
+				end
+			end
+
+			local function CreateAndCheckAll(a, b, c)
+				local instance = CreateTaggedInstance()
+				task.wait()
+				Check(instance, c1, a)
+				Check(instance, c2, b)
+				Check(instance, c3, c)
+			end
+
+			-- All green:
+			SetE(true, true, true)
+			CreateAndCheckAll(true, true, true)
+
+			-- All red:
+			SetE(false, false, false)
+			CreateAndCheckAll(false, false, false)
+
+			-- One red:
+			SetE(true, false, true)
+			CreateAndCheckAll(true, false, false)
+
+			-- One green:
+			SetE(false, false, true)
+			CreateAndCheckAll(false, false, false)
+			
 		end)
 
 	end)
