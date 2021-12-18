@@ -11,10 +11,17 @@ type AncestorList = {Instance}
 ]=]
 type ExtensionFn = (any) -> nil
 
+--[=[
+	@type ExtensionConstructFn (component) -> boolean
+	@within Component
+]=]
+type ExtensionConstructFn = (any) -> boolean
+
 
 --[=[
 	@interface Extension
 	@within Component
+	.ShouldConstruct ExtensionConstructFn?
 	.Constructing ExtensionFn?
 	.Constructed ExtensionFn?
 	.Starting ExtensionFn?
@@ -24,7 +31,14 @@ type ExtensionFn = (any) -> nil
 
 	An extension allows the ability to extend the behavior of
 	components. This is useful for adding injection systems or
-	extending the behavior of components.
+	extending the behavior of components by wrapping around
+	component lifecycle methods.
+
+	A special `ShouldConstruct` method can be used to indicate
+	if the component should actually be created. This must
+	return `true` or `false`. A component with multiple
+	`ShouldConstruct` extension functions must have them _all_
+	return `true` in order for the component to be constructed.
 
 	For instance, an extension could be created to simply log
 	when the various lifecycle stages run on the component:
@@ -42,6 +56,7 @@ type ExtensionFn = (any) -> nil
 	```
 ]=]
 type Extension = {
+	ShouldConstruct: ExtensionConstructFn?,
 	Constructing: ExtensionFn?,
 	Constructed: ExtensionFn?,
 	Starting: ExtensionFn?,
@@ -118,6 +133,20 @@ local function InvokeExtensionFn(component, extensionList, fnName: string)
 			fn(component)
 		end
 	end
+end
+
+
+local function ShouldConstruct(component, extensionList): boolean
+	for _,extension in ipairs(extensionList) do
+		local fn = extension.ShouldConstruct
+		if type(fn) == "function" then
+			local shouldConstruct = fn(component)
+			if not shouldConstruct then
+				return false
+			end
+		end
+	end
+	return true
 end
 
 
@@ -220,6 +249,9 @@ end
 function Component:_instantiate(instance: Instance)
 	local component = setmetatable({}, self)
 	component.Instance = instance
+	if not ShouldConstruct(component) then
+		return nil
+	end
 	InvokeExtensionFn(component, self._extensions, "Constructing")
 	if type(component.Construct) == "function" then
 		component:Construct()
@@ -287,6 +319,9 @@ function Component:_setup()
 	local function TryConstructComponent(instance)
 		if self._instancesToComponents[instance] then return end
 		local component = self:_instantiate(instance)
+		if not component then
+			return
+		end
 		self._instancesToComponents[instance] = component
 		table.insert(self._components, component)
 		task.defer(function()
