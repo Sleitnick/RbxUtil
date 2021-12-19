@@ -312,10 +312,15 @@ function ClientRemoteSignal:Destroy()
 end
 
 
+--[=[
+	@class RemoteProperty
+	@server
+	Created via `ServerComm:CreateProperty()`.
+]=]
 local RemoteProperty = {}
 RemoteProperty.__index = RemoteProperty
 
-function RemoteProperty.new(initialValue: any, parent: Instance, name: string, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?)
+function RemoteProperty.new(parent: Instance, name: string, initialValue: any, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?)
 	local self = setmetatable({}, RemoteProperty)
 	self._rs = RemoteSignal.new(parent, name, inboundMiddleware, outboundMiddleware)
 	self._initial = initialValue
@@ -331,15 +336,31 @@ function RemoteProperty.new(initialValue: any, parent: Instance, name: string, i
 	return self
 end
 
+--[=[
+	@param value any
+	Sets the value of all clients to the same value.
+]=]
 function RemoteProperty:SetAll(value: any)
 	self._initial = value
 	self._rs:FireAll(value)
 end
 
-function RemoteProperty:SetFilter(predicate: (Player, ...any) -> boolean, ...: any)
-	self._rs:FireFilter(predicate, ...)
+--[=[
+	@param predicate (player: Player, value: any) -> boolean
+	@param value any -- Value to set for the clients (and to the predicate)
+	Fires the signal at any clients that pass the `predicate`
+	function test. This can be used to fire signals with much
+	more control logic.	
+]=]
+function RemoteProperty:SetFilter(predicate: (Player, any) -> boolean, value: any)
+	self._rs:FireFilter(predicate, value)
 end
 
+--[=[
+	@param player Player
+	@param value any
+	Set the value of the property for a specific player.
+]=]
 function RemoteProperty:Set(player: Player, value: any)
 	if player.Parent then
 		self._perPlayer[player] = if value ~= nil then value else None
@@ -347,12 +368,20 @@ function RemoteProperty:Set(player: Player, value: any)
 	self._rs:Fire(player, value)
 end
 
+--[=[
+	Destroys the RemoteProperty object.
+]=]
 function RemoteProperty:Destroy()
 	self._rs:Destroy()
 	self._playerRemoving:Disconnect()
 end
 
 
+--[=[
+	@class ClientRemoteProperty
+	@client
+	Created via `ClientComm:GetProperty()`.
+]=]
 local ClientRemoteProperty = {}
 ClientRemoteProperty.__index = ClientRemoteProperty
 
@@ -372,10 +401,25 @@ function ClientRemoteProperty.new(re: RemoteEvent, inboundMiddleware: ClientMidd
 	return self
 end
 
+--[=[
+	@return any
+	Gets the value of the property object.
+
+	:::caution
+	This value might not be ready right away. Use `OnReady()` or `IsReady()`
+	before calling `Get()`.
+	:::
+]=]
 function ClientRemoteProperty:Get()
 	return self._value
 end
 
+--[=[
+	@return Promise<any>
+	Returns a Promise which resolves once the property object is
+	ready to be used. The resolved promise will also contain the
+	value of the property.
+]=]
 function ClientRemoteProperty:OnReady()
 	if self._ready then
 		return Promise.resolve(self._value)
@@ -389,13 +433,36 @@ function ClientRemoteProperty:OnReady()
 	end)
 end
 
-function ClientRemoteProperty:Observe(observer: () -> any)
+--[=[
+	@return boolean
+	Returns `true` if the property object is ready to be
+	used. In other words, it has successfully gained
+	connection to the server-side version and has synced
+	in the initial value.
+]=]
+function ClientRemoteProperty:IsReady(): boolean
+	return self._ready
+end
+
+--[=[
+	@param observer (any) -> nil
+	@return Connection
+	Observes the value of the property. The observer will
+	be called right when the value is first ready, and
+	every time the value changes. This is safe to call
+	immediately (i.e. no need to use `IsReady` or `OnReady`
+	before using this method).
+]=]
+function ClientRemoteProperty:Observe(observer: (any) -> nil)
 	if self._ready then
 		task.defer(observer, self._value)
 	end
 	return self.Changed:Connect(observer)
 end
 
+--[=[
+	Destroys the ClientRemoteProperty object.
+]=]
 function ClientRemoteProperty:Destroy()
 	self._rs:Destroy()
 	if self._readyPromise then
@@ -431,6 +498,7 @@ local Comm = {Server = {}, Client = {}}
 	.BindFunction (parent: Instance, name: string, fn: FnBind, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?): RemoteFunction
 	.WrapMethod (parent: Instance, tbl: table, name: string, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?): RemoteFunction
 	.CreateSignal (parent: Instance, name: string, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?): RemoteSignal
+	.CreateProperty (parent: Instance, name: string, value: any, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?): RemoteProperty
 	Server Comm
 ]=]
 --[=[
@@ -438,7 +506,8 @@ local Comm = {Server = {}, Client = {}}
 	@private
 	@interface Client
 	.GetFunction (parent: Instance, name: string, usePromise: boolean, inboundMiddleware: ClientMiddleware?, outboundMiddleware: ClientMiddleware?): (...: any) -> any
-	.GetSignal (parent: Instance, name: string, inboundMiddleware: ClientMiddleware?, outboundMiddleware: ClientMiddleware?): ClientRemoteFunction
+	.GetSignal (parent: Instance, name: string, inboundMiddleware: ClientMiddleware?, outboundMiddleware: ClientMiddleware?): ClientRemoteSignal
+	.GetProperty (parent: Instance, name: string, inboundMiddleware: ClientMiddleware?, outboundMiddleware: ClientMiddleware?): ClientRemoteProperty
 	Client Comm
 ]=]
 
@@ -510,6 +579,14 @@ function Comm.Server.CreateSignal(parent: Instance, name: string, inboundMiddlew
 	local folder = GetCommSubFolder(parent, "RE"):Expect("Failed to get Comm RE folder")
 	local rs = RemoteSignal.new(folder, name, inboundMiddleware, outboundMiddleware)
 	return rs
+end
+
+
+function Comm.Server.CreateProperty(parent: Instance, name: string, initialValue: any, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?)
+	assert(IS_SERVER, "CreateProperty must be called from the server")
+	local folder = GetCommSubFolder(parent, "RP"):Expect("Failed to get Comm RP folder")
+	local rp = RemoteProperty.new(folder, name, initialValue, inboundMiddleware, outboundMiddleware)
+	return rp
 end
 
 
@@ -614,6 +691,15 @@ function Comm.Client.GetSignal(parent: Instance, name: string, inboundMiddleware
 end
 
 
+function Comm.Client.GetProperty(parent: Instance, name: string, inboundMiddleware: ClientMiddleware?, outboundMiddleware: ClientMiddleware?)
+	assert(not IS_SERVER, "GetProperty must be called from the client")
+	local folder = GetCommSubFolder(parent, "RP"):Expect("Failed to get Comm RP folder")
+	local re = folder:WaitForChild(name, WAIT_FOR_CHILD_TIMEOUT)
+	assert(re ~= nil, "Failed to find RemoteEvent for RemoteProperty: " .. name)
+	return ClientRemoteProperty.new(re, inboundMiddleware, outboundMiddleware)
+end
+
+
 --[=[
 	@class ServerComm
 	@server
@@ -691,6 +777,17 @@ end
 ]=]
 function ServerComm:CreateSignal(name: string, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?)
 	return Comm.Server.CreateSignal(self._instancesFolder, name, inboundMiddleware, outboundMiddleware)
+end
+
+--[=[
+	@param name string
+	@param initialValue any
+	@param inboundMiddleware ServerMiddleware?
+	@param outboundMiddleware ServerMiddleware?
+	@return RemoteProperty
+]=]
+function ServerComm:CreateProperty(name: string, initialValue: any, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?)
+	return Comm.Server.CreateProperty(self._instanceFolder, name, initialValue, inboundMiddleware, outboundMiddleware)
 end
 
 --[=[
@@ -803,6 +900,18 @@ function ClientComm:GetSignal(name: string, inboundMiddleware: ClientMiddleware?
 end
 
 --[=[
+	@param name string
+	@param inboundMiddleware ClientMiddleware?
+	@param outboundMiddleware ClientMiddleware?
+	@return ClientRemoteSignal
+	Returns a new ClientRemoteProperty that mirrors the matching RemoteProperty created by
+	ServerComm with the same matching `name`.
+]=]
+function ClientComm:GetProperty(name: string, inboundMiddleware: ClientMiddleware?, outboundMiddleware: ClientMiddleware?)
+	return Comm.Client.GetProperty(self._instancesFolder, name, inboundMiddleware, outboundMiddleware)
+end
+
+--[=[
 	@param inboundMiddleware ClientMiddleware?
 	@param outboundMiddleware ClientMiddleware?
 	@return table
@@ -823,6 +932,7 @@ function ClientComm:BuildObject(inboundMiddleware: ClientMiddleware?, outboundMi
 	local obj = {}
 	local rfFolder = self._instancesFolder:FindFirstChild("RF")
 	local reFolder = self._instancesFolder:FindFirstChild("RE")
+	local rpFolder = self._instancesFolder:FindFirstChild("RP")
 	if rfFolder then
 		for _,rf in ipairs(rfFolder:GetChildren()) do
 			if not rf:IsA("RemoteFunction") then continue end
@@ -836,6 +946,12 @@ function ClientComm:BuildObject(inboundMiddleware: ClientMiddleware?, outboundMi
 		for _,re in ipairs(reFolder:GetChildren()) do
 			if not re:IsA("RemoteEvent") then continue end
 			obj[re.Name] = self:GetSignal(re.Name, inboundMiddleware, outboundMiddleware)
+		end
+	end
+	if rpFolder then
+		for _,re in ipairs(rpFolder:GetChildren()) do
+			if not re:IsA("RemoteEvent") then continue end
+			obj[re.Name] = self:GetProperty(re.Name, inboundMiddleware, outboundMiddleware)
 		end
 	end
 	return obj
