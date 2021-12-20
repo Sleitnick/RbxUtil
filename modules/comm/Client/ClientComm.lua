@@ -38,6 +38,13 @@ ClientComm.__index = ClientComm
 	If `usePromise` is set to `true`, then `GetFunction` will generate a function that returns a Promise
 	that resolves with the server response. If set to `false`, the function will act like a normal
 	call to a RemoteFunction and yield until the function responds.
+
+	```lua
+	local clientComm = ClientComm.new(game:GetService("ReplicatedStorage"))
+
+	-- If using a unique namespace with ServerComm, include it as second argument:
+	local clientComm = ClientComm.new(game:GetService("ReplicatedStorage"), "MyNamespace")
+	```
 ]=]
 function ClientComm.new(parent: Instance, usePromise: boolean, namespace: string?)
 	assert(not Util.IsServer, "ClientComm must be constructed from the client")
@@ -99,6 +106,18 @@ end
 	@return ClientRemoteSignal
 	Returns a new ClientRemoteSignal that mirrors the matching RemoteSignal created by
 	ServerComm with the same matching `name`.
+
+	```lua
+	local mySignal = clientComm:GetSignal("MySignal")
+
+	-- Listen for data from the server:
+	mySignal:Connect(function(message)
+		print("Received message from server:", message)
+	end)
+
+	-- Send data to the server:
+	mySignal:Fire("Hello!")
+	```
 ]=]
 function ClientComm:GetSignal(name: string, inboundMiddleware: Types.ClientMiddleware?, outboundMiddleware: Types.ClientMiddleware?)
 	return Comm.GetSignal(self._instancesFolder, name, inboundMiddleware, outboundMiddleware)
@@ -111,6 +130,32 @@ end
 	@return ClientRemoteProperty
 	Returns a new ClientRemoteProperty that mirrors the matching RemoteProperty created by
 	ServerComm with the same matching `name`.
+
+	Take a look at the ClientRemoteProperty documentation for more info, such as
+	understanding how to wait for data to be ready.
+
+	```lua
+	local mapInfo = clientComm:GetProperty("MapInfo")
+
+	-- Observe the initial value of mapInfo, and all subsequent changes:
+	mapInfo:Observe(function(info)
+		print("Current map info", info)
+	end)
+
+	-- Check to see if data is initially ready:
+	if mapInfo:IsReady() then
+		-- Get the data:
+		local info = mapInfo:Get()
+	end
+
+	-- Get a promise that resolves once the data is ready (resolves immediately if already ready):
+	mapInfo:OnReady():andThen(function(info)
+		print("Map info is ready with info", info)
+	end)
+
+	-- Same as above, but yields thread:
+	local success, info = mapInfo:OnReady():await()
+	```
 ]=]
 function ClientComm:GetProperty(name: string, inboundMiddleware: Types.ClientMiddleware?, outboundMiddleware: Types.ClientMiddleware?)
 	return Comm.GetProperty(self._instancesFolder, name, inboundMiddleware, outboundMiddleware)
@@ -126,11 +171,13 @@ end
 	-- Server-side:
 	serverComm:BindFunction("Test", function(player) end)
 	serverComm:CreateSignal("MySignal")
+	serverComm:CreateProperty("MyProperty", 10)
 
 	-- Client-side
 	local obj = clientComm:BuildObject()
 	obj:Test()
-	obj.MySignal:Connect(function() end)
+	obj.MySignal:Connect(function(data) end)
+	obj.MyProperty:Observe(function(value) end)
 	```
 ]=]
 function ClientComm:BuildObject(inboundMiddleware: Types.ClientMiddleware?, outboundMiddleware: Types.ClientMiddleware?)

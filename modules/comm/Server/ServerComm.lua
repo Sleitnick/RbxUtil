@@ -36,6 +36,13 @@ ServerComm.__index = ServerComm
 	Constructs a ServerComm object. The `namespace` parameter is used
 	in cases where more than one ServerComm object may be bound
 	to the same object. Otherwise, a default namespace is used.
+
+	```lua
+	local serverComm = ServerComm.new(game:GetService("ReplicatedStorage"))
+
+	-- If many might exist in the given parent, use a unique namespace:
+	local serverComm = ServerComm.new(game:GetService("ReplicatedStorage"), "MyNamespace")
+	```
 ]=]
 function ServerComm.new(parent: Instance, namespace: string?)
 	assert(Util.IsServer, "ServerComm must be constructed from the server")
@@ -60,6 +67,14 @@ end
 	@return RemoteFunction
 	Creates a RemoteFunction and binds the given function to it. Inbound
 	and outbound middleware can be applied if desired.
+
+	```lua
+	local function GetSomething(player: Player)
+		return "Something"
+	end
+
+	serverComm:BindFunction("GetSomething", GetSomething)
+	```
 ]=]
 function ServerComm:BindFunction(name: string, func: Types.FnBind, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?): RemoteFunction
 	return Comm.BindFunction(self._instancesFolder, name, func, inboundMiddleware, outboundMiddleware)
@@ -71,6 +86,22 @@ end
 	@param inboundMiddleware ServerMiddleware?
 	@param outboundMiddleware ServerMiddleware?
 	@return RemoteFunction
+
+	Binds a function to a table method. The name must match the
+	name of the method in the table. The same name will be used
+	on the client to access the given function.
+
+	```lua
+	local MyObject = {
+		_Data = 10,
+	}
+
+	function MyObject:GetData(player: Player)
+		return self._Data
+	end
+
+	serverComm:WrapMethod(MyObject, "GetData")
+	```
 ]=]
 function ServerComm:WrapMethod(tbl: {}, name: string, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?): RemoteFunction
 	return Comm.WrapMethod(self._instancesFolder, tbl, name, inboundMiddleware, outboundMiddleware)
@@ -81,6 +112,24 @@ end
 	@param inboundMiddleware ServerMiddleware?
 	@param outboundMiddleware ServerMiddleware?
 	@return RemoteSignal
+
+	Creates a signal that can be used to fire data to the clients
+	or receive data from the clients.
+
+	```lua
+	local mySignal = serverComm:CreateSignal("MySignal")
+
+	-- Examples of firing in different ways (see docs for RemoteSignal for further info):
+	mySignal:Fire(somePlayer, "Hello world")
+	mySignal:FireAll("Hi there")
+	mySignal:FireExcept(somePlayer, "Hello everyone except " .. somePlayer.Name)
+	mySignal:FireFilter(function(player) return player.Team == someCoolTeam end, "Hello cool team")
+
+	-- Example of listening for clients to send data:
+	mySignal:Connect(function(player, message)
+		print("Got a message from " .. player.Name .. ":", message)
+	end)
+	```
 ]=]
 function ServerComm:CreateSignal(name: string, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?)
 	return Comm.CreateSignal(self._instancesFolder, name, inboundMiddleware, outboundMiddleware)
@@ -100,7 +149,7 @@ end
 	```lua
 	local comm = Comm.ServerComm.new(game:GetService("ReplicatedStorage"))
 
-	local mapInfo = comm:CreateProperty({
+	local mapInfo = comm:CreateProperty("MapInfo", {
 		MapName = "TheAwesomeMap",
 		MapDuration = 60,
 	})
