@@ -175,6 +175,23 @@ function RemoteSignal:FireAll(...: any)
 end
 
 --[=[
+	@param ignorePlayer Player -- The client to ignore
+	@param ... any -- Arguments passed to the other clients
+	Fires the signal to all clients _except_ the specified
+	client.
+
+	:::note Outbound Middleware
+	All arguments pass through any outbound middleware before being
+	sent to the client.
+	:::
+]=]
+function RemoteSignal:FireExcept(ignorePlayer: Player, ...: any)
+	self:FireFilter(function(plr)
+		return plr ~= ignorePlayer
+	end, ...)
+end
+
+--[=[
 	@param predicate (player: Player, argsFromFire: ...) -> boolean
 	@param ... any -- Arguments to pass to the clients (and to the predicate)
 	Fires the signal at any clients that pass the `predicate`
@@ -330,7 +347,7 @@ function RemoteProperty.new(parent: Instance, name: string, initialValue: any, i
 	end)
 	self._rs:Connect(function(player)
 		local playerValue = self._perPlayer[player]
-		local value = if playerValue == nil then self._inital elseif playerValue == None then nil else playerValue
+		local value = if playerValue == nil then self._initial elseif playerValue == None then nil else playerValue
 		self._rs:Fire(player, value)
 	end)
 	return self

@@ -9,7 +9,7 @@ classes = ["Input", "PreferredInput", "Keyboard", "Mouse", "Touch"]
 
 [[classOrder]]
 section = "Remote Comm"
-classes = ["Comm", "ServerComm", "ClientComm", "RemoteSignal", "ClientRemoteSignal"]
+classes = ["Comm", "ServerComm", "ClientComm", "RemoteSignal", "ClientRemoteSignal", "RemoteProperty", "ClientRemoteProperty"]
 
 [home]
 enabled = true
