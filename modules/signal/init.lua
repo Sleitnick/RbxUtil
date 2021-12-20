@@ -24,6 +24,50 @@
 --   sleitnick - August 3rd, 2021 - Modified for Knit.                        --
 -- -----------------------------------------------------------------------------
 
+-- -----------------------------------------------------------------------------
+--               Batched Yield-Safe Signal Implementation                     --
+-- This is a Signal class which has effectively identical behavior to a       --
+-- normal RBXScriptSignal, with the only difference being a couple extra      --
+-- stack frames at the bottom of the stack trace when an error is thrown.     --
+-- This implementation caches runner coroutines, so the ability to yield in   --
+-- the signal handlers comes at minimal extra cost over a naive signal        --
+-- implementation that either always or never spawns a thread.                --
+--                                                                            --
+-- API:                                                                       --
+--   local Signal = require(THIS MODULE)                                      --
+--   local sig = Signal.new()                                                 --
+--   local connection = sig:Connect(function(arg1, arg2, ...) ... end)        --
+--   sig:Fire(arg1, arg2, ...)                                                --
+--   connection:Disconnect()                                                  --
+--   sig:DisconnectAll()                                                      --
+--   local arg1, arg2, ... = sig:Wait()                                       --
+--                                                                            --
+-- License:                                                                   --
+--   Licensed under the MIT license.                                          --
+--                                                                            --
+-- Authors:                                                                   --
+--   stravant - July 31st, 2021 - Created the file.                           --
+--   sleitnick - August 3rd, 2021 - Modified for Knit.                        --
+-- -----------------------------------------------------------------------------
+
+export type Type<T...> = {
+	Connect: (Type<T...>, func: (T...) -> ()) -> Connection<T...>,
+	Fire: (Type<T...>, T...) -> (),
+	FireDeferred: (Type<T...>, T...) -> (),
+	Wait: (Type<T...>) -> (T...),
+	GetConnections: (Type<T...>) -> {Connection<T...>},
+	DisconnectAll: (Type<T...>) -> (),
+	Destroy: (Type<T...>) -> (),
+
+	_handlerListHead: any,
+	_proxyHandler: any,
+}
+
+type Connection<T...> = {
+	Disconnect: (Connection<T...>) -> (),
+	Destroy: (Connection<T...>) -> (),
+}
+
 -- The currently idle thread to run the next handler on
 local freeRunnerThread = nil
 
@@ -56,7 +100,7 @@ local Connection = {}
 Connection.__index = Connection
 
 
-function Connection.new(signal, fn)
+function Connection.new<T...>(signal, fn: (T...) -> ())
 	return setmetatable({
 		_connected = true,
 		_signal = signal,
@@ -90,14 +134,15 @@ end
 Connection.Destroy = Connection.Disconnect
 
 -- Make Connection strict
-setmetatable(Connection, {
+--[[setmetatable(Connection, {
 	__index = function(_tb, key)
 		error(("Attempt to get Connection::%s (not a valid member)"):format(tostring(key)), 2)
 	end,
 	__newindex = function(_tb, key, _value)
 		error(("Attempt to set Connection::%s (not a valid member)"):format(tostring(key)), 2)
 	end
-})
+})]]
+table.freeze(Connection)
 
 
 --[=[
@@ -124,12 +169,12 @@ Signal.__index = Signal
 
 	@return Signal
 ]=]
-function Signal.new()
+function Signal.new<T...>(): Type<T...>
 	local self = setmetatable({
 		_handlerListHead = false,
 		_proxyHandler = nil,
 	}, Signal)
-	return self
+	return self :: Type<T...>
 end
 
 
@@ -146,13 +191,13 @@ end
 	Instance.new("Part").Parent = workspace
 	```
 ]=]
-function Signal.Wrap(rbxScriptSignal)
+function Signal.Wrap<T...>(rbxScriptSignal) : Type<T...>
 	assert(typeof(rbxScriptSignal) == "RBXScriptSignal", "Argument #1 to Signal.Wrap must be a RBXScriptSignal; got " .. typeof(rbxScriptSignal))
 	local signal = Signal.new()
 	signal._proxyHandler = rbxScriptSignal:Connect(function(...)
 		signal:Fire(...)
 	end)
-	return signal
+	return signal :: Type<T...>
 end
 
 
@@ -162,7 +207,7 @@ end
 	@param obj any -- Object to check
 	@return boolean -- `true` if the object is a Signal.
 ]=]
-function Signal.Is(obj)
+function Signal.Is(obj): boolean
 	return type(obj) == "table" and getmetatable(obj) == Signal
 end
 
@@ -173,7 +218,7 @@ end
 	@param fn (...any) -> nil
 	@return Connection -- A connection to the signal
 ]=]
-function Signal:Connect(fn)
+function Signal:Connect<T...>(fn: (T...) -> ()): Connection<T...>
 	local connection = Connection.new(self, fn)
 	if self._handlerListHead then
 		connection._next = self._handlerListHead
@@ -181,18 +226,18 @@ function Signal:Connect(fn)
 	else
 		self._handlerListHead = connection
 	end
-	return connection
+	return connection :: Connection<T...>
 end
 
 
-function Signal:GetConnections()
+function Signal:GetConnections<T...>(): {Connection<T...>}
 	local items = {}
 	local item = self._handlerListHead
 	while item do
 		table.insert(items, item)
 		item = item._next
 	end
-	return items
+	return items :: {Connection<T...>}
 end
 
 
@@ -215,7 +260,7 @@ end
 
 	@param ... any -- Arguments to pass to the connected functions
 ]=]
-function Signal:Fire(...)
+function Signal:Fire<T...>(...: T...)
 	local item = self._handlerListHead
 	while item do
 		if item._connected then
@@ -234,7 +279,7 @@ end
 
 	@param ... any -- Arguments to pass to the connected functions
 ]=]
-function Signal:FireDeferred(...)
+function Signal:FireDeferred<T...>(...: T...)
 	local item = self._handlerListHead
 	while item do
 		task.defer(item._fn, ...)
@@ -249,10 +294,10 @@ end
 	@return ... any -- Arguments passed to the signal when it was fired
 	@yields
 ]=]
-function Signal:Wait()
+function Signal:Wait<T...>(): T...
 	local waitingCoroutine = coroutine.running()
 	local cn
-	cn = self:Connect(function(...)
+	cn = (self :: Type<T...>):Connect(function(...)
 		cn:Disconnect()
 		task.spawn(waitingCoroutine, ...)
 	end)
@@ -269,17 +314,20 @@ function Signal:Destroy()
 	if proxyHandler then
 		proxyHandler:Disconnect()
 	end
+	self = nil
 end
 
 
 -- Make signal strict
-setmetatable(Signal, {
+--[[setmetatable(Signal, {
 	__index = function(_tb, key)
 		error(("Attempt to get Signal::%s (not a valid member)"):format(tostring(key)), 2)
 	end,
 	__newindex = function(_tb, key, _value)
 		error(("Attempt to set Signal::%s (not a valid member)"):format(tostring(key)), 2)
 	end
-})
+})]]
+
+table.freeze(Signal)
 
 return Signal
