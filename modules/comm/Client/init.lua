@@ -1,11 +1,12 @@
 local Util = require(script.Parent.Util)
+local Types = require(script.Parent.Types)
 local Promise = require(script.Parent.Parent.Promise)
 local ClientRemoteSignal = require(script.ClientRemoteSignal)
 local ClientRemoteProperty = require(script.ClientRemoteProperty)
 
 local Client = {}
 
-function Client.GetFunction(parent: Instance, name: string, usePromise: boolean, inboundMiddleware: ClientMiddleware?, outboundMiddleware: ClientMiddleware?)
+function Client.GetFunction(parent: Instance, name: string, usePromise: boolean, inboundMiddleware: Types.ClientMiddleware?, outboundMiddleware: Types.ClientMiddleware?)
 	assert(not Util.IsServer, "GetFunction must be called from the client")
 	local folder = Util.GetCommSubFolder(parent, "RF"):Expect("Failed to get Comm RF folder")
 	local rf = folder:WaitForChild(name, Util.WaitForChildTimeout)
@@ -97,7 +98,7 @@ function Client.GetFunction(parent: Instance, name: string, usePromise: boolean,
 end
 
 
-function Client.GetSignal(parent: Instance, name: string, inboundMiddleware: ClientMiddleware?, outboundMiddleware: ClientMiddleware?)
+function Client.GetSignal(parent: Instance, name: string, inboundMiddleware: Types.ClientMiddleware?, outboundMiddleware: Types.ClientMiddleware?)
 	assert(not Util.IsServer, "GetSignal must be called from the client")
 	local folder = Util.GetCommSubFolder(parent, "RE"):Expect("Failed to get Comm RE folder")
 	local re = folder:WaitForChild(name, Util.WaitForChildTimeout)
@@ -106,7 +107,7 @@ function Client.GetSignal(parent: Instance, name: string, inboundMiddleware: Cli
 end
 
 
-function Client.GetProperty(parent: Instance, name: string, inboundMiddleware: ClientMiddleware?, outboundMiddleware: ClientMiddleware?)
+function Client.GetProperty(parent: Instance, name: string, inboundMiddleware: Types.ClientMiddleware?, outboundMiddleware: Types.ClientMiddleware?)
 	assert(not Util.IsServer, "GetProperty must be called from the client")
 	local folder = Util.GetCommSubFolder(parent, "RP"):Expect("Failed to get Comm RP folder")
 	local re = folder:WaitForChild(name, Util.WaitForChildTimeout)

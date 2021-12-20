@@ -4,7 +4,23 @@
 
 
 local Promise = require(script.Parent.Parent.Parent.Promise)
+local Signal = require(script.Parent.Parent.Parent.Signal)
 local ClientRemoteSignal = require(script.Parent.ClientRemoteSignal)
+local Types = require(script.Parent.Parent.Types)
+
+--[=[
+	@within ClientRemoteProperty
+	@prop Changed Signal<any>
+
+	Fires when the property receives an updated value
+	from the server.
+
+	```lua
+	clientRemoteProperty.Changed:Connect(function(value)
+		print("New value", value)
+	end)
+	```
+]=]
 
 --[=[
 	@class ClientRemoteProperty
@@ -14,17 +30,20 @@ local ClientRemoteSignal = require(script.Parent.ClientRemoteSignal)
 local ClientRemoteProperty = {}
 ClientRemoteProperty.__index = ClientRemoteProperty
 
-function ClientRemoteProperty.new(re: RemoteEvent, inboundMiddleware: ClientMiddleware?, outboudMiddleware: ClientMiddleware?)
+function ClientRemoteProperty.new(re: RemoteEvent, inboundMiddleware: Types.ClientMiddleware?, outboudMiddleware: Types.ClientMiddleware?)
 	local self = setmetatable({}, ClientRemoteProperty)
 	self._rs = ClientRemoteSignal.new(re, inboundMiddleware, outboudMiddleware)
 	self._ready = false
 	self._value = nil
-	self.Changed = self._rs
-	self._changed = self._rs:Connect(function(value)
-		self._value = value
-	end)
+	self.Changed = Signal.new()
 	self._readyPromise = self:OnReady():andThen(function()
 		self._readyPromise = nil
+		self.Changed:Fire(self._value)
+		self._changed = self._rs:Connect(function(value)
+			if value == self._value then return end
+			self._value = value
+			self.Changed:Fire(value)
+		end)
 	end)
 	self._rs:Fire()
 	return self
@@ -101,6 +120,10 @@ end
 	immediately (i.e. no need to use `IsReady` or `OnReady`
 	before using this method).
 
+	Observing is essentially listening to `Changed`, but
+	also sends the initial value right away (or at least
+	once `OnReady` is completed).
+
 	```lua
 	local function ObserveValue(value)
 		print(value)
@@ -124,7 +147,10 @@ function ClientRemoteProperty:Destroy()
 	if self._readyPromise then
 		self._readyPromise:cancel()
 	end
-	self._changed:Disconnect()
+	if self._changed then
+		self._changed:Disconnect()
+	end
+	self.Changed:Destroy()
 end
 
 return ClientRemoteProperty

@@ -4,6 +4,7 @@
 
 local Comm = require(script.Parent)
 local Util = require(script.Parent.Parent.Util)
+local Types = require(script.Parent.Parent.Types)
 
 --[=[
 	@class ClientComm
@@ -38,7 +39,7 @@ ClientComm.__index = ClientComm
 	that resolves with the server response. If set to `false`, the function will act like a normal
 	call to a RemoteFunction and yield until the function responds.
 ]=]
-function ClientComm.new(parent: Instance, usePromise: boolean, namespace: string?, janitor)
+function ClientComm.new(parent: Instance, usePromise: boolean, namespace: string?)
 	assert(not Util.IsServer, "ClientComm must be constructed from the client")
 	assert(typeof(parent) == "Instance", "Parent must be of type Instance")
 	local ns = Util.DefaultCommFolderName
@@ -50,9 +51,6 @@ function ClientComm.new(parent: Instance, usePromise: boolean, namespace: string
 	local self = setmetatable({}, ClientComm)
 	self._instancesFolder = folder
 	self._usePromise = usePromise
-	if janitor then
-		janitor:Add(self)
-	end
 	return self
 end
 
@@ -90,7 +88,7 @@ end
 	end)
 	```
 ]=]
-function ClientComm:GetFunction(name: string, inboundMiddleware: ClientMiddleware?, outboundMiddleware: ClientMiddleware?)
+function ClientComm:GetFunction(name: string, inboundMiddleware: Types.ClientMiddleware?, outboundMiddleware: Types.ClientMiddleware?)
 	return Comm.GetFunction(self._instancesFolder, name, self._usePromise, inboundMiddleware, outboundMiddleware)
 end
 
@@ -102,7 +100,7 @@ end
 	Returns a new ClientRemoteSignal that mirrors the matching RemoteSignal created by
 	ServerComm with the same matching `name`.
 ]=]
-function ClientComm:GetSignal(name: string, inboundMiddleware: ClientMiddleware?, outboundMiddleware: ClientMiddleware?)
+function ClientComm:GetSignal(name: string, inboundMiddleware: Types.ClientMiddleware?, outboundMiddleware: Types.ClientMiddleware?)
 	return Comm.GetSignal(self._instancesFolder, name, inboundMiddleware, outboundMiddleware)
 end
 
@@ -110,11 +108,11 @@ end
 	@param name string
 	@param inboundMiddleware ClientMiddleware?
 	@param outboundMiddleware ClientMiddleware?
-	@return ClientRemoteSignal
+	@return ClientRemoteProperty
 	Returns a new ClientRemoteProperty that mirrors the matching RemoteProperty created by
 	ServerComm with the same matching `name`.
 ]=]
-function ClientComm:GetProperty(name: string, inboundMiddleware: ClientMiddleware?, outboundMiddleware: ClientMiddleware?)
+function ClientComm:GetProperty(name: string, inboundMiddleware: Types.ClientMiddleware?, outboundMiddleware: Types.ClientMiddleware?)
 	return Comm.GetProperty(self._instancesFolder, name, inboundMiddleware, outboundMiddleware)
 end
 
@@ -135,7 +133,7 @@ end
 	obj.MySignal:Connect(function() end)
 	```
 ]=]
-function ClientComm:BuildObject(inboundMiddleware: ClientMiddleware?, outboundMiddleware: ClientMiddleware?)
+function ClientComm:BuildObject(inboundMiddleware: Types.ClientMiddleware?, outboundMiddleware: Types.ClientMiddleware?)
 	local obj = {}
 	local rfFolder = self._instancesFolder:FindFirstChild("RF")
 	local reFolder = self._instancesFolder:FindFirstChild("RE")

@@ -4,6 +4,7 @@
 
 
 local Signal = require(script.Parent.Parent.Parent.Signal)
+local Types = require(script.Parent.Parent.Types)
 
 --[=[
 	@class ClientRemoteSignal
@@ -19,7 +20,7 @@ ClientRemoteSignal.__index = ClientRemoteSignal
 	.Disconnect () -> nil
 ]=]
 
-function ClientRemoteSignal.new(re: RemoteEvent, inboundMiddleware: ClientMiddleware?, outboudMiddleware: ClientMiddleware?)
+function ClientRemoteSignal.new(re: RemoteEvent, inboundMiddleware: Types.ClientMiddleware?, outboudMiddleware: Types.ClientMiddleware?)
 	local self = setmetatable({}, ClientRemoteSignal)
 	self._re = re
 	if outboudMiddleware and #outboudMiddleware > 0 then
@@ -30,7 +31,7 @@ function ClientRemoteSignal.new(re: RemoteEvent, inboundMiddleware: ClientMiddle
 	end
 	if inboundMiddleware and #inboundMiddleware > 0 then
 		self._directConnect = false
-		self._signal = Signal.new(nil)
+		self._signal = Signal.new()
 		self._reConn = self._re.OnClientEvent:Connect(function(...)
 			local args = table.pack(...)
 			for _,middlewareFunc in ipairs(inboundMiddleware) do

@@ -5,6 +5,7 @@
 
 local Comm = require(script.Parent)
 local Util = require(script.Parent.Parent.Util)
+local Types = require(script.Parent.Parent.Types)
 
 --[=[
 	@class ServerComm
@@ -60,7 +61,7 @@ end
 	Creates a RemoteFunction and binds the given function to it. Inbound
 	and outbound middleware can be applied if desired.
 ]=]
-function ServerComm:BindFunction(name: string, func: FnBind, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?): RemoteFunction
+function ServerComm:BindFunction(name: string, func: Types.FnBind, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?): RemoteFunction
 	return Comm.BindFunction(self._instancesFolder, name, func, inboundMiddleware, outboundMiddleware)
 end
 
@@ -71,7 +72,7 @@ end
 	@param outboundMiddleware ServerMiddleware?
 	@return RemoteFunction
 ]=]
-function ServerComm:WrapMethod(tbl: {}, name: string, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?): RemoteFunction
+function ServerComm:WrapMethod(tbl: {}, name: string, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?): RemoteFunction
 	return Comm.WrapMethod(self._instancesFolder, tbl, name, inboundMiddleware, outboundMiddleware)
 end
 
@@ -81,7 +82,7 @@ end
 	@param outboundMiddleware ServerMiddleware?
 	@return RemoteSignal
 ]=]
-function ServerComm:CreateSignal(name: string, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?)
+function ServerComm:CreateSignal(name: string, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?)
 	return Comm.CreateSignal(self._instancesFolder, name, inboundMiddleware, outboundMiddleware)
 end
 
@@ -125,8 +126,8 @@ end
 	})
 	```
 ]=]
-function ServerComm:CreateProperty(name: string, initialValue: any, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?)
-	return Comm.CreateProperty(self._instanceFolder, name, initialValue, inboundMiddleware, outboundMiddleware)
+function ServerComm:CreateProperty(name: string, initialValue: any, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?)
+	return Comm.CreateProperty(self._instancesFolder, name, initialValue, inboundMiddleware, outboundMiddleware)
 end
 
 --[=[

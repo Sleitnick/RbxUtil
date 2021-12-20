@@ -1,6 +1,7 @@
 local Util = require(script.Parent.Util)
 local RemoteSignal = require(script.RemoteSignal)
 local RemoteProperty = require(script.RemoteProperty)
+local Types = require(script.Parent.Types)
 
 local Server = {}
 
@@ -34,7 +35,7 @@ local Server = {}
 ]=]
 
 
-function Server.BindFunction(parent: Instance, name: string, func: FnBind, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?): RemoteFunction
+function Server.BindFunction(parent: Instance, name: string, func: Types.FnBind, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?): RemoteFunction
 	assert(Util.IsServer, "BindFunction must be called from the server")
 	local folder = Util.GetCommSubFolder(parent, "RF"):Expect("Failed to get Comm RF folder")
 	local rf = Instance.new("RemoteFunction")
@@ -88,7 +89,7 @@ function Server.BindFunction(parent: Instance, name: string, func: FnBind, inbou
 end
 
 
-function Server.WrapMethod(parent: Instance, tbl: {}, name: string, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?): RemoteFunction
+function Server.WrapMethod(parent: Instance, tbl: {}, name: string, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?): RemoteFunction
 	assert(Util.IsServer, "WrapMethod must be called from the server")
 	local fn = tbl[name]
 	assert(type(fn) == "function", "Value at index " .. name .. " must be a function; got " .. type(fn))
@@ -96,7 +97,7 @@ function Server.WrapMethod(parent: Instance, tbl: {}, name: string, inboundMiddl
 end
 
 
-function Server.CreateSignal(parent: Instance, name: string, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?)
+function Server.CreateSignal(parent: Instance, name: string, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?)
 	assert(Util.IsServer, "CreateSignal must be called from the server")
 	local folder = Util.GetCommSubFolder(parent, "RE"):Expect("Failed to get Comm RE folder")
 	local rs = RemoteSignal.new(folder, name, inboundMiddleware, outboundMiddleware)
@@ -104,7 +105,7 @@ function Server.CreateSignal(parent: Instance, name: string, inboundMiddleware: 
 end
 
 
-function Server.CreateProperty(parent: Instance, name: string, initialValue: any, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?)
+function Server.CreateProperty(parent: Instance, name: string, initialValue: any, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?)
 	assert(Util.IsServer, "CreateProperty must be called from the server")
 	local folder = Util.GetCommSubFolder(parent, "RP"):Expect("Failed to get Comm RP folder")
 	local rp = RemoteProperty.new(folder, name, initialValue, inboundMiddleware, outboundMiddleware)

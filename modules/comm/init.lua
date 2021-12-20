@@ -3,18 +3,6 @@
 -- August 05, 2021
 
 
-type FnBind = (Instance, ...any) -> ...any
-type Args = {
-	n: number,
-	[any]: any,
-}
-
-type ServerMiddlewareFn = (Instance, Args) -> (boolean, ...any)
-type ServerMiddleware = {ServerMiddlewareFn}
-
-type ClientMiddlewareFn = (Args) -> (boolean, ...any)
-type ClientMiddleware = {ClientMiddlewareFn}
-
 --[=[
 	@class Comm
 	Remote communication library.

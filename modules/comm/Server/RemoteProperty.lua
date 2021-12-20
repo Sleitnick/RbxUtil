@@ -6,6 +6,7 @@
 local Players = game:GetService("Players")
 
 local Util = require(script.Parent.Parent.Util)
+local Types = require(script.Parent.Parent.Types)
 local RemoteSignal = require(script.Parent.RemoteSignal)
 
 local None = Util.None
@@ -35,7 +36,7 @@ local None = Util.None
 local RemoteProperty = {}
 RemoteProperty.__index = RemoteProperty
 
-function RemoteProperty.new(parent: Instance, name: string, initialValue: any, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?)
+function RemoteProperty.new(parent: Instance, name: string, initialValue: any, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?)
 	local self = setmetatable({}, RemoteProperty)
 	self._rs = RemoteSignal.new(parent, name, inboundMiddleware, outboundMiddleware)
 	self._value = initialValue

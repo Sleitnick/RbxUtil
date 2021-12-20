@@ -6,6 +6,7 @@
 local Players = game:GetService("Players")
 
 local Signal = require(script.Parent.Parent.Parent.Signal)
+local Types = require(script.Parent.Parent.Types)
 
 
 --[=[
@@ -22,7 +23,7 @@ RemoteSignal.__index = RemoteSignal
 	.Disconnect () -> nil
 ]=]
 
-function RemoteSignal.new(parent: Instance, name: string, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?)
+function RemoteSignal.new(parent: Instance, name: string, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?)
 	local self = setmetatable({}, RemoteSignal)
 	self._re = Instance.new("RemoteEvent")
 	self._re.Name = name
