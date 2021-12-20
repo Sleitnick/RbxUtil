@@ -1,0 +1,139 @@
+-- ServerComm
+-- Stephen Leitnick
+-- December 20, 2021
+
+
+local Comm = require(script.Parent)
+local Util = require(script.Parent.Parent.Util)
+
+--[=[
+	@class ServerComm
+	@server
+]=]
+local ServerComm = {}
+ServerComm.__index = ServerComm
+
+--[=[
+	@within ServerComm
+	@type ServerMiddlewareFn (player: Player, args: {any}) -> (shouldContinue: boolean, ...: any)
+	The middleware function takes the client player and the arguments (as a table array), and should
+	return `true|false` to indicate if the process should continue.
+
+	If returning `false`, the optional varargs after the `false` are used as the new return values
+	to whatever was calling the middleware.
+]=]
+--[=[
+	@within ServerComm
+	@type ServerMiddleware {ServerMiddlewareFn}
+	Array of middleware functions.
+]=]
+
+--[=[
+	@param parent Instance
+	@param namespace string?
+	@return ServerComm
+	Constructs a ServerComm object. The `namespace` parameter is used
+	in cases where more than one ServerComm object may be bound
+	to the same object. Otherwise, a default namespace is used.
+]=]
+function ServerComm.new(parent: Instance, namespace: string?)
+	assert(Util.IsServer, "ServerComm must be constructed from the server")
+	assert(typeof(parent) == "Instance", "Parent must be of type Instance")
+	local ns = Util.DefaultCommFolderName
+	if namespace then
+		ns = namespace
+	end
+	assert(not parent:FindFirstChild(ns), "Parent already has another ServerComm bound to namespace " .. ns)
+	local self = setmetatable({}, ServerComm)
+	self._instancesFolder = Instance.new("Folder")
+	self._instancesFolder.Name = ns
+	self._instancesFolder.Parent = parent
+	return self
+end
+
+--[=[
+	@param name string
+	@param fn (player: Player, ...: any) -> ...: any
+	@param inboundMiddleware ServerMiddleware?
+	@param outboundMiddleware ServerMiddleware?
+	@return RemoteFunction
+	Creates a RemoteFunction and binds the given function to it. Inbound
+	and outbound middleware can be applied if desired.
+]=]
+function ServerComm:BindFunction(name: string, func: FnBind, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?): RemoteFunction
+	return Comm.BindFunction(self._instancesFolder, name, func, inboundMiddleware, outboundMiddleware)
+end
+
+--[=[
+	@param tbl table
+	@param name string
+	@param inboundMiddleware ServerMiddleware?
+	@param outboundMiddleware ServerMiddleware?
+	@return RemoteFunction
+]=]
+function ServerComm:WrapMethod(tbl: {}, name: string, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?): RemoteFunction
+	return Comm.WrapMethod(self._instancesFolder, tbl, name, inboundMiddleware, outboundMiddleware)
+end
+
+--[=[
+	@param name string
+	@param inboundMiddleware ServerMiddleware?
+	@param outboundMiddleware ServerMiddleware?
+	@return RemoteSignal
+]=]
+function ServerComm:CreateSignal(name: string, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?)
+	return Comm.CreateSignal(self._instancesFolder, name, inboundMiddleware, outboundMiddleware)
+end
+
+--[=[
+	@param name string
+	@param initialValue any
+	@param inboundMiddleware ServerMiddleware?
+	@param outboundMiddleware ServerMiddleware?
+	@return RemoteProperty
+
+	Create a property object which will replicate its property value to
+	the clients. Optionally, specific clients can be targeted with
+	different property values.
+
+	```lua
+	local comm = Comm.ServerComm.new(game:GetService("ReplicatedStorage"))
+
+	local mapInfo = comm:CreateProperty({
+		MapName = "TheAwesomeMap",
+		MapDuration = 60,
+	})
+
+	-- Change the data:
+	mapInfo:Set({
+		MapName = "AnotherMap",
+		MapDuration = 30,
+	})
+
+	-- Change the data for one player:
+	mapInfo:SetFor(somePlayer, {
+		MapName = "ASpecialMapForYou",
+		MapDuration = 90,
+	})
+
+	-- Change data based on a predicate function:
+	mapInfo:SetFilter(function(player)
+		return player.Team == game.Teams.SomeSpecialTeam
+	end, {
+		MapName = "TeamMap",
+		MapDuration = 20,
+	})
+	```
+]=]
+function ServerComm:CreateProperty(name: string, initialValue: any, inboundMiddleware: ServerMiddleware?, outboundMiddleware: ServerMiddleware?)
+	return Comm.CreateProperty(self._instanceFolder, name, initialValue, inboundMiddleware, outboundMiddleware)
+end
+
+--[=[
+	Destroy the ServerComm object.
+]=]
+function ServerComm:Destroy()
+	self._instancesFolder:Destroy()
+end
+
+return ServerComm
