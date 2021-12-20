@@ -109,9 +109,10 @@ end
 --[=[
 	@param predicate (player: Player, value: any) -> boolean
 	@param value any -- Value to set for the clients (and to the predicate)
-	Fires the signal at any clients that pass the `predicate`
-	function test. This can be used to fire signals with much
-	more control logic.
+	Sets the value for specific clients that pass the `predicate`
+	function test. This can be used to finely set the values
+	based on more control logic (e.g. setting certain values
+	per team).
 
 	```lua
 	-- Set the value of "NewValue" to players with a name longer than 10 characters:
