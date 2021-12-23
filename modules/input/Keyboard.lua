@@ -135,14 +135,16 @@ function Keyboard:_setup()
 		if processed then return end
 							
 		if input.UserInputType == Enum.UserInputType.Keyboard then
-			self.KeyDown:Fire(input.KeyCode, processed)
+			self.KeysDown[input.KeyCode] = true
+			self.KeyDown:Fire(input.KeyCode)
 			self._keysProcessed[input.KeyCode] = processed			
 		end
 	end)
 
 	self._trove:Connect(UserInputService.InputEnded, function(input, processed)
 		if input.UserInputType == Enum.UserInputType.Keyboard then
-			self.KeyUp:Fire(input.KeyCode, processed)
+			self.KeysDown[input.KeyCode] = false
+			self.KeyUp:Fire(input.KeyCode)
 			self._keysProcessed[input.KeyCode] = false
 		end
 	end)
