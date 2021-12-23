@@ -40,10 +40,10 @@ ClientComm.__index = ClientComm
 	call to a RemoteFunction and yield until the function responds.
 
 	```lua
-	local clientComm = ClientComm.new(game:GetService("ReplicatedStorage"))
+	local clientComm = ClientComm.new(game:GetService("ReplicatedStorage"), true)
 
 	-- If using a unique namespace with ServerComm, include it as second argument:
-	local clientComm = ClientComm.new(game:GetService("ReplicatedStorage"), "MyNamespace")
+	local clientComm = ClientComm.new(game:GetService("ReplicatedStorage"), true, "MyNamespace")
 	```
 ]=]
 function ClientComm.new(parent: Instance, usePromise: boolean, namespace: string?)
