@@ -18,7 +18,7 @@ local function ApplyDeadzone(value: number, threshold: number): number
 	return ((math.abs(value) - threshold) / (1 - threshold)) * math.sign(value)
 end
 
-local function GetActiveGamepad(): UserInputType?
+local function GetActiveGamepad(): Enum.UserInputType?
 	local activeGamepad = nil
 	local navGamepads = UserInputService:GetNavigationGamepads()
 	if #navGamepads > 1 then
@@ -34,6 +34,9 @@ local function GetActiveGamepad(): UserInputType?
 				activeGamepad = connectedGamepad
 			end
 		end
+	end
+	if activeGamepad and not UserInputService:GetGamepadConnected(activeGamepad) then
+		activeGamepad = nil
 	end
 	return activeGamepad
 end
@@ -68,38 +71,30 @@ Gamepad.__index = Gamepad
 
 --[=[
 	@within Gamepad
-	@prop ButtonDown Signal<Enum.KeyCode>
+	@prop ButtonDown Signal<(button: Enum.KeyCode, processed: boolean)>
 	@readonly
 	The ButtonDown signal fires when a gamepad button is pressed
-	down. The pressed KeyCode is passed to the signal.
-
-	:::note Processed
-	Button presses that are processed are _not_ sent to this event.
-	:::
+	down. The pressed KeyCode is passed to the signal, along with
+	whether or not the event was processed.
 
 	```lua
-	gamepad.ButtonDown:Connect(function(button)
-		print("Button down", button)
+	gamepad.ButtonDown:Connect(function(button: Enum.KeyCode, processed: boolean)
+		print("Button down", button, processed)
 	end)
 	```
 ]=]
 
 --[=[
 	@within Gamepad
-	@prop ButtonUp Signal<Enum.KeyCode>
+	@prop ButtonUp Signal<(button: Enum.KeyCode, processed: boolean)>
 	@readonly
 	The ButtonUp signal fires when a gamepad button is released.
-	The released KeyCode is passed to the signal.
+	The released KeyCode is passed to the signal, along with
+	whether or not the event was processed.
 
-	:::note All
-	All button-up events fire this signal, including events that
-	were processed. This is to help prevent issues where a button-down
-	event occurs that triggers a task, but then no button-up
-	event occurs to stop that task.
-	:::
 	```lua
-	gamepad.ButtonUp:Connect(function(button)
-		print("Button up", button)
+	gamepad.ButtonUp:Connect(function(button: Enum.KeyCode, processed: boolean)
+		print("Button up", button, processed)
 	end)
 	```
 ]=]
@@ -140,7 +135,7 @@ Gamepad.__index = Gamepad
 
 --[=[
 	@within Gamepad
-	@prop GamepadChanged Signal<Enum.UserInputType>
+	@prop GamepadChanged Signal<gamepad: Enum.UserInputType>
 	@readonly
 	Fires when the active gamepad switches. Internally, the gamepad
 	object will always wrap around the active gamepad, so nothing
@@ -279,14 +274,14 @@ function Gamepad:_setupActiveGamepad(gamepad: Enum.UserInputType?)
 	self._gamepadTrove:Add(self, "StopMotors")
 
 	self._gamepadTrove:Connect(UserInputService.InputBegan, function(input, processed)
-		if not processed and input.UserInputType == gamepad then
-			self.ButtonDown:Fire(input.KeyCode)
+		if input.UserInputType == gamepad then
+			self.ButtonDown:Fire(input.KeyCode, processed)
 		end
 	end)
 
-	self._gamepadTrove:Connect(UserInputService.InputEnded, function(input, _processed)
+	self._gamepadTrove:Connect(UserInputService.InputEnded, function(input, processed)
 		if input.UserInputType == gamepad then
-			self.ButtonUp:Fire(input.KeyCode)
+			self.ButtonUp:Fire(input.KeyCode, processed)
 		end
 	end)
 
