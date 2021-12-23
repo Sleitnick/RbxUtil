@@ -343,7 +343,7 @@ function Shake:Update(): (Vector3, Vector3, boolean)
 	if dur < self.FadeInTime then
 		multiplierFadeIn = dur / self.FadeInTime
 	end
-	if dur > self.FadeInTime + self.SustainTime then
+	if not self.Sustain and dur > self.FadeInTime + self.SustainTime then
 		multiplierFadeOut = 1 - (dur - self.FadeInTime - self.SustainTime) / self.FadeOutTime
 		if (not self.Sustain) and dur >= self.FadeInTime + self.SustainTime + self.FadeOutTime then
 			done = true
