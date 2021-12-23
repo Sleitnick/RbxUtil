@@ -83,7 +83,7 @@ end
 function Keyboard:IsKeyDown(keyCode)
 	return self._keysDown[keyCode] == true, self._keysProcessed[keyCode]
 end
-		
+
 --[=[
 	@param keycodes table
 	@return areAllKeysDown: boolean
@@ -97,16 +97,21 @@ end
 ]=]
 
 function Keyboard:AreAllKeysDown(keycodes)
-    for _, keycode in ipairs(keycodes) do
-	    if not self:IsKeyDown(keycode) then return false end
+	for _, keycode in ipairs(keycodes) do
+		local down, processed  =  self:IsKeyDown(keycode)
+		
+		if not down or processed then
+			return false
+		end
 	end
-			
-    return true
+
+	return true
 end		
-			
+
 --[=[
 	@param keycodes table
 	@return areAnyKeysDown: boolean
+	@return processed: boolean
 
 	Returns `true` if any keys in `keycodes` are down.
 
@@ -117,28 +122,32 @@ end
 ]=]
 
 function Keyboard:AreAnyKeysDown(keycodes)
-    for _, keycode in ipairs(keycodes) do
-	    if self:IsKeyDown(keycode) then return true end
+	for _, keycode in ipairs(keycodes) do
+		local down, processed  =  self:IsKeyDown(keycode)
+		
+		if not down or processed then
+			continue
+		end
 	end
-			
-    return false
+
+	return true
 end		
-				
+
 function Keyboard:_setup()
 
 	self._trove:Connect(UserInputService.InputBegan, function(input, processed)
 		if input.UserInputType == Enum.UserInputType.Keyboard then
 			self.KeyDown:Fire(input.KeyCode, processed)
-			self._keysProcessed[input.Keycode] = processed
-			self._keysDown[input.Keycode] = true				
+			self._keysProcessed[input.KeyCode] = processed
+			self._keysDown[input.KeyCode] = true				
 		end
 	end)
 
 	self._trove:Connect(UserInputService.InputEnded, function(input, processed)
 		if input.UserInputType == Enum.UserInputType.Keyboard then
 			self.KeyUp:Fire(input.KeyCode, processed)
-			self._keysProcessed[input.Keycode] = false
-			self._keysDown[input.Keycode] = false
+			self._keysProcessed[input.KeyCode] = false
+			self._keysDown[input.KeyCode] = false
 		end
 	end)
 end
