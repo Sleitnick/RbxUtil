@@ -5,7 +5,7 @@ classes = ["Signal", "TableUtil", "Component"]
 
 [[classOrder]]
 section = "Input"
-classes = ["Input", "PreferredInput", "Keyboard", "Mouse", "Touch"]
+classes = ["Input", "PreferredInput", "Keyboard", "Mouse", "Touch", "Gamepad"]
 
 [[classOrder]]
 section = "Remote Comm"

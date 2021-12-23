@@ -11,6 +11,7 @@
 	- [Mouse](/api/Mouse)
 	- [Keyboard](/api/Keyboard)
 	- [Touch](/api/Touch)
+	- [Gamepad](/api/Gamepad)
 
 	```lua
 	local Input = require(packages.Input)
@@ -19,6 +20,7 @@
 	local Mouse = Input.Mouse
 	local Keyboard = Input.Keyboard
 	local Touch = Input.Touch
+	local Gamepad = Input.Gamepad
 	```
 ]=]
 local Input = {
@@ -26,6 +28,7 @@ local Input = {
 	Mouse = require(script.Mouse);
 	Keyboard = require(script.Keyboard);
 	Touch = require(script.Touch);
+	Gamepad = require(script.Gamepad);
 }
 
 return Input

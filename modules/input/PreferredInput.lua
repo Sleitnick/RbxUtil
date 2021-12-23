@@ -4,15 +4,6 @@
 -- Stephen Leitnick
 -- April 05, 2021
 
---[[
-
-	PreferredInput.InputType: { MouseKeyboard, Touch, Gamepad }
-	PreferredInput.Current: InputType
-
-	PreferredInput.Changed(inputType: InputType)
-
---]]
-
 
 local Signal = require(script.Parent.Parent.Signal)
 local EnumList = require(script.Parent.Parent.EnumList)
