@@ -12,16 +12,17 @@ type AncestorList = {Instance}
 type ExtensionFn = (any) -> nil
 
 --[=[
-	@type ExtensionConstructFn (component) -> boolean
+	@type ExtensionShouldFn (component) -> boolean
 	@within Component
 ]=]
-type ExtensionConstructFn = (any) -> boolean
+type ExtensionShouldFn = (any) -> boolean
 
 
 --[=[
 	@interface Extension
 	@within Component
-	.ShouldConstruct ExtensionConstructFn?
+	.ShouldExtend ExtensionShouldFn?
+	.ShouldConstruct ExtensionShouldFn?
 	.Constructing ExtensionFn?
 	.Constructed ExtensionFn?
 	.Starting ExtensionFn?
@@ -34,7 +35,7 @@ type ExtensionConstructFn = (any) -> boolean
 	extending the behavior of components by wrapping around
 	component lifecycle methods.
 
-	A special `ShouldConstruct` function can be used to indicate
+	The `ShouldConstruct` function can be used to indicate
 	if the component should actually be created. This must
 	return `true` or `false`. A component with multiple
 	`ShouldConstruct` extension functions must have them _all_
@@ -42,7 +43,14 @@ type ExtensionConstructFn = (any) -> boolean
 	The `ShouldConstruct` function runs _before_ all other
 	extension functions and component lifecycle methods.
 
-	For instance, an extension could be created to simply log
+	The `ShouldExtend` function can be used to indicate if
+	the extension itself should be used. This can be used in
+	order to toggle an extension on/off depending on whatever
+	logic is appropriate. If no `ShouldExtend` function is
+	provided, the extension will always be used if provided
+	as an extension to the component.
+
+	As an example, an extension could be created to simply log
 	when the various lifecycle stages run on the component:
 
 	```lua
@@ -62,7 +70,6 @@ type ExtensionConstructFn = (any) -> boolean
 	component on the client should only be instantiated for the
 	local player, an extension might look like this, assuming the
 	instance has an attribute linking it to the player's UserId:
-
 	```lua
 	local player = game:GetService("Players").LocalPlayer
 
@@ -74,9 +81,20 @@ type ExtensionConstructFn = (any) -> boolean
 
 	local MyComponent = Component.new({Tag = "MyComponent", Extensions = {OnlyLocalPlayer}})
 	```
+
+	It can also be useful for an extension itself to turn on/off
+	depending on various contexts. For example, let's take the
+	Logger from the first example, and only use that extension
+	if the bound instance has a Log attribute set to `true`:
+	```lua
+	function Logger.ShouldExtend(component)
+		return component.Instance:GetAttribute("Log") == true
+	end
+	```
 ]=]
 type Extension = {
-	ShouldConstruct: ExtensionConstructFn?,
+	ShouldExtend: ExtensionShouldFn?,
+	ShouldConstruct: ExtensionShouldFn?,
 	Constructing: ExtensionFn?,
 	Constructed: ExtensionFn?,
 	Starting: ExtensionFn?,
@@ -138,6 +156,11 @@ local Trove = require(script.Parent.Trove)
 local IS_SERVER = RunService:IsServer()
 local DEFAULT_ANCESTORS = {workspace, game:GetService("Players")}
 
+local EXTENSION_ACTIVE = newproxy(true)
+getmetatable(EXTENSION_ACTIVE).__tostring = function()
+	return "EXTENSION_ACTIVE"
+end
+
 
 local renderId = 0
 local function NextRenderName(): string
@@ -148,6 +171,7 @@ end
 
 local function InvokeExtensionFn(component, extensionList, fnName: string)
 	for _,extension in ipairs(extensionList) do
+		if not extension[EXTENSION_ACTIVE] then continue end
 		local fn = extension[fnName]
 		if type(fn) == "function" then
 			fn(component)
@@ -158,6 +182,7 @@ end
 
 local function ShouldConstruct(component, extensionList): boolean
 	for _,extension in ipairs(extensionList) do
+		if not extension[EXTENSION_ACTIVE] then continue end
 		local fn = extension.ShouldConstruct
 		if type(fn) == "function" then
 			local shouldConstruct = fn(component)
@@ -167,6 +192,18 @@ local function ShouldConstruct(component, extensionList): boolean
 		end
 	end
 	return true
+end
+
+
+local function ShouldExtend(component, extensionList)
+	for _,extension in ipairs(extensionList) do
+		local fn = extension.ShouldExtend
+		if type(fn) == "function" then
+			extension[EXTENSION_ACTIVE] = if fn(component) then true else false
+		else
+			extension[EXTENSION_ACTIVE] = true
+		end
+	end
 end
 
 
@@ -269,6 +306,7 @@ end
 function Component:_instantiate(instance: Instance)
 	local component = setmetatable({}, self)
 	component.Instance = instance
+	ShouldExtend(component, self._extensions)
 	if not ShouldConstruct(component, self._extensions) then
 		return nil
 	end
