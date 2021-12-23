@@ -24,22 +24,22 @@ Keyboard.__index = Keyboard
 
 --[=[
 	@within Keyboard
-	@prop KeyDown Signal<Enum.KeyCode, boolean>
+	@prop KeyDown Signal<Enum.KeyCode>
 	@tag Event
 	Fired when a key is pressed.
 	```lua
-	keyboard.KeyDown:Connect(function(key: KeyCode, processed)
+	keyboard.KeyDown:Connect(function(key: KeyCode)
 		print("Key pressed", key)
 	end)
 	```
 ]=]
 --[=[
 	@within Keyboard
-	@prop KeyUp Signal<Enum.KeyCode, boolean>
+	@prop KeyUp Signal<Enum.KeyCode>
 	@tag Event
 	Fired when a key is released.
 	```lua
-	keyboard.KeyUp:Connect(function(key: KeyCode, processed)
+	keyboard.KeyUp:Connect(function(key: KeyCode)
 		print("Key released", key)
 	end)
 	```
@@ -59,7 +59,6 @@ function Keyboard.new()
 	local self = setmetatable({}, Keyboard)
 	self._trove = Trove.new()
 	self._keysProcessed = {}
-	self._keysDown = {}
 	self.KeyDown = self._trove:Construct(Signal)
 	self.KeyUp = self._trove:Construct(Signal)
 	self:_setup()
@@ -72,16 +71,15 @@ end
 	@return isDown: boolean
     @return isProcessed: boolean
 
-	Returns `true` if the key is down, and also returns another boolean indicating if the keycode
-	was processed by the game engine or not.
+	Returns `true` if the key is down.
 
 	```lua
-	local w, isProcessed = keyboard:IsKeyDown(Enum.KeyCode.W)
-	if w and not isProcessed then ... end
+	local w = keyboard:IsKeyDown(Enum.KeyCode.W)
+	if w then ... end
 	```
 ]=]
 function Keyboard:IsKeyDown(keyCode)
-	return self._keysDown[keyCode] == true, self._keysProcessed[keyCode]
+	return UserInputService:IsKeyDown(keyCode) and self._keysProcessed[keyCode] ~= true
 end
 
 --[=[
@@ -123,23 +121,22 @@ end
 
 function Keyboard:AreAnyKeysDown(keycodes)
 	for _, keycode in ipairs(keycodes) do
-		local down, processed  =  self:IsKeyDown(keycode)
-		
-		if not down or processed then
-			continue
+		if self:IsKeyDown(keycode)  then
+			return true
 		end
 	end
 
-	return true
+	return false
 end		
 
 function Keyboard:_setup()
 
 	self._trove:Connect(UserInputService.InputBegan, function(input, processed)
+		if processed then return end
+							
 		if input.UserInputType == Enum.UserInputType.Keyboard then
 			self.KeyDown:Fire(input.KeyCode, processed)
-			self._keysProcessed[input.KeyCode] = processed
-			self._keysDown[input.KeyCode] = true				
+			self._keysProcessed[input.KeyCode] = processed			
 		end
 	end)
 
@@ -147,7 +144,6 @@ function Keyboard:_setup()
 		if input.UserInputType == Enum.UserInputType.Keyboard then
 			self.KeyUp:Fire(input.KeyCode, processed)
 			self._keysProcessed[input.KeyCode] = false
-			self._keysDown[input.KeyCode] = false
 		end
 	end)
 end
