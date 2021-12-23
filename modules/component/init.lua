@@ -198,11 +198,7 @@ end
 local function ShouldExtend(component, extensionList)
 	for _,extension in ipairs(extensionList) do
 		local fn = extension.ShouldExtend
-		if type(fn) == "function" then
-			extension[EXTENSION_ACTIVE] = if fn(component) then true else false
-		else
-			extension[EXTENSION_ACTIVE] = true
-		end
+		extension[EXTENSION_ACTIVE] = type(fn) ~= "function" or not not fn(component)
 	end
 end
 
