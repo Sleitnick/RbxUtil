@@ -209,6 +209,52 @@ return function()
 			
 		end)
 
+		it("should decide whether or not to use extend", function()
+
+			local e1 = {extend = true}
+			function e1.ShouldExtend(_component)
+				return e1.extend
+			end
+			function e1.Constructing(component)
+				component.E1 = true
+			end
+
+			local e2 = {extend = true}
+			function e2.ShouldExtend(_component)
+				return e2.extend
+			end
+			function e2.Constructing(component)
+				component.E2 = true
+			end
+
+			local TestComponent = Component.new({Tag = TAG, Extensions = {e1, e2}})
+
+			local function SetAndCheck(ex1, ex2)
+				e1.extend = ex1
+				e2.extend = ex2
+				local instance = CreateTaggedInstance()
+				task.wait()
+				local component = TestComponent.FromInstance(instance, TestComponent)
+				expect(component).to.be.ok()
+				if ex1 then
+					expect(component.E1).to.equal(true)
+				else
+					expect(component.E1).to.never.be.ok()
+				end
+				if ex2 then
+					expect(component.E2).to.equal(true)
+				else
+					expect(component.E2).to.never.be.ok()
+				end
+			end
+
+			SetAndCheck(true, true)
+			SetAndCheck(false, false)
+			SetAndCheck(true, false)
+			SetAndCheck(false, true)
+
+		end)
+
 	end)
 
 end

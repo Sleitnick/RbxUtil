@@ -1,7 +1,7 @@
 [package]
 name = "sleitnick/component"
 description = "Component class"
-version = "2.1.0"
+version = "2.2.0"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"
