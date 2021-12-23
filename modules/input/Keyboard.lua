@@ -24,22 +24,22 @@ Keyboard.__index = Keyboard
 
 --[=[
 	@within Keyboard
-	@prop KeyDown Signal<Enum.KeyCode>
+	@prop KeyDown Signal<Enum.KeyCode, boolean>
 	@tag Event
 	Fired when a key is pressed.
 	```lua
-	keyboard.KeyDown:Connect(function(key: KeyCode)
+	keyboard.KeyDown:Connect(function(key: KeyCode, processed)
 		print("Key pressed", key)
 	end)
 	```
 ]=]
 --[=[
 	@within Keyboard
-	@prop KeyUp Signal<Enum.KeyCode>
+	@prop KeyUp Signal<Enum.KeyCode, boolean>
 	@tag Event
 	Fired when a key is released.
 	```lua
-	keyboard.KeyUp:Connect(function(key: KeyCode)
+	keyboard.KeyUp:Connect(function(key: KeyCode, processed)
 		print("Key released", key)
 	end)
 	```
@@ -58,6 +58,8 @@ Keyboard.__index = Keyboard
 function Keyboard.new()
 	local self = setmetatable({}, Keyboard)
 	self._trove = Trove.new()
+	self._keysProcessed = {}
+	self._keysDown = {}
 	self.KeyDown = self._trove:Construct(Signal)
 	self.KeyUp = self._trove:Construct(Signal)
 	self:_setup()
@@ -68,52 +70,77 @@ end
 --[=[
 	@param keyCode Enum.KeyCode
 	@return isDown: boolean
+    @return isProcessed: boolean
 
-	Returns `true` if the key is down.
+	Returns `true` if the key is down, and also returns another boolean indicating if the keycode
+	was processed by the game engine or not.
 
 	```lua
-	local w = keyboard:IsKeyDown(Enum.KeyCode.W)
-	if w then ... end
+	local w, isProcessed = keyboard:IsKeyDown(Enum.KeyCode.W)
+	if w and not isProcessed then ... end
 	```
 ]=]
 function Keyboard:IsKeyDown(keyCode)
-	return UserInputService:IsKeyDown(keyCode)
+	return self._keysDown[keyCode] == true, self._keysProcessed[keyCode]
 end
-
-
+		
 --[=[
-	@param keyCodeOne Enum.KeyCode
-	@param keyCodeTwo Enum.KeyCode
-	@return areKeysDown: boolean
+	@param keycodes table
+	@return areAllKeysDown: boolean
 
-	Returns `true` if both keys are down. Useful for key combinations.
+	Returns `true` if all keys in `keycodes` are down.
 
 	```lua
-	local shiftA = keyboard:AreKeysDown(Enum.KeyCode.LeftShift, Enum.KeyCode.A)
-	if shiftA then ... end
+	local areAllDown = keyboard:AreAllKeysDown({Enum.KeyCode.LeftShift, Enum.KeyCode.A})
+	if areAllDown then ... end
 	```
 ]=]
-function Keyboard:AreKeysDown(keyCodeOne, keyCodeTwo)
-	return self:IsKeyDown(keyCodeOne) and self:IsKeyDown(keyCodeTwo)
-end
 
+function Keyboard:AreAllKeysDown(keycodes)
+    for _, keycode in ipairs(keycodes) do
+	    if not self:IsKeyDown(keycode) then return false end
+	end
+			
+    return true
+end		
+			
+--[=[
+	@param keycodes table
+	@return areAnyKeysDown: boolean
 
+	Returns `true` if any keys in `keycodes` are down.
+
+	```lua
+	local areAnyDown = keyboard:AreAnyKeysDown({Enum.KeyCode.LeftShift, Enum.KeyCode.A})
+	if areAnyDown then ... end
+	```
+]=]
+
+function Keyboard:AreAnyKeysDown(keycodes)
+    for _, keycode in ipairs(keycodes) do
+	    if self:IsKeyDown(keycode) then return true end
+	end
+			
+    return false
+end		
+				
 function Keyboard:_setup()
 
 	self._trove:Connect(UserInputService.InputBegan, function(input, processed)
-		if processed then return end
 		if input.UserInputType == Enum.UserInputType.Keyboard then
-			self.KeyDown:Fire(input.KeyCode)
+			self.KeyDown:Fire(input.KeyCode, processed)
+			self._keysProcessed[input.Keycode] = processed
+			self._keysDown[input.Keycode] = true				
 		end
 	end)
 
 	self._trove:Connect(UserInputService.InputEnded, function(input, processed)
-		if processed then return end
 		if input.UserInputType == Enum.UserInputType.Keyboard then
-			self.KeyUp:Fire(input.KeyCode)
+			self.KeyUp:Fire(input.KeyCode, processed)
+			self._keysProcessed[input.Keycode] = false
+			self._keysDown[input.Keycode] = false
 		end
 	end)
-
 end
 
 
