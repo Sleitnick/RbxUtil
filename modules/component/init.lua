@@ -156,11 +156,6 @@ local Trove = require(script.Parent.Trove)
 local IS_SERVER = RunService:IsServer()
 local DEFAULT_ANCESTORS = {workspace, game:GetService("Players")}
 
-local EXTENSION_ACTIVE = newproxy(true)
-getmetatable(EXTENSION_ACTIVE).__tostring = function()
-	return "EXTENSION_ACTIVE"
-end
-
 
 local renderId = 0
 local function NextRenderName(): string
@@ -169,9 +164,8 @@ local function NextRenderName(): string
 end
 
 
-local function InvokeExtensionFn(component, extensionList, fnName: string)
-	for _,extension in ipairs(extensionList) do
-		if not extension[EXTENSION_ACTIVE] then continue end
+local function InvokeExtensionFn(component, fnName: string)
+	for _,extension in ipairs(component._activeExtensions) do
 		local fn = extension[fnName]
 		if type(fn) == "function" then
 			fn(component)
@@ -180,9 +174,8 @@ local function InvokeExtensionFn(component, extensionList, fnName: string)
 end
 
 
-local function ShouldConstruct(component, extensionList): boolean
-	for _,extension in ipairs(extensionList) do
-		if not extension[EXTENSION_ACTIVE] then continue end
+local function ShouldConstruct(component): boolean
+	for _,extension in ipairs(component._activeExtensions) do
 		local fn = extension.ShouldConstruct
 		if type(fn) == "function" then
 			local shouldConstruct = fn(component)
@@ -195,11 +188,19 @@ local function ShouldConstruct(component, extensionList): boolean
 end
 
 
-local function ShouldExtend(component, extensionList)
+local function GetActiveExtensions(component, extensionList)
+	local activeExtensions = table.create(#extensionList)
+	local allActive = true
 	for _,extension in ipairs(extensionList) do
 		local fn = extension.ShouldExtend
-		extension[EXTENSION_ACTIVE] = type(fn) ~= "function" or not not fn(component)
+		local shouldExtend = type(fn) ~= "function" or not not fn(component)
+		if shouldExtend then
+			table.insert(activeExtensions, extension)
+		else
+			allActive = false
+		end
 	end
+	return if allActive then extensionList else activeExtensions
 end
 
 
@@ -302,15 +303,15 @@ end
 function Component:_instantiate(instance: Instance)
 	local component = setmetatable({}, self)
 	component.Instance = instance
-	ShouldExtend(component, self._extensions)
-	if not ShouldConstruct(component, self._extensions) then
+	component._activeExtensions = GetActiveExtensions(component, self._extensions)
+	if not ShouldConstruct(component) then
 		return nil
 	end
-	InvokeExtensionFn(component, self._extensions, "Constructing")
+	InvokeExtensionFn(component, "Constructing")
 	if type(component.Construct) == "function" then
 		component:Construct()
 	end
-	InvokeExtensionFn(component, self._extensions, "Constructed")
+	InvokeExtensionFn(component, "Constructed")
 	return component
 end
 
@@ -320,9 +321,9 @@ function Component:_setup()
 	local watchingInstances = {}
 	
 	local function StartComponent(component)
-		InvokeExtensionFn(component, self._extensions, "Starting")
+		InvokeExtensionFn(component, "Starting")
 		component:Start()
-		InvokeExtensionFn(component, self._extensions, "Started")
+		InvokeExtensionFn(component, "Started")
 		local hasHeartbeatUpdate = typeof(component.HeartbeatUpdate) == "function"
 		local hasSteppedUpdate = typeof(component.SteppedUpdate) == "function"
 		local hasRenderSteppedUpdate = typeof(component.RenderSteppedUpdate) == "function"
@@ -364,9 +365,9 @@ function Component:_setup()
 		elseif component._renderName then
 			RunService:UnbindFromRenderStep(self._renderName)
 		end
-		InvokeExtensionFn(component, self._extensions, "Stopping")
+		InvokeExtensionFn(component, "Stopping")
 		component:Stop()
-		InvokeExtensionFn(component, self._extensions, "Stopped")
+		InvokeExtensionFn(component, "Stopped")
 		self.Stopped:Fire(component)
 	end
 	
