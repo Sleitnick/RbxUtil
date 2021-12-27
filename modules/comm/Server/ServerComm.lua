@@ -76,8 +76,8 @@ end
 	serverComm:BindFunction("GetSomething", GetSomething)
 	```
 ]=]
-function ServerComm:BindFunction(name: string, func: Types.FnBind, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?): RemoteFunction
-	return Comm.BindFunction(self._instancesFolder, name, func, inboundMiddleware, outboundMiddleware)
+function ServerComm:BindFunction(name: string, fn: Types.FnBind, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?): RemoteFunction
+	return Comm.BindFunction(self._instancesFolder, name, fn, inboundMiddleware, outboundMiddleware)
 end
 
 --[=[
