@@ -49,6 +49,7 @@ function Server.BindFunction(parent: Instance, name: string, func: Types.FnBind,
 			if not middlewareResult[1] then
 				return table.unpack(middlewareResult, 2, middlewareResult.n)
 			end
+			args.n = #args
 		end
 		return table.unpack(args, 1, args.n)
 	end
@@ -60,6 +61,7 @@ function Server.BindFunction(parent: Instance, name: string, func: Types.FnBind,
 				if not middlewareResult[1] then
 					return table.unpack(middlewareResult, 2, middlewareResult.n)
 				end
+				args.n = #args
 			end
 			return ProcessOutbound(player, func(player, table.unpack(args, 1, args.n)))
 		end
@@ -72,6 +74,7 @@ function Server.BindFunction(parent: Instance, name: string, func: Types.FnBind,
 				if not middlewareResult[1] then
 					return table.unpack(middlewareResult, 2, middlewareResult.n)
 				end
+				args.n = #args
 			end
 			return func(player, table.unpack(args, 1, args.n))
 		end

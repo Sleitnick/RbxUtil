@@ -19,6 +19,7 @@ function Client.GetFunction(parent: Instance, name: string, usePromise: boolean,
 			if not middlewareResult[1] then
 				return table.unpack(middlewareResult, 2, middlewareResult.n)
 			end
+			args.n = #args
 		end
 		return table.unpack(args, 1, args.n)
 	end
@@ -40,6 +41,7 @@ function Client.GetFunction(parent: Instance, name: string, usePromise: boolean,
 							if not middlewareResult[1] then
 								return table.unpack(middlewareResult, 2, middlewareResult.n)
 							end
+							res.n = #res
 						end
 						resolve(table.unpack(res, 1, res.n))
 					else
@@ -60,6 +62,7 @@ function Client.GetFunction(parent: Instance, name: string, usePromise: boolean,
 					if not middlewareResult[1] then
 						return table.unpack(middlewareResult, 2, middlewareResult.n)
 					end
+					res.n = #res
 				end
 				return table.unpack(res, 1, res.n)
 			end

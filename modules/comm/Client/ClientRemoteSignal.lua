@@ -39,6 +39,7 @@ function ClientRemoteSignal.new(re: RemoteEvent, inboundMiddleware: Types.Client
 				if not middlewareResult[1] then
 					return
 				end
+				args.n = #args
 			end
 			self._signal:Fire(table.unpack(args, 1, args.n))
 		end)
@@ -55,6 +56,7 @@ function ClientRemoteSignal:_processOutboundMiddleware(...: any)
 		if not middlewareResult[1] then
 			return table.unpack(middlewareResult, 2, middlewareResult.n)
 		end
+		args.n = #args
 	end
 	return table.unpack(args, 1, args.n)
 end
