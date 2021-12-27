@@ -200,9 +200,6 @@ end
 
 
 --[=[
-	@param vector Vector3
-	@param distance number
-	@return Vector3
 	Apply an inverse square intensity multiplier to the given vector based on the
 	distance away from some source. This can be used to simulate shake intensity
 	based on the distance the shake is occurring from some source.
@@ -241,7 +238,6 @@ end
 
 
 --[=[
-	@return string
 	Returns a unique render name for every call, which can
 	be used with the `BindToRenderStep` method optionally.
 
@@ -285,7 +281,6 @@ end
 
 
 --[=[
-	@return boolean
 	Returns `true` if the shake instance is currently running,
 	otherwise returns `false`.
 ]=]
@@ -307,7 +302,6 @@ end
 
 
 --[=[
-	@return (position: Vector3, rotation: Vector3, completed: boolean)
 	Calculates the current shake vector. This should be continuously
 	called inside a loop, such as `RunService.Heartbeat`. Alternatively,
 	`OnSignal` or `BindToRenderStep` can be used to automatically call

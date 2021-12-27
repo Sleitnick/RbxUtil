@@ -175,8 +175,8 @@ end
 	@return any
 	Unpacks the arguments returned by either `SerializeArgs` or `DeserializeArgs`.
 ]=]
-function Ser.UnpackArgs(args: Args): ...any
-	return table.unpack(args, 1, args.n)
+function Ser.UnpackArgs(value: Args): ...any
+	return table.unpack(value, 1, value.n)
 end
 
 
