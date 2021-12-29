@@ -24,22 +24,22 @@
 --   sleitnick - August 3rd, 2021 - Modified for Knit.                        --
 -- -----------------------------------------------------------------------------
 
-export type Type<T...> = {
-	Connect: (Type<T...>, func: (T...) -> ()) -> Connection<T...>,
-	Fire: (Type<T...>, T...) -> (),
-	FireDeferred: (Type<T...>, T...) -> (),
-	Wait: (Type<T...>) -> (T...),
-	GetConnections: (Type<T...>) -> {Connection<T...>},
-	DisconnectAll: (Type<T...>) -> (),
-	Destroy: (Type<T...>) -> (),
+export type SignalType<U...> = {
+	Connect: (SignalType<U...>, func: (U...) -> ()) -> Connection<U...>,
+	Fire: (SignalType<U...>, U...) -> (),
+	FireDeferred: (SignalType<U...>, U...) -> (),
+	Wait: (SignalType<U...>) -> (U...),
+	GetConnections: (SignalType<U...>) -> {Connection<U...>},
+	DisconnectAll: (SignalType<U...>) -> (),
+	Destroy: (SignalType<U...>) -> (),
 
 	_handlerListHead: any,
 	_proxyHandler: any,
 }
 
-type Connection<T...> = {
-	Disconnect: (Connection<T...>) -> (),
-	Destroy: (Connection<T...>) -> (),
+type Connection<U...> = {
+	Disconnect: (Connection<U...>) -> (),
+	Destroy: (Connection<U...>) -> (),
 }
 
 -- The currently idle thread to run the next handler on
@@ -74,7 +74,7 @@ local Connection = {}
 Connection.__index = Connection
 
 
-function Connection.new<T...>(signal, fn: (T...) -> ())
+function Connection.new<U...>(signal, fn: (U...) -> ())
 	return setmetatable({
 		_connected = true,
 		_signal = signal,
@@ -143,12 +143,12 @@ Signal.__index = Signal
 
 	@return Signal
 ]=]
-function Signal.new<T...>(): Type<T...>
+function Signal.new<U...>(): SignalType<U...>
 	local self = setmetatable({
 		_handlerListHead = false,
 		_proxyHandler = nil,
 	}, Signal)
-	return self :: Type<T...>
+	return self :: SignalType<U...>
 end
 
 
@@ -165,13 +165,13 @@ end
 	Instance.new("Part").Parent = workspace
 	```
 ]=]
-function Signal.Wrap<T...>(rbxScriptSignal) : Type<T...>
+function Signal.Wrap<U...>(rbxScriptSignal) : SignalType<U...>
 	assert(typeof(rbxScriptSignal) == "RBXScriptSignal", "Argument #1 to Signal.Wrap must be a RBXScriptSignal; got " .. typeof(rbxScriptSignal))
 	local signal = Signal.new()
 	signal._proxyHandler = rbxScriptSignal:Connect(function(...)
 		signal:Fire(...)
 	end)
-	return signal :: Type<T...>
+	return signal :: SignalType<U...>
 end
 
 
@@ -192,7 +192,7 @@ end
 	@param fn (...any) -> nil
 	@return Connection -- A connection to the signal
 ]=]
-function Signal:Connect<T...>(fn: (T...) -> ()): Connection<T...>
+function Signal:Connect<U...>(fn: (U...) -> ()): Connection<U...>
 	local connection = Connection.new(self, fn)
 	if self._handlerListHead then
 		connection._next = self._handlerListHead
@@ -200,18 +200,18 @@ function Signal:Connect<T...>(fn: (T...) -> ()): Connection<T...>
 	else
 		self._handlerListHead = connection
 	end
-	return connection :: Connection<T...>
+	return connection :: Connection<U...>
 end
 
 
-function Signal:GetConnections<T...>(): {Connection<T...>}
+function Signal:GetConnections<U...>(): {Connection<U...>}
 	local items = {}
 	local item = self._handlerListHead
 	while item do
 		table.insert(items, item)
 		item = item._next
 	end
-	return items :: {Connection<T...>}
+	return items :: {Connection<U...>}
 end
 
 
@@ -234,7 +234,7 @@ end
 
 	@param ... any -- Arguments to pass to the connected functions
 ]=]
-function Signal:Fire<T...>(...: T...)
+function Signal:Fire<U...>(...: U...)
 	local item = self._handlerListHead
 	while item do
 		if item._connected then
@@ -253,7 +253,7 @@ end
 
 	@param ... any -- Arguments to pass to the connected functions
 ]=]
-function Signal:FireDeferred<T...>(...: T...)
+function Signal:FireDeferred<U...>(...: U...)
 	local item = self._handlerListHead
 	while item do
 		task.defer(item._fn, ...)
@@ -268,10 +268,10 @@ end
 	@return ... any -- Arguments passed to the signal when it was fired
 	@yields
 ]=]
-function Signal:Wait<T...>(): T...
+function Signal:Wait<U...>(): U...
 	local waitingCoroutine = coroutine.running()
 	local cn
-	cn = (self :: Type<T...>):Connect(function(...)
+	cn = (self :: SignalType<U...>):Connect(function(...)
 		cn:Disconnect()
 		task.spawn(waitingCoroutine, ...)
 	end)
