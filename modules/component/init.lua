@@ -151,10 +151,20 @@ local CollectionService = game:GetService("CollectionService")
 local RunService = game:GetService("RunService")
 
 local Signal = require(script.Parent.Signal)
+local Symbol = require(script.Parent.Symbol)
 local Trove = require(script.Parent.Trove)
 
 local IS_SERVER = RunService:IsServer()
 local DEFAULT_ANCESTORS = {workspace, game:GetService("Players")}
+
+-- Symbol keys:
+local KEY_ANCESTORS = Symbol("Ancestors")
+local KEY_INST_TO_COMPONENTS = Symbol("InstancesToComponents")
+local KEY_COMPONENTS = Symbol("Components")
+local KEY_TROVE = Symbol("Trove")
+local KEY_EXTENSIONS = Symbol("Extensions")
+local KEY_ACTIVE_EXTENSIONS = Symbol("ActiveExtensions")
+local KEY_STARTED = Symbol("Started")
 
 
 local renderId = 0
@@ -165,7 +175,7 @@ end
 
 
 local function InvokeExtensionFn(component, fnName: string)
-	for _,extension in ipairs(component._activeExtensions) do
+	for _,extension in ipairs(component[KEY_ACTIVE_EXTENSIONS]) do
 		local fn = extension[fnName]
 		if type(fn) == "function" then
 			fn(component)
@@ -175,7 +185,7 @@ end
 
 
 local function ShouldConstruct(component): boolean
-	for _,extension in ipairs(component._activeExtensions) do
+	for _,extension in ipairs(component[KEY_ACTIVE_EXTENSIONS]) do
 		local fn = extension.ShouldConstruct
 		if type(fn) == "function" then
 			local shouldConstruct = fn(component)
@@ -266,15 +276,15 @@ function Component.new(config: ComponentConfig)
 	customComponent.__tostring = function()
 		return "Component<" .. config.Tag .. ">"
 	end
-	customComponent._ancestors = config.Ancestors or DEFAULT_ANCESTORS
-	customComponent._instancesToComponents = {}
-	customComponent._components = {}
-	customComponent._trove = Trove.new()
-	customComponent._extensions = config.Extensions or {}
-	customComponent._started = false
+	customComponent[KEY_ANCESTORS] = config.Ancestors or DEFAULT_ANCESTORS
+	customComponent[KEY_INST_TO_COMPONENTS] = {}
+	customComponent[KEY_COMPONENTS] = {}
+	customComponent[KEY_TROVE] = Trove.new()
+	customComponent[KEY_EXTENSIONS] = config.Extensions or {}
+	customComponent[KEY_STARTED] = false
 	customComponent.Tag = config.Tag
-	customComponent.Started = customComponent._trove:Construct(Signal)
-	customComponent.Stopped = customComponent._trove:Construct(Signal)
+	customComponent.Started = customComponent[KEY_TROVE]:Construct(Signal)
+	customComponent.Stopped = customComponent[KEY_TROVE]:Construct(Signal)
 	setmetatable(customComponent, Component)
 	customComponent:_setup()
 	return customComponent
@@ -296,14 +306,14 @@ end
 	```
 ]=]
 function Component.FromInstance(instance: Instance, componentClass)
-	return componentClass._instancesToComponents[instance]
+	return componentClass[KEY_INST_TO_COMPONENTS][instance]
 end
 
 
 function Component:_instantiate(instance: Instance)
 	local component = setmetatable({}, self)
 	component.Instance = instance
-	component._activeExtensions = GetActiveExtensions(component, self._extensions)
+	component[KEY_ACTIVE_EXTENSIONS] = GetActiveExtensions(component, self[KEY_EXTENSIONS])
 	if not ShouldConstruct(component) then
 		return nil
 	end
@@ -349,7 +359,7 @@ function Component:_setup()
 				end)
 			end
 		end
-		component._started = true
+		component[KEY_STARTED] = true
 		self.Started:Fire(component)
 	end
 	
@@ -372,31 +382,32 @@ function Component:_setup()
 	end
 	
 	local function TryConstructComponent(instance)
-		if self._instancesToComponents[instance] then return end
+		if self[KEY_INST_TO_COMPONENTS][instance] then return end
 		local component = self:_instantiate(instance)
 		if not component then
 			return
 		end
-		self._instancesToComponents[instance] = component
-		table.insert(self._components, component)
+		self[KEY_INST_TO_COMPONENTS][instance] = component
+		table.insert(self[KEY_COMPONENTS], component)
 		task.defer(function()
-			if self._instancesToComponents[instance] == component then
+			if self[KEY_INST_TO_COMPONENTS][instance] == component then
 				StartComponent(component)
 			end
 		end)
 	end
 	
 	local function TryDeconstructComponent(instance)
-		local component = self._instancesToComponents[instance]
+		local component = self[KEY_INST_TO_COMPONENTS][instance]
 		if not component then return end
-		self._instancesToComponents[instance] = nil
-		local index = table.find(self._components, component)
+		self[KEY_INST_TO_COMPONENTS][instance] = nil
+		local components = self[KEY_COMPONENTS]
+		local index = table.find(components, component)
 		if index then
-			local n = #self._components
-			self._components[index] = self._components[n]
-			self._components[n] = nil
+			local n = #components
+			components[index] = components[n]
+			components[n] = nil
 		end
-		if component._started then
+		if component[KEY_STARTED] then
 			task.spawn(StopComponent, component)
 		end
 	end
@@ -404,14 +415,14 @@ function Component:_setup()
 	local function StartWatchingInstance(instance)
 		if watchingInstances[instance] then return end
 		local function IsInAncestorList(): boolean
-			for _,parent in ipairs(self._ancestors) do
+			for _,parent in ipairs(self[KEY_ANCESTORS]) do
 				if instance:IsDescendantOf(parent) then
 					return true
 				end
 			end
 			return false
 		end
-		local ancestryChangedHandle = self._trove:Connect(instance.AncestryChanged, function(_, parent)
+		local ancestryChangedHandle = self[KEY_TROVE]:Connect(instance.AncestryChanged, function(_, parent)
 			if parent and IsInAncestorList() then
 				TryConstructComponent(instance)
 			else
@@ -437,14 +448,37 @@ function Component:_setup()
 		TryDeconstructComponent(instance)
 	end
 	
-	self._trove:Connect(CollectionService:GetInstanceAddedSignal(self.Tag), InstanceTagged)
-	self._trove:Connect(CollectionService:GetInstanceRemovedSignal(self.Tag), InstanceUntagged)
+	self[KEY_TROVE]:Connect(CollectionService:GetInstanceAddedSignal(self.Tag), InstanceTagged)
+	self[KEY_TROVE]:Connect(CollectionService:GetInstanceRemovedSignal(self.Tag), InstanceUntagged)
 	
 	local tagged = CollectionService:GetTagged(self.Tag)
 	for _,instance in ipairs(tagged) do
 		task.defer(InstanceTagged, instance)
 	end
 	
+end
+
+
+--[=[
+	@return {Component}
+	Gets a table array of all existing component objects. For example,
+	if there was a component class linked to the "MyComponent" tag,
+	and three Roblox instances in your game had that same tag, then
+	calling `GetAll` would return the three component instances.
+
+	```lua
+	local MyComponent = Component.new({Tag = "MyComponent"})
+
+	-- ...
+
+	local components = MyComponent:GetAll()
+	for _,component in ipairs(components) do
+		component:DoSomethingHere()
+	end
+	```
+]=]
+function Component:GetAll()
+	return self[KEY_COMPONENTS]
 end
 
 
@@ -521,7 +555,7 @@ end
 	```
 ]=]
 function Component:GetComponent(componentClass)
-	return componentClass._instancesToComponents[self.Instance]
+	return componentClass[KEY_INST_TO_COMPONENTS][self.Instance]
 end
 
 
@@ -605,7 +639,7 @@ end
 
 
 function Component:Destroy()
-	self._trove:Destroy()
+	self[KEY_TROVE]:Destroy()
 end
 
 
