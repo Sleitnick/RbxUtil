@@ -1,6 +1,6 @@
 [package]
 name = "sleitnick/symbol"
-description = "Symbol class"
+description = "Symbol"
 version = "2.0.0"
 license = "MIT"
 authors = ["Stephen Leitnick"]
