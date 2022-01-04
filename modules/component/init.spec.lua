@@ -124,6 +124,22 @@ return function()
 			expect(component).to.be.ok()
 		end)
 
+		it("should be able to get all component instances existing", function()
+			local numComponents = 3
+			local instances = table.create(numComponents)
+			for i = 1,numComponents do
+				local instance = CreateTaggedInstance()
+				instances[i] = instance
+			end
+			task.wait()
+			local components = TestComponentMain:GetAll()
+			expect(components).to.be.a("table")
+			expect(#components).to.equal(numComponents)
+			for _,c in ipairs(components) do
+				expect(table.find(instances, c.Instance)).to.be.ok()
+			end
+		end)
+
 		it("should call lifecycle methods and extension functions", function()
 			local instance = CreateTaggedInstance()
 			task.wait(0.2)
