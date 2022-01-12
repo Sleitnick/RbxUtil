@@ -180,6 +180,14 @@ end
 
 
 --[=[
+	Returns `true` if the timer is currently running.
+]=]
+function Timer:IsRunning(): boolean
+	return self._runHandle ~= nil
+end
+
+
+--[=[
 	Destroys the timer.
 ]=]
 function Timer:Destroy()
