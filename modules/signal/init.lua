@@ -51,6 +51,21 @@ local function runEventHandlerInFreeThread(...)
 end
 
 
+--[=[
+	@within Signal
+	@interface SignalConnection
+	.Connected boolean
+	.Disconnect (SignalConnection) -> ()
+
+	Represents a connection to a signal.
+	```lua
+	local connection = signal:Connect(function() end)
+	print(connection.Connected) --> true
+	connection:Disconnect()
+	print(connection.Connected) --> false
+	```
+]=]
+
 -- Connection class
 local Connection = {}
 Connection.__index = Connection
@@ -58,7 +73,7 @@ Connection.__index = Connection
 
 function Connection.new(signal, fn)
 	return setmetatable({
-		_connected = true,
+		Connected = true,
 		_signal = signal,
 		_fn = fn,
 		_next = false,
@@ -67,8 +82,8 @@ end
 
 
 function Connection:Disconnect()
-	if not self._connected then return end
-	self._connected = false
+	if not self.Connected then return end
+	self.Connected = false
 
 	-- Unhook the node, but DON'T clear it. That way any fire calls that are
 	-- currently sitting on this node will be able to iterate forwards off of
@@ -99,6 +114,13 @@ setmetatable(Connection, {
 	end
 })
 
+
+--[=[
+	@within Signal
+	@type ConnectionFn (...any) -> ()
+
+	A function connected to a signal.
+]=]
 
 --[=[
 	@class Signal
@@ -168,10 +190,17 @@ end
 
 
 --[=[
-	Connects a function to the signal, which will be called anytime the signal is fired.
+	@param fn ConnectionFn
+	@return SignalConnection
 
-	@param fn (...any) -> nil
-	@return Connection -- A connection to the signal
+	Connects a function to the signal, which will be called anytime the signal is fired.
+	```lua
+	signal:Connect(function(msg, num)
+		print(msg, num)
+	end)
+
+	signal:Fire("Hello", 25)
+	```
 ]=]
 function Signal:Connect(fn)
 	local connection = Connection.new(self, fn)
@@ -200,8 +229,16 @@ end
 -- reference to the head handler.
 --[=[
 	Disconnects all connections from the signal.
+	```lua
+	signal:DisconnectAll()
+	```
 ]=]
 function Signal:DisconnectAll()
+	local item = self._handlerListHead
+	while item do
+		item.Connected = false
+		item = item._next
+	end
 	self._handlerListHead = false
 end
 
@@ -211,14 +248,20 @@ end
 -- to us, that means that it yielded to the Roblox scheduler and has been taken
 -- over by Roblox scheduling, meaning we have to make a new coroutine runner.
 --[=[
-	Fire the signal, which will call all of the connected functions with the given arguments.
+	@param ... any
 
-	@param ... any -- Arguments to pass to the connected functions
+	Fire the signal, which will call all of the connected functions with the given arguments.
+	```lua
+	signal:Fire("Hello")
+
+	-- Any number of arguments can be fired:
+	signal:Fire("Hello", 32, {Test = "Test"}, true)
+	```
 ]=]
 function Signal:Fire(...)
 	local item = self._handlerListHead
 	while item do
-		if item._connected then
+		if item.Connected then
 			if not freeRunnerThread then
 				freeRunnerThread = coroutine.create(runEventHandlerInFreeThread)
 			end
@@ -230,9 +273,12 @@ end
 
 
 --[=[
-	Same as `Fire`, but uses `task.defer` internally & doesn't take advantage of thread reuse.
+	@param ... any
 
-	@param ... any -- Arguments to pass to the connected functions
+	Same as `Fire`, but uses `task.defer` internally & doesn't take advantage of thread reuse.
+	```lua
+	signal:FireDeferred("Hello")
+	```
 ]=]
 function Signal:FireDeferred(...)
 	local item = self._handlerListHead
@@ -244,10 +290,17 @@ end
 
 
 --[=[
-	Yields the current thread until the signal is fired, and returns the arguments fired from the signal.
-
-	@return ... any -- Arguments passed to the signal when it was fired
+	@return ... any
 	@yields
+
+	Yields the current thread until the signal is fired, and returns the arguments fired from the signal.
+	```lua
+	task.spawn(function()
+		local msg, num = signal:Wait()
+		print(msg, num) --> "Hello", 32
+	end)
+	signal:Fire("Hello", 32)
+	```
 ]=]
 function Signal:Wait()
 	local waitingCoroutine = coroutine.running()
@@ -262,6 +315,15 @@ end
 
 --[=[
 	Cleans up the signal.
+
+	Technically, this is only necessary if the signal is created using
+	`Signal.Wrap`. Connections should be properly GC'd once the signal
+	is no longer referenced anywhere. However, it is still good practice
+	to include ways to strictly clean up resources. Calling `Destroy`
+	on a signal will also disconnect all connections immediately.
+	```lua
+	signal:Destroy()
+	```
 ]=]
 function Signal:Destroy()
 	self:DisconnectAll()
