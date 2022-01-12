@@ -160,6 +160,7 @@ local DEFAULT_ANCESTORS = {workspace, game:GetService("Players")}
 -- Symbol keys:
 local KEY_ANCESTORS = Symbol("Ancestors")
 local KEY_INST_TO_COMPONENTS = Symbol("InstancesToComponents")
+local KEY_LOCK_CONSTRUCT = Symbol("LockConstruct")
 local KEY_COMPONENTS = Symbol("Components")
 local KEY_TROVE = Symbol("Trove")
 local KEY_EXTENSIONS = Symbol("Extensions")
@@ -279,6 +280,7 @@ function Component.new(config: ComponentConfig)
 	customComponent[KEY_ANCESTORS] = config.Ancestors or DEFAULT_ANCESTORS
 	customComponent[KEY_INST_TO_COMPONENTS] = {}
 	customComponent[KEY_COMPONENTS] = {}
+	customComponent[KEY_LOCK_CONSTRUCT] = {}
 	customComponent[KEY_TROVE] = Trove.new()
 	customComponent[KEY_EXTENSIONS] = config.Extensions or {}
 	customComponent[KEY_STARTED] = false
@@ -380,19 +382,35 @@ function Component:_setup()
 		InvokeExtensionFn(component, "Stopped")
 		self.Stopped:Fire(component)
 	end
+
+	local function SafeConstruct(instance, id)
+		if self[KEY_LOCK_CONSTRUCT][instance] ~= id then
+			return nil
+		end
+		local component = self:_instantiate(instance)
+		if self[KEY_LOCK_CONSTRUCT][instance] ~= id then
+			return nil
+		end
+		return component
+	end
 	
 	local function TryConstructComponent(instance)
 		if self[KEY_INST_TO_COMPONENTS][instance] then return end
-		local component = self:_instantiate(instance)
-		if not component then
-			return
-		end
-		self[KEY_INST_TO_COMPONENTS][instance] = component
-		table.insert(self[KEY_COMPONENTS], component)
+		local id = self[KEY_LOCK_CONSTRUCT][instance] or 0
+		id += 1
+		self[KEY_LOCK_CONSTRUCT][instance] = id
 		task.defer(function()
-			if self[KEY_INST_TO_COMPONENTS][instance] == component then
-				StartComponent(component)
+			local component = SafeConstruct(instance, id)
+			if not component then
+				return
 			end
+			self[KEY_INST_TO_COMPONENTS][instance] = component
+			table.insert(self[KEY_COMPONENTS], component)
+			task.defer(function()
+				if self[KEY_INST_TO_COMPONENTS][instance] == component then
+					StartComponent(component)
+				end
+			end)
 		end)
 	end
 	
@@ -400,6 +418,7 @@ function Component:_setup()
 		local component = self[KEY_INST_TO_COMPONENTS][instance]
 		if not component then return end
 		self[KEY_INST_TO_COMPONENTS][instance] = nil
+		self[KEY_LOCK_CONSTRUCT][instance] = nil
 		local components = self[KEY_COMPONENTS]
 		local index = table.find(components, component)
 		if index then
