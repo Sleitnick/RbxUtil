@@ -6,7 +6,7 @@
 | Module | Dependency | Description |
 | -- | -- | -- |
 | [Comm](https://sleitnick.github.io/RbxUtil/api/Comm) | `Comm = "sleitnick/comm@0.2.2"` | Comm library for remote communication |
-| [Component](https://sleitnick.github.io/RbxUtil/api/Component) | `Component = "sleitnick/component@2.3.0"` | Component class |
+| [Component](https://sleitnick.github.io/RbxUtil/api/Component) | `Component = "sleitnick/component@2.3.1"` | Component class |
 | [EnumList](https://sleitnick.github.io/RbxUtil/api/EnumList) | `EnumList = "sleitnick/enum-list@2.0.0"` | Enum List class |
 | [Input](https://sleitnick.github.io/RbxUtil/api/Input) | `Input = "sleitnick/input@1.2.0"` | Basic input classes |
 | [Loader](https://sleitnick.github.io/RbxUtil/api/Loader) | `Loader = "sleitnick/loader@1.0.2"` | Requires all modules within a given instance |
@@ -20,5 +20,5 @@
 | [Symbol](https://sleitnick.github.io/RbxUtil/api/Symbol) | `Symbol = "sleitnick/symbol@2.0.0"` | Symbol |
 | [TableUtil](https://sleitnick.github.io/RbxUtil/api/TableUtil) | `TableUtil = "sleitnick/table-util@1.1.1"` | Table utility functions |
 | [TaskQueue](https://sleitnick.github.io/RbxUtil/api/TaskQueue) | `TaskQueue = "sleitnick/task-queue@0.1.0"` | Batches tasks that occur on the same execution step |
-| [Timer](https://sleitnick.github.io/RbxUtil/api/Timer) | `Timer = "sleitnick/timer@1.0.3"` | Timer class |
+| [Timer](https://sleitnick.github.io/RbxUtil/api/Timer) | `Timer = "sleitnick/timer@1.1.0"` | Timer class |
 | [Trove](https://sleitnick.github.io/RbxUtil/api/Trove) | `Trove = "sleitnick/trove@0.1.3"` | Trove class for tracking and cleaning up objects |
