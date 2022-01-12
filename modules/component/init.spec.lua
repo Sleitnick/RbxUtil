@@ -271,6 +271,33 @@ return function()
 
 		end)
 
+		it("should allow yielding within construct", function()
+
+			local CUSTOM_TAG = "CustomTag"
+
+			local TestComponent = Component.new({Tag = CUSTOM_TAG})
+
+			local numConstruct = 0
+
+			function TestComponent:Construct()
+				numConstruct += 1
+				task.wait(0.5)
+			end
+
+			local p = Instance.new("Part")
+			p.Parent = game:GetService("ReplicatedStorage")
+			CollectionService:AddTag(p, CUSTOM_TAG)
+			local newP = p:Clone()
+			newP.Parent = workspace
+
+			task.wait(0.6)
+
+			expect(numConstruct).to.equal(1)
+			p:Destroy()
+			newP:Destroy()
+
+		end)
+
 	end)
 
 end
