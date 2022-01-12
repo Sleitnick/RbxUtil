@@ -3,8 +3,19 @@
 -- July 28, 2021
 
 
-type CallbackFunc = () -> nil
-type TimeFunc = () -> number
+--[=[
+	@within Timer
+	@type CallbackFn () -> ()
+	Callback function.
+]=]
+type CallbackFn = () -> nil
+
+--[=[
+	@within Timer
+	@type TimeFn () -> number
+	Time function.
+]=]
+type TimeFn = () -> number
 
 local Signal = require(script.Parent.Signal)
 
@@ -40,7 +51,7 @@ Timer.__index = Timer
 ]=]
 --[=[
 	@within Timer
-	@prop TimeFunction () -> number
+	@prop TimeFunction TimeFn
 	The function which gets the current time.
 ]=]
 --[=[
@@ -59,7 +70,6 @@ Timer.__index = Timer
 
 
 --[=[
-	@param interval number
 	@return Timer
 	
 	Creates a new timer.
@@ -79,18 +89,25 @@ end
 
 
 --[=[
-	@param interval number
-	@param callback () -> nil
-	@param startNow boolean?
-	@param updateSignal RBXScriptSignal? | Signal?
-	@param timeFunc () -> number
 	@return RBXScriptConnection
 
 	Creates a simplified timer which just fires off a callback function at the given interval.
+
+	```lua
+	-- Basic:
+	Timer.Simple(1, function()
+		print("Tick")
+	end)
+
+	-- Using other arguments:
+	Timer.Simple(1, function()
+		print("Tick")
+	end, true, RunService.Heartbeat, os.clock)
+	```
 ]=]
-function Timer.Simple(interval: number, callback: CallbackFunc, startNow: boolean?, updateSignal: RBXScriptSignal?, timeFunc: TimeFunc?)
+function Timer.Simple(interval: number, callback: CallbackFn, startNow: boolean?, updateSignal: RBXScriptSignal?, timeFn: TimeFn?)
 	local update = updateSignal or RunService.Heartbeat
-	local t = timeFunc or time
+	local t = timeFn or time
 	local nextTick = t() + interval
 	if startNow then
 		task.defer(callback)
@@ -106,9 +123,6 @@ end
 
 
 --[=[
-	@param obj any
-	@return boolean
-
 	Returns `true` if the given object is a Timer.
 ]=]
 function Timer.Is(obj: any): boolean
@@ -147,7 +161,11 @@ end
 
 
 --[=[
-	Starts the timer.
+	Starts the timer. Will do nothing if the timer is already running.
+
+	```lua
+	timer:Start()
+	```
 ]=]
 function Timer:Start()
 	if self._runHandle then return end
@@ -160,7 +178,12 @@ end
 
 
 --[=[
-	Starts the timer and fires off the Tick event immediately.
+	Starts the timer and fires off the Tick event immediately. Will do
+	nothing if the timer is already running.
+
+	```lua
+	timer:StartNow()
+	```
 ]=]
 function Timer:StartNow()
 	if self._runHandle then return end
@@ -170,7 +193,11 @@ end
 
 
 --[=[
-	Stops the timer.
+	Stops the timer. Will do nothing if the timer is already stopped.
+
+	```lua
+	timer:Stop()
+	```
 ]=]
 function Timer:Stop()
 	if not self._runHandle then return end
@@ -181,6 +208,12 @@ end
 
 --[=[
 	Returns `true` if the timer is currently running.
+
+	```lua
+	if timer:IsRunning() then
+		-- Do something
+	end
+	```
 ]=]
 function Timer:IsRunning(): boolean
 	return self._runHandle ~= nil
@@ -188,7 +221,7 @@ end
 
 
 --[=[
-	Destroys the timer.
+	Destroys the timer. This will also stop the timer.
 ]=]
 function Timer:Destroy()
 	self.Tick:Destroy()
