@@ -66,35 +66,44 @@ end
 
 
 --[=[
-	@param keyCode Enum.KeyCode
-	@return isDown: boolean
-
-	Returns `true` if the key is down.
+	Check if the given key is down.
 
 	```lua
 	local w = keyboard:IsKeyDown(Enum.KeyCode.W)
 	if w then ... end
 	```
 ]=]
-function Keyboard:IsKeyDown(keyCode)
+function Keyboard:IsKeyDown(keyCode: Enum.KeyCode): boolean
 	return UserInputService:IsKeyDown(keyCode)
 end
 
 
 --[=[
-	@param keyCodeOne Enum.KeyCode
-	@param keyCodeTwo Enum.KeyCode
-	@return areKeysDown: boolean
-
-	Returns `true` if both keys are down. Useful for key combinations.
+	Check if _both_ keys are down. Useful for key combinations.
 
 	```lua
 	local shiftA = keyboard:AreKeysDown(Enum.KeyCode.LeftShift, Enum.KeyCode.A)
 	if shiftA then ... end
 	```
 ]=]
-function Keyboard:AreKeysDown(keyCodeOne, keyCodeTwo)
+function Keyboard:AreKeysDown(keyCodeOne: Enum.KeyCode, keyCodeTwo: Enum.KeyCode): boolean
 	return self:IsKeyDown(keyCodeOne) and self:IsKeyDown(keyCodeTwo)
+end
+
+
+--[=[
+	Check if _either_ of the keys are down. Useful when two keys might perform
+	the same operation.
+
+	```lua
+	local wOrUp = keyboard:AreEitherKeysDown(Enum.KeyCode.W, Enum.KeyCode.Up)
+	if wOrUp then
+		-- Go forward
+	end
+	```
+]=]
+function Keyboard:AreEitherKeysDown(keyCodeOne: Enum.KeyCode, keyCodeTwo: Enum.KeyCode): boolean
+	return self:IsKeyDown(keyCodeOne) or self:IsKeyDown(keyCodeTwo)
 end
 
 
