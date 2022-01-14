@@ -13,8 +13,8 @@ local Keyboard = require(packages.Input).Keyboard
 ```lua
 local Keyboard = require(packages.Input).Keyboard
 ```"><meta data-react-helmet="true" property="og:url" content="https://Sleitnick.github.io/RbxUtil/api/Keyboard"><meta data-react-helmet="true" name="docusaurus_locale" content="en"><meta data-react-helmet="true" name="docusaurus_tag" content="default"><link data-react-helmet="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/Keyboard"><link data-react-helmet="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/Keyboard" hreflang="en"><link data-react-helmet="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/Keyboard" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.302001c7.css">
-<link rel="preload" href="/RbxUtil/assets/js/runtime~main.4fbc0bde.js" as="script">
-<link rel="preload" href="/RbxUtil/assets/js/main.46c9bd30.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/runtime~main.3a25f490.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/main.80b6662f.js" as="script">
 </head>
 <body>
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -38,17 +38,27 @@ local Keyboard = require(packages.Input).Keyboard
 <p>Constructs a new keyboard input capturer.</p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> keyboard <span class="token operator">=</span> Keyboard<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 </code></pre>
-</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="IsKeyDown"><code style="text-decoration:none">IsKeyDown</code><a aria-hidden="true" class="hash-link" href="#IsKeyDown" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/input/Keyboard.lua#L79"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>Keyboard<!-- -->:</code><code class="green_3LnD">IsKeyDown</code><code>(</code><code>keyCode<!-- -->: </code><code class="blue_2Afy">Enum.KeyCode</code><code>) → </code><code>isDown<!-- -->: </code><code class="blue_2Afy">boolean</code></div><div>
-<p>Returns <code>true</code> if the key is down.</p>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="IsKeyDown"><code style="text-decoration:none">IsKeyDown</code><a aria-hidden="true" class="hash-link" href="#IsKeyDown" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/input/Keyboard.lua#L76"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>Keyboard<!-- -->:</code><code class="green_3LnD">IsKeyDown</code><code>(</code><code>keyCode<!-- -->: </code><code class="blue_2Afy">Enum.KeyCode</code><code>) → </code><code class="blue_2Afy">boolean</code></div><div>
+<p>Check if the given key is down.</p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> w <span class="token operator">=</span> keyboard<span class="token punctuation">:</span><span class="token function">IsKeyDown</span><span class="token punctuation">(</span>Enum<span class="token punctuation">.</span>KeyCode<span class="token punctuation">.</span>W<span class="token punctuation">)</span>
 <span class="token keyword">if</span> w <span class="token keyword">then</span> <span class="token punctuation">...</span> <span class="token keyword">end</span>
 </code></pre>
-</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="AreKeysDown"><code style="text-decoration:none">AreKeysDown</code><a aria-hidden="true" class="hash-link" href="#AreKeysDown" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/input/Keyboard.lua#L96"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>Keyboard<!-- -->:</code><code class="green_3LnD">AreKeysDown</code><code>(</code><div class="inset_2cJr"><div><code>keyCodeOne<!-- -->: </code><code class="blue_2Afy">Enum.KeyCode</code><code>,</code></div><div><code>keyCodeTwo<!-- -->: </code><code class="blue_2Afy">Enum.KeyCode</code></div></div><code>) → </code><code>areKeysDown<!-- -->: </code><code class="blue_2Afy">boolean</code></div><div>
-<p>Returns <code>true</code> if both keys are down. Useful for key combinations.</p>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="AreKeysDown"><code style="text-decoration:none">AreKeysDown</code><a aria-hidden="true" class="hash-link" href="#AreKeysDown" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/input/Keyboard.lua#L89"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>Keyboard<!-- -->:</code><code class="green_3LnD">AreKeysDown</code><code>(</code><div class="inset_2cJr"><div><code>keyCodeOne<!-- -->: </code><code class="blue_2Afy">Enum.KeyCode</code><code>,</code></div><div><code>keyCodeTwo<!-- -->: </code><code class="blue_2Afy">Enum.KeyCode</code></div></div><code>) → </code><code class="blue_2Afy">boolean</code></div><div>
+<p>Check if <em>both</em> keys are down. Useful for key combinations.</p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> shiftA <span class="token operator">=</span> keyboard<span class="token punctuation">:</span><span class="token function">AreKeysDown</span><span class="token punctuation">(</span>Enum<span class="token punctuation">.</span>KeyCode<span class="token punctuation">.</span>LeftShift<span class="token punctuation">,</span> Enum<span class="token punctuation">.</span>KeyCode<span class="token punctuation">.</span>A<span class="token punctuation">)</span>
 <span class="token keyword">if</span> shiftA <span class="token keyword">then</span> <span class="token punctuation">...</span> <span class="token keyword">end</span>
 </code></pre>
-</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Destroy"><code style="text-decoration:none">Destroy</code><a aria-hidden="true" class="hash-link" href="#Destroy" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/input/Keyboard.lua#L123"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>Keyboard<!-- -->:</code><code class="green_3LnD">Destroy</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="AreEitherKeysDown"><code style="text-decoration:none">AreEitherKeysDown</code><a aria-hidden="true" class="hash-link" href="#AreEitherKeysDown" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/input/Keyboard.lua#L105"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>Keyboard<!-- -->:</code><code class="green_3LnD">AreEitherKeysDown</code><code>(</code><div class="inset_2cJr"><div><code>keyCodeOne<!-- -->: </code><code class="blue_2Afy">Enum.KeyCode</code><code>,</code></div><div><code>keyCodeTwo<!-- -->: </code><code class="blue_2Afy">Enum.KeyCode</code></div></div><code>) → </code><code class="blue_2Afy">boolean</code></div><div>
+<p>
+  Check if <em>either</em> of the keys are down. Useful when two keys might perform
+  the same operation.
+</p>
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> wOrUp <span class="token operator">=</span> keyboard<span class="token punctuation">:</span><span class="token function">AreEitherKeysDown</span><span class="token punctuation">(</span>Enum<span class="token punctuation">.</span>KeyCode<span class="token punctuation">.</span>W<span class="token punctuation">,</span> Enum<span class="token punctuation">.</span>KeyCode<span class="token punctuation">.</span>Up<span class="token punctuation">)</span>
+<span class="token keyword">if</span> wOrUp <span class="token keyword">then</span>
+	<span class="token comment">-- Go forward</span>
+<span class="token keyword">end</span>
+</code></pre>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Destroy"><code style="text-decoration:none">Destroy</code><a aria-hidden="true" class="hash-link" href="#Destroy" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/input/Keyboard.lua#L132"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>Keyboard<!-- -->:</code><code class="green_3LnD">Destroy</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
 <p>Destroy the keyboard input capturer.</p>
 </div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
     &quot;functions&quot;: [
@@ -70,7 +80,7 @@ local Keyboard = require(packages.Input).Keyboard
         },
         {
             &quot;name&quot;: &quot;IsKeyDown&quot;,
-            &quot;desc&quot;: &quot;Returns `true` if the key is down.\n\n```lua\nlocal w = keyboard:IsKeyDown(Enum.KeyCode.W)\nif w then ... end\n```&quot;,
+            &quot;desc&quot;: &quot;Check if the given key is down.\n\n```lua\nlocal w = keyboard:IsKeyDown(Enum.KeyCode.W)\nif w then ... end\n```&quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;keyCode&quot;,
@@ -81,18 +91,18 @@ local Keyboard = require(packages.Input).Keyboard
             &quot;returns&quot;: [
                 {
                     &quot;desc&quot;: &quot;&quot;,
-                    &quot;lua_type&quot;: &quot;isDown: boolean&quot;
+                    &quot;lua_type&quot;: &quot;boolean\n&quot;
                 }
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 79,
+                &quot;line&quot;: 76,
                 &quot;path&quot;: &quot;modules/input/Keyboard.lua&quot;
             }
         },
         {
             &quot;name&quot;: &quot;AreKeysDown&quot;,
-            &quot;desc&quot;: &quot;Returns `true` if both keys are down. Useful for key combinations.\n\n```lua\nlocal shiftA = keyboard:AreKeysDown(Enum.KeyCode.LeftShift, Enum.KeyCode.A)\nif shiftA then ... end\n```&quot;,
+            &quot;desc&quot;: &quot;Check if _both_ keys are down. Useful for key combinations.\n\n```lua\nlocal shiftA = keyboard:AreKeysDown(Enum.KeyCode.LeftShift, Enum.KeyCode.A)\nif shiftA then ... end\n```&quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;keyCodeOne&quot;,
@@ -108,12 +118,39 @@ local Keyboard = require(packages.Input).Keyboard
             &quot;returns&quot;: [
                 {
                     &quot;desc&quot;: &quot;&quot;,
-                    &quot;lua_type&quot;: &quot;areKeysDown: boolean&quot;
+                    &quot;lua_type&quot;: &quot;boolean\n&quot;
                 }
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 96,
+                &quot;line&quot;: 89,
+                &quot;path&quot;: &quot;modules/input/Keyboard.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;AreEitherKeysDown&quot;,
+            &quot;desc&quot;: &quot;Check if _either_ of the keys are down. Useful when two keys might perform\nthe same operation.\n\n```lua\nlocal wOrUp = keyboard:AreEitherKeysDown(Enum.KeyCode.W, Enum.KeyCode.Up)\nif wOrUp then\n\t-- Go forward\nend\n```&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;keyCodeOne&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Enum.KeyCode&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;keyCodeTwo&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Enum.KeyCode&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;boolean\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 105,
                 &quot;path&quot;: &quot;modules/input/Keyboard.lua&quot;
             }
         },
@@ -124,7 +161,7 @@ local Keyboard = require(packages.Input).Keyboard
             &quot;returns&quot;: [],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 123,
+                &quot;line&quot;: 132,
                 &quot;path&quot;: &quot;modules/input/Keyboard.lua&quot;
             }
         }
@@ -165,8 +202,8 @@ local Keyboard = require(packages.Input).Keyboard
         &quot;line&quot;: 22,
         &quot;path&quot;: &quot;modules/input/Keyboard.lua&quot;
     }
-}</pre></details></div><div class="col col--3"><div class="tableOfContents_35-E thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#KeyDown" class="table-of-contents__link toc-highlight">KeyDown</a></li><li><a href="#KeyUp" class="table-of-contents__link toc-highlight">KeyUp</a></li></ul></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#AreKeysDown" class="table-of-contents__link toc-highlight">:AreKeysDown</a></li><li><a href="#Destroy" class="table-of-contents__link toc-highlight">:Destroy</a></li><li><a href="#IsKeyDown" class="table-of-contents__link toc-highlight">:IsKeyDown</a></li><li><a href="#new" class="table-of-contents__link toc-highlight">.new</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2022 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/RbxUtil/assets/js/runtime~main.4fbc0bde.js"></script>
-<script src="/RbxUtil/assets/js/main.46c9bd30.js"></script>
+}</pre></details></div><div class="col col--3"><div class="tableOfContents_35-E thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#KeyDown" class="table-of-contents__link toc-highlight">KeyDown</a></li><li><a href="#KeyUp" class="table-of-contents__link toc-highlight">KeyUp</a></li></ul></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#AreEitherKeysDown" class="table-of-contents__link toc-highlight">:AreEitherKeysDown</a></li><li><a href="#AreKeysDown" class="table-of-contents__link toc-highlight">:AreKeysDown</a></li><li><a href="#Destroy" class="table-of-contents__link toc-highlight">:Destroy</a></li><li><a href="#IsKeyDown" class="table-of-contents__link toc-highlight">:IsKeyDown</a></li><li><a href="#new" class="table-of-contents__link toc-highlight">.new</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2022 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
+<script src="/RbxUtil/assets/js/runtime~main.3a25f490.js"></script>
+<script src="/RbxUtil/assets/js/main.80b6662f.js"></script>
 </body>
 </html>

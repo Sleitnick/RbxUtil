@@ -13,7 +13,7 @@ game to respond to this change.
 The Preferred class is part of the Input package.
 
 ```lua
-local Preferred = require(packages.Input).Preferred
+local PreferredInput = require(packages.Input).PreferredInput
 ```"><meta data-react-helmet="true" property="og:description" content="A helper library for observing the preferred user input of the
 player. This is useful for determining what input schemes
 to use during gameplay. A player might switch from using
@@ -23,10 +23,10 @@ game to respond to this change.
 The Preferred class is part of the Input package.
 
 ```lua
-local Preferred = require(packages.Input).Preferred
+local PreferredInput = require(packages.Input).PreferredInput
 ```"><meta data-react-helmet="true" property="og:url" content="https://Sleitnick.github.io/RbxUtil/api/PreferredInput"><meta data-react-helmet="true" name="docusaurus_locale" content="en"><meta data-react-helmet="true" name="docusaurus_tag" content="default"><link data-react-helmet="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/PreferredInput"><link data-react-helmet="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/PreferredInput" hreflang="en"><link data-react-helmet="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/PreferredInput" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.302001c7.css">
-<link rel="preload" href="/RbxUtil/assets/js/runtime~main.4fbc0bde.js" as="script">
-<link rel="preload" href="/RbxUtil/assets/js/main.46c9bd30.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/runtime~main.3a25f490.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/main.80b6662f.js" as="script">
 </head>
 <body>
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -39,55 +39,105 @@ local Preferred = require(packages.Input).Preferred
   game to respond to this change.
 </p>
 <p>The Preferred class is part of the Input package.</p>
-<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> Preferred <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span>packages<span class="token punctuation">.</span>Input<span class="token punctuation">)</span><span class="token punctuation">.</span>Preferred
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> PreferredInput <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span>packages<span class="token punctuation">.</span>Input<span class="token punctuation">)</span><span class="token punctuation">.</span>PreferredInput
 </code></pre>
-</div></header><h2 class="anchor anchorWithStickyNavbar_31ik" id="types">Types<a aria-hidden="true" class="hash-link" href="#types" title="Direct link to heading">​</a></h2><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="InputType"><code style="text-decoration:none">InputType</code><a aria-hidden="true" class="hash-link" href="#InputType" title="Direct link to heading">​</a></h3><span class="docTag_3qMS" style="border-color:#dc0073;color:#dc0073">Enum</span><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/input/PreferredInput.lua#L43"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code class="purple__nFc">interface</code> <code>InputType<!-- --> <!-- -->{</code><div class="inset_2cJr"><div><code>MouseKeyboard<!-- -->: </code><code class="blue_2Afy">&quot;MouseKeyboard&quot;</code><span class="inlineDescription_17uy">-- <span>
+</div></header><h2 class="anchor anchorWithStickyNavbar_31ik" id="types">Types<a aria-hidden="true" class="hash-link" href="#types" title="Direct link to heading">​</a></h2><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="InputType"><code style="text-decoration:none">InputType</code><a aria-hidden="true" class="hash-link" href="#InputType" title="Direct link to heading">​</a></h3><span class="docTag_3qMS" style="border-color:#dc0073;color:#dc0073">Enum</span><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/input/PreferredInput.lua#L45"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code class="purple__nFc">interface</code> <code>InputType<!-- --> <!-- -->{</code><div class="inset_2cJr"><div><code>MouseKeyboard<!-- -->: </code><code class="blue_2Afy">&quot;MouseKeyboard&quot;</code><span class="inlineDescription_17uy">-- <span>
 <p>Prefer mouse and keyboard input</p>
-</span></span></div><div><code>Touch<!-- -->: </code><code class="blue_2Afy">&quot;MouseKeyboard&quot;</code><span class="inlineDescription_17uy">-- <span>
+</span></span></div><div><code>Touch<!-- -->: </code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Touch">&quot;Touch&quot;</a></code><span class="inlineDescription_17uy">-- <span>
 <p>Prefer touch input</p>
 </span></span></div><div><code>Gamepad<!-- -->: </code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Gamepad">&quot;Gamepad&quot;</a></code><span class="inlineDescription_17uy">-- <span>
 <p>Prefer gamepad input</p>
-</span></span></div></div><code>}</code></div><div></div><h2 class="anchor anchorWithStickyNavbar_31ik" id="properties">Properties<a aria-hidden="true" class="hash-link" href="#properties" title="Direct link to heading">​</a></h2><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Changed"><code style="text-decoration:none">Changed</code><a aria-hidden="true" class="hash-link" href="#Changed" title="Direct link to heading">​</a></h3><span class="docTag_3qMS" style="border-color:#ff5252;color:#ff5252">Event</span><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/input/PreferredInput.lua#L49"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>PreferredInput<!-- -->.<!-- -->Changed<!-- -->:<!-- --> </code> <code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Signal">Signal</a></code><code class="op_1JtD">&lt;</code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/PreferredInput#InputType">InputType</a></code><code class="op_1JtD">&gt;</code></div><div>
+</span></span></div></div><code>}</code></div><div>
+<p>Indicates an input schema that the user currently prefers.</p>
+</div><h2 class="anchor anchorWithStickyNavbar_31ik" id="properties">Properties<a aria-hidden="true" class="hash-link" href="#properties" title="Direct link to heading">​</a></h2><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Changed"><code style="text-decoration:none">Changed</code><a aria-hidden="true" class="hash-link" href="#Changed" title="Direct link to heading">​</a></h3><span class="docTag_3qMS" style="border-color:#ff5252;color:#ff5252">Event</span><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/input/PreferredInput.lua#L61"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>PreferredInput<!-- -->.<!-- -->Changed<!-- -->:<!-- --> </code> <code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Signal">Signal</a></code><code class="op_1JtD">&lt;</code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/PreferredInput#InputType">InputType</a></code><code class="op_1JtD">&gt;</code></div><div>
 <p>Fired when the preferred InputType changes.</p>
-</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="InputType"><code style="text-decoration:none">InputType</code><a aria-hidden="true" class="hash-link" href="#InputType" title="Direct link to heading">​</a></h3><span class="badge_3ZFo" style="color:#e74c3c"><span class="badgeTooltip_2qiw">This item is read only and cannot be modified.</span><span class="badgeToolTipTail_2yaQ"><svg xmlns="http://www.w3.org/2000/svg" height="300px" width="300px" fill="#e74c3c" x="0px" y="0px" viewBox="0 0 96 96"><path d="M70.354,15.662h-7.496H25.566c-3.282,0-5.19-0.776-5.728-1.169v-1.456c0.538-0.393,2.445-1.168,5.728-1.168h46.479V8H25.566  c-4.776,0-9.594,1.468-9.594,4.747v61.458C15.972,86.645,20.328,88,37.495,88h42.535V15.662H70.354z"></path></svg> <!-- -->Read Only</span></span><span class="docTag_3qMS" style="border-color:#70cc00;color:#70cc00">Enums</span><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/input/PreferredInput.lua#L56"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>PreferredInput<!-- -->.<!-- -->InputType<!-- -->:<!-- --> </code> <code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/PreferredInput#InputType">InputType</a></code></div><div>
-<p>A table containing the InputType enum, e.g. <code>Preferred.InputType.Gamepad</code>.</p>
-</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Current"><code style="text-decoration:none">Current</code><a aria-hidden="true" class="hash-link" href="#Current" title="Direct link to heading">​</a></h3><span class="badge_3ZFo" style="color:#e74c3c"><span class="badgeTooltip_2qiw">This item is read only and cannot be modified.</span><span class="badgeToolTipTail_2yaQ"><svg xmlns="http://www.w3.org/2000/svg" height="300px" width="300px" fill="#e74c3c" x="0px" y="0px" viewBox="0 0 96 96"><path d="M70.354,15.662h-7.496H25.566c-3.282,0-5.19-0.776-5.728-1.169v-1.456c0.538-0.393,2.445-1.168,5.728-1.168h46.479V8H25.566  c-4.776,0-9.594,1.468-9.594,4.747v61.458C15.972,86.645,20.328,88,37.495,88h42.535V15.662H70.354z"></path></svg> <!-- -->Read Only</span></span><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/input/PreferredInput.lua#L62"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>PreferredInput<!-- -->.<!-- -->Current<!-- -->:<!-- --> </code> <code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/PreferredInput#InputType">InputType</a></code></div><div>
+<pre class="language-lua"><code class="language-lua">PreferredInput<span class="token punctuation">.</span>Changed<span class="token punctuation">:</span><span class="token function">Connect</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>preferred<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> preferred <span class="token operator">==</span> PreferredInput<span class="token punctuation">.</span>InputType<span class="token punctuation">.</span>Gamepad <span class="token keyword">then</span>
+		<span class="token comment">-- Prefer gamepad input</span>
+	<span class="token keyword">end</span>
+<span class="token keyword">end</span><span class="token punctuation">)</span>
+</code></pre>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="InputType"><code style="text-decoration:none">InputType</code><a aria-hidden="true" class="hash-link" href="#InputType" title="Direct link to heading">​</a></h3><span class="badge_3ZFo" style="color:#e74c3c"><span class="badgeTooltip_2qiw">This item is read only and cannot be modified.</span><span class="badgeToolTipTail_2yaQ"><svg xmlns="http://www.w3.org/2000/svg" height="300px" width="300px" fill="#e74c3c" x="0px" y="0px" viewBox="0 0 96 96"><path d="M70.354,15.662h-7.496H25.566c-3.282,0-5.19-0.776-5.728-1.169v-1.456c0.538-0.393,2.445-1.168,5.728-1.168h46.479V8H25.566  c-4.776,0-9.594,1.468-9.594,4.747v61.458C15.972,86.645,20.328,88,37.495,88h42.535V15.662H70.354z"></path></svg> <!-- -->Read Only</span></span><span class="docTag_3qMS" style="border-color:#70cc00;color:#70cc00">Enums</span><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/input/PreferredInput.lua#L76"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>PreferredInput<!-- -->.<!-- -->InputType<!-- -->:<!-- --> </code> <code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/PreferredInput#InputType">InputType</a></code></div><div>
+<p>A table containing the InputType enum, e.g. <code>PreferredInput.InputType.Gamepad</code>.</p>
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">if</span> PreferredInput<span class="token punctuation">.</span>Current <span class="token operator">==</span> PreferredInput<span class="token punctuation">.</span>InputType<span class="token punctuation">.</span>Gamepad <span class="token keyword">then</span>
+	<span class="token comment">-- User prefers gamepad input</span>
+<span class="token keyword">end</span>
+</code></pre>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Current"><code style="text-decoration:none">Current</code><a aria-hidden="true" class="hash-link" href="#Current" title="Direct link to heading">​</a></h3><span class="badge_3ZFo" style="color:#e74c3c"><span class="badgeTooltip_2qiw">This item is read only and cannot be modified.</span><span class="badgeToolTipTail_2yaQ"><svg xmlns="http://www.w3.org/2000/svg" height="300px" width="300px" fill="#e74c3c" x="0px" y="0px" viewBox="0 0 96 96"><path d="M70.354,15.662h-7.496H25.566c-3.282,0-5.19-0.776-5.728-1.169v-1.456c0.538-0.393,2.445-1.168,5.728-1.168h46.479V8H25.566  c-4.776,0-9.594,1.468-9.594,4.747v61.458C15.972,86.645,20.328,88,37.495,88h42.535V15.662H70.354z"></path></svg> <!-- -->Read Only</span></span><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/input/PreferredInput.lua#L88"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>PreferredInput<!-- -->.<!-- -->Current<!-- -->:<!-- --> </code> <code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/PreferredInput#InputType">InputType</a></code></div><div>
 <p>The current preferred InputType.</p>
+<pre class="language-lua"><code class="language-lua"><span class="token function">print</span><span class="token punctuation">(</span>PreferredInput<span class="token punctuation">.</span>Current<span class="token punctuation">)</span>
+</code></pre>
+</div><h2 class="anchor anchorWithStickyNavbar_31ik" id="functions">Functions<a aria-hidden="true" class="hash-link" href="#functions" title="Direct link to heading">​</a></h2><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Observe"><code style="text-decoration:none">Observe</code><a aria-hidden="true" class="hash-link" href="#Observe" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/input/PreferredInput.lua#L111"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>PreferredInput<!-- -->.</code><code class="green_3LnD">Observe</code><code>(</code><code>handler<!-- -->: </code><code class="purple__nFc">(</code><code>preferred<!-- -->: </code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/PreferredInput#InputType">InputType</a></code><code class="purple__nFc">)</code><code class="purple__nFc"> → </code><code class="purple__nFc">(</code><code class="purple__nFc">)</code><code>) → </code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/RemoteSignal#Connection">Connection</a></code></div><div>
+<p>
+  Observes the preferred input. In other words, the handler function will
+  be fired immediately, as well as any time the preferred input changes.
+</p>
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> connection <span class="token operator">=</span> PreferredInput<span class="token punctuation">.</span><span class="token function">Observe</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>preferred<span class="token punctuation">)</span>
+	<span class="token comment">-- Fires immediately &#x26; any time the preferred input changes</span>
+	<span class="token function">print</span><span class="token punctuation">(</span>preferred<span class="token punctuation">)</span>
+<span class="token keyword">end</span><span class="token punctuation">)</span>
+
+<span class="token comment">-- If/when desired, the connection to Observe can be cleaned up:</span>
+connection<span class="token punctuation">:</span><span class="token function">Disconnect</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
 </div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
-    &quot;functions&quot;: [],
+    &quot;functions&quot;: [
+        {
+            &quot;name&quot;: &quot;Observe&quot;,
+            &quot;desc&quot;: &quot;Observes the preferred input. In other words, the handler function will\nbe fired immediately, as well as any time the preferred input changes.\n\n```lua\nlocal connection = PreferredInput.Observe(function(preferred)\n\t-- Fires immediately &amp; any time the preferred input changes\n\tprint(preferred)\nend)\n\n-- If/when desired, the connection to Observe can be cleaned up:\nconnection:Disconnect()\n```&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;handler&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;(preferred: InputType) -&gt; ()&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Connection&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 111,
+                &quot;path&quot;: &quot;modules/input/PreferredInput.lua&quot;
+            }
+        }
+    ],
     &quot;properties&quot;: [
         {
             &quot;name&quot;: &quot;Changed&quot;,
-            &quot;desc&quot;: &quot;Fired when the preferred InputType changes.&quot;,
+            &quot;desc&quot;: &quot;Fired when the preferred InputType changes.\n\n```lua\nPreferredInput.Changed:Connect(function(preferred)\n\tif preferred == PreferredInput.InputType.Gamepad then\n\t\t-- Prefer gamepad input\n\tend\nend)\n```&quot;,
             &quot;lua_type&quot;: &quot;Signal&lt;InputType&gt;&quot;,
             &quot;tags&quot;: [
                 &quot;Event&quot;
             ],
             &quot;source&quot;: {
-                &quot;line&quot;: 49,
+                &quot;line&quot;: 61,
                 &quot;path&quot;: &quot;modules/input/PreferredInput.lua&quot;
             }
         },
         {
             &quot;name&quot;: &quot;InputType&quot;,
-            &quot;desc&quot;: &quot;A table containing the InputType enum, e.g. `Preferred.InputType.Gamepad`.&quot;,
+            &quot;desc&quot;: &quot;A table containing the InputType enum, e.g. `PreferredInput.InputType.Gamepad`.\n\n```lua\nif PreferredInput.Current == PreferredInput.InputType.Gamepad then\n\t-- User prefers gamepad input\nend\n```&quot;,
             &quot;lua_type&quot;: &quot;InputType&quot;,
             &quot;tags&quot;: [
                 &quot;Enums&quot;
             ],
             &quot;readonly&quot;: true,
             &quot;source&quot;: {
-                &quot;line&quot;: 56,
+                &quot;line&quot;: 76,
                 &quot;path&quot;: &quot;modules/input/PreferredInput.lua&quot;
             }
         },
         {
             &quot;name&quot;: &quot;Current&quot;,
-            &quot;desc&quot;: &quot;The current preferred InputType.&quot;,
+            &quot;desc&quot;: &quot;The current preferred InputType.\n\n```lua\nprint(PreferredInput.Current)\n```&quot;,
             &quot;lua_type&quot;: &quot;InputType&quot;,
             &quot;readonly&quot;: true,
             &quot;source&quot;: {
-                &quot;line&quot;: 62,
+                &quot;line&quot;: 88,
                 &quot;path&quot;: &quot;modules/input/PreferredInput.lua&quot;
             }
         }
@@ -95,7 +145,7 @@ local Preferred = require(packages.Input).Preferred
     &quot;types&quot;: [
         {
             &quot;name&quot;: &quot;InputType&quot;,
-            &quot;desc&quot;: &quot;&quot;,
+            &quot;desc&quot;: &quot;Indicates an input schema that the user currently prefers.&quot;,
             &quot;fields&quot;: [
                 {
                     &quot;name&quot;: &quot;MouseKeyboard&quot;,
@@ -104,7 +154,7 @@ local Preferred = require(packages.Input).Preferred
                 },
                 {
                     &quot;name&quot;: &quot;Touch&quot;,
-                    &quot;lua_type&quot;: &quot;\&quot;MouseKeyboard\&quot;&quot;,
+                    &quot;lua_type&quot;: &quot;\&quot;Touch\&quot;&quot;,
                     &quot;desc&quot;: &quot;Prefer touch input&quot;
                 },
                 {
@@ -117,13 +167,13 @@ local Preferred = require(packages.Input).Preferred
                 &quot;Enum&quot;
             ],
             &quot;source&quot;: {
-                &quot;line&quot;: 43,
+                &quot;line&quot;: 45,
                 &quot;path&quot;: &quot;modules/input/PreferredInput.lua&quot;
             }
         }
     ],
     &quot;name&quot;: &quot;PreferredInput&quot;,
-    &quot;desc&quot;: &quot;A helper library for observing the preferred user input of the\nplayer. This is useful for determining what input schemes\nto use during gameplay. A player might switch from using\na mouse to a gamepad mid-game, and it is important for the\ngame to respond to this change.\n\nThe Preferred class is part of the Input package.\n\n```lua\nlocal Preferred = require(packages.Input).Preferred\n```&quot;,
+    &quot;desc&quot;: &quot;A helper library for observing the preferred user input of the\nplayer. This is useful for determining what input schemes\nto use during gameplay. A player might switch from using\na mouse to a gamepad mid-game, and it is important for the\ngame to respond to this change.\n\nThe Preferred class is part of the Input package.\n\n```lua\nlocal PreferredInput = require(packages.Input).PreferredInput\n```&quot;,
     &quot;realm&quot;: [
         &quot;Client&quot;
     ],
@@ -131,8 +181,8 @@ local Preferred = require(packages.Input).Preferred
         &quot;line&quot;: 33,
         &quot;path&quot;: &quot;modules/input/PreferredInput.lua&quot;
     }
-}</pre></details></div><div class="col col--3"><div class="tableOfContents_35-E thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a><ul><li><a href="#InputType" class="table-of-contents__link toc-highlight">InputType</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#Changed" class="table-of-contents__link toc-highlight">Changed</a></li><li><a href="#Current" class="table-of-contents__link toc-highlight">Current</a></li><li><a href="#InputType" class="table-of-contents__link toc-highlight">InputType</a></li></ul></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2022 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/RbxUtil/assets/js/runtime~main.4fbc0bde.js"></script>
-<script src="/RbxUtil/assets/js/main.46c9bd30.js"></script>
+}</pre></details></div><div class="col col--3"><div class="tableOfContents_35-E thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a><ul><li><a href="#InputType" class="table-of-contents__link toc-highlight">InputType</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#Changed" class="table-of-contents__link toc-highlight">Changed</a></li><li><a href="#Current" class="table-of-contents__link toc-highlight">Current</a></li><li><a href="#InputType" class="table-of-contents__link toc-highlight">InputType</a></li></ul></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#Observe" class="table-of-contents__link toc-highlight">.Observe</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2022 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
+<script src="/RbxUtil/assets/js/runtime~main.3a25f490.js"></script>
+<script src="/RbxUtil/assets/js/main.80b6662f.js"></script>
 </body>
 </html>
