@@ -122,8 +122,9 @@ type ComponentConfig = {
 }
 
 --[=[
-	@prop Started Signal
 	@within Component
+	@prop Started Signal
+	@tag Event
 
 	Fired when a new instance of a component is started.
 
@@ -135,8 +136,9 @@ type ComponentConfig = {
 ]=]
 
 --[=[
-	@prop Stopped Signal
 	@within Component
+	@prop Stopped Signal
+	@tag Event
 
 	Fired when an instance of a component is stopped.
 
@@ -153,6 +155,7 @@ local RunService = game:GetService("RunService")
 local Signal = require(script.Parent.Signal)
 local Symbol = require(script.Parent.Symbol)
 local Trove = require(script.Parent.Trove)
+local Promise = require(script.Parent.Promise)
 
 local IS_SERVER = RunService:IsServer()
 local DEFAULT_ANCESTORS = {workspace, game:GetService("Players")}
@@ -290,25 +293,6 @@ function Component.new(config: ComponentConfig)
 	setmetatable(customComponent, Component)
 	customComponent:_setup()
 	return customComponent
-end
-
-
---[=[
-	@param instance Instance
-	@param componentClass ComponentClass
-	@return Component?
-
-	Gets an instance of a component class given the Roblox instance
-	and the component class. Returns `nil` if not found.
-
-	```lua
-	local MyComponent = require(somewhere.MyComponent)
-
-	local myComponentInstance = Component.FromInstance(workspace.SomeInstance, MyComponent)
-	```
-]=]
-function Component.FromInstance(instance: Instance, componentClass)
-	return componentClass[KEY_INST_TO_COMPONENTS][instance]
 end
 
 
@@ -498,6 +482,40 @@ end
 ]=]
 function Component:GetAll()
 	return self[KEY_COMPONENTS]
+end
+
+
+--[=[
+	@return Component?
+
+	Gets an instance of a component class from the given Roblox
+	instance. Returns `nil` if not found.
+
+	```lua
+	local MyComponent = require(somewhere.MyComponent)
+
+	local myComponentInstance = MyComponent:FromInstance(workspace.SomeInstance)
+	```
+]=]
+function Component:FromInstance(instance: Instance)
+	return self[KEY_INST_TO_COMPONENTS][instance]
+end
+
+
+function Component:WaitForInstance(instance: Instance)
+	local componentInstance = self:FromInstance(instance)
+	if componentInstance then
+		return Promise.resolve(componentInstance)
+	end
+	return Promise.fromEvent(self.Started, function(c)
+		local match = c.Instance == instance
+		if match then
+			componentInstance = c
+		end
+		return match
+	end):andThen(function()
+		return componentInstance
+	end)
 end
 
 
