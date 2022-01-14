@@ -8,11 +8,10 @@
 				"$path": "test"
 			}
 		},
-		"TestService": {
-			"$className": "TestService",
-			"$path": "ci",
-			"$properties": {
-				"ExecuteWithStudioRun": true
+		"ServerScriptService": {
+			"$className": "ServerScriptService",
+			"TestRunner": {
+				"$path": "ci"
 			}
 		}
 	}
