@@ -15,8 +15,39 @@ local DEFAULT_TIMEOUT = 60
 
 	By default, all promises timeout after 60 seconds, unless the `timeout`
 	argument is specified.
+
+	:::note
+	Promises will be rejected if the parent (or any ancestor) is unparented
+	from the game.
+	:::
+
+	:::caution Set name before parent
+	When waiting for instances based on name (e.g. `WaitFor.Child`), the `WaitFor`
+	system is listening to events to capture these instances being added. This
+	means that the name must be set _before_ being parented into the object.
+	:::
 ]=]
 local WaitFor = {}
+
+--[=[
+	@within WaitFor
+	@prop Error {Unparented: string, ParentChanged: string}
+]=]
+WaitFor.Error = {
+	Unparented = "Unparented",
+	ParentChanged = "ParentChanged",
+}
+
+local function PromiseWatchAncestry(instance: Instance, promise)
+	return Promise.race({
+		promise,
+		Promise.fromEvent(instance.AncestryChanged, function(_, newParent)
+			return newParent == nil
+		end):andThen(function()
+			return Promise.reject(WaitFor.Error.Unparented)
+		end),
+	})
+end
 
 --[=[
 	@return Promise<Instance>
@@ -33,15 +64,11 @@ function WaitFor.Child(parent: Instance, childName: string, timeout: number?)
 	if child then
 		return Promise.resolve(child)
 	end
-	return Promise.fromEvent(parent.ChildAdded, function(c)
-		local match = c.Name == childName
-		if match then
-			child = c
-		end
-		return match
-	end):andThen(function()
-		return child
-	end):timeout(timeout or DEFAULT_TIMEOUT)
+	return PromiseWatchAncestry(parent,
+		Promise.fromEvent(parent.ChildAdded, function(c)
+			return c.Name == childName
+		end):timeout(timeout or DEFAULT_TIMEOUT)
+	)
 end
 
 --[=[
@@ -53,13 +80,29 @@ end
 		local someObject01, someObject02 = table.unpack(children)
 	end)
 	```
+
+	:::note
+	Once all children are found, a second check is made to ensure that all children
+	are still directly parented to the given `parent` (since one child's parent
+	might have changed before another child was found). A rejected promise with the
+	`WaitFor.Error.ParentChanged` error will be thrown if any parents of the children
+	no longer match the given `parent`.
+	:::
 ]=]
 function WaitFor.Children(parent: Instance, childrenNames: {string}, timeout: number?)
 	local all = table.create(#childrenNames)
 	for i,childName in ipairs(childrenNames) do
 		all[i] = WaitFor.Child(parent, childName, timeout)
 	end
-	return Promise.all(all)
+	return Promise.all(all):andThen(function(children)
+		-- Check that all are still parented
+		for _,child in ipairs(children) do
+			if child.Parent ~= parent then
+				return Promise.reject(WaitFor.Error.ParentChanged)
+			end
+		end
+		return children
+	end)
 end
 
 --[=[
@@ -79,15 +122,11 @@ function WaitFor.Descendant(parent: Instance, descendantName: string, timeout: n
 	if descendant then
 		return Promise.resolve(descendant)
 	end
-	return Promise.fromEvent(parent.DescendantAdded, function(d)
-		local match = d.Name == descendantName
-		if match then
-			descendant = d
-		end
-		return match
-	end):andThen(function()
-		return descendant
-	end):timeout(timeout or DEFAULT_TIMEOUT)
+	return PromiseWatchAncestry(parent,
+		Promise.fromEvent(parent.DescendantAdded, function(d)
+			return d.Name == descendantName
+		end):timeout(timeout or DEFAULT_TIMEOUT)
+	)
 end
 
 --[=[
@@ -99,13 +138,29 @@ end
 		local someDescendant01, someDescendant02 = table.unpack(descendants)
 	end)
 	```
+
+	:::note
+	Once all descendants are found, a second check is made to ensure that none of the
+	instances have moved outside of the parent (since one instance might change before
+	another instance is found). A rejected promise with the `WaitFor.Error.ParentChanged`
+	error will be thrown if any of the instances are no longer descendants of the given
+	`parent`.
+	:::
 ]=]
 function WaitFor.Descendants(parent: Instance, descendantNames: {string}, timeout: number?)
 	local all = table.create(#descendantNames)
 	for i,descendantName in ipairs(descendantNames) do
 		all[i] = WaitFor.Descendant(parent, descendantName, timeout)
 	end
-	return Promise.all(all)
+	return Promise.all(all):andThen(function(descendants)
+		-- Check that all are still parented
+		for _,descendant in ipairs(descendants) do
+			if not descendant:IsDescendantOf(parent) then
+				return Promise.reject(WaitFor.Error.ParentChanged)
+			end
+		end
+		return descendants
+	end)
 end
 
 --[=[
@@ -123,12 +178,14 @@ function WaitFor.PrimaryPart(model: Model, timeout: number?)
 	if primary then
 		return Promise.resolve(primary)
 	end
-	return Promise.fromEvent(model:GetPropertyChangedSignal("PrimaryPart"), function()
-		primary = model.PrimaryPart
-		return primary ~= nil
-	end):andThen(function()
-		return primary
-	end):timeout(timeout or DEFAULT_TIMEOUT)
+	return PromiseWatchAncestry(model,
+		Promise.fromEvent(model:GetPropertyChangedSignal("PrimaryPart"), function()
+			primary = model.PrimaryPart
+			return primary ~= nil
+		end):andThen(function()
+			return primary
+		end):timeout(timeout or DEFAULT_TIMEOUT)
+	)
 end
 
 --[=[
@@ -146,12 +203,14 @@ function WaitFor.ObjectValue(objectValue: ObjectValue, timeout: number?)
 	if value then
 		return Promise.resolve(value)
 	end
-	return Promise.fromEvent(objectValue.Changed, function(v)
-		value = v
-		return value ~= nil
-	end):andThen(function()
-		return value
-	end):timeout(timeout or DEFAULT_TIMEOUT)
+	return PromiseWatchAncestry(objectValue, 
+		Promise.fromEvent(objectValue.Changed, function(v)
+			value = v
+			return value ~= nil
+		end):andThen(function()
+			return value
+		end):timeout(timeout or DEFAULT_TIMEOUT)
+	)
 end
 
 --[=[

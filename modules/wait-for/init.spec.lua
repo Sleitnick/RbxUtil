@@ -1,6 +1,7 @@
 return function()
 
     local WaitFor = require(script.Parent)
+    local Promise = require(script.Parent.Parent.Promise)
 
     local instances = {}
 
@@ -38,6 +39,27 @@ return function()
             
         end)
 
+        it("should stop waiting for child if parent is unparented", function()
+
+            local parent = Create("SomeParent", workspace)
+            local childName = "TestChild"
+
+            task.delay(0.1, function() parent:Destroy() end)
+
+            local success, err = WaitFor.Child(parent, childName):await()
+            expect(success).to.equal(false)
+            expect(err).to.equal(WaitFor.Error.Unparented)
+        
+        end)
+
+        it("should stop waiting for child if timeout is reached", function()
+
+            local success, err = WaitFor.Child(workspace, "InstanceThatDoesNotExist", 0.1):await()
+            expect(success).to.equal(false)
+            expect(Promise.Error.isKind(err, Promise.Error.Kind.TimedOut)).to.equal(true)
+
+        end)
+
         it("should wait for children", function()
 
             local parent = workspace
@@ -55,6 +77,24 @@ return function()
                 expect(child.Parent).to.equal(parent)
             end
             
+        end)
+
+        it("should fail if any children are no longer parented in parent", function()
+
+            local parent = workspace
+            local childrenNames = {"TestChild04", "TestChild05", "TestChild06"}
+
+            local child3
+
+            task.delay(0.1, Create, childrenNames[1], parent)
+            task.delay(0.2, Create, childrenNames[2], parent)
+            task.delay(0.05, function() child3 = Create(childrenNames[3], parent) end)
+            task.delay(0.1, function() child3:Destroy() end)
+
+            local success, err = WaitFor.Children(parent, childrenNames):await()
+            expect(success).to.equal(false)
+            expect(err).to.equal(WaitFor.Error.ParentChanged)
+
         end)
 
         it("should wait for descendant", function()
