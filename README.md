@@ -22,3 +22,4 @@
 | [TaskQueue](https://sleitnick.github.io/RbxUtil/api/TaskQueue) | `TaskQueue = "sleitnick/task-queue@0.1.0"` | Batches tasks that occur on the same execution step |
 | [Timer](https://sleitnick.github.io/RbxUtil/api/Timer) | `Timer = "sleitnick/timer@1.1.0"` | Timer class |
 | [Trove](https://sleitnick.github.io/RbxUtil/api/Trove) | `Trove = "sleitnick/trove@0.1.3"` | Trove class for tracking and cleaning up objects |
+| [WaitFor](https://sleitnick.github.io/RbxUtil/api/WaitFor) | `WaitFor = "sleitnick/wait-for@0.1.0"` | WaitFor class for awaiting instances |
