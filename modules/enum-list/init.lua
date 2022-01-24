@@ -62,8 +62,8 @@ function EnumList.new(name: string, enums: EnumNames)
 	assert(type(name) == "string", "Name string required")
 	assert(type(enums) == "table", "Enums table required")
 	local self = setmetatable({}, {__index = function(self, key)
-	    local val = EnumList[key] or rawget(self, key)
-	    assert(val, ("Key %s was not found in enum list"):format(key))
+	    local val = EnumList[key] 
+	    assert(val ~= nil, ("Key %s was not found in enum list"):format(key))
 	    return val
 	end})
 	self[LIST_KEY] = {}
