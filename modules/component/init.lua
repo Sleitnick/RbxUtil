@@ -335,8 +335,8 @@ function Component:_setup()
 		end
 		if hasRenderSteppedUpdate and not IS_SERVER then
 			if component.RenderPriority then
-				self._renderName = NextRenderName()
-				RunService:BindToRenderStep(self._renderName, component.RenderPriority, function(dt)
+				component._renderName = NextRenderName()
+				RunService:BindToRenderStep(component._renderName, component.RenderPriority, function(dt)
 					component:RenderSteppedUpdate(dt)
 				end)
 			else
@@ -359,7 +359,7 @@ function Component:_setup()
 		if component._renderSteppedUpdate then
 			component._renderSteppedUpdate:Disconnect()
 		elseif component._renderName then
-			RunService:UnbindFromRenderStep(self._renderName)
+			RunService:UnbindFromRenderStep(component._renderName)
 		end
 		InvokeExtensionFn(component, "Stopping")
 		component:Stop()
