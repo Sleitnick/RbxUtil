@@ -52,6 +52,39 @@ end
 
 
 --[=[
+	@return Trove
+	Creates and adds another trove to itself. This is just shorthand
+	for `trove:Construct(Trove)`. This is useful for contexts where
+	the trove object is present, but the class itself isn't.
+
+	:::note
+	This does _not_ clone the trove. In other words, the objects in the
+	trove are not given to the new constructed trove. This is simply to
+	construct a new Trove and add it as an object to track.
+	:::
+
+	```lua
+	local trove = Trove.new()
+	local subTrove = trove:Extend()
+
+	trove:Clean() -- Cleans up the subTrove too
+	```
+]=]
+function Trove:Extend()
+	return self:Construct(Trove)
+end
+
+
+--[=[
+	Clones the given instance and adds it to the trove. Shorthand for
+	`trove:Add(instance:Clone())`.
+]=]
+function Trove:Clone(instance: Instance): Instance
+	return self:Add(instance:Clone())
+end
+
+
+--[=[
 	@param class table | (...any) -> any
 	@param ... any
 	@return any
@@ -67,6 +100,9 @@ end
 	
 	The result from either of the two options
 	will be added to the trove.
+
+	This is shorthand for `trove:Add(SomeClass.new(...))`
+	and `trove:Add(SomeFunction(...))`.
 
 	```lua
 	local Signal = require(somewhere.Signal)
@@ -99,6 +135,8 @@ end
 	@return RBXScriptConnection
 	Connects the function to the signal, adds the connection
 	to the trove, and then returns the connection.
+
+	This is shorthand for `trove:Add(signal:Connect(fn))`.
 
 	```lua
 	trove:Connect(workspace.ChildAdded, function(instance)
