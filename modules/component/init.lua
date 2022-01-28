@@ -159,6 +159,7 @@ local Promise = require(script.Parent.Promise)
 
 local IS_SERVER = RunService:IsServer()
 local DEFAULT_ANCESTORS = {workspace, game:GetService("Players")}
+local DEFAULT_TIMEOUT = 60
 
 -- Symbol keys:
 local KEY_ANCESTORS = Symbol("Ancestors")
@@ -508,6 +509,10 @@ end
 	Resolves a promise once the component class is present on a given
 	Roblox instance.
 
+	An optional `timeout` can be provided to reject the promise if it
+	takes more than `timeout` seconds to resolve. If no timeout is
+	supplied, `timeout` defaults to 60 seconds.
+
 	```lua
 	local MyComponent = require(somewhere.MyComponent)
 
@@ -516,7 +521,7 @@ end
 	end)
 	```
 ]=]
-function Component:WaitForInstance(instance: Instance)
+function Component:WaitForInstance(instance: Instance, timeout: number?)
 	local componentInstance = self:FromInstance(instance)
 	if componentInstance then
 		return Promise.resolve(componentInstance)
@@ -529,7 +534,7 @@ function Component:WaitForInstance(instance: Instance)
 		return match
 	end):andThen(function()
 		return componentInstance
-	end)
+	end):timeout(if type(timeout) == "number" then timeout else DEFAULT_TIMEOUT)
 end
 
 
