@@ -159,6 +159,7 @@ local Promise = require(script.Parent.Promise)
 
 local IS_SERVER = RunService:IsServer()
 local DEFAULT_ANCESTORS = {workspace, game:GetService("Players")}
+local DEFAULT_TIMEOUT = 60
 
 -- Symbol keys:
 local KEY_ANCESTORS = Symbol("Ancestors")
@@ -335,8 +336,8 @@ function Component:_setup()
 		end
 		if hasRenderSteppedUpdate and not IS_SERVER then
 			if component.RenderPriority then
-				self._renderName = NextRenderName()
-				RunService:BindToRenderStep(self._renderName, component.RenderPriority, function(dt)
+				component._renderName = NextRenderName()
+				RunService:BindToRenderStep(component._renderName, component.RenderPriority, function(dt)
 					component:RenderSteppedUpdate(dt)
 				end)
 			else
@@ -359,7 +360,7 @@ function Component:_setup()
 		if component._renderSteppedUpdate then
 			component._renderSteppedUpdate:Disconnect()
 		elseif component._renderName then
-			RunService:UnbindFromRenderStep(self._renderName)
+			RunService:UnbindFromRenderStep(component._renderName)
 		end
 		InvokeExtensionFn(component, "Stopping")
 		component:Stop()
@@ -502,7 +503,25 @@ function Component:FromInstance(instance: Instance)
 end
 
 
-function Component:WaitForInstance(instance: Instance)
+--[=[
+	@return Promise
+
+	Resolves a promise once the component class is present on a given
+	Roblox instance.
+
+	An optional `timeout` can be provided to reject the promise if it
+	takes more than `timeout` seconds to resolve. If no timeout is
+	supplied, `timeout` defaults to 60 seconds.
+
+	```lua
+	local MyComponent = require(somewhere.MyComponent)
+
+	MyComponent:WaitForInstance(workspace.SomeInstance):andThen(function(myComponentInstance)
+		-- Do something with the component class
+	end)
+	```
+]=]
+function Component:WaitForInstance(instance: Instance, timeout: number?)
 	local componentInstance = self:FromInstance(instance)
 	if componentInstance then
 		return Promise.resolve(componentInstance)
@@ -515,7 +534,7 @@ function Component:WaitForInstance(instance: Instance)
 		return match
 	end):andThen(function()
 		return componentInstance
-	end)
+	end):timeout(if type(timeout) == "number" then timeout else DEFAULT_TIMEOUT)
 end
 
 
