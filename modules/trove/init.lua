@@ -41,6 +41,7 @@ Trove.__index = Trove
 
 
 --[=[
+	@return Trove
 	Constructs a Trove object.
 ]=]
 function Trove.new()
@@ -94,7 +95,7 @@ end
 
 --[=[
 	@param signal RBXScriptSignal
-	@param fn (...: any) -> any
+	@param fn (...: any) -> ()
 	@return RBXScriptConnection
 	Connects the function to the signal, adds the connection
 	to the trove, and then returns the connection.
@@ -113,7 +114,7 @@ end
 --[=[
 	@param name string
 	@param priority number
-	@param fn (dt: number) -> nil
+	@param fn (dt: number) -> ()
 	Calls `RunService:BindToRenderStep` and registers a function in the
 	trove that will call `RunService:UnbindFromRenderStep` on cleanup.
 
@@ -123,7 +124,7 @@ end
 	end)
 	```
 ]=]
-function Trove:BindToRenderStep(name: string, priority: number, fn: (dt: number) -> nil)
+function Trove:BindToRenderStep(name: string, priority: number, fn: (dt: number) -> ())
 	RunService:BindToRenderStep(name, priority, fn)
 	self:Add(function()
 		RunService:UnbindFromRenderStep(name)
