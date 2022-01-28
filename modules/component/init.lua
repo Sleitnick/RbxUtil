@@ -502,6 +502,20 @@ function Component:FromInstance(instance: Instance)
 end
 
 
+--[=[
+	@return Promise
+
+	Resolves a promise once the component class is present on a given
+	Roblox instance.
+
+	```lua
+	local MyComponent = require(somewhere.MyComponent)
+
+	MyComponent:WaitForInstance(workspace.SomeInstance):andThen(function(myComponentInstance)
+		-- Do something with the component class
+	end)
+	```
+]=]
 function Component:WaitForInstance(instance: Instance)
 	local componentInstance = self:FromInstance(instance)
 	if componentInstance then
