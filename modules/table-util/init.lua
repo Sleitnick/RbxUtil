@@ -330,14 +330,14 @@ local function Filter(t: Table, f: FilterPredicate): Table
 	if #t > 0 then
 		local n = 0
 		for i,v in ipairs(t) do
-			if f(v, i, t) then
+			if f(i, v, t) then
 				n += 1
 				newT[n] = v
 			end
 		end
 	else
 		for k,v in pairs(t) do
-			if f(v, k, t) then
+			if f(k, v, t) then
 				newT[k] = v
 			end
 		end
