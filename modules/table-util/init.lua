@@ -317,7 +317,7 @@ end
 
 	```lua
 	local t = {A = 10, B = 20, C = 30}
-	local t2 = TableUtil.Filter(t, function(key, value)
+	local t2 = TableUtil.Filter(t, function(value, key)
 		return value > 15
 	end)
 	print(t2) --> {B = 40, C = 60}
@@ -330,14 +330,14 @@ local function Filter(t: Table, f: FilterPredicate): Table
 	if #t > 0 then
 		local n = 0
 		for i,v in ipairs(t) do
-			if f(i, v, t) then
+			if f(v, i, t) then
 				n += 1
 				newT[n] = v
 			end
 		end
 	else
 		for k,v in pairs(t) do
-			if f(k, v, t) then
+			if f(v, k, t) then
 				newT[k] = v
 			end
 		end
