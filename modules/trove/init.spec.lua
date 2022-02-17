@@ -156,6 +156,14 @@ return function()
 			expect(p1.Name).to.equal(p2.Name)
 		end)
 
+		it("should clean up a thread", function()
+			local co = coroutine.create(function() end)
+			trove:Add(co)
+			expect(coroutine.status(co)).to.equal("suspended")
+			trove:Clean()
+			expect(coroutine.status(co)).to.equal("dead")
+		end)
+
 	end)
 
 end

@@ -4,6 +4,7 @@
 
 
 local FN_MARKER = newproxy()
+local THREAD_MARKER = newproxy()
 
 local RunService = game:GetService("RunService")
 
@@ -12,6 +13,8 @@ local function GetObjectCleanupFunction(object, cleanupMethod)
 	local t = typeof(object)
 	if t == "function" then
 		return FN_MARKER
+	elseif t == "thread" then
+		return THREAD_MARKER
 	end
 	if cleanupMethod then
 		return cleanupMethod
@@ -177,12 +180,16 @@ end
 	Adds an object to the trove. Once the trove is cleaned or
 	destroyed, the object will also be cleaned up.
 
-	The object must be any of the following:
-	- Roblox instance (e.g. Part)
-	- RBXScriptConnection (e.g. `workspace.ChildAdded:Connect(function() end)`)
-	- Function
-	- Table with either a `Destroy` or `Disconnect` method
-	- Table with custom `cleanupMethod` name provided
+	The following types are accepted (e.g. `typeof(object)`):
+
+	| Type | Cleanup |
+	| ---- | ------- |
+	| `Instance` | `object:Destroy()` |
+	| `RBXScriptConnection` | `object:Disconnect()` |
+	| `function` | `object()` |
+	| `thread` | `coroutine.close(object)` |
+	| `table` | `object:Destroy()` _or_ `object:Disconnect()` |
+	| `table` with `cleanupMethod` | `object:<cleanupMethod>()` |
 
 	Returns the object added.
 
@@ -262,6 +269,8 @@ end
 function Trove:_cleanupObject(object, cleanupMethod)
 	if cleanupMethod == FN_MARKER then
 		object()
+	elseif cleanupMethod == THREAD_MARKER then
+		coroutine.close(object)
 	else
 		object[cleanupMethod](object)
 	end
