@@ -1,2 +1,3 @@
 [[coroutine.close.args]]
-type = "thread"
+required = false
+type = "any"
