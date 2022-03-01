@@ -6,10 +6,10 @@
 type AncestorList = {Instance}
 
 --[=[
-	@type ExtensionFn (component) -> nil
+	@type ExtensionFn (component) -> ()
 	@within Component
 ]=]
-type ExtensionFn = (any) -> nil
+type ExtensionFn = (any) -> ()
 
 --[=[
 	@type ExtensionShouldFn (component) -> boolean
@@ -125,6 +125,7 @@ type ComponentConfig = {
 	@within Component
 	@prop Started Signal
 	@tag Event
+	@tag Component Class
 
 	Fired when a new instance of a component is started.
 
@@ -139,6 +140,7 @@ type ComponentConfig = {
 	@within Component
 	@prop Stopped Signal
 	@tag Event
+	@tag Component Class
 
 	Fired when an instance of a component is stopped.
 
@@ -146,6 +148,23 @@ type ComponentConfig = {
 	local MyComponent = Component.new({Tag = "MyComponent"})
 
 	MyComponent.Stopped:Connect(function(component) end)
+	```
+]=]
+
+--[=[
+	@tag Component Instance
+	@within Component
+	@prop Instance Instance
+	
+	A reference back to the _Roblox_ instance from within a _component_ instance. When
+	a component instance is created, it is bound to a specific Roblox instance, which
+	will always be present through the `Instance` property.
+
+	```lua
+	MyComponent.Started:Connect(function(component)
+		local robloxInstance: Instance = component.Instance
+		print("Component is bound to " .. robloxInstance:GetFullName())
+	end)
 	```
 ]=]
 
@@ -223,12 +242,21 @@ end
 	@class Component
 
 	Bind components to Roblox instances using the Component class and CollectionService tags.
+
+	To avoid confusion of terms:
+	- `Component` refers to this module.
+	- `Component Class` (e.g. `MyComponent` through this documentation) refers to a class created via `Component.new`
+	- `Component Instance` refers to an instance of a component class.
+	- `Roblox Instance` refers to the Roblox instance to which the component instance is bound.
+
+	Methods and properties are tagged with the above terms to help clarify the level at which they are used.
 ]=]
 local Component = {}
 Component.__index = Component
 
 
 --[=[
+	@tag Component
 	@param config ComponentConfig
 	@return ComponentClass
 
@@ -464,6 +492,7 @@ end
 
 
 --[=[
+	@tag Component Class
 	@return {Component}
 	Gets a table array of all existing component objects. For example,
 	if there was a component class linked to the "MyComponent" tag,
@@ -487,6 +516,7 @@ end
 
 
 --[=[
+	@tag Component Class
 	@return Component?
 
 	Gets an instance of a component class from the given Roblox
@@ -504,9 +534,10 @@ end
 
 
 --[=[
-	@return Promise
+	@tag Component Class
+	@return Promise<ComponentInstance>
 
-	Resolves a promise once the component class is present on a given
+	Resolves a promise once the component instance is present on a given
 	Roblox instance.
 
 	An optional `timeout` can be provided to reject the promise if it
@@ -539,6 +570,7 @@ end
 
 
 --[=[
+	@tag Component Class
 	`Construct` is called before the component is started, and should be used
 	to construct the component instance.
 
@@ -556,6 +588,7 @@ end
 
 
 --[=[
+	@tag Component Class
 	`Start` is called when the component is started. At this point in time, it
 	is safe to grab other components also bound to the same instance.
 
@@ -574,6 +607,7 @@ end
 
 
 --[=[
+	@tag Component Class
 	`Stop` is called when the component is stopped. This occurs either when the
 	bound instance is removed from one of the whitelisted ancestors _or_ when
 	the matching tag is removed from the instance. This also means that the
@@ -595,6 +629,7 @@ end
 
 
 --[=[
+	@tag Component Instance
 	@param componentClass ComponentClass
 	@return Component?
 
@@ -616,6 +651,7 @@ end
 
 
 --[=[
+	@tag Component Class
 	@function HeartbeatUpdate
 	@param dt number
 	@within Component
@@ -636,6 +672,7 @@ end
 	```
 ]=]
 --[=[
+	@tag Component Class
 	@function SteppedUpdate
 	@param dt number
 	@within Component
@@ -656,6 +693,7 @@ end
 	```
 ]=]
 --[=[
+	@tag Component Class
 	@function RenderSteppedUpdate
 	@param dt number
 	@within Component
