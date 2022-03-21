@@ -33,8 +33,8 @@ local rng = Random.new()
 --[=[
 	@within TableUtil
 	@function Copy
-	@param tbl table -- Table to copy
-	@param deep boolean? -- Whether or not to perform a deep copy
+	@param tbl table
+	@param deep boolean?
 	@return table
 
 	Creates a copy of the given table. By default, a shallow copy is
@@ -77,8 +77,8 @@ end
 --[=[
 	@within TableUtil
 	@function Sync
-	@param source table -- Source table
-	@param template table -- Template table
+	@param source table
+	@param template table
 	@return table
 
 	Synchronizes the `source` based on the `template`. This will make
@@ -202,14 +202,14 @@ end
 --[=[
 	@within TableUtil
 	@function SwapRemove
-	@param tbl table -- Array
-	@param i number -- Index
+	@param tbl table
+	@param index number
 
-	Removes index `i` in the table by swapping the value at `i` with
+	Removes index `index` in the table by swapping the value at `index` with
 	the last value in the array, and then trimming off the last
 	value from the array.
 
-	This allows removal of the value at `i` in `O(1)` time, but does
+	This allows removal of the value at `index` in `O(1)` time, but does
 	not preserve array ordering. If a value needs to be removed from
 	an array, but ordering of the array does not matter, using
 	`SwapRemove` is always preferred over `table.remove`.
@@ -226,21 +226,21 @@ end
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
 ]=]
-local function SwapRemove(tbl: Table, i: number)
-	local n = #tbl
-	tbl[i] = tbl[n]
-	tbl[n] = nil
+local function SwapRemove(tbl: Table, index: number)
+	local last = #tbl
+	tbl[index] = tbl[last]
+	tbl[last] = nil
 end
 
 
 --[=[
 	@within TableUtil
 	@function SwapRemoveFirstValue
-	@param tbl table -- Array
-	@param v any -- Value to find
+	@param tbl table
+	@param value any
 	@return number?
 
-	Performs `table.find(tbl, v)` to find the index of the given
+	Performs `table.find(tbl, value)` to find the index of the given
 	value, and then performs `TableUtil.SwapRemove` on that index.
 
 	```lua
@@ -252,8 +252,8 @@ end
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
 ]=]
-local function SwapRemoveFirstValue(tbl: Table, v: any): number?
-	local index: number? = table.find(tbl, v)
+local function SwapRemoveFirstValue(tbl: Table, value: any): number?
+	local index: number? = table.find(tbl, value)
 	if index then
 		SwapRemove(tbl, index)
 	end
