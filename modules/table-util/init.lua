@@ -6,11 +6,11 @@
 
 
 type Table = {any}
-type MapPredicate = (any, any, Table) -> any
-type FilterPredicate = (any, any, Table) -> boolean
-type ReducePredicate = (number, any, any, Table) -> any
-type FindCallback = (any, any, Table) -> boolean
-type IteratorFunc = (t: Table, k: any) -> (any, any)
+type MapPredicate = (value: any, key: any, tbl: Table) -> any
+type FilterPredicate = (value: any, key: any, tbl: Table) -> boolean
+type ReducePredicate = (accumulator: any, value: any, key: any, tbl: Table) -> any
+type FindCallback = (value: any, key: any, tbl: Table) -> boolean
+type IteratorFunc = (tbl: Table, key: any) -> (any?, Table?)
 
 --[=[
 	@class TableUtil
@@ -46,11 +46,11 @@ local rng = Random.new()
 	a table with cyclical references _and_ the `deep` parameter set to
 	`true` will result in a stack-overflow.
 ]=]
-local function Copy(t: Table, deep: boolean?): Table
+local function Copy(tbl: Table, deep: boolean?): Table
 	if deep then
-		local function DeepCopy(tbl)
-			local tCopy = table.create(#tbl)
-			for k,v in pairs(tbl) do
+		local function DeepCopy(t: Table): Table
+			local tCopy = table.create(#t)
+			for k,v in pairs(t) do
 				if type(v) == "table" then
 					tCopy[k] = DeepCopy(v)
 				else
@@ -59,13 +59,13 @@ local function Copy(t: Table, deep: boolean?): Table
 			end
 			return tCopy
 		end
-		return DeepCopy(t)
+		return DeepCopy(tbl)
 	else
-		if #t > 0 then
-			return table.move(t, 1, #t, 1, table.create(#t))
+		if #tbl > 0 then
+			return table.move(tbl, 1, #tbl, 1, table.create(#tbl))
 		else
 			local tCopy = {}
-			for k,v in pairs(t) do
+			for k,v in pairs(tbl) do
 				tCopy[k] = v
 			end
 			return tCopy
@@ -77,13 +77,13 @@ end
 --[=[
 	@within TableUtil
 	@function Sync
-	@param srcTbl table -- Source table
-	@param templateTbl table -- Template table
+	@param source table -- Source table
+	@param template table -- Template table
 	@return table
 
-	Synchronizes the `srcTbl` based on the `templateTbl`. This will make
-	sure that `srcTbl` has all of the same keys as `templateTbl`, including
-	removing keys in `srcTbl` that are not present in `templateTbl`. This
+	Synchronizes the `source` based on the `template`. This will make
+	sure that `source` has all of the same keys as `template`, including
+	removing keys in `source` that are not present in `template`. This
 	is a _deep_ operation, so any nested tables will be synchronized as
 	well.
 
@@ -102,24 +102,20 @@ end
 
 	For player data, use `TableUtil.Reconcile` instead.
 ]=]
-local function Sync(srcTbl: Table, templateTbl: Table): Table
+local function Sync(source: Table, template: Table): Table
+	assert(type(source) == "table", "First argument must be a table")
+	assert(type(template) == "table", "Second argument must be a table")
 
-	assert(type(srcTbl) == "table", "First argument must be a table")
-	assert(type(templateTbl) == "table", "Second argument must be a table")
+	local tbl = Copy(source)
 
-	local tbl = Copy(srcTbl)
-
-	-- If 'tbl' has something 'templateTbl' doesn't, then remove it from 'tbl'
-	-- If 'tbl' has something of a different type than 'templateTbl', copy from 'templateTbl'
-	-- If 'templateTbl' has something 'tbl' doesn't, then add it to 'tbl'
+	-- If 'tbl' has something 'template' doesn't, then remove it from 'tbl'
+	-- If 'tbl' has something of a different type than 'template', copy from 'template'
+	-- If 'template' has something 'tbl' doesn't, then add it to 'tbl'
 	for k,v in pairs(tbl) do
-
-		local vTemplate = templateTbl[k]
-
+		local vTemplate = template[k]
 		-- Remove keys not within template:
 		if vTemplate == nil then
 			tbl[k] = nil
-
 		-- Synchronize data types:
 		elseif type(v) ~= type(vTemplate) then
 			if type(vTemplate) == "table" then
@@ -127,19 +123,15 @@ local function Sync(srcTbl: Table, templateTbl: Table): Table
 			else
 				tbl[k] = vTemplate
 			end
-
 		-- Synchronize sub-tables:
 		elseif type(v) == "table" then
 			tbl[k] = Sync(v, vTemplate)
 		end
-
 	end
 
 	-- Add any missing keys:
-	for k,vTemplate in pairs(templateTbl) do
-
+	for k,vTemplate in pairs(template) do
 		local v = tbl[k]
-
 		if v == nil then
 			if type(vTemplate) == "table" then
 				tbl[k] = Copy(vTemplate, true)
@@ -151,7 +143,6 @@ local function Sync(srcTbl: Table, templateTbl: Table): Table
 	end
 
 	return tbl
-
 end
 
 
@@ -177,19 +168,18 @@ end
 	local template = {kills = 0, deaths = 0, xp = 0}
 	local data = {kills = 10, abc = 20}
 	local correctedData = TableUtil.Reconcile(data, template)
-	
+
 	print(correctedData) --> {kills = 10, deaths = 0, xp = 0, abc = 30}
 	```
 ]=]
-local function Reconcile(src: Table, template: Table): Table
-
-	assert(type(src) == "table", "First argument must be a table")
+local function Reconcile(source: Table, template: Table): Table
+	assert(type(source) == "table", "First argument must be a table")
 	assert(type(template) == "table", "Second argument must be a table")
 
-	local tbl = Copy(src)
+	local tbl = Copy(source)
 
 	for k,v in pairs(template) do
-		local sv = src[k]
+		local sv = source[k]
 		if sv == nil then
 			if type(v) == "table" then
 				tbl[k] = Copy(v, true)
@@ -206,7 +196,6 @@ local function Reconcile(src: Table, template: Table): Table
 	end
 
 	return tbl
-
 end
 
 
@@ -237,10 +226,10 @@ end
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
 ]=]
-local function SwapRemove(t: Table, i: number)
-	local n = #t
-	t[i] = t[n]
-	t[n] = nil
+local function SwapRemove(tbl: Table, i: number)
+	local n = #tbl
+	tbl[i] = tbl[n]
+	tbl[n] = nil
 end
 
 
@@ -263,10 +252,10 @@ end
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
 ]=]
-local function SwapRemoveFirstValue(t: Table, v: any): number?
-	local index: number? = table.find(t, v)
+local function SwapRemoveFirstValue(tbl: Table, v: any): number?
+	local index: number? = table.find(tbl, v)
 	if index then
-		SwapRemove(t, index)
+		SwapRemove(tbl, index)
 	end
 	return index
 end
@@ -286,18 +275,18 @@ end
 
 	```lua
 	local t = {A = 10, B = 20, C = 30}
-	local t2 = TableUtil.Map(t, function(key, value)
+	local t2 = TableUtil.Map(t, function(value, key)
 		return value * 2
 	end)
 	print(t2) --> {A = 20, B = 40, C = 60}
 	```
 ]=]
-local function Map(t: Table, f: MapPredicate): Table
-	assert(type(t) == "table", "First argument must be a table")
-	assert(type(f) == "function", "Second argument must be a function")
-	local newT = table.create(#t)
-	for k,v in pairs(t) do
-		newT[k] = f(v, k, t)
+local function Map(tbl: Table, predicate: MapPredicate): Table
+	assert(type(tbl) == "table", "First argument must be a table")
+	assert(type(predicate) == "function", "Second argument must be a function")
+	local newT = table.create(#tbl)
+	for k,v in pairs(tbl) do
+		newT[k] = predicate(v, k, tbl)
 	end
 	return newT
 end
@@ -323,21 +312,21 @@ end
 	print(t2) --> {B = 40, C = 60}
 	```
 ]=]
-local function Filter(t: Table, f: FilterPredicate): Table
-	assert(type(t) == "table", "First argument must be a table")
-	assert(type(f) == "function", "Second argument must be a function")
-	local newT = table.create(#t)
-	if #t > 0 then
+local function Filter(tbl: Table, predicate: FilterPredicate): Table
+	assert(type(tbl) == "table", "First argument must be a table")
+	assert(type(predicate) == "function", "Second argument must be a function")
+	local newT = table.create(#tbl)
+	if #tbl > 0 then
 		local n = 0
-		for i,v in ipairs(t) do
-			if f(v, i, t) then
+		for i,v in ipairs(tbl) do
+			if predicate(v, i, tbl) then
 				n += 1
 				newT[n] = v
 			end
 		end
 	else
-		for k,v in pairs(t) do
-			if f(v, k, t) then
+		for k,v in pairs(tbl) do
+			if predicate(v, k, tbl) then
 				newT[k] = v
 			end
 		end
@@ -350,8 +339,9 @@ end
 	@within TableUtil
 	@function Reduce
 	@param tbl table
-	@param predicate (accumulator: any, value: any, index: any, tbl: table) -> result: any
-	@return table
+	@param predicate (accumulator: any, value: any, key: any, tbl: table) -> result: any
+	@param init any?
+	@return any
 
 	Performs a reduce operation against the given table, which can be used to
 	reduce the table into a single value. This could be used to sum up a table
@@ -367,27 +357,27 @@ end
 	print(result) --> 100
 	```
 ]=]
-local function Reduce(t: Table, f: ReducePredicate, init: any?): any
-	assert(type(t) == "table", "First argument must be a table")
-	assert(type(f) == "function", "Second argument must be a function")
+local function Reduce(tbl: Table, predicate: ReducePredicate, init: any?): any
+	assert(type(tbl) == "table", "First argument must be a table")
+	assert(type(predicate) == "function", "Second argument must be a function")
 	local result = init
-	if #t > 0 then
+	if #tbl > 0 then
 		local start = 1
 		if init == nil then
-			result = t[1]
+			result = tbl[1]
 			start = 2
 		end
-		for i = start,#t do
-			result = f(result, t[i], i, t)
+		for i = start,#tbl do
+			result = predicate(result, tbl[i], i, tbl)
 		end
 	else
 		local start = nil
 		if init == nil then
-			result = next(t)
+			result = next(tbl)
 			start = result
 		end
-		for k,v in next,t,start do
-			result = f(result, v, k, t)
+		for k,v in next,tbl,start do
+			result = predicate(result, v, k, tbl)
 		end
 	end
 	return result
@@ -511,7 +501,7 @@ end
 	@within TableUtil
 	@function Sample
 	@param tbl table
-	@param sampleSize number
+	@param size number
 	@param rngOverride Random?
 	@return table
 
@@ -530,7 +520,6 @@ local function Sample(tbl: Table, size: number, rngOverride: Random?): Table
 	assert(type(tbl) == "table", "First argument must be a table")
 	assert(type(size) == "number", "Second argument must be a number")
 	local shuffled = Copy(tbl)
-	local sample = table.create(size)
 	local random = if typeof(rngOverride) == "Random" then rngOverride else rng
 	local len = #tbl
 	size = math.clamp(size, 1, len)
@@ -538,8 +527,7 @@ local function Sample(tbl: Table, size: number, rngOverride: Random?): Table
 		local j = random:NextInteger(i, len)
 		shuffled[i], shuffled[j] = shuffled[j], shuffled[i]
 	end
-	table.move(shuffled, 1, size, 1, sample)
-	return sample
+	return table.move(shuffled, 1, size, 1, table.create(size))
 end
 
 
@@ -585,7 +573,7 @@ end
 	@within TableUtil
 	@function FlatMap
 	@param tbl table
-	@param predicate (key: any, value: any, tbl: table) -> newValue: any
+	@param predicate (value: any, key: any, tbl: table) -> newValue: any
 	@return table
 
 	Calls `TableUtil.Map` on the given table and predicate, and then
@@ -602,8 +590,8 @@ end
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
 ]=]
-local function FlatMap(tbl: Table, callback: MapPredicate): Table
-	return Flat(Map(tbl, callback))
+local function FlatMap(tbl: Table, predicate: MapPredicate): Table
+	return Flat(Map(tbl, predicate))
 end
 
 
@@ -642,7 +630,7 @@ end
 	@within TableUtil
 	@function Find
 	@param tbl table
-	@param callback (value: any, index: any, tbl: table) -> boolean
+	@param callback (value: any, key: any, tbl: table) -> boolean
 	@return (value: any?, key: any?)
 
 	Performs a linear scan across the table and calls `callback` on
@@ -683,7 +671,7 @@ end
 	@within TableUtil
 	@function Every
 	@param tbl table
-	@param callback (value: any, index: any, tbl: table) -> boolean
+	@param callback (value: any, key: any, tbl: table) -> boolean
 	@return boolean
 
 	Returns `true` if the `callback` also returns `true` for _every_
@@ -713,7 +701,7 @@ end
 	@within TableUtil
 	@function Some
 	@param tbl table
-	@param callback (value: any, index: any, tbl: table) -> boolean
+	@param callback (value: any, key: any, tbl: table) -> boolean
 	@return boolean
 
 	Returns `true` if the `callback` also returns `true` for _at least
@@ -754,8 +742,8 @@ end
 	print(tTruncated) --> {10, 20, 30}
 	```
 ]=]
-local function Truncate(tbl: Table, len: number): Table
-	return table.move(tbl, 1, len, 1, table.create(len))
+local function Truncate(tbl: Table, length: number): Table
+	return table.move(tbl, 1, length, 1, table.create(length))
 end
 
 
@@ -763,7 +751,7 @@ end
 	@within TableUtil
 	@function Zip
 	@param ... table
-	@return (iter: (t: table, k: any) -> (key: any?, values: table?), tbl: table, startIndex: any?)
+	@return (iter: (tbl: table, key: any) -> (key: any?, values: table?), tbl: table, startIndex: any?)
 
 	Returns an iterator that can scan through multiple tables at the same time side-by-side, matching
 	against shared keys/indices.
@@ -786,7 +774,7 @@ end
 	--]]
 	```
 ]=]
-local function Zip(...): (IteratorFunc, Table, any)
+local function Zip(...): (IteratorFunc, Table, any?)
 	assert(select("#", ...) > 0, "Must supply at least 1 table")
 	local function ZipIteratorArray(all: Table, k: number)
 		k += 1
@@ -871,7 +859,7 @@ end
 	TableUtil.IsEmpty({abc = 32}) -- false
 	```
 ]=]
-local function IsEmpty(tbl)
+local function IsEmpty(tbl: Table): boolean
 	return next(tbl) == nil
 end
 
@@ -879,26 +867,26 @@ end
 --[=[
 	@within TableUtil
 	@function EncodeJSON
-	@param value any
+	@param input any
 	@return string
 
 	Proxy for [`HttpService:JSONEncode`](https://developer.roblox.com/en-us/api-reference/function/HttpService/JSONEncode).
 ]=]
-local function EncodeJSON(value: any): string
-	return HttpService:JSONEncode(value)
+local function EncodeJSON(input: any): string
+	return HttpService:JSONEncode(input)
 end
 
 
 --[=[
 	@within TableUtil
 	@function DecodeJSON
-	@param value any
-	@return string
+	@param input string
+	@return any
 
 	Proxy for [`HttpService:JSONDecode`](https://developer.roblox.com/en-us/api-reference/function/HttpService/JSONDecode).
 ]=]
-local function DecodeJSON(str: string): any
-	return HttpService:JSONDecode(str)
+local function DecodeJSON(input: string): any
+	return HttpService:JSONDecode(input)
 end
 
 
