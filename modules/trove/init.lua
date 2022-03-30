@@ -174,6 +174,40 @@ end
 
 
 --[=[
+	@param promise Promise
+	@return Promise
+	Gives the promise to the trove, which will cancel the promise if the trove is cleaned up or if the promise
+	is removed. The exact promise is returned, thus allowing chaining.
+
+	```lua
+	trove:AddPromise(doSomethingThatReturnsAPromise())
+		:andThen(function()
+			print("Done")
+		end)
+	-- Will cancel the above promise (assuming it didn't resolve immediately)
+	trove:Clean()
+
+	local p = trove:AddPromise(doSomethingThatReturnsAPromise())
+	-- Will also cancel the promise
+	trove:Remove(p)
+	```
+
+	:::caution Promise v4 Only
+	This is only compatible with the [roblox-lua-promise](https://eryn.io/roblox-lua-promise/) library, version 4.
+	:::
+]=]
+function Trove:AddPromise(promise)
+	if promise:getStatus() == "Started" then
+		promise:finally(function()
+			return self:_findAndRemoveFromObjects(promise, false)
+		end)
+		self:Add(promise, "cancel")
+	end
+	return promise
+end
+
+
+--[=[
 	@param object any -- Object to track
 	@param cleanupMethod string? -- Optional cleanup name override
 	@return object: any
@@ -239,17 +273,7 @@ end
 	```
 ]=]
 function Trove:Remove(object: any): boolean
-	local objects = self._objects
-	for i,obj in ipairs(objects) do
-		if obj[1] == object then
-			local n = #objects
-			objects[i] = objects[n]
-			objects[n] = nil
-			self:_cleanupObject(obj[1], obj[2])
-			return true
-		end
-	end
-	return false
+	return self:_findAndRemoveFromObjects(object, true)
 end
 
 
@@ -263,6 +287,23 @@ function Trove:Clean()
 		self:_cleanupObject(obj[1], obj[2])
 	end
 	table.clear(self._objects)
+end
+
+
+function Trove:_findAndRemoveFromObjects(object: any, cleanup: boolean): boolean
+	local objects = self._objects
+	for i,obj in ipairs(objects) do
+		if obj[1] == object then
+			local n = #objects
+			objects[i] = objects[n]
+			objects[n] = nil
+			if cleanup then
+				self:_cleanupObject(obj[1], obj[2])
+			end
+			return true
+		end
+	end
+	return true
 end
 
 
