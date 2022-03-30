@@ -1,11 +1,11 @@
 [package]
 name = "sleitnick/wait-for"
 description = "WaitFor class for awaiting instances"
-version = "0.2.0"
+version = "0.2.1"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
 [dependencies]
-Promise = "evaera/promise@^3"
+Promise = "evaera/promise@^4"
