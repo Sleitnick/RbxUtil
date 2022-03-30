@@ -30,7 +30,14 @@ local function GetObjectCleanupFunction(object, cleanupMethod)
 			return "Disconnect"
 		end
 	end
-	error("Failed to get cleanup function for object " .. t .. ": " .. tostring(object))
+	error("Failed to get cleanup function for object " .. t .. ": " .. tostring(object), 3)
+end
+
+
+local function AssertPromiseLike(object)
+	if type(object) ~= "table" or type(object.getStatus) ~= "function" or type(object.finally) ~= "function" or type(object.cancel) ~= "function" then
+		error("Did not receive a Promise as an argument", 3)
+	end
 end
 
 
@@ -197,6 +204,7 @@ end
 	:::
 ]=]
 function Trove:AddPromise(promise)
+	AssertPromiseLike(promise)
 	if promise:getStatus() == "Started" then
 		promise:finally(function()
 			return self:_findAndRemoveFromObjects(promise, false)
