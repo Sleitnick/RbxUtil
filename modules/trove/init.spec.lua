@@ -133,6 +133,37 @@ return function()
 			expect(function() trove:AttachToInstance(part) end).to.throw()
 		end)
 
+		it("should extend itself", function()
+			local subTrove = trove:Extend()
+			local called = false
+			subTrove:Add(function()
+				called = true
+			end)
+			expect(subTrove).to.be.a("table")
+			expect(getmetatable(subTrove)).to.equal(Trove)
+			trove:Clean()
+			expect(called).to.equal(true)
+		end)
+
+		it("should clone an instance", function()
+			local name = "TroveCloneTest"
+			local p1 = trove:Construct(Instance.new, "Part")
+			p1.Name = name
+			local p2 = trove:Clone(p1)
+			expect(typeof(p2)).to.equal("Instance")
+			expect(p2).to.never.equal(p1)
+			expect(p2.Name).to.equal(name)
+			expect(p1.Name).to.equal(p2.Name)
+		end)
+
+		it("should clean up a thread", function()
+			local co = coroutine.create(function() end)
+			trove:Add(co)
+			expect(coroutine.status(co)).to.equal("suspended")
+			trove:Clean()
+			expect(coroutine.status(co)).to.equal("dead")
+		end)
+
 	end)
 
 end

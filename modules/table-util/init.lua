@@ -317,7 +317,7 @@ end
 
 	```lua
 	local t = {A = 10, B = 20, C = 30}
-	local t2 = TableUtil.Filter(t, function(key, value)
+	local t2 = TableUtil.Filter(t, function(value, key)
 		return value > 15
 	end)
 	print(t2) --> {B = 40, C = 60}

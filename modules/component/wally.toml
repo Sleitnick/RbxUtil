@@ -1,12 +1,14 @@
 [package]
 name = "sleitnick/component"
 description = "Component class"
-version = "2.2.0"
+version = "2.4.4"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
 [dependencies]
-Signal = "sleitnick/signal@^1.0"
-Trove = "sleitnick/trove@^0.1"
+Signal = "sleitnick/signal@^1"
+Symbol = "sleitnick/symbol@^2"
+Trove = "sleitnick/trove@^0.3"
+Promise = "evaera/promise@^3"

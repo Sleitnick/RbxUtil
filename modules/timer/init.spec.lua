@@ -56,6 +56,18 @@ return function()
 			expect(ticks).to.equal(1)
 		end)
 
+		it("should detect if running", function()
+			expect(timer:IsRunning()).to.equal(false)
+			timer:Start()
+			expect(timer:IsRunning()).to.equal(true)
+			timer:Stop()
+			expect(timer:IsRunning()).to.equal(false)
+			timer:StartNow()
+			expect(timer:IsRunning()).to.equal(true)
+			timer:Stop()
+			expect(timer:IsRunning()).to.equal(false)
+		end)
+
 	end)
 
 end

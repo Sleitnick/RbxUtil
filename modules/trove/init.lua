@@ -4,6 +4,7 @@
 
 
 local FN_MARKER = newproxy()
+local THREAD_MARKER = newproxy()
 
 local RunService = game:GetService("RunService")
 
@@ -12,6 +13,8 @@ local function GetObjectCleanupFunction(object, cleanupMethod)
 	local t = typeof(object)
 	if t == "function" then
 		return FN_MARKER
+	elseif t == "thread" then
+		return THREAD_MARKER
 	end
 	if cleanupMethod then
 		return cleanupMethod
@@ -41,12 +44,46 @@ Trove.__index = Trove
 
 
 --[=[
+	@return Trove
 	Constructs a Trove object.
 ]=]
 function Trove.new()
 	local self = setmetatable({}, Trove)
 	self._objects = {}
 	return self
+end
+
+
+--[=[
+	@return Trove
+	Creates and adds another trove to itself. This is just shorthand
+	for `trove:Construct(Trove)`. This is useful for contexts where
+	the trove object is present, but the class itself isn't.
+
+	:::note
+	This does _not_ clone the trove. In other words, the objects in the
+	trove are not given to the new constructed trove. This is simply to
+	construct a new Trove and add it as an object to track.
+	:::
+
+	```lua
+	local trove = Trove.new()
+	local subTrove = trove:Extend()
+
+	trove:Clean() -- Cleans up the subTrove too
+	```
+]=]
+function Trove:Extend()
+	return self:Construct(Trove)
+end
+
+
+--[=[
+	Clones the given instance and adds it to the trove. Shorthand for
+	`trove:Add(instance:Clone())`.
+]=]
+function Trove:Clone(instance: Instance): Instance
+	return self:Add(instance:Clone())
 end
 
 
@@ -66,6 +103,9 @@ end
 	
 	The result from either of the two options
 	will be added to the trove.
+
+	This is shorthand for `trove:Add(SomeClass.new(...))`
+	and `trove:Add(SomeFunction(...))`.
 
 	```lua
 	local Signal = require(somewhere.Signal)
@@ -94,10 +134,12 @@ end
 
 --[=[
 	@param signal RBXScriptSignal
-	@param fn (...: any) -> any
+	@param fn (...: any) -> ()
 	@return RBXScriptConnection
 	Connects the function to the signal, adds the connection
 	to the trove, and then returns the connection.
+
+	This is shorthand for `trove:Add(signal:Connect(fn))`.
 
 	```lua
 	trove:Connect(workspace.ChildAdded, function(instance)
@@ -113,7 +155,7 @@ end
 --[=[
 	@param name string
 	@param priority number
-	@param fn (dt: number) -> nil
+	@param fn (dt: number) -> ()
 	Calls `RunService:BindToRenderStep` and registers a function in the
 	trove that will call `RunService:UnbindFromRenderStep` on cleanup.
 
@@ -123,7 +165,7 @@ end
 	end)
 	```
 ]=]
-function Trove:BindToRenderStep(name: string, priority: number, fn: (dt: number) -> nil)
+function Trove:BindToRenderStep(name: string, priority: number, fn: (dt: number) -> ())
 	RunService:BindToRenderStep(name, priority, fn)
 	self:Add(function()
 		RunService:UnbindFromRenderStep(name)
@@ -138,12 +180,16 @@ end
 	Adds an object to the trove. Once the trove is cleaned or
 	destroyed, the object will also be cleaned up.
 
-	The object must be any of the following:
-	- Roblox instance (e.g. Part)
-	- RBXScriptConnection (e.g. `workspace.ChildAdded:Connect(function() end)`)
-	- Function
-	- Table with either a `Destroy` or `Disconnect` method
-	- Table with custom `cleanupMethod` name provided
+	The following types are accepted (e.g. `typeof(object)`):
+
+	| Type | Cleanup |
+	| ---- | ------- |
+	| `Instance` | `object:Destroy()` |
+	| `RBXScriptConnection` | `object:Disconnect()` |
+	| `function` | `object()` |
+	| `thread` | `coroutine.close(object)` |
+	| `table` | `object:Destroy()` _or_ `object:Disconnect()` |
+	| `table` with `cleanupMethod` | `object:<cleanupMethod>()` |
 
 	Returns the object added.
 
@@ -223,6 +269,8 @@ end
 function Trove:_cleanupObject(object, cleanupMethod)
 	if cleanupMethod == FN_MARKER then
 		object()
+	elseif cleanupMethod == THREAD_MARKER then
+		coroutine.close(object)
 	else
 		object[cleanupMethod](object)
 	end

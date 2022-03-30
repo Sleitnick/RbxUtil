@@ -120,14 +120,30 @@ return function()
 		it("should be able to get component from the instance", function()
 			local instance = CreateTaggedInstance()
 			task.wait()
-			local component = Component.FromInstance(instance, TestComponentMain)
+			local component = TestComponentMain:FromInstance(instance)
 			expect(component).to.be.ok()
+		end)
+
+		it("should be able to get all component instances existing", function()
+			local numComponents = 3
+			local instances = table.create(numComponents)
+			for i = 1,numComponents do
+				local instance = CreateTaggedInstance()
+				instances[i] = instance
+			end
+			task.wait()
+			local components = TestComponentMain:GetAll()
+			expect(components).to.be.a("table")
+			expect(#components).to.equal(numComponents)
+			for _,c in ipairs(components) do
+				expect(table.find(instances, c.Instance)).to.be.ok()
+			end
 		end)
 
 		it("should call lifecycle methods and extension functions", function()
 			local instance = CreateTaggedInstance()
 			task.wait(0.2)
-			local component = Component.FromInstance(instance, TestComponentMain)
+			local component = TestComponentMain:FromInstance(instance)
 			expect(component).to.be.ok()
 			expect(component.Data).to.equal("abcdef")
 			expect(component.DidHeartbeat).to.equal(true)
@@ -141,7 +157,7 @@ return function()
 		it("should get another component linked to the same instance", function()
 			local instance = CreateTaggedInstance()
 			task.wait()
-			local component = Component.FromInstance(instance, TestComponentMain)
+			local component = TestComponentMain:FromInstance(instance)
 			expect(component).to.be.ok()
 			expect(component.Another).to.be.ok()
 			expect(component.Another:GetData()).to.equal(true)
@@ -175,7 +191,7 @@ return function()
 			end
 
 			local function Check(inst, comp, shouldExist)
-				local c = Component.FromInstance(inst, comp)
+				local c = comp:FromInstance(inst)
 				if shouldExist then
 					expect(c).to.be.ok()
 				else
@@ -234,7 +250,7 @@ return function()
 				e2.extend = ex2
 				local instance = CreateTaggedInstance()
 				task.wait()
-				local component = TestComponent.FromInstance(instance, TestComponent)
+				local component = TestComponent:FromInstance(instance)
 				expect(component).to.be.ok()
 				if ex1 then
 					expect(component.E1).to.equal(true)
@@ -253,6 +269,48 @@ return function()
 			SetAndCheck(true, false)
 			SetAndCheck(false, true)
 
+		end)
+
+		it("should allow yielding within construct", function()
+
+			local CUSTOM_TAG = "CustomTag"
+
+			local TestComponent = Component.new({Tag = CUSTOM_TAG})
+
+			local numConstruct = 0
+
+			function TestComponent:Construct()
+				numConstruct += 1
+				task.wait(0.5)
+			end
+
+			local p = Instance.new("Part")
+			p.Anchored = true
+			p.Parent = game:GetService("ReplicatedStorage")
+			CollectionService:AddTag(p, CUSTOM_TAG)
+			local newP = p:Clone()
+			newP.Parent = workspace
+
+			task.wait(0.6)
+
+			expect(numConstruct).to.equal(1)
+			p:Destroy()
+			newP:Destroy()
+
+		end)
+
+		it("should wait for instance", function()
+			local p = Instance.new("Part")
+			p.Anchored = true
+			p.Parent = workspace
+			task.delay(0.1, function()
+				CollectionService:AddTag(p, TAG)
+			end)
+			local success, c = TestComponentMain:WaitForInstance(p):timeout(1):await()
+			expect(success).to.equal(true)
+			expect(c).to.be.a("table")
+			expect(c.Instance).to.equal(p)
+			p:Destroy()
 		end)
 
 	end)
