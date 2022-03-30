@@ -10,5 +10,5 @@ realm = "shared"
 [dependencies]
 Signal = "sleitnick/signal@^1"
 Symbol = "sleitnick/symbol@^2"
-Trove = "sleitnick/trove@^0.3"
+Trove = "sleitnick/trove@^0.4"
 Promise = "evaera/promise@^4"
