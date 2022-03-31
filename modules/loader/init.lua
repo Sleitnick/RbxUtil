@@ -21,7 +21,7 @@
 local Loader = {}
 
 type Module = {}
-type Modules = {Module}
+type Modules = { [string]: Module }
 
 
 --[=[
@@ -35,7 +35,7 @@ function Loader.LoadChildren(parent: Instance): Modules
 	for _,child in ipairs(parent:GetChildren()) do
 		if child:IsA("ModuleScript") then
 			local m = require(child)
-			table.insert(modules, m)
+			modules[child.Name] = m
 		end
 	end
 	return modules
@@ -53,7 +53,7 @@ function Loader.LoadDescendants(parent: Instance): Modules
 	for _,descendant in ipairs(parent:GetDescendants()) do
 		if descendant:IsA("ModuleScript") then
 			local m = require(descendant)
-			table.insert(modules, m)
+			modules[descendant.Name] = m
 		end
 	end
 	return modules
