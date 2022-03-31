@@ -35,11 +35,11 @@ return function()
 			local s2 = Streamable.new(instanceFolder, "XYZ")
 			local observe = 0
 			local cleaned = 0
-			StreamableUtil.Compound({S1 = s1; S2 = s2}, function(_streamables, trove)
+			StreamableUtil.Compound({S1 = s1; S2 = s2}, function(_streamables)
 				observe += 1
-				trove:Add(function()
+				return function()
 					cleaned += 1
-				end)
+				end
 			end)
 			local i1 = CreateInstance("ABC")
 			local i2 = CreateInstance("XYZ")
@@ -55,6 +55,28 @@ return function()
 			task.wait()
 			expect(observe).to.equal(2)
 			expect(cleaned).to.equal(2)
+			s1:Destroy()
+			s2:Destroy()
+		end)
+
+		it("should clean up a compound streamable", function()
+			local s1 = Streamable.new(instanceFolder, "ABC")
+			local s2 = Streamable.new(instanceFolder, "XYZ")
+			local observe = 0
+			local cleaned = 0
+			local cleanup = StreamableUtil.Compound({S1 = s1; S2 = s2}, function(_streamables)
+				observe += 1
+				return function()
+					cleaned += 1
+				end
+			end)
+			local _i1 = CreateInstance("ABC")
+			local _i2 = CreateInstance("XYZ")
+			task.wait()
+			cleanup()
+			task.wait()
+			expect(observe).to.equal(1)
+			expect(cleaned).to.equal(1)
 			s1:Destroy()
 			s2:Destroy()
 		end)
