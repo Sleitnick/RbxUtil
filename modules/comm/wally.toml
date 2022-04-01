@@ -1,7 +1,7 @@
 [package]
 name = "sleitnick/comm"
 description = "Comm library for remote communication"
-version = "0.2.2"
+version = "0.2.3"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"
@@ -10,4 +10,4 @@ realm = "shared"
 [dependencies]
 Signal = "sleitnick/signal@1"
 Option = "sleitnick/option@1"
-Promise = "evaera/promise@3"
+Promise = "evaera/promise@4"
