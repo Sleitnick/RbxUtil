@@ -29,9 +29,6 @@ ClientComm.__index = ClientComm
 ]=]
 
 --[=[
-	@param parent Instance
-	@param usePromise boolean
-	@param namespace string?
 	@return ClientComm
 	Constructs a ClientComm object.
 
