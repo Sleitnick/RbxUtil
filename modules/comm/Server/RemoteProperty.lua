@@ -19,6 +19,21 @@ local None = Util.None
 	Values set can be anything that can pass through a
 	[RemoteEvent](https://developer.roblox.com/en-us/articles/Remote-Functions-and-Events#parameter-limitations).
 
+	Here is a cheat-sheet for the below methods:
+	- Setting data
+		- `Set`: Set "top" value for all current and future players. Overrides any custom-set data per player.
+		- `SetTop`: Set the "top" value for all players, but does _not_ override any custom-set data per player.
+		- `SetFor`: Set custom data for the given player. Overrides the "top" value. (_Can be nil_)
+		- `SetForList`: Same as `SetFor`, but accepts a list of players.
+		- `SetFilter`: Accepts a predicate function which checks for which players to set.
+	- Clearing data
+		- `ClearFor`: Clears the custom data set for a given player. Player will start using the "top" level value instead.
+		- `ClearForList`: Same as `ClearFor`, but accepts a list of players.
+		- `ClearFilter`: Accepts a predicate function which checks for which players to clear.
+	- Getting data
+		- `Get`: Retrieves the "top" value
+		- `GetFor`: Gets the current value for the given player. If cleared, returns the top value.
+
 	:::caution Network
 	Calling any of the data setter methods (e.g. `Set()`) will
 	fire the underlying RemoteEvent to replicate data to the
@@ -53,7 +68,6 @@ function RemoteProperty.new(parent: Instance, name: string, initialValue: any, i
 end
 
 --[=[
-	@param value any
 	Sets the top-level value of all clients to the same value.
 	
 	:::note Override Per-Player Data
@@ -76,7 +90,6 @@ function RemoteProperty:Set(value: any)
 end
 
 --[=[
-	@param value any
 	Set the top-level value of the property, but does not override
 	any per-player data (e.g. set with `SetFor` or `SetFilter`).
 	Any player without custom-set data will receive this new data.
@@ -107,7 +120,6 @@ function RemoteProperty:SetTop(value: any)
 end
 
 --[=[
-	@param predicate (player: Player, value: any) -> boolean
 	@param value any -- Value to set for the clients (and to the predicate)
 	Sets the value for specific clients that pass the `predicate`
 	function test. This can be used to finely set the values
@@ -130,8 +142,6 @@ function RemoteProperty:SetFilter(predicate: (Player, any) -> boolean, value: an
 end
 
 --[=[
-	@param player Player
-	@param value any
 	Set the value of the property for a specific player. This
 	will override the value used by `Set` (and the initial value
 	set for the property when created).
@@ -153,7 +163,21 @@ function RemoteProperty:SetFor(player: Player, value: any)
 end
 
 --[=[
-	@param player Player
+	Set the value of the property for specific players. This just
+	loops through the players given and calls `SetFor`.
+
+	```lua
+	local players = {player1, player2, player3}
+	remoteProperty:SetForList(players, "CustomData")
+	```
+]=]
+function RemoteProperty:SetForList(players: {Player}, value: any)
+	for _,player in ipairs(players) do
+		self:SetFor(player, value)
+	end
+end
+
+--[=[
 	Clears the custom property value for the given player. When
 	this occurs, the player will reset to use the top-level
 	value held by this property (either the value set when the
@@ -181,7 +205,29 @@ function RemoteProperty:ClearFor(player: Player)
 end
 
 --[=[
-	@return any
+	Clears the custom value for the given players. This
+	just loops through the list of players and calls
+	the `ClearFor` method for each player.
+]=]
+function RemoteProperty:ClearForList(players: {Player})
+	for _,player in ipairs(players) do
+		self:ClearFor(player)
+	end
+end
+
+--[=[
+	The same as `SetFiler`, except clears the custom value
+	for any player that passes the predicate.
+]=]
+function RemoteProperty:ClearFilter(predicate: (Player) -> boolean)
+	for _,player in ipairs(Players:GetPlayers()) do
+		if predicate(player) then
+			self:ClearFor(player)
+		end
+	end
+end
+
+--[=[
 	Returns the top-level value held by the property. This will
 	either be the initial value set, or the last value set
 	with `Set()`.
@@ -196,7 +242,6 @@ function RemoteProperty:Get(): any
 end
 
 --[=[
-	@return any
 	Returns the current value for the given player. This value
 	will depend on if `SetFor` or `SetFilter` has affected the
 	custom value for the player. If so, that custom value will
