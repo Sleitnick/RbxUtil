@@ -8,7 +8,7 @@
 type Table = {any}
 type MapPredicate = (any, any, Table) -> any
 type FilterPredicate = (any, any, Table) -> boolean
-type ReducePredicate = (number, any, any, Table) -> any
+type ReducePredicate = (any, any, any, Table) -> any
 type FindCallback = (any, any, Table) -> boolean
 type IteratorFunc = (t: Table, k: any) -> (any, any)
 
@@ -777,7 +777,7 @@ end
 ]=]
 local function Zip(...): (IteratorFunc, Table, any)
 	assert(select("#", ...) > 0, "Must supply at least 1 table")
-	local function ZipIteratorArray(all: Table, k: number)
+	local function ZipIteratorArray(all: Table, k: number): (number?, {any}?)
 		k += 1
 		local values = {}
 		for i,t in ipairs(all) do
@@ -790,7 +790,7 @@ local function Zip(...): (IteratorFunc, Table, any)
 		end
 		return k, values
 	end
-	local function ZipIteratorMap(all: Table, k: any)
+	local function ZipIteratorMap(all: Table, k: any): (number?, {any}?)
 		local values = {}
 		for i,t in ipairs(all) do
 			local v = next(t, k)
