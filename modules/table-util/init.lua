@@ -47,30 +47,19 @@ local rng = Random.new()
 	`true` will result in a stack-overflow.
 ]=]
 local function Copy(t: Table, deep: boolean?): Table
-	if deep then
-		local function DeepCopy(tbl)
-			local tCopy = table.create(#tbl)
-			for k,v in pairs(tbl) do
-				if type(v) == "table" then
-					tCopy[k] = DeepCopy(v)
-				else
-					tCopy[k] = v
-				end
-			end
-			return tCopy
-		end
-		return DeepCopy(t)
-	else
-		if #t > 0 then
-			return table.move(t, 1, #t, 1, table.create(#t))
-		else
-			local tCopy = {}
-			for k,v in pairs(t) do
-				tCopy[k] = v
-			end
-			return tCopy
-		end
+	if not deep then
+		return table.clone(t)
 	end
+	local function DeepCopy(tbl)
+		local tCopy = table.clone(tbl)
+		for k,v in pairs(tCopy) do
+			if type(v) == "table" then
+				tCopy[k] = DeepCopy(v)
+			end
+		end
+		return tCopy
+	end
+	return DeepCopy(t)
 end
 
 
