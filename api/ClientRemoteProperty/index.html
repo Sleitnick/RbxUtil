@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="generator" content="Docusaurus v2.0.0-beta.9">
 <title data-react-helmet="true">ClientRemoteProperty | RbxUtil</title><meta data-react-helmet="true" property="og:title" content="ClientRemoteProperty | RbxUtil"><meta data-react-helmet="true" name="twitter:card" content="summary_large_image"><meta data-react-helmet="true" name="description" content="Created via `ClientComm:GetProperty()`."><meta data-react-helmet="true" property="og:description" content="Created via `ClientComm:GetProperty()`."><meta data-react-helmet="true" property="og:url" content="https://Sleitnick.github.io/RbxUtil/api/ClientRemoteProperty"><meta data-react-helmet="true" name="docusaurus_locale" content="en"><meta data-react-helmet="true" name="docusaurus_tag" content="default"><link data-react-helmet="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/ClientRemoteProperty"><link data-react-helmet="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/ClientRemoteProperty" hreflang="en"><link data-react-helmet="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/ClientRemoteProperty" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.302001c7.css">
-<link rel="preload" href="/RbxUtil/assets/js/runtime~main.3c3bca71.js" as="script">
-<link rel="preload" href="/RbxUtil/assets/js/main.1292c2a6.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/runtime~main.1890f48c.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/main.aa8991f1.js" as="script">
 </head>
 <body>
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -21,7 +21,7 @@
 	<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"New value"</span><span class="token punctuation">,</span> value<span class="token punctuation">)</span>
 <span class="token keyword">end</span><span class="token punctuation">)</span>
 </code></pre>
-</div><h2 class="anchor anchorWithStickyNavbar_31ik" id="functions">Functions<a aria-hidden="true" class="hash-link" href="#functions" title="Direct link to heading">​</a></h2><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Get"><code style="text-decoration:none">Get</code><a aria-hidden="true" class="hash-link" href="#Get" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/comm/Client/ClientRemoteProperty.lua#L61"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>ClientRemoteProperty<!-- -->:</code><code class="green_3LnD">Get</code><code>(</code><code>) → </code><code class="blue_2Afy">any</code></div><div>
+</div><h2 class="anchor anchorWithStickyNavbar_31ik" id="functions">Functions<a aria-hidden="true" class="hash-link" href="#functions" title="Direct link to heading">​</a></h2><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Get"><code style="text-decoration:none">Get</code><a aria-hidden="true" class="hash-link" href="#Get" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/comm/Client/ClientRemoteProperty.lua#L60"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>ClientRemoteProperty<!-- -->:</code><code class="green_3LnD">Get</code><code>(</code><code>) → </code><code class="blue_2Afy">any</code></div><div>
 <p>Gets the value of the property object.</p>
 <div class="admonition admonition-caution alert alert--warning">
   <div class="admonition-heading">
@@ -32,11 +32,11 @@
   <div class="admonition-content">
     <p>
       This value might not be ready right away. Use <code>OnReady()</code> or <code>IsReady()</code>
-      before calling <code>Get()</code>.
+      before calling <code>Get()</code>. If not ready, this value will return <code>nil</code>.
     </p>
   </div>
 </div>
-</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="OnReady"><code style="text-decoration:none">OnReady</code><a aria-hidden="true" class="hash-link" href="#OnReady" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/comm/Client/ClientRemoteProperty.lua#L84"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>ClientRemoteProperty<!-- -->:</code><code class="green_3LnD">OnReady</code><code>(</code><code>) → </code><code class="blue_2Afy">Promise</code><code class="op_1JtD">&lt;</code><code class="blue_2Afy">any</code><code class="op_1JtD">&gt;</code></div><div>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="OnReady"><code style="text-decoration:none">OnReady</code><a aria-hidden="true" class="hash-link" href="#OnReady" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/comm/Client/ClientRemoteProperty.lua#L83"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>ClientRemoteProperty<!-- -->:</code><code class="green_3LnD">OnReady</code><code>(</code><code>) → </code><code class="blue_2Afy">Promise</code><code class="op_1JtD">&lt;</code><code class="blue_2Afy">any</code><code class="op_1JtD">&gt;</code></div><div>
 <p>
   Returns a Promise which resolves once the property object is
   ready to be used. The resolved promise will also contain the
@@ -53,7 +53,7 @@ clientRemoteProperty<span class="token punctuation">:</span><span class="token f
 	<span class="token function">print</span><span class="token punctuation">(</span>initialValue<span class="token punctuation">)</span>
 <span class="token keyword">end</span>
 </code></pre>
-</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="IsReady"><code style="text-decoration:none">IsReady</code><a aria-hidden="true" class="hash-link" href="#IsReady" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/comm/Client/ClientRemoteProperty.lua#L110"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>ClientRemoteProperty<!-- -->:</code><code class="green_3LnD">IsReady</code><code>(</code><code>) → </code><code class="blue_2Afy">boolean</code></div><div>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="IsReady"><code style="text-decoration:none">IsReady</code><a aria-hidden="true" class="hash-link" href="#IsReady" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/comm/Client/ClientRemoteProperty.lua#L108"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>ClientRemoteProperty<!-- -->:</code><code class="green_3LnD">IsReady</code><code>(</code><code>) → </code><code class="blue_2Afy">boolean</code></div><div>
 <p>
   Returns <code>true</code> if the property object is ready to be
   used. In other words, it has successfully gained
@@ -64,7 +64,7 @@ clientRemoteProperty<span class="token punctuation">:</span><span class="token f
 	<span class="token keyword">local</span> value <span class="token operator">=</span> clientRemoteProperty<span class="token punctuation">:</span><span class="token function">Get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token keyword">end</span>
 </code></pre>
-</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Observe"><code style="text-decoration:none">Observe</code><a aria-hidden="true" class="hash-link" href="#Observe" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/comm/Client/ClientRemoteProperty.lua#L135"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>ClientRemoteProperty<!-- -->:</code><code class="green_3LnD">Observe</code><code>(</code><code>observer<!-- -->: </code><code class="purple__nFc">(</code><code class="blue_2Afy">any</code><code class="purple__nFc">)</code><code class="purple__nFc"> → </code><code class="blue_2Afy">nil</code><code>) → </code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/RemoteSignal#Connection">Connection</a></code></div><div>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Observe"><code style="text-decoration:none">Observe</code><a aria-hidden="true" class="hash-link" href="#Observe" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/comm/Client/ClientRemoteProperty.lua#L133"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>ClientRemoteProperty<!-- -->:</code><code class="green_3LnD">Observe</code><code>(</code><code>observer<!-- -->: </code><code class="purple__nFc">(</code><code class="blue_2Afy">any</code><code class="purple__nFc">)</code><code class="purple__nFc"> → </code><code class="blue_2Afy">nil</code><code>) → </code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/RemoteSignal#Connection">Connection</a></code></div><div>
 <p>
   Observes the value of the property. The observer will
   be called right when the value is first ready, and
@@ -83,23 +83,23 @@ clientRemoteProperty<span class="token punctuation">:</span><span class="token f
 
 clientRemoteProperty<span class="token punctuation">:</span><span class="token function">Observe</span><span class="token punctuation">(</span>ObserveValue<span class="token punctuation">)</span>
 </code></pre>
-</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Destroy"><code style="text-decoration:none">Destroy</code><a aria-hidden="true" class="hash-link" href="#Destroy" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/comm/Client/ClientRemoteProperty.lua#L145"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>ClientRemoteProperty<!-- -->:</code><code class="green_3LnD">Destroy</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Destroy"><code style="text-decoration:none">Destroy</code><a aria-hidden="true" class="hash-link" href="#Destroy" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/comm/Client/ClientRemoteProperty.lua#L143"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>ClientRemoteProperty<!-- -->:</code><code class="green_3LnD">Destroy</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
 <p>Destroys the ClientRemoteProperty object.</p>
 </div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
     &quot;functions&quot;: [
         {
             &quot;name&quot;: &quot;Get&quot;,
-            &quot;desc&quot;: &quot;Gets the value of the property object.\n\n:::caution\nThis value might not be ready right away. Use `OnReady()` or `IsReady()`\nbefore calling `Get()`.\n:::&quot;,
+            &quot;desc&quot;: &quot;Gets the value of the property object.\n\n:::caution\nThis value might not be ready right away. Use `OnReady()` or `IsReady()`\nbefore calling `Get()`. If not ready, this value will return `nil`.\n:::&quot;,
             &quot;params&quot;: [],
             &quot;returns&quot;: [
                 {
                     &quot;desc&quot;: &quot;&quot;,
-                    &quot;lua_type&quot;: &quot;any&quot;
+                    &quot;lua_type&quot;: &quot;any\n&quot;
                 }
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 61,
+                &quot;line&quot;: 60,
                 &quot;path&quot;: &quot;modules/comm/Client/ClientRemoteProperty.lua&quot;
             }
         },
@@ -115,7 +115,7 @@ clientRemoteProperty<span class="token punctuation">:</span><span class="token f
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 84,
+                &quot;line&quot;: 83,
                 &quot;path&quot;: &quot;modules/comm/Client/ClientRemoteProperty.lua&quot;
             }
         },
@@ -126,12 +126,12 @@ clientRemoteProperty<span class="token punctuation">:</span><span class="token f
             &quot;returns&quot;: [
                 {
                     &quot;desc&quot;: &quot;&quot;,
-                    &quot;lua_type&quot;: &quot;boolean&quot;
+                    &quot;lua_type&quot;: &quot;boolean\n&quot;
                 }
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 110,
+                &quot;line&quot;: 108,
                 &quot;path&quot;: &quot;modules/comm/Client/ClientRemoteProperty.lua&quot;
             }
         },
@@ -153,7 +153,7 @@ clientRemoteProperty<span class="token punctuation">:</span><span class="token f
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 135,
+                &quot;line&quot;: 133,
                 &quot;path&quot;: &quot;modules/comm/Client/ClientRemoteProperty.lua&quot;
             }
         },
@@ -164,7 +164,7 @@ clientRemoteProperty<span class="token punctuation">:</span><span class="token f
             &quot;returns&quot;: [],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 145,
+                &quot;line&quot;: 143,
                 &quot;path&quot;: &quot;modules/comm/Client/ClientRemoteProperty.lua&quot;
             }
         }
@@ -191,7 +191,7 @@ clientRemoteProperty<span class="token punctuation">:</span><span class="token f
         &quot;path&quot;: &quot;modules/comm/Client/ClientRemoteProperty.lua&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_35-E thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#Changed" class="table-of-contents__link toc-highlight">Changed</a></li></ul></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#Destroy" class="table-of-contents__link toc-highlight">:Destroy</a></li><li><a href="#Get" class="table-of-contents__link toc-highlight">:Get</a></li><li><a href="#IsReady" class="table-of-contents__link toc-highlight">:IsReady</a></li><li><a href="#Observe" class="table-of-contents__link toc-highlight">:Observe</a></li><li><a href="#OnReady" class="table-of-contents__link toc-highlight">:OnReady</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2022 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/RbxUtil/assets/js/runtime~main.3c3bca71.js"></script>
-<script src="/RbxUtil/assets/js/main.1292c2a6.js"></script>
+<script src="/RbxUtil/assets/js/runtime~main.1890f48c.js"></script>
+<script src="/RbxUtil/assets/js/main.aa8991f1.js"></script>
 </body>
 </html>
