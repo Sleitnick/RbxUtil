@@ -47,30 +47,19 @@ local rng = Random.new()
 	`true` will result in a stack-overflow.
 ]=]
 local function Copy(tbl: Table, deep: boolean?): Table
-	if deep then
-		local function DeepCopy(t: Table): Table
-			local tCopy = table.create(#t)
-			for k,v in pairs(t) do
-				if type(v) == "table" then
-					tCopy[k] = DeepCopy(v)
-				else
-					tCopy[k] = v
-				end
-			end
-			return tCopy
-		end
-		return DeepCopy(tbl)
-	else
-		if #tbl > 0 then
-			return table.move(tbl, 1, #tbl, 1, table.create(#tbl))
-		else
-			local tCopy = {}
-			for k,v in pairs(tbl) do
-				tCopy[k] = v
-			end
-			return tCopy
-		end
+	if not deep then
+		return table.clone(tbl)
 	end
+	local function DeepCopy(t)
+		local tCopy = table.clone(t)
+		for k, v in pairs(tCopy) do
+			if type(v) == "table" then
+				tCopy[k] = DeepCopy(v)
+			end
+		end
+		return tCopy
+	end
+	return DeepCopy(tbl)
 end
 
 
@@ -106,7 +95,7 @@ local function Sync(source: Table, template: Table): Table
 	assert(type(source) == "table", "First argument must be a table")
 	assert(type(template) == "table", "Second argument must be a table")
 
-	local tbl = Copy(source)
+	local tbl = table.clone(source)
 
 	-- If 'tbl' has something 'template' doesn't, then remove it from 'tbl'
 	-- If 'tbl' has something of a different type than 'template', copy from 'template'
@@ -176,7 +165,7 @@ local function Reconcile(source: Table, template: Table): Table
 	assert(type(source) == "table", "First argument must be a table")
 	assert(type(template) == "table", "Second argument must be a table")
 
-	local tbl = Copy(source)
+	local tbl = table.clone(source)
 
 	for k,v in pairs(template) do
 		local sv = source[k]
@@ -402,7 +391,7 @@ end
 	```
 ]=]
 local function Assign(target: Table, ...: Table): Table
-	local tbl = Copy(target)
+	local tbl = table.clone(target)
 	for _,src in ipairs({...}) do
 		for k,v in pairs(src) do
 			tbl[k] = v
@@ -432,7 +421,7 @@ end
 	This function works on arrays, but not dictionaries.
 ]=]
 local function Extend(target: Table, extension: Table): Table
-	local tbl = Copy(target)
+	local tbl = table.clone(target)
 	for _,v in ipairs(extension) do
 		table.insert(tbl, v)
 	end
@@ -487,7 +476,7 @@ end
 ]=]
 local function Shuffle(tbl: Table, rngOverride: Random?): Table
 	assert(type(tbl) == "table", "First argument must be a table")
-	local shuffled = Copy(tbl)
+	local shuffled = table.clone(tbl)
 	local random = if typeof(rngOverride) == "Random" then rngOverride else rng
 	for i = #tbl, 2, -1 do
 		local j = random:NextInteger(1, i)
@@ -519,7 +508,7 @@ end
 local function Sample(tbl: Table, size: number, rngOverride: Random?): Table
 	assert(type(tbl) == "table", "First argument must be a table")
 	assert(type(size) == "number", "Second argument must be a number")
-	local shuffled = Copy(tbl)
+	local shuffled = table.clone(tbl)
 	local random = if typeof(rngOverride) == "Random" then rngOverride else rng
 	local len = #tbl
 	size = math.clamp(size, 1, len)
@@ -776,7 +765,7 @@ end
 ]=]
 local function Zip(...): (IteratorFunc, Table, any?)
 	assert(select("#", ...) > 0, "Must supply at least 1 table")
-	local function ZipIteratorArray(all: Table, k: number)
+	local function ZipIteratorArray(all: Table, k: number): (number?, {any}?)
 		k += 1
 		local values = {}
 		for i,t in ipairs(all) do
@@ -789,7 +778,7 @@ local function Zip(...): (IteratorFunc, Table, any?)
 		end
 		return k, values
 	end
-	local function ZipIteratorMap(all: Table, k: any)
+	local function ZipIteratorMap(all: Table, k: any): (number?, {any}?)
 		local values = {}
 		for i,t in ipairs(all) do
 			local v = next(t, k)

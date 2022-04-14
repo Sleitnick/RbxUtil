@@ -17,7 +17,7 @@ ClientRemoteSignal.__index = ClientRemoteSignal
 --[=[
 	@within ClientRemoteSignal
 	@interface Connection
-	.Disconnect () -> nil
+	.Disconnect () -> ()
 ]=]
 
 function ClientRemoteSignal.new(re: RemoteEvent, inboundMiddleware: Types.ClientMiddleware?, outboudMiddleware: Types.ClientMiddleware?)
@@ -62,13 +62,13 @@ function ClientRemoteSignal:_processOutboundMiddleware(...: any)
 end
 
 --[=[
-	@param fn (...: any) -> any
+	@param fn (...: any) -> ()
 	@return Connection
 	Connects a function to the remote signal. The function will be
 	called anytime the equivalent server-side RemoteSignal is
 	fired at this specific client that created this client signal.
 ]=]
-function ClientRemoteSignal:Connect(fn)
+function ClientRemoteSignal:Connect(fn: (...any) -> ())
 	if self._directConnect then
 		return self._re.OnClientEvent:Connect(fn)
 	else
@@ -77,7 +77,6 @@ function ClientRemoteSignal:Connect(fn)
 end
 
 --[=[
-	@param ... any -- Arguments to pass to the server
 	Fires the equivalent server-side signal with the given arguments.
 
 	:::note Outbound Middleware
