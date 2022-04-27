@@ -256,6 +256,19 @@ return function()
 
 	end)
 
+	describe("Values", function()
+
+		it("should give all values of table", function()
+			local tbl = {a = 1, b = 2, c = 3}
+			local values = TableUtil.Values(tbl)
+			expect(#values).to.equal(3)
+			expect(table.find(values, 1)).to.be.ok()
+			expect(table.find(values, 2)).to.be.ok()
+			expect(table.find(values, 3)).to.be.ok()
+		end)
+
+	end)
+
 	describe("Find", function()
 
 		it("should find item in array", function()
