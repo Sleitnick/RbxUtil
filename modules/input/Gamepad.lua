@@ -61,7 +61,7 @@ end
 	The Gamepad class is part of the Input package.
 
 	```lua
-	local Gamepad = require(packages.Input).Gamepad
+	local Gamepad = require(packages.Input.Gamepad)
 
 	local gamepad = Gamepad.new()
 	```
