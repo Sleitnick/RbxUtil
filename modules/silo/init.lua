@@ -140,6 +140,9 @@ end
 	```
 ]=]
 function Silo:GetState<S>(): State<S>
+	if self._Parent ~= self then
+		error("can only get state from top-level silo", 2)
+	end
 	return self._State
 end
 
@@ -197,7 +200,6 @@ function Silo:Subscribe<S>(subscriber: (newState: State<S>, oldState: State<S>) 
 		error("cannot subscribe same function more than once", 2)
 	end
 	table.insert(self._Subscribers, subscriber)
-	subscriber(self:GetState())
 	return function()
 		local index = table.find(self._Subscribers, subscriber)
 		if not index then return end
@@ -224,17 +226,15 @@ end
 	```
 ]=]
 function Silo:Watch<S, T>(selector: (State<S>) -> T, onChange: (T) -> ()): () -> ()
-	if self._Parent ~= self then
-		error("can only watch on top-level silo", 2)
-	end
 	local value = selector(self:GetState())
-	onChange(value)
-	return self:Subscribe(function(state)
+	local unsubscribe = self:Subscribe(function(state)
 		local newValue = selector(state)
 		if newValue == value then return end
 		value = newValue
 		onChange(value)
 	end)
+	onChange(value)
+	return unsubscribe
 end
 
 return Silo
