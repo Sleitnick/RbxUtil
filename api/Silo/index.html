@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="generator" content="Docusaurus v2.0.0-beta.9">
+<title data-react-helmet="true">Silo | RbxUtil</title><meta data-react-helmet="true" property="og:title" content="Silo | RbxUtil"><meta data-react-helmet="true" name="twitter:card" content="summary_large_image"><meta data-react-helmet="true" name="description" content="A Silo is a state container, inspired by Redux slices and
+designed for Roblox developers."><meta data-react-helmet="true" property="og:description" content="A Silo is a state container, inspired by Redux slices and
+designed for Roblox developers."><meta data-react-helmet="true" property="og:url" content="https://Sleitnick.github.io/RbxUtil/api/Silo"><meta data-react-helmet="true" name="docusaurus_locale" content="en"><meta data-react-helmet="true" name="docusaurus_tag" content="default"><link data-react-helmet="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/Silo"><link data-react-helmet="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/Silo" hreflang="en"><link data-react-helmet="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/Silo" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.302001c7.css">
+<link rel="preload" href="/RbxUtil/assets/js/runtime~main.959bef4f.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/main.d103bc9c.js" as="script">
+</head>
+<body>
+<script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
+<div><a href="#" class="skipToContent_1oUP">Skip to main content</a></div><nav class="navbar navbar--fixed-top"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Navigation bar toggle" class="navbar__toggle clean-btn" type="button" tabindex="0"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/RbxUtil/"><b class="navbar__title">RbxUtil</b></a><a class="navbar__item navbar__link" href="/RbxUtil/docs/intro">Docs</a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/RbxUtil/api/">API</a></div><div class="navbar__items navbar__items--right"><a href="https://github.com/Sleitnick/RbxUtil" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link"><span>GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_3J9K"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></span></a><div class="toggle_71bT toggle_3Zt9 toggleDisabled_3cF-"><div class="toggleTrack_32Fl" role="button" tabindex="-1"><div class="toggleTrackCheck_3lV7"><span class="toggleIcon_O4iE">🌜</span></div><div class="toggleTrackX_S2yS"><span class="toggleIcon_O4iE">🌞</span></div><div class="toggleTrackThumb_xI_Z"></div></div><input type="checkbox" class="toggleScreenReader_28Tw" aria-label="Switch between dark and light mode"></div><div class="navbar__search"><span aria-label="expand searchbar" role="button" class="search-icon" tabindex="0"></span><input type="search" id="search_input_react" placeholder="Press S to Search..." aria-label="Search" class="navbar__search-input search-bar"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div class="main-wrapper docPageContainer_2Kz0"><div class="docPage_1bdk"><div class="docSidebarContainer_1ykS"><div class="sidebar_15mo"><nav class="menu thin-scrollbar menu_Bmed"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Signal">​Signal</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/TableUtil">​Table​Util</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Component">​Component</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><a class="menu__link menu__link--sublist" href="#">Input</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><a class="menu__link menu__link--sublist" href="#">Remote Comm</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/EnumList">​Enum​List</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Loader">​Loader</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Log">​Log</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Option">​Option</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/PID">​P​I​D</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Ser">​Ser</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Shake">​Shake</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" href="/RbxUtil/api/Silo">​Silo</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Streamable">​Streamable</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/StreamableUtil">​Streamable​Util</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Symbol">​Symbol</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/TaskQueue">​Task​Queue</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Timer">​Timer</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Trove">​Trove</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/WaitFor">​Wait​For</a></li></ul></nav><button type="button" title="Collapse sidebar" aria-label="Collapse sidebar" class="button button--secondary button--outline collapseSidebarButton_1CGd"><svg width="20" height="20" aria-hidden="true" class="collapseSidebarButtonIcon_3E-R"><g fill="#7a7a7a"><path d="M9.992 10.023c0 .2-.062.399-.172.547l-4.996 7.492a.982.982 0 01-.828.454H1c-.55 0-1-.453-1-1 0-.2.059-.403.168-.551l4.629-6.942L.168 3.078A.939.939 0 010 2.528c0-.548.45-.997 1-.997h2.996c.352 0 .649.18.828.45L9.82 9.472c.11.148.172.347.172.55zm0 0"></path><path d="M19.98 10.023c0 .2-.058.399-.168.547l-4.996 7.492a.987.987 0 01-.828.454h-3c-.547 0-.996-.453-.996-1 0-.2.059-.403.168-.551l4.625-6.942-4.625-6.945a.939.939 0 01-.168-.55 1 1 0 01.996-.997h3c.348 0 .649.18.828.45l4.996 7.492c.11.148.168.347.168.55zm0 0"></path></g></svg></button></div></div><main class="docMainContainer_28N5"><div class="container padding-vert--lg"><div class="row"><div class="col docItemCol_3WPG"><div class="docItemContainer_3XDu"><article><div class="member_qHIL markdown"><div class="tocCollapsible_1PrD theme-doc-toc-mobile tocMobile_3ryM"><button type="button" class="clean-btn tocCollapsibleButton_2O1e">On this page</button></div><header><h1 class="docTitle_1ddc" style="text-decoration:none"><span style="display:inline-block">Silo</span></h1><div class="luaClassTags_2Zrs"></div><div>
+<p>
+  A Silo is a state container, inspired by Redux slices and
+  designed for Roblox developers.
+</p>
+</div></header><h2 class="anchor anchorWithStickyNavbar_31ik" id="types">Types<a aria-hidden="true" class="hash-link" href="#types" title="Direct link to heading">​</a></h2><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="State&lt;S&gt;"><code style="text-decoration:none">State&lt;S&gt;</code><a aria-hidden="true" class="hash-link" href="#State&lt;S&gt;" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/silo/init.lua#L13"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code class="purple__nFc">type</code> <code>State&lt;S&gt;<!-- --> = </code> <code class="purple__nFc">{</code><span><code>[</code><code class="blue_2Afy">string</code><code>]</code></span><code>: </code><code class="blue_2Afy">any</code><code class="purple__nFc">}</code></div><div>
+<p>Represents state.</p>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Modifier&lt;S&gt;"><code style="text-decoration:none">Modifier&lt;S&gt;</code><a aria-hidden="true" class="hash-link" href="#Modifier&lt;S&gt;" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/silo/init.lua#L20"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code class="purple__nFc">type</code> <code>Modifier&lt;S&gt;<!-- --> = </code> <code class="purple__nFc">(</code><div class="inset_2cJr"><code class="blue_2Afy">State</code><code class="op_1JtD">&lt;</code><code class="blue_2Afy">S</code><code class="op_1JtD">&gt;</code><code class="purple__nFc">,</code></div><div class="inset_2cJr"><code class="blue_2Afy">any</code></div><code class="purple__nFc">)</code><code class="purple__nFc"> → </code><code class="purple__nFc">(</code><code class="purple__nFc">)</code></div><div>
+<p>A function that modifies state.</p>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Action&lt;A&gt;"><code style="text-decoration:none">Action&lt;A&gt;</code><a aria-hidden="true" class="hash-link" href="#Action&lt;A&gt;" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/silo/init.lua#L31"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code class="purple__nFc">interface</code> <code>Action&lt;A&gt;<!-- --> <!-- -->{</code><div class="inset_2cJr"><div><code>Name<!-- -->: </code><code class="blue_2Afy">string</code></div><div><code>Payload<!-- -->: </code><code class="blue_2Afy">A</code></div></div><code>}</code></div><div>
+<p>
+  Actions are passed to <code>Dispatch</code>. However, typically actions are
+  never constructed by hand. Use a silo's Actions table to generate
+  these actions.
+</p>
+</div><h2 class="anchor anchorWithStickyNavbar_31ik" id="functions">Functions<a aria-hidden="true" class="hash-link" href="#functions" title="Direct link to heading">​</a></h2><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="new"><code style="text-decoration:none">new</code><a aria-hidden="true" class="hash-link" href="#new" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/silo/init.lua#L79"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>Silo<!-- -->.</code><code class="green_3LnD">new</code><code>(</code><div class="inset_2cJr"><div><code>defaultState<!-- -->: </code><code class="blue_2Afy">State</code><code class="op_1JtD">&lt;</code><code class="blue_2Afy">S</code><code class="op_1JtD">&gt;</code><code>,</code></div><div><code>modifiers<!-- -->: </code><code class="purple__nFc">{</code><code class="blue_2Afy">Modifier</code><code class="op_1JtD">&lt;</code><code class="blue_2Afy">S</code><code class="op_1JtD">&gt;</code><code class="purple__nFc">}</code><code class="blue_2Afy">?</code></div></div><code>) → </code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Silo">Silo</a></code></div><div>
+<p>Create a Silo.</p>
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> statsSilo <span class="token operator">=</span> Silo<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+	<span class="token comment">-- Initial state:</span>
+	Kills <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>
+	Deaths <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>
+	Points <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+	<span class="token comment">-- Modifiers are functions that modify the state:</span>
+	SetKills <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>state<span class="token punctuation">,</span> kills<span class="token punctuation">)</span>
+		state<span class="token punctuation">.</span>Kills <span class="token operator">=</span> kills
+	<span class="token keyword">end</span><span class="token punctuation">,</span>
+	AddPoints <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>state<span class="token punctuation">,</span> points<span class="token punctuation">)</span>
+		state<span class="token punctuation">.</span>Points <span class="token operator">+</span><span class="token operator">=</span> points
+	<span class="token keyword">end</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment">-- Use Actions to modify the state:</span>
+statsSilo<span class="token punctuation">:</span><span class="token function">Dispatch</span><span class="token punctuation">(</span>statsSilo<span class="token punctuation">.</span>Actions<span class="token punctuation">.</span><span class="token function">SetKills</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment">-- Use GetState to get the current state:</span>
+<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Kills"</span><span class="token punctuation">,</span> statsSilo<span class="token punctuation">:</span><span class="token function">GetState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>Kills<span class="token punctuation">)</span>
+</code></pre>
+<p>
+  From the above example, note how the modifier functions were transformed
+  into functions that can be called from <code>Actions</code> with just the single
+  payload (no need to pass state). The <code>SetKills</code> modifier is then used
+  as the <code>SetKills</code> action to be dispatched.
+</p>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="combine"><code style="text-decoration:none">combine</code><a aria-hidden="true" class="hash-link" href="#combine" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/silo/init.lua#L120"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>Silo<!-- -->.</code><code class="green_3LnD">combine</code><code>(</code><div class="inset_2cJr"><div><code>silos<!-- -->: </code><code class="purple__nFc">{</code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Silo">Silo</a></code><code class="purple__nFc">}</code><code>,</code></div><div><code>initialState<!-- -->: </code><code class="blue_2Afy">State</code><code class="op_1JtD">&lt;</code><code class="blue_2Afy">S</code><code class="op_1JtD">&gt;</code><code class="blue_2Afy">?</code></div></div><code>) → </code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Silo">Silo</a></code></div><div>
+<p>Constructs a new silo as a combination of other silos.</p>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="GetState"><code style="text-decoration:none">GetState</code><a aria-hidden="true" class="hash-link" href="#GetState" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/silo/init.lua#L169"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>Silo<!-- -->:</code><code class="green_3LnD">GetState</code><code>(</code><code>) → </code><code class="blue_2Afy">State</code><code class="op_1JtD">&lt;</code><code class="blue_2Afy">S</code><code class="op_1JtD">&gt;</code></div><div>
+<p>Get the current state.</p>
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> state <span class="token operator">=</span> silo<span class="token punctuation">:</span><span class="token function">GetState</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Dispatch"><code style="text-decoration:none">Dispatch</code><a aria-hidden="true" class="hash-link" href="#Dispatch" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/silo/init.lua#L183"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>Silo<!-- -->:</code><code class="green_3LnD">Dispatch</code><code>(</code><code>action<!-- -->: </code><code class="blue_2Afy">Action</code><code class="op_1JtD">&lt;</code><code class="blue_2Afy">A</code><code class="op_1JtD">&gt;</code><code>) → </code><code>(</code><code>)</code></div><div>
+<p>Dispatch an action.</p>
+<pre class="language-lua"><code class="language-lua">silo<span class="token punctuation">:</span><span class="token function">Dispatch</span><span class="token punctuation">(</span>silo<span class="token punctuation">.</span>Actions<span class="token punctuation">.</span><span class="token function">DoSomething</span><span class="token punctuation">(</span><span class="token string">"something"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Subscribe"><code style="text-decoration:none">Subscribe</code><a aria-hidden="true" class="hash-link" href="#Subscribe" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/silo/init.lua#L231"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>Silo<!-- -->:</code><code class="green_3LnD">Subscribe</code><code>(</code><code>subscriber<!-- -->: </code><code class="purple__nFc">(</code><div class="inset_2cJr"><code>newState<!-- -->: </code><code class="blue_2Afy">State</code><code class="op_1JtD">&lt;</code><code class="blue_2Afy">S</code><code class="op_1JtD">&gt;</code><code class="purple__nFc">,</code></div><div class="inset_2cJr"><code>oldState<!-- -->: </code><code class="blue_2Afy">State</code><code class="op_1JtD">&lt;</code><code class="blue_2Afy">S</code><code class="op_1JtD">&gt;</code></div><code class="purple__nFc">)</code><code class="purple__nFc"> → </code><code class="purple__nFc">(</code><code class="purple__nFc">)</code><code>) → </code><code class="purple__nFc">(</code><code class="purple__nFc">)</code><code class="purple__nFc"> → </code><code class="purple__nFc">(</code><code class="purple__nFc">)</code></div><div>
+<p>
+  Subscribe a function to receive all state updates, including
+  initial state (subscriber is called immediately).
+</p>
+<p>Returns an unsubscribe function. Call the function to unsubscribe.</p>
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> unsubscribe <span class="token operator">=</span> silo<span class="token punctuation">:</span><span class="token function">Subscribe</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>newState<span class="token punctuation">,</span> oldState<span class="token punctuation">)</span>
+	<span class="token comment">-- Do something</span>
+<span class="token keyword">end</span><span class="token punctuation">)</span>
+
+<span class="token comment">-- Later on, if desired, disconnect the subscription by calling unsubscribe:</span>
+<span class="token function">unsubscribe</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Watch"><code style="text-decoration:none">Watch</code><a aria-hidden="true" class="hash-link" href="#Watch" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/silo/init.lua#L272"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>Silo<!-- -->:</code><code class="green_3LnD">Watch</code><code>(</code><div class="inset_2cJr"><div><code>selector<!-- -->: </code><code class="purple__nFc">(</code><code class="blue_2Afy">State</code><code class="op_1JtD">&lt;</code><code class="blue_2Afy">S</code><code class="op_1JtD">&gt;</code><code class="purple__nFc">)</code><code class="purple__nFc"> → </code><code class="blue_2Afy">T</code><code>,</code></div><div><code>onChange<!-- -->: </code><code class="purple__nFc">(</code><code class="blue_2Afy">T</code><code class="purple__nFc">)</code><code class="purple__nFc"> → </code><code class="purple__nFc">(</code><code class="purple__nFc">)</code></div></div><code>) → </code><code class="purple__nFc">(</code><code class="purple__nFc">)</code><code class="purple__nFc"> → </code><code class="purple__nFc">(</code><code class="purple__nFc">)</code></div><div>
+<p>
+  Watch a specific value within the state, which is selected by the
+  <code>selector</code> function. The initial value, and any subsequent changes
+  grabbed by the selector, will be passed to the <code>onChange</code> function.
+</p>
+<p>
+  Just like <code>Subscribe</code>, a function is returned that can be used
+  to unsubscribe (i.e. stop watching).
+</p>
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> <span class="token keyword">function</span> <span class="token function">SelectPoints</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span>
+	<span class="token keyword">return</span> state<span class="token punctuation">.</span>Statistics<span class="token punctuation">.</span>Points
+<span class="token keyword">end</span>
+
+<span class="token keyword">local</span> unsubscribe <span class="token operator">=</span> silo<span class="token punctuation">:</span><span class="token function">Watch</span><span class="token punctuation">(</span>SelectPoints<span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span>points<span class="token punctuation">)</span>
+	<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Points"</span><span class="token punctuation">,</span> points<span class="token punctuation">)</span>
+<span class="token keyword">end</span><span class="token punctuation">)</span>
+</code></pre>
+</div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
+    &quot;functions&quot;: [
+        {
+            &quot;name&quot;: &quot;new&quot;,
+            &quot;desc&quot;: &quot;Create a Silo.\n\n```lua\nlocal statsSilo = Silo.new({\n\t-- Initial state:\n\tKills = 0,\n\tDeaths = 0,\n\tPoints = 0,\n}, {\n\t-- Modifiers are functions that modify the state:\n\tSetKills = function(state, kills)\n\t\tstate.Kills = kills\n\tend,\n\tAddPoints = function(state, points)\n\t\tstate.Points += points\n\tend,\n})\n\n-- Use Actions to modify the state:\nstatsSilo:Dispatch(statsSilo.Actions.SetKills(10))\n\n-- Use GetState to get the current state:\nprint(\&quot;Kills\&quot;, statsSilo:GetState().Kills)\n```\n\nFrom the above example, note how the modifier functions were transformed\ninto functions that can be called from `Actions` with just the single\npayload (no need to pass state). The `SetKills` modifier is then used\nas the `SetKills` action to be dispatched.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;defaultState&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;State&lt;S&gt;&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;modifiers&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;{Modifier&lt;S&gt;}?&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Silo&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 79,
+                &quot;path&quot;: &quot;modules/silo/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;combine&quot;,
+            &quot;desc&quot;: &quot;Constructs a new silo as a combination of other silos.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;silos&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;{Silo}&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;initialState&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;State&lt;S&gt;?&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Silo&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 120,
+                &quot;path&quot;: &quot;modules/silo/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;GetState&quot;,
+            &quot;desc&quot;: &quot;Get the current state.\n\n```lua\nlocal state = silo:GetState()\n```&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;State&lt;S&gt;\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 169,
+                &quot;path&quot;: &quot;modules/silo/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Dispatch&quot;,
+            &quot;desc&quot;: &quot;Dispatch an action.\n\n```lua\nsilo:Dispatch(silo.Actions.DoSomething(\&quot;something\&quot;))\n```&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;action&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Action&lt;A&gt;&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 183,
+                &quot;path&quot;: &quot;modules/silo/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Subscribe&quot;,
+            &quot;desc&quot;: &quot;Subscribe a function to receive all state updates, including\ninitial state (subscriber is called immediately).\n\nReturns an unsubscribe function. Call the function to unsubscribe.\n\n```lua\nlocal unsubscribe = silo:Subscribe(function(newState, oldState)\n\t-- Do something\nend)\n\n-- Later on, if desired, disconnect the subscription by calling unsubscribe:\nunsubscribe()\n```&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;subscriber&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;(newState: State&lt;S&gt;, oldState: State&lt;S&gt;) -&gt; ()&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;() -&gt; ()\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 231,
+                &quot;path&quot;: &quot;modules/silo/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Watch&quot;,
+            &quot;desc&quot;: &quot;Watch a specific value within the state, which is selected by the\n`selector` function. The initial value, and any subsequent changes\ngrabbed by the selector, will be passed to the `onChange` function.\n\nJust like `Subscribe`, a function is returned that can be used\nto unsubscribe (i.e. stop watching).\n\n```lua\nlocal function SelectPoints(state)\n\treturn state.Statistics.Points\nend\n\nlocal unsubscribe = silo:Watch(SelectPoints, function(points)\n\tprint(\&quot;Points\&quot;, points)\nend)\n```&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;selector&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;(State&lt;S&gt;) -&gt; T&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;onChange&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;(T) -&gt; ()&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;() -&gt; ()\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 272,
+                &quot;path&quot;: &quot;modules/silo/init.lua&quot;
+            }
+        }
+    ],
+    &quot;properties&quot;: [],
+    &quot;types&quot;: [
+        {
+            &quot;name&quot;: &quot;State&lt;S&gt;&quot;,
+            &quot;desc&quot;: &quot;Represents state.&quot;,
+            &quot;lua_type&quot;: &quot;{[string]: any}&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 13,
+                &quot;path&quot;: &quot;modules/silo/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Modifier&lt;S&gt;&quot;,
+            &quot;desc&quot;: &quot;A function that modifies state.&quot;,
+            &quot;lua_type&quot;: &quot;(State&lt;S&gt;, any) -&gt; ()&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 20,
+                &quot;path&quot;: &quot;modules/silo/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Action&lt;A&gt;&quot;,
+            &quot;desc&quot;: &quot;Actions are passed to `Dispatch`. However, typically actions are\nnever constructed by hand. Use a silo&#x27;s Actions table to generate\nthese actions.&quot;,
+            &quot;fields&quot;: [
+                {
+                    &quot;name&quot;: &quot;Name&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;,
+                    &quot;desc&quot;: &quot;&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;Payload&quot;,
+                    &quot;lua_type&quot;: &quot;A&quot;,
+                    &quot;desc&quot;: &quot;&quot;
+                }
+            ],
+            &quot;source&quot;: {
+                &quot;line&quot;: 31,
+                &quot;path&quot;: &quot;modules/silo/init.lua&quot;
+            }
+        }
+    ],
+    &quot;name&quot;: &quot;Silo&quot;,
+    &quot;desc&quot;: &quot;A Silo is a state container, inspired by Redux slices and\ndesigned for Roblox developers.&quot;,
+    &quot;source&quot;: {
+        &quot;line&quot;: 44,
+        &quot;path&quot;: &quot;modules/silo/init.lua&quot;
+    }
+}</pre></details></div><div class="col col--3"><div class="tableOfContents_35-E thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a><ul><li><a href="#Action&lt;A&gt;" class="table-of-contents__link toc-highlight">Action<a></a></a></li><li><a href="#Modifier&lt;S&gt;" class="table-of-contents__link toc-highlight">Modifier<s></s></a></li><li><a href="#State&lt;S&gt;" class="table-of-contents__link toc-highlight">State<s></s></a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#Dispatch" class="table-of-contents__link toc-highlight">:Dispatch</a></li><li><a href="#GetState" class="table-of-contents__link toc-highlight">:GetState</a></li><li><a href="#Subscribe" class="table-of-contents__link toc-highlight">:Subscribe</a></li><li><a href="#Watch" class="table-of-contents__link toc-highlight">:Watch</a></li><li><a href="#combine" class="table-of-contents__link toc-highlight">.combine</a></li><li><a href="#new" class="table-of-contents__link toc-highlight">.new</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2022 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
+<script src="/RbxUtil/assets/js/runtime~main.959bef4f.js"></script>
+<script src="/RbxUtil/assets/js/main.d103bc9c.js"></script>
+</body>
+</html>
