@@ -11,6 +11,7 @@ local Util = {}
 
 Util.None = newproxy()
 
+-- Recursive table freeze.
 function Util.DeepFreeze(tbl: AnyTable): AnyTable
 	table.freeze(tbl)
 	for _,v in pairs(tbl) do
@@ -21,6 +22,7 @@ function Util.DeepFreeze(tbl: AnyTable): AnyTable
 	return tbl
 end
 
+-- Recursive table copy.
 function Util.DeepCopy(tbl: AnyTable): AnyTable
 	local newTbl = table.clone(tbl)
 	for k,v in pairs(newTbl) do
@@ -31,6 +33,8 @@ function Util.DeepCopy(tbl: AnyTable): AnyTable
 	return newTbl
 end
 
+-- Extends one table with another.
+-- Similar to the spread operator in JavaScript.
 function Util.Extend(original: AnyTable, extension: AnyTable): AnyTable
 	local t = Util.DeepCopy(original)
 	for k,v in pairs(extension) do

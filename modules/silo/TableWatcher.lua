@@ -14,7 +14,7 @@ type Watcher = {
 
 local Util = require(script.Parent.Util)
 
-local watchers: {[AnyTable]: Watcher} = {}
+local watchers: {[TableWatcher]: Watcher} = {}
 setmetatable(watchers, {__mode = "k"})
 
 local WatcherMt = {}
@@ -50,14 +50,15 @@ function WatcherMt:__call()
 	return Util.Extend(w.Tbl, w.Changes)
 end
 
-local function TableWatcher(t)
-	local watcher = {}
+local function TableWatcher(t: AnyTable): TableWatcher
+	local watcher = setmetatable({}, WatcherMt)
 	watchers[watcher] = {
 		Changes = {},
 		Tbl = t,
 	}
-	setmetatable(watcher, WatcherMt)
 	return watcher
 end
+
+type TableWatcher = typeof(setmetatable({}, WatcherMt))
 
 return TableWatcher

@@ -70,29 +70,46 @@ Silo.__index = Silo
 	-- Use GetState to get the current state:
 	print("Kills", statsSilo:GetState().Kills)
 	```
+
+	From the above example, note how the modifier functions were transformed
+	into functions that can be called from `Actions` with just the single
+	payload (no need to pass state). The `SetKills` modifier is then used
+	as the `SetKills` action to be dispatched.
 ]=]
 function Silo.new<S>(defaultState: State<S>, modifiers: {Modifier<S>}?)
+
 	local self = setmetatable({}, Silo)
+
 	self._State = Util.DeepFreeze(Util.DeepCopy(defaultState))
 	self._Modifiers = {}
 	self._Dispatching = false
 	self._Parent = self
 	self._Subscribers = {}
+
 	self.Actions = {}
+
+	-- Create modifiers and action creators:
 	for actionName,modifier in pairs(modifiers or {}) do
+
 		self._Modifiers[actionName] = function(state: State<S>, payload: any)
+			-- Create a watcher to virtually watch for state mutations:
 			local watcher = TableWatcher(state)
 			modifier(watcher, payload)
+			-- Apply state mutations into new state table:
 			return watcher()
 		end
+
 		self.Actions[actionName] = function(payload)
 			return {
 				Name = actionName,
 				Payload = payload,
 			}
 		end
+
 	end
+
 	return self
+
 end
 
 --[=[
@@ -101,6 +118,8 @@ end
 	Constructs a new silo as a combination of other silos.
 ]=]
 function Silo.combine<S>(silos, initialState: State<S>?)
+
+	-- Combine state:
 	local state = {}
 	for name,silo in pairs(silos) do
 		if silo._Dispatching then
@@ -108,18 +127,24 @@ function Silo.combine<S>(silos, initialState: State<S>?)
 		end
 		state[name] = silo:GetState()
 	end
+
 	local combinedSilo = Silo.new(Util.Extend(state, initialState or {}))
+
+	-- Combine modifiers and actions:
 	for name,silo in pairs(silos) do
 		silo._Parent = combinedSilo
 		for actionName,modifier in pairs(silo._Modifiers) do
+			-- Prefix action name to keep it unique:
 			local fullActionName = name .. "/" .. actionName
 			combinedSilo._Modifiers[fullActionName] = function(s, payload)
+				-- Extend the top-level state from the sub-silo state modification:
 				return Util.Extend(s, {
 					[name] = modifier((s :: {[string]: any})[name], payload)
 				})
 			end
 		end
 		for actionName in pairs(silo.Actions) do
+			-- Update the action creator to include the correct prefixed action name:
 			local fullActionName = name .. "/" .. actionName
 			silo.Actions[actionName] = function(p)
 				return {
@@ -129,7 +154,9 @@ function Silo.combine<S>(silos, initialState: State<S>?)
 			end
 		end
 	end
+
 	return combinedSilo
+
 end
 
 --[=[
@@ -154,25 +181,36 @@ end
 	```
 ]=]
 function Silo:Dispatch<A>(action: Action<A>)
+
 	if self._Dispatching then
 		error("cannot dispatch from a modifier", 2)
 	end
 	if self._Parent ~= self then
 		error("can only dispatch from top-level silo", 2)
 	end
+
+	-- Find and invoke the modifier to modify current state:
 	self._Dispatching = true
 	local oldState = self._State
 	local newState = oldState
 	local modifier = self._Modifiers[action.Name]
 	if modifier then
 		newState = modifier(newState, action.Payload)
-		Util.DeepFreeze(newState)
 	end
-	self._State = newState
 	self._Dispatching = false
-	for _,subscriber in ipairs(self._Subscribers) do
-		subscriber(newState, oldState)
+
+	-- State changed:
+	if newState ~= oldState then
+
+		self._State = Util.DeepFreeze(newState)
+
+		-- Notify subscribers of state change:
+		for _,subscriber in ipairs(self._Subscribers) do
+			subscriber(newState, oldState)
+		end
+		
 	end
+
 end
 
 --[=[
@@ -191,6 +229,7 @@ end
 	```
 ]=]
 function Silo:Subscribe<S>(subscriber: (newState: State<S>, oldState: State<S>) -> ()): () -> ()
+
 	if self._Dispatching then
 		error("cannot subscribe from within a modifier", 2)
 	end
@@ -200,12 +239,16 @@ function Silo:Subscribe<S>(subscriber: (newState: State<S>, oldState: State<S>) 
 	if table.find(self._Subscribers, subscriber) then
 		error("cannot subscribe same function more than once", 2)
 	end
+
 	table.insert(self._Subscribers, subscriber)
+
+	-- Unsubscribe:
 	return function()
 		local index = table.find(self._Subscribers, subscriber)
 		if not index then return end
 		table.remove(self._Subscribers, index)
 	end
+
 end
 
 --[=[
@@ -227,15 +270,21 @@ end
 	```
 ]=]
 function Silo:Watch<S, T>(selector: (State<S>) -> T, onChange: (T) -> ()): () -> ()
+
 	local value = selector(self:GetState())
+
 	local unsubscribe = self:Subscribe(function(state)
 		local newValue = selector(state)
 		if newValue == value then return end
 		value = newValue
 		onChange(value)
 	end)
+
+	-- Call initial onChange after subscription to verify subscription didn't fail:
 	onChange(value)
+
 	return unsubscribe
+
 end
 
 return Silo
