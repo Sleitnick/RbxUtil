@@ -1,13 +1,17 @@
+--!strict
+
 -- Util
 -- Stephen Leitnick
 -- April 29, 2022
 
 
+type AnyTable = {[any]: any}
+
 local Util = {}
 
 Util.None = newproxy()
 
-function Util.DeepCopy(tbl)
+function Util.DeepCopy(tbl: AnyTable): AnyTable
 	local newTbl = table.clone(tbl)
 	for k,v in pairs(newTbl) do
 		if type(v) == "table" then
@@ -17,7 +21,7 @@ function Util.DeepCopy(tbl)
 	return newTbl
 end
 
-function Util.Extend(original, extension)
+function Util.Extend(original: AnyTable, extension: AnyTable): AnyTable
 	local t = Util.DeepCopy(original)
 	for k,v in pairs(extension) do
 		if type(v) == "table" then

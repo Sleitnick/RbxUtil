@@ -1,11 +1,20 @@
+--!strict
+
 -- TableWatcher
 -- Stephen Leitnick
 -- April 29, 2022
 
 
+type AnyTable = {[any]: any}
+
+type Watcher = {
+	Changes: AnyTable,
+	Tbl: AnyTable,
+}
+
 local Util = require(script.Parent.Util)
 
-local watchers = {}
+local watchers: {[AnyTable]: Watcher} = {}
 setmetatable(watchers, {__mode = "k"})
 
 local WatcherMt = {}

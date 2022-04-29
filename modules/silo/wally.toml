@@ -1,5 +1,5 @@
 [package]
-name = "sleitnick/basket"
+name = "sleitnick/silo"
 description = "State management class"
 version = "0.1.0"
 license = "MIT"

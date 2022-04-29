@@ -49,7 +49,7 @@ Silo.__index = Silo
 	Create a Silo.
 
 	```lua
-	local statsBasket = Silo.new({
+	local statsSilo = Silo.new({
 		-- Initial state:
 		Kills = 0,
 		Deaths = 0,
@@ -65,17 +65,18 @@ Silo.__index = Silo
 	})
 
 	-- Use Actions to modify the state:
-	statsBasket:Dispatch(statsBasket.Actions.SetKills(10))
+	statsSilo:Dispatch(statsSilo.Actions.SetKills(10))
 
 	-- Use GetState to get the current state:
-	print("Kills", statsBasket:GetState().Kills)
+	print("Kills", statsSilo:GetState().Kills)
 	```
 ]=]
-function Silo.new<S>(defaultState: State<S>, modifiers: {Modifier<S>})
+function Silo.new<S>(defaultState: State<S>, modifiers: {Modifier<S>}?)
 	local self = setmetatable({}, Silo)
 	self._State = Util.DeepCopy(defaultState)
 	self._Modifiers = {}
 	self._Dispatching = false
+	self._Parent = self
 	self._Subscribers = {}
 	self.Actions = {}
 	for actionName,modifier in pairs(modifiers or {}) do
@@ -107,11 +108,12 @@ function Silo.combine<S>(silos, initialState: State<S>?)
 		end
 		state[name] = silo:GetState()
 	end
-	local combinedBasket = Silo.new(Util.Extend(state, initialState or {}))
+	local combinedSilo = Silo.new(Util.Extend(state, initialState or {}))
 	for name,silo in pairs(silos) do
+		silo._Parent = combinedSilo
 		for actionName,modifier in pairs(silo._Modifiers) do
 			local fullActionName = name .. "/" .. actionName
-			combinedBasket._Modifiers[fullActionName] = function(s, payload)
+			combinedSilo._Modifiers[fullActionName] = function(s, payload)
 				return Util.Extend(s, {
 					[name] = modifier((s :: {[string]: any})[name], payload)
 				})
@@ -127,11 +129,15 @@ function Silo.combine<S>(silos, initialState: State<S>?)
 			end
 		end
 	end
-	return combinedBasket
+	return combinedSilo
 end
 
 --[=[
 	Get the current state.
+
+	```lua
+	local state = silo:GetState()
+	```
 ]=]
 function Silo:GetState<S>(): State<S>
 	return self._State
@@ -139,10 +145,17 @@ end
 
 --[=[
 	Dispatch an action.
+
+	```lua
+	silo:Dispatch(silo.Actions.DoSomething("something"))
+	```
 ]=]
 function Silo:Dispatch<A>(action: Action<A>)
 	if self._Dispatching then
 		error("cannot dispatch from a modifier", 2)
+	end
+	if self._Parent ~= self then
+		error("can only dispatch from top-level silo", 2)
 	end
 	self._Dispatching = true
 	local oldState = self._State
@@ -177,6 +190,9 @@ function Silo:Subscribe<S>(subscriber: (newState: State<S>, oldState: State<S>) 
 	if self._Dispatching then
 		error("cannot subscribe from within a modifier", 2)
 	end
+	if self._Parent ~= self then
+		error("can only subscribe on top-level silo", 2)
+	end
 	if table.find(self._Subscribers, subscriber) then
 		error("cannot subscribe same function more than once", 2)
 	end
@@ -208,6 +224,9 @@ end
 	```
 ]=]
 function Silo:Watch<S, T>(selector: (State<S>) -> T, onChange: (T) -> ()): () -> ()
+	if self._Parent ~= self then
+		error("can only watch on top-level silo", 2)
+	end
 	local value = selector(self:GetState())
 	onChange(value)
 	return self:Subscribe(function(state)
