@@ -11,6 +11,16 @@ local Util = {}
 
 Util.None = newproxy()
 
+function Util.DeepFreeze(tbl: AnyTable): AnyTable
+	table.freeze(tbl)
+	for _,v in pairs(tbl) do
+		if type(v) == "table" then
+			Util.DeepFreeze(v)
+		end
+	end
+	return tbl
+end
+
 function Util.DeepCopy(tbl: AnyTable): AnyTable
 	local newTbl = table.clone(tbl)
 	for k,v in pairs(newTbl) do

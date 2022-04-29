@@ -73,7 +73,7 @@ Silo.__index = Silo
 ]=]
 function Silo.new<S>(defaultState: State<S>, modifiers: {Modifier<S>}?)
 	local self = setmetatable({}, Silo)
-	self._State = Util.DeepCopy(defaultState)
+	self._State = Util.DeepFreeze(Util.DeepCopy(defaultState))
 	self._Modifiers = {}
 	self._Dispatching = false
 	self._Parent = self
@@ -166,6 +166,7 @@ function Silo:Dispatch<A>(action: Action<A>)
 	local modifier = self._Modifiers[action.Name]
 	if modifier then
 		newState = modifier(newState, action.Payload)
+		Util.DeepFreeze(newState)
 	end
 	self._State = newState
 	self._Dispatching = false

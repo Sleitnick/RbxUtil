@@ -59,6 +59,21 @@ return function()
 			end).to.throw()
 		end)
 
+		it("should throw error if attempting to modify state directly", function()
+			expect(function()
+				rootSilo:GetState().Stats.Kills = 10
+			end).to.throw()
+			expect(function()
+				rootSilo:GetState().Stats.SomethingNew = 100
+			end).to.throw()
+			expect(function()
+				rootSilo:GetState().Stats = {}
+			end).to.throw()
+			expect(function()
+				rootSilo:GetState().SomethingElse = {}
+			end).to.throw()
+		end)
+
 	end)
 
 	describe("Dispatch", function()
