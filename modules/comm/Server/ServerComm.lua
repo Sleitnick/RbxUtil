@@ -30,8 +30,6 @@ ServerComm.__index = ServerComm
 ]=]
 
 --[=[
-	@param parent Instance
-	@param namespace string?
 	@return ServerComm
 	Constructs a ServerComm object. The `namespace` parameter is used
 	in cases where more than one ServerComm object may be bound

@@ -50,15 +50,14 @@ function ClientRemoteProperty.new(re: RemoteEvent, inboundMiddleware: Types.Clie
 end
 
 --[=[
-	@return any
 	Gets the value of the property object.
 
 	:::caution
 	This value might not be ready right away. Use `OnReady()` or `IsReady()`
-	before calling `Get()`.
+	before calling `Get()`. If not ready, this value will return `nil`.
 	:::
 ]=]
-function ClientRemoteProperty:Get()
+function ClientRemoteProperty:Get(): any
 	return self._value
 end
 
@@ -95,7 +94,6 @@ function ClientRemoteProperty:OnReady()
 end
 
 --[=[
-	@return boolean
 	Returns `true` if the property object is ready to be
 	used. In other words, it has successfully gained
 	connection to the server-side version and has synced
@@ -132,7 +130,7 @@ end
 	clientRemoteProperty:Observe(ObserveValue)
 	```
 ]=]
-function ClientRemoteProperty:Observe(observer: (any) -> nil)
+function ClientRemoteProperty:Observe(observer: (any) -> ())
 	if self._ready then
 		task.defer(observer, self._value)
 	end

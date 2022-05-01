@@ -21,6 +21,7 @@ RemoteSignal.__index = RemoteSignal
 	@within RemoteSignal
 	@interface Connection
 	.Disconnect () -> nil
+	.Connected boolean
 ]=]
 
 function RemoteSignal.new(parent: Instance, name: string, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?)
@@ -90,8 +91,8 @@ end
 	Fires the signal at the specified client with any arguments.
 
 	:::note Outbound Middleware
-	All arguments pass through any outbound middleware before being
-	sent to the client.
+	All arguments pass through any outbound middleware (if any)
+	before being sent to the clients.
 	:::
 ]=]
 function RemoteSignal:Fire(player: Player, ...: any)
@@ -103,8 +104,8 @@ end
 	Fires the signal at _all_ clients with any arguments.
 
 	:::note Outbound Middleware
-	All arguments pass through any outbound middleware before being
-	sent to the clients.
+	All arguments pass through any outbound middleware (if any)
+	before being sent to the clients.
 	:::
 ]=]
 function RemoteSignal:FireAll(...: any)
@@ -118,8 +119,8 @@ end
 	client.
 
 	:::note Outbound Middleware
-	All arguments pass through any outbound middleware before being
-	sent to the client.
+	All arguments pass through any outbound middleware (if any)
+	before being sent to the clients.
 	:::
 ]=]
 function RemoteSignal:FireExcept(ignorePlayer: Player, ...: any)
@@ -136,8 +137,8 @@ end
 	more control logic.
 
 	:::note Outbound Middleware
-	All arguments pass through any outbound middleware before being
-	sent to the clients.
+	All arguments pass through any outbound middleware (if any)
+	before being sent to the clients.
 	:::
 
 	:::caution Predicate Before Middleware
@@ -157,6 +158,28 @@ function RemoteSignal:FireFilter(predicate: (Player, ...any) -> boolean, ...: an
 		if predicate(player, ...) then
 			self._re:FireClient(player, self:_processOutboundMiddleware(nil, ...))
 		end
+	end
+end
+
+--[=[
+	Fires a signal at the clients within the `players` table. This is
+	useful when signals need to fire for a specific set of players.
+
+	For more complex firing, see `FireFilter`.
+
+	:::note Outbound Middleware
+	All arguments pass through any outbound middleware (if any)
+	before being sent to the clients.
+	:::
+
+	```lua
+	local players = {somePlayer1, somePlayer2, somePlayer3}
+	remoteSignal:FireFor(players, "Hello, players!")
+	```
+]=]
+function RemoteSignal:FireFor(players: {Player}, ...: any)
+	for _,player in ipairs(players) do
+		self._re:FireClient(player, self:_processOutboundMiddleware(nil, ...))
 	end
 end
 

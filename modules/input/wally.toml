@@ -1,7 +1,7 @@
 [package]
 name = "sleitnick/input"
 description = "Basic input classes"
-version = "1.3.3"
+version = "2.0.0"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"
@@ -9,5 +9,4 @@ realm = "shared"
 
 [dependencies]
 Signal = "sleitnick/signal@1"
-EnumList = "sleitnick/enum-list@2"
 Trove = "sleitnick/trove@0.4"
