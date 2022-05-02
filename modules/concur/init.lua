@@ -36,7 +36,7 @@ Concur.__index = Concur
 --[=[
 	@within Concur
 	@interface Errors
-	.Cancelled "Cancelled"
+	.Stopped "Stopped"
 	.Timeout "Timeout"
 ]=]
 
@@ -46,7 +46,7 @@ Concur.__index = Concur
 	@prop Errors Errors
 ]=]
 Concur.Errors = {
-	Cancelled = "Cancelled",
+	Stopped = "Stopped",
 	Timeout = "Timeout",
 }
 
@@ -292,7 +292,8 @@ end
 
 --[=[
 	Stops the Concur instance. The underlying thread will be cancelled using
-	`task.cancel`.
+	`task.cancel`. Any bound `OnCompleted` functions or threads waiting with
+	`Await` will be completed with the error `Concur.Errors.Stopped`.
 
 	```lua
 	local c = Concur.spawn(function()
@@ -309,10 +310,10 @@ end
 function Concur:Stop()
 	if self._completed then return end
 	self._completed = true
-	self._err = Concur.Errors.Cancelled
+	self._err = Concur.Errors.Stopped
 	task.cancel(self._thread)
 	for _,thread: thread in ipairs(self._awaitingThreads) do
-		task.spawn(thread, Concur.Errors.Cancelled)
+		task.spawn(thread, Concur.Errors.Stopped)
 	end
 end
 
@@ -371,14 +372,28 @@ end
 
 	This will stop awaiting if the Concur instance was stopped
 	too, in which case the `err` will be equal to
-	`Concur.Errors.Cancelled`:
+	`Concur.Errors.Stopped`:
 
 	```lua
 	local c = Concur.delay(10, function() end)
 	c:Stop()
 	local err = c:Await()
-	if err == Concur.Errors.Cancelled then
-		print("Was cancelled")
+	if err == Concur.Errors.Stopped then
+		print("Was stopped")
+	end
+	```
+
+	An optional timeout can be given, which will return the
+	`Concur.Errors.Timeout` error if timed out. Timing out
+	does _not_ stop the Concur instance, so other callers
+	to `Await` or `OnCompleted` can still grab the resulting
+	values.
+
+	```lua
+	local c = Concur.delay(10, function() end)
+	local err = c:Await(1)
+	if err == Concur.Errors.Timeout then
+		-- Handle timeout
 	end
 	```
 ]=]
@@ -475,16 +490,28 @@ end
 
 	This will call the function if the Concur instance was stopped
 	too, in which case the `err` will be equal to
-	`Concur.Errors.Cancelled`:
+	`Concur.Errors.Stopped`:
 
 	```lua
 	local c = Concur.delay(10, function() end)
 	c:OnCompleted(function(err)
-		if err == Concur.Errors.Cancelled then
-			print("Was cancelled")
+		if err == Concur.Errors.Stopped then
+			print("Was stopped")
 		end
 	end)
 	c:Stop()
+	```
+
+	An optional timeout can also be supplied, which will call the
+	function with the `Concur.Errors.Timeout` error:
+
+	```lua
+	local c = Concur.delay(10, function() end)
+	c:OnCompleted(function(err)
+		if err == Concur.Errors.Timeout then
+			-- Handle timeout
+		end
+	end, 1)
 	```
 ]=]
 function Concur:OnCompleted(fn: (Error, ...any?) -> (), timeout: number?): () -> ()
