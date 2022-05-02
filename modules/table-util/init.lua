@@ -775,6 +775,7 @@ end
 	```
 ]=]
 local function Truncate(tbl: Table, len: number): Table
+	len = math.clamp(len, 1, #tbl)
 	return table.move(tbl, 1, len, 1, table.create(len))
 end
 
