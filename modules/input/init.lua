@@ -5,7 +5,7 @@
 --[=[
 	@class Input
 
-	The Input module provides access to various user input classes.
+	The Input package provides access to various user input classes.
 
 	- [PreferredInput](/api/PreferredInput)
 	- [Mouse](/api/Mouse)
@@ -13,22 +13,15 @@
 	- [Touch](/api/Touch)
 	- [Gamepad](/api/Gamepad)
 
-	```lua
-	local Input = require(packages.Input)
+	Require the desired input modules to get started:
 
-	local PreferredInput = Input.PreferredInput
-	local Mouse = Input.Mouse
-	local Keyboard = Input.Keyboard
-	local Touch = Input.Touch
-	local Gamepad = Input.Gamepad
+	```lua
+	local PreferredInput = require(Packages.Input.PreferredInput)
+	local Mouse = require(Packages.Input.Mouse)
+	local Keyboard = require(Packages.Input.Keyboard)
+	local Touch = require(Packages.Input.Touch)
+	local Gamepad = require(Packages.Input.Gamepad)
 	```
 ]=]
-local Input = {
-	PreferredInput = require(script.PreferredInput),
-	Mouse = require(script.Mouse),
-	Keyboard = require(script.Keyboard),
-	Touch = require(script.Touch),
-	Gamepad = require(script.Gamepad),
-}
 
-return Input
+return nil

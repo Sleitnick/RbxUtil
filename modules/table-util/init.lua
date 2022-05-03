@@ -617,6 +617,37 @@ end
 
 --[=[
 	@within TableUtil
+	@function Values
+	@param tbl table
+	@return table
+
+	Returns an array with all the values in the table.
+
+	```lua
+	local t = {A = 10, B = 20, C = 30}
+	local values = TableUtil.Values(t)
+	print(values) --> {10, 20, 30}
+	```
+
+	:::caution Ordering
+	The ordering of the values is never guaranteed. If order is imperative, call
+	`table.sort` on the resulting `values` array.
+	```lua
+	local values = TableUtil.Values(t)
+	table.sort(values)
+	```
+]=]
+local function Values(tbl: Table): Table
+	local values = table.create(#tbl)
+	for _, v in pairs(tbl) do
+		table.insert(values, v)
+	end
+	return values
+end
+
+
+--[=[
+	@within TableUtil
 	@function Find
 	@param tbl table
 	@param callback (value: any, key: any, tbl: table) -> boolean
@@ -895,6 +926,7 @@ TableUtil.Sample = Sample
 TableUtil.Flat = Flat
 TableUtil.FlatMap = FlatMap
 TableUtil.Keys = Keys
+TableUtil.Values = Values
 TableUtil.Find = Find
 TableUtil.Every = Every
 TableUtil.Some = Some

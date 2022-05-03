@@ -4,15 +4,24 @@
 -- Stephen Leitnick
 -- April 05, 2021
 
+--[=[
+	@within PreferredInput
+	@type InputType "MouseKeyboard" | "Touch" | "Gamepad"
 
-local Signal = require(script.Parent.Parent.Signal)
-local EnumList = require(script.Parent.Parent.EnumList)
+	The InputType is just a string that is either `"MouseKeyboard"`,
+	`"Touch"`, or `"Gamepad"`.
+]=]
+export type InputType = "MouseKeyboard" | "Touch" | "Gamepad"
 
 local UserInputService = game:GetService("UserInputService")
 
 local touchUserInputType = Enum.UserInputType.Touch
 local keyboardUserInputType = Enum.UserInputType.Keyboard
 
+type PreferredInput = {
+	Current: InputType,
+	Observe: (handler: (inputType: InputType) -> ()) -> () -> (),
+}
 
 --[=[
 	@class PreferredInput
@@ -27,53 +36,9 @@ local keyboardUserInputType = Enum.UserInputType.Keyboard
 	The Preferred class is part of the Input package.
 
 	```lua
-	local PreferredInput = require(packages.Input).PreferredInput
+	local PreferredInput = require(packages.Input.PreferredInput)
 	```
 ]=]
-local PreferredInput = {}
-
---[=[
-	@within PreferredInput
-	@interface InputType
-	@tag Enum
-	.MouseKeyboard "MouseKeyboard" -- Prefer mouse and keyboard input
-	.Touch "Touch" -- Prefer touch input
-	.Gamepad "Gamepad" -- Prefer gamepad input
-
-	Indicates an input schema that the user currently prefers.
-]=]
-
---[=[
-	@within PreferredInput
-	@prop Changed Signal<InputType>
-	@tag Event
-
-	Fired when the preferred InputType changes.
-
-	```lua
-	PreferredInput.Changed:Connect(function(preferred)
-		if preferred == PreferredInput.InputType.Gamepad then
-			-- Prefer gamepad input
-		end
-	end)
-	```
-]=]
-
---[=[
-	@within PreferredInput
-	@prop InputType InputType
-	@readonly
-	@tag Enums
-
-	A table containing the InputType enum, e.g. `PreferredInput.InputType.Gamepad`.
-
-	```lua
-	if PreferredInput.Current == PreferredInput.InputType.Gamepad then
-		-- User prefers gamepad input
-	end
-	```
-]=]
-
 --[=[
 	@within PreferredInput
 	@prop Current InputType
@@ -85,13 +50,9 @@ local PreferredInput = {}
 	print(PreferredInput.Current)
 	```
 ]=]
-
-PreferredInput.Changed = Signal.new()
-PreferredInput.InputType = EnumList.new("InputType", {"MouseKeyboard", "Touch", "Gamepad"})
-PreferredInput.Current = PreferredInput.InputType.MouseKeyboard
-
-
 --[=[
+	@within PreferredInput
+	@function Observe
 	@param handler (preferred: InputType) -> ()
 	@return Connection
 
@@ -108,33 +69,51 @@ PreferredInput.Current = PreferredInput.InputType.MouseKeyboard
 	connection:Disconnect()
 	```
 ]=]
-function PreferredInput.Observe(handler)
-	task.spawn(handler, PreferredInput.Current)
-	return PreferredInput.Changed:Connect(handler)
-end
 
+local PreferredInput: PreferredInput
 
-local function SetPreferred(preferred)
-	if preferred ~= PreferredInput.Current then
-		PreferredInput.Current = preferred
-		PreferredInput.Changed:Fire(preferred)
+local subscribers = {}
+
+PreferredInput = {
+
+	Current = "MouseKeyboard",
+
+	Observe = function(handler: (inputType: InputType) -> ()): () -> ()
+		if table.find(subscribers, handler) then
+			error("function already subscribed", 2)
+		end
+		table.insert(subscribers, handler)
+		task.spawn(handler, PreferredInput.Current)
+		return function()
+			local index = table.find(subscribers, handler)
+			if index then
+				local n = #subscribers
+				subscribers[index], subscribers[n] = subscribers[n], nil
+			end
+		end
+	end,
+
+}
+
+local function SetPreferred(preferred: InputType)
+	if preferred == PreferredInput.Current then return end
+	PreferredInput.Current = preferred
+	for _,subscriber in ipairs(subscribers) do
+		task.spawn(subscriber, preferred)
 	end
 end
-
 
 local function DeterminePreferred(inputType: Enum.UserInputType)
 	if inputType == touchUserInputType then
-		SetPreferred(PreferredInput.InputType.Touch)
+		SetPreferred("Touch")
 	elseif inputType == keyboardUserInputType or inputType.Name:sub(1, 5) == "Mouse" then
-		SetPreferred(PreferredInput.InputType.MouseKeyboard)
+		SetPreferred("MouseKeyboard")
 	elseif inputType.Name:sub(1, 7) == "Gamepad" then
-		SetPreferred(PreferredInput.InputType.Gamepad)
+		SetPreferred("Gamepad")
 	end
 end
 
-
 DeterminePreferred(UserInputService:GetLastInputType())
 UserInputService.LastInputTypeChanged:Connect(DeterminePreferred)
-
 
 return PreferredInput

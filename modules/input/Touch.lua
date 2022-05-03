@@ -16,7 +16,7 @@ local UserInputService = game:GetService("UserInputService")
 	The Touch class is part of the Input package.
 
 	```lua
-	local Touch = require(packages.Input).Touch
+	local Touch = require(packages.Input.Touch)
 	```
 ]=]
 local Touch = {}
