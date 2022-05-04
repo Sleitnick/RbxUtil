@@ -311,7 +311,7 @@ function Trove:_findAndRemoveFromObjects(object: any, cleanup: boolean): boolean
 			return true
 		end
 	end
-	return true
+	return false
 end
 
 
