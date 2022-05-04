@@ -119,6 +119,13 @@ return function()
 			expect(connection.Connected).to.equal(false)
 		end)
 
+		it("should not remove an object not in the trove", function()
+			local connection = workspace.Changed:Connect(function() end)
+			expect(trove:Remove(connection)).to.equal(false)
+			expect(connection.Connected).to.equal(true)
+			connection:Disconnect()
+		end)
+
 		it("should attach to instance", function()
 			local part = Instance.new("Part")
 			part.Parent = workspace
