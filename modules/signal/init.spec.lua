@@ -100,6 +100,22 @@ return function()
 
 	end)
 
+	describe("ConnectOnce", function()
+
+		it("should only capture first fire", function()
+			local value
+			local c = signal:ConnectOnce(function(v)
+				value = v
+			end)
+			expect(c.Connected).to.equal(true)
+			signal:Fire(10)
+			expect(c.Connected).to.equal(false)
+			signal:Fire(20)
+			expect(value).to.equal(10)
+		end)
+		
+	end)
+
 	describe("Wait", function()
 
 		it("should be able to wait for a signal to fire", function()

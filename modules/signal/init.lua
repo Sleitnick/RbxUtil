@@ -214,6 +214,34 @@ function Signal:Connect(fn)
 end
 
 
+--[=[
+	@param fn ConnectionFn
+	@return SignalConnection
+
+	Connects a function to the signal, which will be called the next time the signal fires. Once
+	the connection is triggered, it will disconnect itself.
+	```lua
+	signal:ConnectOnce(function(msg, num)
+		print(msg, num)
+	end)
+
+	signal:Fire("Hello", 25)
+	signal:Fire("This message will not go through", 10)
+	```
+]=]
+function Signal:ConnectOnce(fn)
+	local connection
+	local done = false
+	connection = self:Connect(function(...)
+		if done then return end
+		done = true
+		connection:Disconnect()
+		fn(...)
+	end)
+	return connection
+end
+
+
 function Signal:GetConnections()
 	local items = {}
 	local item = self._handlerListHead
@@ -294,6 +322,8 @@ end
 	@yields
 
 	Yields the current thread until the signal is fired, and returns the arguments fired from the signal.
+	Yielding the current thread is not always desirable. If the desire is to only capture the next event
+	fired, using `ConnectOnce` might be a better solution.
 	```lua
 	task.spawn(function()
 		local msg, num = signal:Wait()
@@ -304,9 +334,12 @@ end
 ]=]
 function Signal:Wait()
 	local waitingCoroutine = coroutine.running()
-	local cn
-	cn = self:Connect(function(...)
-		cn:Disconnect()
+	local connection
+	local done = false
+	connection = self:Connect(function(...)
+		if done then return end
+		done = true
+		connection:Disconnect()
 		task.spawn(waitingCoroutine, ...)
 	end)
 	return coroutine.yield()
