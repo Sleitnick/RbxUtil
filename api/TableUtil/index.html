@@ -19,8 +19,8 @@ Tables that only work specifically with arrays or dictionaries are marked as suc
 :::info Immutability
 All functions (_except_ `SwapRemove`, `SwapRemoveFirstValue`, and `Lock`) treat tables as immutable and will return
 copies of the given table(s) with the operations performed on the copies."><meta data-react-helmet="true" property="og:url" content="https://Sleitnick.github.io/RbxUtil/api/TableUtil"><meta data-react-helmet="true" name="docusaurus_locale" content="en"><meta data-react-helmet="true" name="docusaurus_tag" content="default"><link data-react-helmet="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/TableUtil"><link data-react-helmet="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/TableUtil" hreflang="en"><link data-react-helmet="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/TableUtil" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.302001c7.css">
-<link rel="preload" href="/RbxUtil/assets/js/runtime~main.24a6ae4f.js" as="script">
-<link rel="preload" href="/RbxUtil/assets/js/main.9f051a91.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/runtime~main.52300edf.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/main.798fb21d.js" as="script">
 </head>
 <body>
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -431,13 +431,17 @@ one</em> of the items in the table.</p>
 
 <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Some below twenty:"</span><span class="token punctuation">,</span> someBelowTwenty<span class="token punctuation">)</span> <span class="token comment">--> Some below twenty: true</span>
 </code></pre>
-</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Truncate"><code style="text-decoration:none">Truncate</code><a aria-hidden="true" class="hash-link" href="#Truncate" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/table-util/init.lua#L777"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>TableUtil<!-- -->.</code><code class="green_3LnD">Truncate</code><code>(</code><div class="inset_2cJr"><div><code>tbl<!-- -->: </code><code class="blue_2Afy">table</code><code>,</code></div><div><code>length<!-- -->: </code><code class="blue_2Afy">number</code></div></div><code>) → </code><code class="blue_2Afy">table</code></div><div>
-<p>Returns a new table truncated to the length of <code>length</code>.</p>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Truncate"><code style="text-decoration:none">Truncate</code><a aria-hidden="true" class="hash-link" href="#Truncate" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/table-util/init.lua#L779"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>TableUtil<!-- -->.</code><code class="green_3LnD">Truncate</code><code>(</code><div class="inset_2cJr"><div><code>tbl<!-- -->: </code><code class="blue_2Afy">table</code><code>,</code></div><div><code>length<!-- -->: </code><code class="blue_2Afy">number</code></div></div><code>) → </code><code class="blue_2Afy">table</code></div><div>
+<p>
+  Returns a new table truncated to the length of <code>length</code>. Any length
+  equal or greater than the current length will simply return a
+  shallow copy of the table.
+</p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> t <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">,</span> <span class="token number">30</span><span class="token punctuation">,</span> <span class="token number">40</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">,</span> <span class="token number">60</span><span class="token punctuation">,</span> <span class="token number">70</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">}</span>
 <span class="token keyword">local</span> tTruncated <span class="token operator">=</span> TableUtil<span class="token punctuation">.</span><span class="token function">Truncate</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span>
 <span class="token function">print</span><span class="token punctuation">(</span>tTruncated<span class="token punctuation">)</span> <span class="token comment">--> {10, 20, 30}</span>
 </code></pre>
-</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Zip"><code style="text-decoration:none">Zip</code><a aria-hidden="true" class="hash-link" href="#Zip" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/table-util/init.lua#L809"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>TableUtil<!-- -->.</code><code class="green_3LnD">Zip</code><code>(</code><code>...<!-- -->: </code><code class="blue_2Afy">table</code><code>) → </code><code class="purple__nFc">(</code><div class="inset_2cJr"><code>iter<!-- -->: </code><code class="green_3LnD">(</code><div class="inset_2cJr"><code>t<!-- -->: </code><code class="blue_2Afy">table</code><code class="green_3LnD">,</code></div><div class="inset_2cJr"><code>k<!-- -->: </code><code class="blue_2Afy">any</code></div><code class="green_3LnD">)</code><code class="green_3LnD"> → </code><code class="green_3LnD">(</code><div class="inset_2cJr"><code>key<!-- -->: </code><code class="blue_2Afy">any?</code><code class="green_3LnD">,</code></div><div class="inset_2cJr"><code>values<!-- -->: </code><code class="blue_2Afy">table?</code></div><code class="green_3LnD">)</code><code class="purple__nFc">,</code></div><div class="inset_2cJr"><code>tbl<!-- -->: </code><code class="blue_2Afy">table</code><code class="purple__nFc">,</code></div><div class="inset_2cJr"><code>startIndex<!-- -->: </code><code class="blue_2Afy">any?</code></div><code class="purple__nFc">)</code></div><div>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Zip"><code style="text-decoration:none">Zip</code><a aria-hidden="true" class="hash-link" href="#Zip" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/table-util/init.lua#L816"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>TableUtil<!-- -->.</code><code class="green_3LnD">Zip</code><code>(</code><code>...<!-- -->: </code><code class="blue_2Afy">table</code><code>) → </code><code class="purple__nFc">(</code><div class="inset_2cJr"><code>iter<!-- -->: </code><code class="green_3LnD">(</code><div class="inset_2cJr"><code>t<!-- -->: </code><code class="blue_2Afy">table</code><code class="green_3LnD">,</code></div><div class="inset_2cJr"><code>k<!-- -->: </code><code class="blue_2Afy">any</code></div><code class="green_3LnD">)</code><code class="green_3LnD"> → </code><code class="green_3LnD">(</code><div class="inset_2cJr"><code>key<!-- -->: </code><code class="blue_2Afy">any?</code><code class="green_3LnD">,</code></div><div class="inset_2cJr"><code>values<!-- -->: </code><code class="blue_2Afy">table?</code></div><code class="green_3LnD">)</code><code class="purple__nFc">,</code></div><div class="inset_2cJr"><code>tbl<!-- -->: </code><code class="blue_2Afy">table</code><code class="purple__nFc">,</code></div><div class="inset_2cJr"><code>startIndex<!-- -->: </code><code class="blue_2Afy">any?</code></div><code class="purple__nFc">)</code></div><div>
 <p>
   Returns an iterator that can scan through multiple tables at the same time side-by-side, matching
   against shared keys/indices.
@@ -458,7 +462,7 @@ one</em> of the items in the table.</p>
 	5 {50, 100}
 --]]</span>
 </code></pre>
-</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Lock"><code style="text-decoration:none">Lock</code><a aria-hidden="true" class="hash-link" href="#Lock" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/table-util/init.lua#L863"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>TableUtil<!-- -->.</code><code class="green_3LnD">Lock</code><code>(</code><code>tbl<!-- -->: </code><code class="blue_2Afy">table</code><code>) → </code><code class="blue_2Afy">table</code></div><div>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Lock"><code style="text-decoration:none">Lock</code><a aria-hidden="true" class="hash-link" href="#Lock" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/table-util/init.lua#L870"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>TableUtil<!-- -->.</code><code class="green_3LnD">Lock</code><code>(</code><code>tbl<!-- -->: </code><code class="blue_2Afy">table</code><code>) → </code><code class="blue_2Afy">table</code></div><div>
 <p>
   Locks the table using <code>table.freeze</code>, as well as any
   nested tables within the given table. This will lock
@@ -470,7 +474,7 @@ tbl<span class="token punctuation">.</span>xyz<span class="token punctuation">.<
 TableUtil<span class="token punctuation">.</span><span class="token function">Lock</span><span class="token punctuation">(</span>tbl<span class="token punctuation">)</span>
 tbl<span class="token punctuation">.</span>xyz<span class="token punctuation">.</span>abc <span class="token operator">=</span> <span class="token number">64</span> <span class="token comment">-- Will throw an error (cannot modify readonly table)</span>
 </code></pre>
-</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="IsEmpty"><code style="text-decoration:none">IsEmpty</code><a aria-hidden="true" class="hash-link" href="#IsEmpty" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/table-util/init.lua#L894"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>TableUtil<!-- -->.</code><code class="green_3LnD">IsEmpty</code><code>(</code><code>tbl<!-- -->: </code><code class="blue_2Afy">table</code><code>) → </code><code class="blue_2Afy">boolean</code></div><div>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="IsEmpty"><code style="text-decoration:none">IsEmpty</code><a aria-hidden="true" class="hash-link" href="#IsEmpty" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/table-util/init.lua#L901"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>TableUtil<!-- -->.</code><code class="green_3LnD">IsEmpty</code><code>(</code><code>tbl<!-- -->: </code><code class="blue_2Afy">table</code><code>) → </code><code class="blue_2Afy">boolean</code></div><div>
 <p>
   Returns <code>true</code> if the given table is empty. This is
   simply performed by checking if <code>next(tbl)</code> is <code>nil</code>
@@ -482,9 +486,9 @@ tbl<span class="token punctuation">.</span>xyz<span class="token punctuation">.<
 TableUtil<span class="token punctuation">.</span><span class="token function">IsEmpty</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">"abc"</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment">-- false</span>
 TableUtil<span class="token punctuation">.</span><span class="token function">IsEmpty</span><span class="token punctuation">(</span><span class="token punctuation">{</span>abc <span class="token operator">=</span> <span class="token number">32</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment">-- false</span>
 </code></pre>
-</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="EncodeJSON"><code style="text-decoration:none">EncodeJSON</code><a aria-hidden="true" class="hash-link" href="#EncodeJSON" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/table-util/init.lua#L907"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>TableUtil<!-- -->.</code><code class="green_3LnD">EncodeJSON</code><code>(</code><code>value<!-- -->: </code><code class="blue_2Afy">any</code><code>) → </code><code class="blue_2Afy">string</code></div><div>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="EncodeJSON"><code style="text-decoration:none">EncodeJSON</code><a aria-hidden="true" class="hash-link" href="#EncodeJSON" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/table-util/init.lua#L914"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>TableUtil<!-- -->.</code><code class="green_3LnD">EncodeJSON</code><code>(</code><code>value<!-- -->: </code><code class="blue_2Afy">any</code><code>) → </code><code class="blue_2Afy">string</code></div><div>
 <p>Proxy for <a href="https://developer.roblox.com/en-us/api-reference/function/HttpService/JSONEncode" target="_blank"><code>HttpService:JSONEncode</code></a>.</p>
-</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="DecodeJSON"><code style="text-decoration:none">DecodeJSON</code><a aria-hidden="true" class="hash-link" href="#DecodeJSON" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/table-util/init.lua#L920"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>TableUtil<!-- -->.</code><code class="green_3LnD">DecodeJSON</code><code>(</code><code>value<!-- -->: </code><code class="blue_2Afy">any</code><code>) → </code><code class="blue_2Afy">string</code></div><div>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="DecodeJSON"><code style="text-decoration:none">DecodeJSON</code><a aria-hidden="true" class="hash-link" href="#DecodeJSON" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/table-util/init.lua#L927"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>TableUtil<!-- -->.</code><code class="green_3LnD">DecodeJSON</code><code>(</code><code>value<!-- -->: </code><code class="blue_2Afy">any</code><code>) → </code><code class="blue_2Afy">string</code></div><div>
 <p>Proxy for <a href="https://developer.roblox.com/en-us/api-reference/function/HttpService/JSONDecode" target="_blank"><code>HttpService:JSONDecode</code></a>.</p>
 </div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
     &quot;functions&quot;: [
@@ -1015,7 +1019,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
         },
         {
             &quot;name&quot;: &quot;Truncate&quot;,
-            &quot;desc&quot;: &quot;Returns a new table truncated to the length of `length`.\n\n```lua\nlocal t = {10, 20, 30, 40, 50, 60, 70, 80}\nlocal tTruncated = TableUtil.Truncate(t, 3)\nprint(tTruncated) --&gt; {10, 20, 30}\n```&quot;,
+            &quot;desc&quot;: &quot;Returns a new table truncated to the length of `length`. Any length\nequal or greater than the current length will simply return a\nshallow copy of the table.\n\n```lua\nlocal t = {10, 20, 30, 40, 50, 60, 70, 80}\nlocal tTruncated = TableUtil.Truncate(t, 3)\nprint(tTruncated) --&gt; {10, 20, 30}\n```&quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;tbl&quot;,
@@ -1036,7 +1040,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 777,
+                &quot;line&quot;: 779,
                 &quot;path&quot;: &quot;modules/table-util/init.lua&quot;
             }
         },
@@ -1058,7 +1062,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 809,
+                &quot;line&quot;: 816,
                 &quot;path&quot;: &quot;modules/table-util/init.lua&quot;
             }
         },
@@ -1080,7 +1084,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 863,
+                &quot;line&quot;: 870,
                 &quot;path&quot;: &quot;modules/table-util/init.lua&quot;
             }
         },
@@ -1102,7 +1106,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 894,
+                &quot;line&quot;: 901,
                 &quot;path&quot;: &quot;modules/table-util/init.lua&quot;
             }
         },
@@ -1124,7 +1128,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 907,
+                &quot;line&quot;: 914,
                 &quot;path&quot;: &quot;modules/table-util/init.lua&quot;
             }
         },
@@ -1146,7 +1150,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 920,
+                &quot;line&quot;: 927,
                 &quot;path&quot;: &quot;modules/table-util/init.lua&quot;
             }
         }
@@ -1160,7 +1164,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
         &quot;path&quot;: &quot;modules/table-util/init.lua&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_35-E thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#Assign" class="table-of-contents__link toc-highlight">.Assign</a></li><li><a href="#Copy" class="table-of-contents__link toc-highlight">.Copy</a></li><li><a href="#DecodeJSON" class="table-of-contents__link toc-highlight">.DecodeJSON</a></li><li><a href="#EncodeJSON" class="table-of-contents__link toc-highlight">.EncodeJSON</a></li><li><a href="#Every" class="table-of-contents__link toc-highlight">.Every</a></li><li><a href="#Extend" class="table-of-contents__link toc-highlight">.Extend</a></li><li><a href="#Filter" class="table-of-contents__link toc-highlight">.Filter</a></li><li><a href="#Find" class="table-of-contents__link toc-highlight">.Find</a></li><li><a href="#Flat" class="table-of-contents__link toc-highlight">.Flat</a></li><li><a href="#FlatMap" class="table-of-contents__link toc-highlight">.FlatMap</a></li><li><a href="#IsEmpty" class="table-of-contents__link toc-highlight">.IsEmpty</a></li><li><a href="#Keys" class="table-of-contents__link toc-highlight">.Keys</a></li><li><a href="#Lock" class="table-of-contents__link toc-highlight">.Lock</a></li><li><a href="#Map" class="table-of-contents__link toc-highlight">.Map</a></li><li><a href="#Reconcile" class="table-of-contents__link toc-highlight">.Reconcile</a></li><li><a href="#Reduce" class="table-of-contents__link toc-highlight">.Reduce</a></li><li><a href="#Reverse" class="table-of-contents__link toc-highlight">.Reverse</a></li><li><a href="#Sample" class="table-of-contents__link toc-highlight">.Sample</a></li><li><a href="#Shuffle" class="table-of-contents__link toc-highlight">.Shuffle</a></li><li><a href="#Some" class="table-of-contents__link toc-highlight">.Some</a></li><li><a href="#SwapRemove" class="table-of-contents__link toc-highlight">.SwapRemove</a></li><li><a href="#SwapRemoveFirstValue" class="table-of-contents__link toc-highlight">.SwapRemoveFirstValue</a></li><li><a href="#Sync" class="table-of-contents__link toc-highlight">.Sync</a></li><li><a href="#Truncate" class="table-of-contents__link toc-highlight">.Truncate</a></li><li><a href="#Values" class="table-of-contents__link toc-highlight">.Values</a></li><li><a href="#Zip" class="table-of-contents__link toc-highlight">.Zip</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2022 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/RbxUtil/assets/js/runtime~main.24a6ae4f.js"></script>
-<script src="/RbxUtil/assets/js/main.9f051a91.js"></script>
+<script src="/RbxUtil/assets/js/runtime~main.52300edf.js"></script>
+<script src="/RbxUtil/assets/js/main.798fb21d.js"></script>
 </body>
 </html>
