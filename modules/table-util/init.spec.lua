@@ -343,6 +343,19 @@ return function()
 			expect(t2[2]).to.equal(t1[2])
 			expect(t2[3]).to.equal(t1[3])
 		end)
+
+		it("should truncate an array with out of bounds sizes", function()
+			local t1 = {1, 2, 3, 4, 5}
+			expect(function()
+				TableUtil.Truncate(t1, -1)
+			end).to.never.throw()
+			expect(function()
+				TableUtil.Truncate(t1, #t1 + 1)
+			end).to.never.throw()
+			local t2 = TableUtil.Truncate(t1, #t1 + 10)
+			expect(#t2).to.equal(#t1)
+			expect(t2).to.never.equal(t1)
+		end)
 		
 	end)
 
