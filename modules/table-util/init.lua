@@ -766,7 +766,9 @@ end
 	@param length number
 	@return table
 
-	Returns a new table truncated to the length of `length`.
+	Returns a new table truncated to the length of `length`. Any length
+	equal or greater than the current length will simply return a
+	shallow copy of the table.
 
 	```lua
 	local t = {10, 20, 30, 40, 50, 60, 70, 80}
@@ -775,6 +777,11 @@ end
 	```
 ]=]
 local function Truncate(tbl: Table, len: number): Table
+	local n = #tbl
+	len = math.clamp(len, 1, n)
+	if len == n then
+		return table.clone(tbl)
+	end
 	return table.move(tbl, 1, len, 1, table.create(len))
 end
 
