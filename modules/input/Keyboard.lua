@@ -16,7 +16,7 @@ local UserInputService = game:GetService("UserInputService")
 	The Keyboard class is part of the Input package.
 
 	```lua
-	local Keyboard = require(packages.Input.Keyboard)
+	local Keyboard = require(packages.Input).Keyboard
 	```
 ]=]
 local Keyboard = {}
@@ -60,6 +60,7 @@ function Keyboard.new()
 	self._trove = Trove.new()
 	self.KeyDown = self._trove:Construct(Signal)
 	self.KeyUp = self._trove:Construct(Signal)
+	self.KeysDown = {}
 	self:_setup()
 	return self
 end
@@ -74,7 +75,7 @@ end
 	```
 ]=]
 function Keyboard:IsKeyDown(keyCode: Enum.KeyCode): boolean
-	return UserInputService:IsKeyDown(keyCode)
+	return self.KeysDown[keyCode] ~= nil
 end
 
 
@@ -112,6 +113,7 @@ function Keyboard:_setup()
 	self._trove:Connect(UserInputService.InputBegan, function(input, processed)
 		if processed then return end
 		if input.UserInputType == Enum.UserInputType.Keyboard then
+			self.KeysDown[input.KeyCode] = true
 			self.KeyDown:Fire(input.KeyCode)
 		end
 	end)
@@ -119,6 +121,7 @@ function Keyboard:_setup()
 	self._trove:Connect(UserInputService.InputEnded, function(input, processed)
 		if processed then return end
 		if input.UserInputType == Enum.UserInputType.Keyboard then
+			self.KeysDown[input.KeyCode] = nil
 			self.KeyUp:Fire(input.KeyCode)
 		end
 	end)
