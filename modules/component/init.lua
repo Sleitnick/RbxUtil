@@ -441,6 +441,12 @@ function Component:_setup()
 		end
 		if component[KEY_STARTED] then
 			task.spawn(StopComponent, component)
+		else
+			Promise.fromEvent(self.Started, function(c)
+				return component == c
+			end):andThen(function()
+				StopComponent(component)
+			end)
 		end
 	end
 	
