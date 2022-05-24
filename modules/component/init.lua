@@ -560,7 +560,7 @@ end
 ]=]
 function Component:WaitForInstance(instance: Instance, timeout: number?)
 	local componentInstance = self:FromInstance(instance)
-	if componentInstance then
+	if componentInstance and componentInstance[KEY_STARTED] == true then
 		return Promise.resolve(componentInstance)
 	end
 	return Promise.fromEvent(self.Started, function(c)
