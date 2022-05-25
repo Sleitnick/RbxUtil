@@ -119,9 +119,9 @@ function Keyboard:_setup()
 	end)
 
 	self._trove:Connect(UserInputService.InputEnded, function(input, processed)
+		self.State[input.KeyCode] = nil
 		if processed then return end
 		if input.UserInputType == Enum.UserInputType.Keyboard then
-			self.State[input.KeyCode] = nil
 			self.KeyUp:Fire(input.KeyCode)
 		end
 	end)
