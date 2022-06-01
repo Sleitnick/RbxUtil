@@ -13,7 +13,7 @@
 	- [Touch](/api/Touch)
 	- [Gamepad](/api/Gamepad)
 
-	Require the desired input modules to get started:
+	Reference the desired input modules via the Input package to get started:
 
 	```lua
 	local PreferredInput = require(Packages.Input).PreferredInput
