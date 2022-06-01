@@ -12,14 +12,14 @@
 - [Touch](/api/Touch)
 - [Gamepad](/api/Gamepad)
 
-Require the desired input modules to get started:
+Reference the desired input modules via the Input package to get started:
 
 ```lua
-local PreferredInput = require(Packages.Input.PreferredInput)
-local Mouse = require(Packages.Input.Mouse)
-local Keyboard = require(Packages.Input.Keyboard)
-local Touch = require(Packages.Input.Touch)
-local Gamepad = require(Packages.Input.Gamepad)
+local PreferredInput = require(Packages.Input).PreferredInput
+local Mouse = require(Packages.Input).Mouse
+local Keyboard = require(Packages.Input).Keyboard
+local Touch = require(Packages.Input).Touch
+local Gamepad = require(Packages.Input).Gamepad
 ```"><meta data-react-helmet="true" property="og:description" content="The Input package provides access to various user input classes.
 
 - [PreferredInput](/api/PreferredInput)
@@ -28,17 +28,17 @@ local Gamepad = require(Packages.Input.Gamepad)
 - [Touch](/api/Touch)
 - [Gamepad](/api/Gamepad)
 
-Require the desired input modules to get started:
+Reference the desired input modules via the Input package to get started:
 
 ```lua
-local PreferredInput = require(Packages.Input.PreferredInput)
-local Mouse = require(Packages.Input.Mouse)
-local Keyboard = require(Packages.Input.Keyboard)
-local Touch = require(Packages.Input.Touch)
-local Gamepad = require(Packages.Input.Gamepad)
+local PreferredInput = require(Packages.Input).PreferredInput
+local Mouse = require(Packages.Input).Mouse
+local Keyboard = require(Packages.Input).Keyboard
+local Touch = require(Packages.Input).Touch
+local Gamepad = require(Packages.Input).Gamepad
 ```"><meta data-react-helmet="true" property="og:url" content="https://Sleitnick.github.io/RbxUtil/api/Input"><meta data-react-helmet="true" name="docusaurus_locale" content="en"><meta data-react-helmet="true" name="docusaurus_tag" content="default"><link data-react-helmet="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/Input"><link data-react-helmet="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/Input" hreflang="en"><link data-react-helmet="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/Input" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.302001c7.css">
-<link rel="preload" href="/RbxUtil/assets/js/runtime~main.6486988e.js" as="script">
-<link rel="preload" href="/RbxUtil/assets/js/main.00390077.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/runtime~main.622f81d6.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/main.e82f1202.js" as="script">
 </head>
 <body>
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -51,25 +51,25 @@ local Gamepad = require(Packages.Input.Gamepad)
   <li><a href="/RbxUtil/api/Touch">Touch</a></li>
   <li><a href="/RbxUtil/api/Gamepad">Gamepad</a></li>
 </ul>
-<p>Require the desired input modules to get started:</p>
-<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> PreferredInput <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span>Packages<span class="token punctuation">.</span>Input<span class="token punctuation">.</span>PreferredInput<span class="token punctuation">)</span>
-<span class="token keyword">local</span> Mouse <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span>Packages<span class="token punctuation">.</span>Input<span class="token punctuation">.</span>Mouse<span class="token punctuation">)</span>
-<span class="token keyword">local</span> Keyboard <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span>Packages<span class="token punctuation">.</span>Input<span class="token punctuation">.</span>Keyboard<span class="token punctuation">)</span>
-<span class="token keyword">local</span> Touch <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span>Packages<span class="token punctuation">.</span>Input<span class="token punctuation">.</span>Touch<span class="token punctuation">)</span>
-<span class="token keyword">local</span> Gamepad <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span>Packages<span class="token punctuation">.</span>Input<span class="token punctuation">.</span>Gamepad<span class="token punctuation">)</span>
+<p>Reference the desired input modules via the Input package to get started:</p>
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> PreferredInput <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span>Packages<span class="token punctuation">.</span>Input<span class="token punctuation">)</span><span class="token punctuation">.</span>PreferredInput
+<span class="token keyword">local</span> Mouse <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span>Packages<span class="token punctuation">.</span>Input<span class="token punctuation">)</span><span class="token punctuation">.</span>Mouse
+<span class="token keyword">local</span> Keyboard <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span>Packages<span class="token punctuation">.</span>Input<span class="token punctuation">)</span><span class="token punctuation">.</span>Keyboard
+<span class="token keyword">local</span> Touch <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span>Packages<span class="token punctuation">.</span>Input<span class="token punctuation">)</span><span class="token punctuation">.</span>Touch
+<span class="token keyword">local</span> Gamepad <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span>Packages<span class="token punctuation">.</span>Input<span class="token punctuation">)</span><span class="token punctuation">.</span>Gamepad
 </code></pre>
 </div></header></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
     &quot;functions&quot;: [],
     &quot;properties&quot;: [],
     &quot;types&quot;: [],
     &quot;name&quot;: &quot;Input&quot;,
-    &quot;desc&quot;: &quot;The Input package provides access to various user input classes.\n\n- [PreferredInput](/api/PreferredInput)\n- [Mouse](/api/Mouse)\n- [Keyboard](/api/Keyboard)\n- [Touch](/api/Touch)\n- [Gamepad](/api/Gamepad)\n\nRequire the desired input modules to get started:\n\n```lua\nlocal PreferredInput = require(Packages.Input.PreferredInput)\nlocal Mouse = require(Packages.Input.Mouse)\nlocal Keyboard = require(Packages.Input.Keyboard)\nlocal Touch = require(Packages.Input.Touch)\nlocal Gamepad = require(Packages.Input.Gamepad)\n```&quot;,
+    &quot;desc&quot;: &quot;The Input package provides access to various user input classes.\n\n- [PreferredInput](/api/PreferredInput)\n- [Mouse](/api/Mouse)\n- [Keyboard](/api/Keyboard)\n- [Touch](/api/Touch)\n- [Gamepad](/api/Gamepad)\n\nReference the desired input modules via the Input package to get started:\n\n```lua\nlocal PreferredInput = require(Packages.Input).PreferredInput\nlocal Mouse = require(Packages.Input).Mouse\nlocal Keyboard = require(Packages.Input).Keyboard\nlocal Touch = require(Packages.Input).Touch\nlocal Gamepad = require(Packages.Input).Gamepad\n```&quot;,
     &quot;source&quot;: {
         &quot;line&quot;: 26,
         &quot;path&quot;: &quot;modules/input/init.lua&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_35-E thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2022 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/RbxUtil/assets/js/runtime~main.6486988e.js"></script>
-<script src="/RbxUtil/assets/js/main.00390077.js"></script>
+<script src="/RbxUtil/assets/js/runtime~main.622f81d6.js"></script>
+<script src="/RbxUtil/assets/js/main.e82f1202.js"></script>
 </body>
 </html>

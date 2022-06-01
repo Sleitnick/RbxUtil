@@ -13,7 +13,7 @@ game to respond to this change.
 The Preferred class is part of the Input package.
 
 ```lua
-local PreferredInput = require(packages.Input.PreferredInput)
+local PreferredInput = require(packages.Input).PreferredInput
 ```"><meta data-react-helmet="true" property="og:description" content="A helper library for observing the preferred user input of the
 player. This is useful for determining what input schemes
 to use during gameplay. A player might switch from using
@@ -23,10 +23,10 @@ game to respond to this change.
 The Preferred class is part of the Input package.
 
 ```lua
-local PreferredInput = require(packages.Input.PreferredInput)
+local PreferredInput = require(packages.Input).PreferredInput
 ```"><meta data-react-helmet="true" property="og:url" content="https://Sleitnick.github.io/RbxUtil/api/PreferredInput"><meta data-react-helmet="true" name="docusaurus_locale" content="en"><meta data-react-helmet="true" name="docusaurus_tag" content="default"><link data-react-helmet="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/PreferredInput"><link data-react-helmet="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/PreferredInput" hreflang="en"><link data-react-helmet="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/PreferredInput" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.302001c7.css">
-<link rel="preload" href="/RbxUtil/assets/js/runtime~main.6486988e.js" as="script">
-<link rel="preload" href="/RbxUtil/assets/js/main.00390077.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/runtime~main.622f81d6.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/main.e82f1202.js" as="script">
 </head>
 <body>
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -39,7 +39,7 @@ local PreferredInput = require(packages.Input.PreferredInput)
   game to respond to this change.
 </p>
 <p>The Preferred class is part of the Input package.</p>
-<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> PreferredInput <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span>packages<span class="token punctuation">.</span>Input<span class="token punctuation">.</span>PreferredInput<span class="token punctuation">)</span>
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> PreferredInput <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span>packages<span class="token punctuation">.</span>Input<span class="token punctuation">)</span><span class="token punctuation">.</span>PreferredInput
 </code></pre>
 </div></header><h2 class="anchor anchorWithStickyNavbar_31ik" id="types">Types<a aria-hidden="true" class="hash-link" href="#types" title="Direct link to heading">​</a></h2><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="InputType"><code style="text-decoration:none">InputType</code><a aria-hidden="true" class="hash-link" href="#InputType" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/Sleitnick/RbxUtil/blob/master/modules/input/PreferredInput.lua#L14"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code class="purple__nFc">type</code> <code>InputType<!-- --> = </code> <code class="blue_2Afy">&quot;MouseKeyboard&quot;</code><code class="op_1JtD"> | </code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Touch">&quot;Touch&quot;</a></code><code class="op_1JtD"> | </code><code class="blue_2Afy"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Gamepad">&quot;Gamepad&quot;</a></code></div><div>
 <p>
@@ -112,7 +112,7 @@ connection<span class="token punctuation">:</span><span class="token function">D
         }
     ],
     &quot;name&quot;: &quot;PreferredInput&quot;,
-    &quot;desc&quot;: &quot;A helper library for observing the preferred user input of the\nplayer. This is useful for determining what input schemes\nto use during gameplay. A player might switch from using\na mouse to a gamepad mid-game, and it is important for the\ngame to respond to this change.\n\nThe Preferred class is part of the Input package.\n\n```lua\nlocal PreferredInput = require(packages.Input.PreferredInput)\n```&quot;,
+    &quot;desc&quot;: &quot;A helper library for observing the preferred user input of the\nplayer. This is useful for determining what input schemes\nto use during gameplay. A player might switch from using\na mouse to a gamepad mid-game, and it is important for the\ngame to respond to this change.\n\nThe Preferred class is part of the Input package.\n\n```lua\nlocal PreferredInput = require(packages.Input).PreferredInput\n```&quot;,
     &quot;realm&quot;: [
         &quot;Client&quot;
     ],
@@ -121,7 +121,7 @@ connection<span class="token punctuation">:</span><span class="token function">D
         &quot;path&quot;: &quot;modules/input/PreferredInput.lua&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_35-E thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a><ul><li><a href="#InputType" class="table-of-contents__link toc-highlight">InputType</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#Current" class="table-of-contents__link toc-highlight">Current</a></li></ul></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#Observe" class="table-of-contents__link toc-highlight">.Observe</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2022 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/RbxUtil/assets/js/runtime~main.6486988e.js"></script>
-<script src="/RbxUtil/assets/js/main.00390077.js"></script>
+<script src="/RbxUtil/assets/js/runtime~main.622f81d6.js"></script>
+<script src="/RbxUtil/assets/js/main.e82f1202.js"></script>
 </body>
 </html>
