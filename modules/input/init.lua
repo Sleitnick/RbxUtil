@@ -16,12 +16,18 @@
 	Require the desired input modules to get started:
 
 	```lua
-	local PreferredInput = require(Packages.Input.PreferredInput)
-	local Mouse = require(Packages.Input.Mouse)
-	local Keyboard = require(Packages.Input.Keyboard)
-	local Touch = require(Packages.Input.Touch)
-	local Gamepad = require(Packages.Input.Gamepad)
+	local PreferredInput = require(Packages.Input).PreferredInput
+	local Mouse = require(Packages.Input).Mouse
+	local Keyboard = require(Packages.Input).Keyboard
+	local Touch = require(Packages.Input).Touch
+	local Gamepad = require(Packages.Input).Gamepad
 	```
 ]=]
 
-return nil
+return {
+	PreferredInput = require(script.PreferredInput),
+	Mouse = require(script.Mouse)
+	Keyboard = require(script.Keyboard)
+	Touch = require(script.Touch)
+	Gamepad = require(script.Gamepad)
+}
