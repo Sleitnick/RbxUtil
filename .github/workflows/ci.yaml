@@ -53,7 +53,9 @@ jobs:
         run: choco install openvpn
 
       - name: Run OpenVPN
-        run: Start-Process -FilePath "C:\\Program Files\\OpenVPN\\bin\\openvpn.exe" -ArgumentList "--config ${{ secrets.OPENVPN_OVPN }}"
+        run: Start-Process -FilePath "C:\\Program Files\\OpenVPN\\bin\\openvpn.exe" -ArgumentList "--config $(INPUT_OVPN)"
+        with:
+          ovpn: ${{ secrets.OPENVPN_OVPN }}
 
       - name: Poll for IP Change
         run: |
