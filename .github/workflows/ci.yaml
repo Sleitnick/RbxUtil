@@ -21,7 +21,7 @@ jobs:
       name: Install Foreman
       with:
           version: "^1.0.0"
-          token: ${{ SECRETS.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Lint
       run: |
@@ -44,15 +44,52 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r requirements.txt
 
+      - name: Install Foreman
+        uses: rojo-rbx/setup-foreman@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download OpenVPN
+        run: choco install openvpn
+
+      - name: Run OpenVPN
+        run: Start-Process -FilePath "C:\\Program Files\\OpenVPN\\bin\\openvpn.exe" -ArgumentList "--config ${{ secrets.OPENVPN_OVPN }}"
+
+      - name: Poll for IP Change
+        run: |
+          $elapsed = 0
+          while ($true) {
+            try {
+              $response = Invoke-WebRequest -Uri 'https://httpbin.org/ip' -Method GET -UseBasicParsing
+              $content = ConvertFrom-Json $response.Content
+              if ($content.origin -eq "18.224.110.74") {
+                break
+              }
+            } catch {}
+            if ($elapsed -ge 20) {
+              Write-Error "Timeout reached!"
+              exit 1
+            }
+            Write-Output "Polling... Elapsed: $elapsed, IP: $($content.origin)"
+            Start-Sleep 5
+            $elapsed += 5
+          }
+          Write-Output "Success!"
+
+      - name: Validate Cookie
+        run: |
+          $session = New-Object Microsoft.PowerShell.Commands.WebRequestSession
+          $cookie = New-Object System.Net.Cookie
+          $cookie.Name = ".ROBLOSECURITY"
+          $cookie.Value = "${{ secrets.ROBLOSECURITY }}"
+          $cookie.Domain = ".roblox.com"
+          $session.Cookies.Add($cookie);
+          Invoke-WebRequest "https://avatar.roblox.com/v1/avatar" -WebSession $session -UseBasicParsing
+
       - name: Install Roblox Studio
         uses: OrbitalOwen/roblox-win-installer-action@1.1
         with:
           cookie: ${{ secrets.ROBLOSECURITY }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Install Foreman
-        uses: rojo-rbx/setup-foreman@v1
-        with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build tests
