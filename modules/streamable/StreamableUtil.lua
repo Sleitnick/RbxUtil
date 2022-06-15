@@ -8,10 +8,15 @@
 local Trove = require(script.Parent.Parent.Trove)
 local _Streamable = require(script.Parent.Streamable)
 
-
 type Streamables = {_Streamable.Streamable}
-type CompoundHandler = (Streamables, any) -> nil
+type CompoundHandler = (Streamables) -> () -> ()
 
+--[=[
+	@within StreamableUtil
+	@type CompoundHandler ({Streamable}) -> () -> ()
+	A function that handles compound streamables. It should return a function that acts
+	as a cleanup function.
+]=]
 
 --[=[
 	@class StreamableUtil
@@ -24,12 +29,8 @@ type CompoundHandler = (Streamables, any) -> nil
 ]=]
 local StreamableUtil = {}
 
-
 --[=[
 	@param streamables {Streamable}
-	@param handler ({[child: string]: Instance}, trove: Trove) -> nil
-	@return Trove
-
 	Creates a compound streamable around all the given streamables. The compound
 	streamable's observer handler will be fired once _all_ the given streamables
 	are in existence, and will be cleaned up when _any_ of the streamables
@@ -48,7 +49,7 @@ local StreamableUtil = {}
 	end)
 	```
 ]=]
-function StreamableUtil.Compound(streamables: Streamables, handler: CompoundHandler)
+function StreamableUtil.Compound(streamables: Streamables, handler: CompoundHandler): () -> ()
 	local compoundTrove = Trove.new()
 	local observeAllTrove = Trove.new()
 	local allAvailable = false
@@ -60,7 +61,10 @@ function StreamableUtil.Compound(streamables: Streamables, handler: CompoundHand
 			end
 		end
 		allAvailable = true
-		handler(streamables, observeAllTrove)
+		local cleanup = handler(streamables)
+		if type(cleanup) == "function" then
+			observeAllTrove:Add(cleanup)
+		end
 	end
 	local function Cleanup()
 		if not allAvailable then return end
@@ -68,14 +72,15 @@ function StreamableUtil.Compound(streamables: Streamables, handler: CompoundHand
 		observeAllTrove:Clean()
 	end
 	for _,streamable in pairs(streamables) do
-		compoundTrove:Add(streamable:Observe(function(_child, trove)
+		compoundTrove:Add(streamable:Observe(function(_child)
 			Check()
-			trove:Add(Cleanup)
+			return Cleanup
 		end))
 	end
 	compoundTrove:Add(Cleanup)
-	return compoundTrove
+	return function()
+		compoundTrove:Destroy()
+	end
 end
-
 
 return StreamableUtil

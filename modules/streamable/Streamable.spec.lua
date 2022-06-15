@@ -49,11 +49,11 @@ return function()
 			local streamable = Streamable.new(instanceFolder, "TestImmediate")
 			local observed = 0
 			local cleaned = 0
-			streamable:Observe(function(_instance, trove)
+			streamable:Observe(function(_instance)
 				observed += 1
-				trove:Add(function()
+				return function()
 					cleaned += 1
-				end)
+				end
 			end)
 			task.wait()
 			testInstance.Parent = nil
@@ -70,11 +70,11 @@ return function()
 			local streamable = Streamable.new(instanceFolder, "TestImmediate")
 			local observed = 0
 			local cleaned = 0
-			streamable:Observe(function(_instance, trove)
+			streamable:Observe(function(_instance)
 				observed += 1
-				trove:Add(function()
+				return function()
 					cleaned += 1
-				end)
+				end
 			end)
 			task.wait(0.1)
 			local testInstance = CreateInstance("TestImmediate")
@@ -94,11 +94,11 @@ return function()
 			local streamable = Streamable.primary(instanceModel)
 			local observed = 0
 			local cleaned = 0
-			streamable:Observe(function(_instance, trove)
+			streamable:Observe(function(_instance)
 				observed += 1
-				trove:Add(function()
+				return function()
 					cleaned += 1
-				end)
+				end
 			end)
 			task.wait()
 			testInstance.Parent = nil
@@ -116,11 +116,11 @@ return function()
 			local streamable = Streamable.primary(instanceModel)
 			local observed = 0
 			local cleaned = 0
-			streamable:Observe(function(_instance, trove)
+			streamable:Observe(function(_instance)
 				observed += 1
-				trove:Add(function()
+				return function()
 					cleaned += 1
-				end)
+				end
 			end)
 			task.wait(0.1)
 			local testInstance = CreatePrimary()
@@ -134,6 +134,29 @@ return function()
 			task.wait()
 			expect(observed).to.equal(2)
 			expect(cleaned).to.equal(2)
+		end)
+
+		it("should clean up an observer", function()
+			local streamable = Streamable.new(instanceFolder, "TestImmediate")
+			local observed = 0
+			local cleaned = 0
+			local cleanup = streamable:Observe(function(_instance)
+				observed += 1
+				return function()
+					cleaned += 1
+				end
+			end)
+			local testInstance = CreateInstance("TestImmediate")
+			task.wait()
+			testInstance.Parent = nil
+			task.wait()
+			testInstance.Parent = instanceFolder
+			task.wait()
+			cleanup()
+			task.wait()
+			expect(observed).to.equal(2)
+			expect(cleaned).to.equal(2)
+			streamable:Destroy()
 		end)
 
 	end)

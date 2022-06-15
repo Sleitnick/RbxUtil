@@ -9,9 +9,18 @@ type StreamableWithInstance = {
 	[any]: any,
 }
 
+type StreamableObserveHandler = () -> ()
+type CleanupFn = () -> ()
+
 local Trove = require(script.Parent.Parent.Trove)
 local Signal = require(script.Parent.Parent.Signal)
 
+
+--[=[
+	@within Streamable
+	@type CleanupFn () -> ()
+	A simple function that is used to clean up a task.
+]=]
 
 --[=[
 	@within Streamable
@@ -44,24 +53,29 @@ local Signal = require(script.Parent.Parent.Signal)
 	-- Watch for a specific part in the model:
 	local partStreamable = Streamable.new(model, "SomePart")
 
-	partStreamable:Observe(function(part, trove)
+	partStreamable:Observe(function(part)
 		print(part:GetFullName() .. " added")
 		-- Run code on the part here.
-		-- Use the trove to manage cleanup when the part goes away.
-		trove:Add(function()
+
+		-- The returned function is called when the part goes out of existence:
+		return function()
 			-- General cleanup stuff
 			print(part.Name .. " removed")
-		end)
+		end
 	end)
 
 	-- Watch for the PrimaryPart of a model to exist:
 	local primaryStreamable = Streamable.primary(model)
-	primaryStreamable:Observe(function(primary, trove)
+	primaryStreamable:Observe(function(primary)
 		print("Model now has a PrimaryPart:", primary.Name)
-		trove:Add(function()
+		return function()
 			print("Model's PrimaryPart has been removed")
-		end)
+		end
 	end)
+
+	-- Stop an observer by running the function the observer returns:
+	local cleanupObserver = primaryStreamable:Observe(function(primary) ... end)
+	cleanupObserver()
 
 	-- At any given point, accessing the Instance field will
 	-- reference the observed part, if it exists:
@@ -85,15 +99,16 @@ local Signal = require(script.Parent.Parent.Signal)
 local Streamable = {}
 Streamable.__index = Streamable
 
-
 --[=[
 	@return Streamable
-	@param parent Instance
-	@param childName string
 
 	Constructs a Streamable that watches for a direct child of name `childName`
 	within the `parent` Instance. Call `Observe` to observe the existence of
 	the child within the parent.
+
+	```lua
+	local streamable = Streamable.new(someInstance, "SomeChild")
+	```
 ]=]
 function Streamable.new(parent: Instance, childName: string)
 
@@ -102,8 +117,7 @@ function Streamable.new(parent: Instance, childName: string)
 
 	self._trove = Trove.new()
 	self._shown = self._trove:Construct(Signal)
-	self._shownTrove = Trove.new()
-	self._trove:Add(self._shownTrove)
+	self._shownTrove = self._trove:Extend()
 
 	self.Instance = parent:FindFirstChild(childName)
 
@@ -140,13 +154,15 @@ function Streamable.new(parent: Instance, childName: string)
 
 end
 
-
 --[=[
 	@return Streamable
-	@param parent Model
 
 	Constructs a streamable that watches for the PrimaryPart of the
 	given `parent` Model.
+
+	```lua
+	local streamable = Streamable.primary(someModel)
+	```
 ]=]
 function Streamable.primary(parent: Model)
 
@@ -155,8 +171,7 @@ function Streamable.primary(parent: Model)
 
 	self._trove = Trove.new()
 	self._shown = self._trove:Construct(Signal)
-	self._shownTrove = Trove.new()
-	self._trove:Add(self._shownTrove)
+	self._shownTrove = self._trove:Extend()
 
 	self.Instance = parent.PrimaryPart
 
@@ -178,36 +193,71 @@ function Streamable.primary(parent: Model)
 	
 end
 
-
 --[=[
-	@param handler (instance: Instance, trove: Trove) -> nil
-	@return Connection
-
 	Observes the instance. The handler is called anytime the
-	instance comes into existence, and the trove given is
-	cleaned up when the instance goes away.
+	instance comes into existence. The handler can return a
+	function that will be called once the instance goes out
+	of existence _or_ when this observer is cleaned up.
 
-	To stop observing, disconnect the returned connection.
+	To stop observing, call the returned function.
+
+	Destroying the streamable will also stop the observer, as
+	well as any other observers.
+
+	```lua
+	local observerCleanup = streamable:Observe(function(instance: Instance)
+		-- Runs when the instance comes into existence
+		print(instance.Name .. " exists")
+
+		return function()
+			print(instance.Name .. " not longer exists")
+			-- Runs when the instance goes out of existence
+			-- Any cleanup necessary
+		end
+	end)
+
+	-- If the observer is no longer needed, it can be cleaned up by calling
+	-- the returned function:
+	observerCleanup()
+	```
 ]=]
-function Streamable:Observe(handler)
-	if self.Instance then
-		task.spawn(handler, self.Instance, self._shownTrove)
+function Streamable:Observe(handler: (instance: Instance) -> CleanupFn?): CleanupFn
+	local cleanupFn
+	local function OnShown(instance: Instance)
+		local cleanup = handler(instance)
+		if type(cleanup) == "function" then
+			cleanupFn = function()
+				cleanupFn = nil
+				cleanup()
+			end
+			self._shownTrove:Add(cleanupFn)
+		end
 	end
-	return self._shown:Connect(handler)
+	if self.Instance then
+		task.spawn(OnShown, self.Instance)
+	end
+	local connection = self._shown:Connect(OnShown)
+	local function CleanupObserver()
+		connection:Disconnect()
+		if cleanupFn then
+			local cleanup = cleanupFn
+			cleanupFn = nil
+			self._shownTrove:Remove(cleanup)
+		end
+	end
+	self._trove:Add(CleanupObserver)
+	return function()
+		self._trove:Remove(CleanupObserver)
+	end
 end
 
-
 --[=[
-	Destroys the Streamable. Any observers will be disconnected,
-	which also means that troves within observers will be cleaned
-	up. This should be called when a streamable is no longer needed.
+	Destroys the streamable. All observers will be cleaned up.
 ]=]
 function Streamable:Destroy()
 	self._trove:Destroy()
 end
 
-
 export type Streamable = typeof(Streamable.new(workspace, "X"))
-
 
 return Streamable
