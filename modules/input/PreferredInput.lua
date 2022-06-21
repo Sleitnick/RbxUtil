@@ -36,7 +36,7 @@ type PreferredInput = {
 	The Preferred class is part of the Input package.
 
 	```lua
-	local PreferredInput = require(packages.Input.PreferredInput)
+	local PreferredInput = require(packages.Input).PreferredInput
 	```
 ]=]
 --[=[

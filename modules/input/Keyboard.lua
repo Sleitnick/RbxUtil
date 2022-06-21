@@ -16,7 +16,7 @@ local UserInputService = game:GetService("UserInputService")
 	The Keyboard class is part of the Input package.
 
 	```lua
-	local Keyboard = require(packages.Input.Keyboard)
+	local Keyboard = require(packages.Input).Keyboard
 	```
 ]=]
 local Keyboard = {}

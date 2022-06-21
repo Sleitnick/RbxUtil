@@ -17,7 +17,7 @@ local RAY_DISTANCE = 1000
 	The Mouse class is part of the Input package.
 
 	```lua
-	local Mouse = require(packages.Input.Mouse)
+	local Mouse = require(packages.Input).Mouse
 	```
 ]=]
 local Mouse = {}
