@@ -1,7 +1,6 @@
 -- PID
 -- August 11, 2020
 
-
 --[=[
 	@class PID
 	The PID class simulates a [PID controller](https://en.wikipedia.org/wiki/PID_controller). PID is an acronym
@@ -38,7 +37,6 @@ PID.__index = PID
 	```
 ]=]
 
-
 --[=[
 	@param min number -- Minimum value the PID can output
 	@param max number -- Maximum value the PID can output
@@ -66,7 +64,6 @@ function PID.new(min: number, max: number, kp: number, ki: number, kd: number)
 	return self
 end
 
-
 --[=[
 	Resets the PID to a zero start state.
 ]=]
@@ -74,7 +71,6 @@ function PID:Reset()
 	self._lastInput = 0
 	self._outputSum = 0
 end
-
 
 --[=[
 	@param setpoint number -- The desired point to reach
@@ -99,26 +95,25 @@ function PID:Calculate(setpoint: number, input: number)
 	local err = (setpoint - input)
 	local dInput = (input - self._lastInput)
 	self._outputSum += (self._ki * err)
-	
+
 	if not self.POnE then
 		self._outputSum -= self._kp * dInput
 	end
-	
+
 	self._outputSum = math.clamp(self._outputSum, self._min, self._max)
-	
+
 	local output = 0
 	if self.POnE then
 		output = self._kp * err
 	end
-	
+
 	output += self._outputSum - self._kd * dInput
 	output = math.clamp(output, self._min, self._max)
-	
+
 	self._lastInput = input
-	
+
 	return output
 end
-
 
 --[=[
 	@param name string -- Folder name
@@ -132,8 +127,12 @@ end
 	this function will do nothing.
 ]=]
 function PID:Debug(name: string, parent: Instance?)
-	if self._debug then return end
-	if not game:GetService("RunService"):IsStudio() then return end
+	if self._debug then
+		return
+	end
+	if not game:GetService("RunService"):IsStudio() then
+		return
+	end
 	local folder = Instance.new("Folder")
 	folder.Name = name
 	local function Bind(attrName, propName)
@@ -152,7 +151,6 @@ function PID:Debug(name: string, parent: Instance?)
 	self._debug = folder
 end
 
-
 --[=[
 	Destroys the PID. This is only necessary if calling `PID:Debug`.
 ]=]
@@ -162,6 +160,5 @@ function PID:Destroy()
 		self._debug = nil
 	end
 end
-
 
 return PID

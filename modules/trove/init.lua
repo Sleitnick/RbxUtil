@@ -2,12 +2,10 @@
 -- Stephen Leitnick
 -- October 16, 2021
 
-
 local FN_MARKER = newproxy()
 local THREAD_MARKER = newproxy()
 
 local RunService = game:GetService("RunService")
-
 
 local function GetObjectCleanupFunction(object, cleanupMethod)
 	local t = typeof(object)
@@ -33,13 +31,16 @@ local function GetObjectCleanupFunction(object, cleanupMethod)
 	error("Failed to get cleanup function for object " .. t .. ": " .. tostring(object), 3)
 end
 
-
 local function AssertPromiseLike(object)
-	if type(object) ~= "table" or type(object.getStatus) ~= "function" or type(object.finally) ~= "function" or type(object.cancel) ~= "function" then
+	if
+		type(object) ~= "table"
+		or type(object.getStatus) ~= "function"
+		or type(object.finally) ~= "function"
+		or type(object.cancel) ~= "function"
+	then
 		error("Did not receive a Promise as an argument", 3)
 	end
 end
-
 
 --[=[
 	@class Trove
@@ -48,7 +49,6 @@ end
 ]=]
 local Trove = {}
 Trove.__index = Trove
-
 
 --[=[
 	@return Trove
@@ -59,7 +59,6 @@ function Trove.new()
 	self._objects = {}
 	return self
 end
-
 
 --[=[
 	@return Trove
@@ -84,7 +83,6 @@ function Trove:Extend()
 	return self:Construct(Trove)
 end
 
-
 --[=[
 	Clones the given instance and adds it to the trove. Shorthand for
 	`trove:Add(instance:Clone())`.
@@ -92,7 +90,6 @@ end
 function Trove:Clone(instance: Instance): Instance
 	return self:Add(instance:Clone())
 end
-
 
 --[=[
 	@param class table | (...any) -> any
@@ -138,7 +135,6 @@ function Trove:Construct(class, ...)
 	return self:Add(object)
 end
 
-
 --[=[
 	@param signal RBXScriptSignal
 	@param fn (...: any) -> ()
@@ -157,7 +153,6 @@ end
 function Trove:Connect(signal, fn)
 	return self:Add(signal:Connect(fn))
 end
-
 
 --[=[
 	@param name string
@@ -178,7 +173,6 @@ function Trove:BindToRenderStep(name: string, priority: number, fn: (dt: number)
 		RunService:UnbindFromRenderStep(name)
 	end)
 end
-
 
 --[=[
 	@param promise Promise
@@ -213,7 +207,6 @@ function Trove:AddPromise(promise)
 	end
 	return promise
 end
-
 
 --[=[
 	@param object any -- Object to track
@@ -265,10 +258,9 @@ end
 ]=]
 function Trove:Add(object: any, cleanupMethod: string?): any
 	local cleanup = GetObjectCleanupFunction(object, cleanupMethod)
-	table.insert(self._objects, {object, cleanup})
+	table.insert(self._objects, { object, cleanup })
 	return object
 end
-
 
 --[=[
 	@param object any -- Object to remove
@@ -284,23 +276,21 @@ function Trove:Remove(object: any): boolean
 	return self:_findAndRemoveFromObjects(object, true)
 end
 
-
 --[=[
 	Cleans up all objects in the trove. This is
 	similar to calling `Remove` on each object
 	within the trove.
 ]=]
 function Trove:Clean()
-	for _,obj in ipairs(self._objects) do
+	for _, obj in ipairs(self._objects) do
 		self:_cleanupObject(obj[1], obj[2])
 	end
 	table.clear(self._objects)
 end
 
-
 function Trove:_findAndRemoveFromObjects(object: any, cleanup: boolean): boolean
 	local objects = self._objects
-	for i,obj in ipairs(objects) do
+	for i, obj in ipairs(objects) do
 		if obj[1] == object then
 			local n = #objects
 			objects[i] = objects[n]
@@ -314,7 +304,6 @@ function Trove:_findAndRemoveFromObjects(object: any, cleanup: boolean): boolean
 	return false
 end
 
-
 function Trove:_cleanupObject(object, cleanupMethod)
 	if cleanupMethod == FN_MARKER then
 		object()
@@ -324,7 +313,6 @@ function Trove:_cleanupObject(object, cleanupMethod)
 		object[cleanupMethod](object)
 	end
 end
-
 
 --[=[
 	@param instance Instance
@@ -346,13 +334,11 @@ function Trove:AttachToInstance(instance: Instance)
 	end)
 end
 
-
 --[=[
 	Destroys the Trove object. Forces `Clean` to run.
 ]=]
 function Trove:Destroy()
 	self:Clean()
 end
-
 
 return Trove

@@ -4,13 +4,12 @@
 -- Stephen Leitnick
 -- April 29, 2022
 
-
 --[=[
 	@within Silo
 	@type State<S> {[string]: any}
 	Represents state.
 ]=]
-export type State<S> = S & {[string]: any}
+export type State<S> = S & { [string]: any }
 
 --[=[
 	@within Silo
@@ -76,8 +75,7 @@ Silo.__index = Silo
 	payload (no need to pass state). The `SetKills` modifier is then used
 	as the `SetKills` action to be dispatched.
 ]=]
-function Silo.new<S>(defaultState: State<S>, modifiers: {Modifier<S>}?)
-
+function Silo.new<S>(defaultState: State<S>, modifiers: { Modifier<S> }?)
 	local self = setmetatable({}, Silo)
 
 	self._State = Util.DeepFreeze(Util.DeepCopy(defaultState))
@@ -89,8 +87,7 @@ function Silo.new<S>(defaultState: State<S>, modifiers: {Modifier<S>}?)
 	self.Actions = {}
 
 	-- Create modifiers and action creators:
-	for actionName,modifier in pairs(modifiers or {}) do
-
+	for actionName, modifier in pairs(modifiers or {}) do
 		self._Modifiers[actionName] = function(state: State<S>, payload: any)
 			-- Create a watcher to virtually watch for state mutations:
 			local watcher = TableWatcher(state)
@@ -105,11 +102,9 @@ function Silo.new<S>(defaultState: State<S>, modifiers: {Modifier<S>}?)
 				Payload = payload,
 			}
 		end
-
 	end
 
 	return self
-
 end
 
 --[=[
@@ -118,10 +113,9 @@ end
 	Constructs a new silo as a combination of other silos.
 ]=]
 function Silo.combine<S>(silos, initialState: State<S>?)
-
 	-- Combine state:
 	local state = {}
-	for name,silo in pairs(silos) do
+	for name, silo in pairs(silos) do
 		if silo._Dispatching then
 			error("cannot combine silos from a modifier", 2)
 		end
@@ -131,15 +125,15 @@ function Silo.combine<S>(silos, initialState: State<S>?)
 	local combinedSilo = Silo.new(Util.Extend(state, initialState or {}))
 
 	-- Combine modifiers and actions:
-	for name,silo in pairs(silos) do
+	for name, silo in pairs(silos) do
 		silo._Parent = combinedSilo
-		for actionName,modifier in pairs(silo._Modifiers) do
+		for actionName, modifier in pairs(silo._Modifiers) do
 			-- Prefix action name to keep it unique:
 			local fullActionName = name .. "/" .. actionName
 			combinedSilo._Modifiers[fullActionName] = function(s, payload)
 				-- Extend the top-level state from the sub-silo state modification:
 				return Util.Extend(s, {
-					[name] = modifier((s :: {[string]: any})[name], payload)
+					[name] = modifier((s :: { [string]: any })[name], payload),
 				})
 			end
 		end
@@ -156,7 +150,6 @@ function Silo.combine<S>(silos, initialState: State<S>?)
 	end
 
 	return combinedSilo
-
 end
 
 --[=[
@@ -181,7 +174,6 @@ end
 	```
 ]=]
 function Silo:Dispatch<A>(action: Action<A>)
-
 	if self._Dispatching then
 		error("cannot dispatch from a modifier", 2)
 	end
@@ -201,16 +193,13 @@ function Silo:Dispatch<A>(action: Action<A>)
 
 	-- State changed:
 	if newState ~= oldState then
-
 		self._State = Util.DeepFreeze(newState)
 
 		-- Notify subscribers of state change:
-		for _,subscriber in ipairs(self._Subscribers) do
+		for _, subscriber in ipairs(self._Subscribers) do
 			subscriber(newState, oldState)
 		end
-		
 	end
-
 end
 
 --[=[
@@ -229,7 +218,6 @@ end
 	```
 ]=]
 function Silo:Subscribe<S>(subscriber: (newState: State<S>, oldState: State<S>) -> ()): () -> ()
-
 	if self._Dispatching then
 		error("cannot subscribe from within a modifier", 2)
 	end
@@ -245,10 +233,11 @@ function Silo:Subscribe<S>(subscriber: (newState: State<S>, oldState: State<S>) 
 	-- Unsubscribe:
 	return function()
 		local index = table.find(self._Subscribers, subscriber)
-		if not index then return end
+		if not index then
+			return
+		end
 		table.remove(self._Subscribers, index)
 	end
-
 end
 
 --[=[
@@ -270,12 +259,13 @@ end
 	```
 ]=]
 function Silo:Watch<S, T>(selector: (State<S>) -> T, onChange: (T) -> ()): () -> ()
-
 	local value = selector(self:GetState())
 
 	local unsubscribe = self:Subscribe(function(state)
 		local newValue = selector(state)
-		if newValue == value then return end
+		if newValue == value then
+			return
+		end
 		value = newValue
 		onChange(value)
 	end)
@@ -284,7 +274,6 @@ function Silo:Watch<S, T>(selector: (State<S>) -> T, onChange: (T) -> ()): () ->
 	onChange(value)
 
 	return unsubscribe
-
 end
 
 return Silo

@@ -40,7 +40,7 @@ local function acquireRunnerThreadAndCallEventHandler(fn, ...)
 	freeRunnerThread = acquiredRunnerThread
 end
 
--- Coroutine runner that we create coroutines of. The coroutine can be 
+-- Coroutine runner that we create coroutines of. The coroutine can be
 -- repeatedly resumed with functions to run followed by the argument to run
 -- them with.
 local function runEventHandlerInFreeThread(...)
@@ -49,7 +49,6 @@ local function runEventHandlerInFreeThread(...)
 		acquireRunnerThreadAndCallEventHandler(coroutine.yield())
 	end
 end
-
 
 --[=[
 	@within Signal
@@ -70,7 +69,6 @@ end
 local Connection = {}
 Connection.__index = Connection
 
-
 function Connection.new(signal, fn)
 	return setmetatable({
 		Connected = true,
@@ -80,9 +78,10 @@ function Connection.new(signal, fn)
 	}, Connection)
 end
 
-
 function Connection:Disconnect()
-	if not self.Connected then return end
+	if not self.Connected then
+		return
+	end
 	self.Connected = false
 
 	-- Unhook the node, but DON'T clear it. That way any fire calls that are
@@ -111,9 +110,8 @@ setmetatable(Connection, {
 	end,
 	__newindex = function(_tb, key, _value)
 		error(("Attempt to set Connection::%s (not a valid member)"):format(tostring(key)), 2)
-	end
+	end,
 })
-
 
 --[=[
 	@within Signal
@@ -154,7 +152,6 @@ function Signal.new()
 	return self
 end
 
-
 --[=[
 	Constructs a new Signal that wraps around an RBXScriptSignal.
 
@@ -169,14 +166,16 @@ end
 	```
 ]=]
 function Signal.Wrap(rbxScriptSignal)
-	assert(typeof(rbxScriptSignal) == "RBXScriptSignal", "Argument #1 to Signal.Wrap must be a RBXScriptSignal; got " .. typeof(rbxScriptSignal))
+	assert(
+		typeof(rbxScriptSignal) == "RBXScriptSignal",
+		"Argument #1 to Signal.Wrap must be a RBXScriptSignal; got " .. typeof(rbxScriptSignal)
+	)
 	local signal = Signal.new()
 	signal._proxyHandler = rbxScriptSignal:Connect(function(...)
 		signal:Fire(...)
 	end)
 	return signal
 end
-
 
 --[=[
 	Checks if the given object is a Signal.
@@ -187,7 +186,6 @@ end
 function Signal.Is(obj)
 	return type(obj) == "table" and getmetatable(obj) == Signal
 end
-
 
 --[=[
 	@param fn ConnectionFn
@@ -213,7 +211,6 @@ function Signal:Connect(fn)
 	return connection
 end
 
-
 --[=[
 	@param fn ConnectionFn
 	@return SignalConnection
@@ -233,14 +230,15 @@ function Signal:ConnectOnce(fn)
 	local connection
 	local done = false
 	connection = self:Connect(function(...)
-		if done then return end
+		if done then
+			return
+		end
 		done = true
 		connection:Disconnect()
 		fn(...)
 	end)
 	return connection
 end
-
 
 function Signal:GetConnections()
 	local items = {}
@@ -251,7 +249,6 @@ function Signal:GetConnections()
 	end
 	return items
 end
-
 
 -- Disconnect all handlers. Since we use a linked list it suffices to clear the
 -- reference to the head handler.
@@ -269,7 +266,6 @@ function Signal:DisconnectAll()
 	end
 	self._handlerListHead = false
 end
-
 
 -- Signal:Fire(...) implemented by running the handler functions on the
 -- coRunnerThread, and any time the resulting thread yielded without returning
@@ -299,7 +295,6 @@ function Signal:Fire(...)
 	end
 end
 
-
 --[=[
 	@param ... any
 
@@ -315,7 +310,6 @@ function Signal:FireDeferred(...)
 		item = item._next
 	end
 end
-
 
 --[=[
 	@return ... any
@@ -337,14 +331,15 @@ function Signal:Wait()
 	local connection
 	local done = false
 	connection = self:Connect(function(...)
-		if done then return end
+		if done then
+			return
+		end
 		done = true
 		connection:Disconnect()
 		task.spawn(waitingCoroutine, ...)
 	end)
 	return coroutine.yield()
 end
-
 
 --[=[
 	Cleans up the signal.
@@ -366,7 +361,6 @@ function Signal:Destroy()
 	end
 end
 
-
 -- Make signal strict
 setmetatable(Signal, {
 	__index = function(_tb, key)
@@ -374,7 +368,7 @@ setmetatable(Signal, {
 	end,
 	__newindex = function(_tb, key, _value)
 		error(("Attempt to set Signal::%s (not a valid member)"):format(tostring(key)), 2)
-	end
+	end,
 })
 
 return Signal

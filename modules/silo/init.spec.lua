@@ -1,5 +1,4 @@
 return function()
-
 	local Silo = require(script.Parent)
 
 	local silo1, silo2, rootSilo
@@ -21,7 +20,7 @@ return function()
 		}, {
 			AddMoney = function(state, money)
 				state.Money += money
-			end
+			end,
 		})
 		rootSilo = Silo.combine({
 			Stats = silo1,
@@ -30,7 +29,6 @@ return function()
 	end)
 
 	describe("State", function()
-
 		it("should get state properly", function()
 			local silo = Silo.new({
 				ABC = 10,
@@ -73,11 +71,9 @@ return function()
 				rootSilo:GetState().SomethingElse = {}
 			end).to.throw()
 		end)
-
 	end)
 
 	describe("Dispatch", function()
-
 		it("should dispatch", function()
 			expect(rootSilo:GetState().Stats.Kills).to.equal(0)
 			rootSilo:Dispatch(silo1.Actions.SetKills(10))
@@ -104,17 +100,15 @@ return function()
 				}, {
 					SetData = function(state, newData)
 						state.Data = newData
-						silo:Dispatch({Name = "", Payload = 0})
+						silo:Dispatch({ Name = "", Payload = 0 })
 					end,
 				})
 				silo:Dispatch(silo.Actions.SetData(0))
 			end).to.throw()
 		end)
-		
 	end)
 
 	describe("Subscribe", function()
-
 		it("should subscribe to a silo", function()
 			local new, old
 			local n = 0
@@ -168,11 +162,9 @@ return function()
 				silo:Dispatch(silo.Actions.SetData(0))
 			end).to.throw()
 		end)
-	
 	end)
 
 	describe("Watch", function()
-
 		it("should watch value changes", function()
 			local function SelectMoney(state)
 				return state.Econ.Money
@@ -201,7 +193,5 @@ return function()
 			expect(changes).to.equal(3)
 			expect(currentMoney).to.equal(30)
 		end)
-		
 	end)
-
 end

@@ -12,7 +12,6 @@ type StreamableWithInstance = {
 local Trove = require(script.Parent.Parent.Trove)
 local Signal = require(script.Parent.Parent.Signal)
 
-
 --[=[
 	@within Streamable
 	@prop Instance Instance
@@ -85,7 +84,6 @@ local Signal = require(script.Parent.Parent.Signal)
 local Streamable = {}
 Streamable.__index = Streamable
 
-
 --[=[
 	@return Streamable
 	@param parent Instance
@@ -96,7 +94,6 @@ Streamable.__index = Streamable
 	the child within the parent.
 ]=]
 function Streamable.new(parent: Instance, childName: string)
-
 	local self: StreamableWithInstance = {}
 	setmetatable(self, Streamable)
 
@@ -137,9 +134,7 @@ function Streamable.new(parent: Instance, childName: string)
 	end
 
 	return self
-
 end
-
 
 --[=[
 	@return Streamable
@@ -149,7 +144,6 @@ end
 	given `parent` Model.
 ]=]
 function Streamable.primary(parent: Model)
-
 	local self: StreamableWithInstance = {}
 	setmetatable(self, Streamable)
 
@@ -175,9 +169,7 @@ function Streamable.primary(parent: Model)
 	end
 
 	return self
-	
 end
-
 
 --[=[
 	@param handler (instance: Instance, trove: Trove) -> nil
@@ -196,7 +188,6 @@ function Streamable:Observe(handler)
 	return self._shown:Connect(handler)
 end
 
-
 --[=[
 	Destroys the Streamable. Any observers will be disconnected,
 	which also means that troves within observers will be cleaned
@@ -206,8 +197,6 @@ function Streamable:Destroy()
 	self._trove:Destroy()
 end
 
-
 export type Streamable = typeof(Streamable.new(workspace, "X"))
-
 
 return Streamable

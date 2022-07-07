@@ -28,12 +28,10 @@
 
 --]]
 
-
 type Args = {
 	n: number,
 	[any]: any,
 }
-
 
 local Option = require(script.Parent.Option)
 
@@ -72,11 +70,12 @@ local Ser = {}
 ]=]
 Ser.Classes = {
 	Option = {
-		Serialize = function(opt) return opt:Serialize() end;
-		Deserialize = Option.Deserialize;
-	};
+		Serialize = function(opt)
+			return opt:Serialize()
+		end,
+		Deserialize = Option.Deserialize,
+	},
 }
-
 
 --[=[
 	@param ... any
@@ -85,7 +84,7 @@ Ser.Classes = {
 ]=]
 function Ser.SerializeArgs(...: any): Args
 	local args = table.pack(...)
-	for i,arg in ipairs(args) do
+	for i, arg in ipairs(args) do
 		if type(arg) == "table" then
 			local ser = Ser.Classes[arg.ClassName]
 			if ser then
@@ -95,7 +94,6 @@ function Ser.SerializeArgs(...: any): Args
 	end
 	return args
 end
-
 
 --[=[
 	@param ... any
@@ -107,7 +105,6 @@ function Ser.SerializeArgsAndUnpack(...: any): ...any
 	return table.unpack(args, 1, args.n)
 end
 
-
 --[=[
 	@param ... any
 	@return args: table
@@ -115,7 +112,7 @@ end
 ]=]
 function Ser.DeserializeArgs(...: any): Args
 	local args = table.pack(...)
-	for i,arg in ipairs(args) do
+	for i, arg in ipairs(args) do
 		if type(arg) == "table" then
 			local ser = Ser.Classes[arg.ClassName]
 			if ser then
@@ -126,7 +123,6 @@ function Ser.DeserializeArgs(...: any): Args
 	return args
 end
 
-
 --[=[
 	@param ... any
 	@return args: table
@@ -136,7 +132,6 @@ function Ser.DeserializeArgsAndUnpack(...: any): ...any
 	local args = Ser.DeserializeArgs(...)
 	return table.unpack(args, 1, args.n)
 end
-
 
 --[=[
 	@param value any
@@ -153,7 +148,6 @@ function Ser.Serialize(value: any): any
 	return value
 end
 
-
 --[=[
 	@param value any
 	@return any
@@ -169,7 +163,6 @@ function Ser.Deserialize(value: any): any
 	return value
 end
 
-
 --[=[
 	@param value any
 	@return any
@@ -178,6 +171,5 @@ end
 function Ser.UnpackArgs(value: Args): ...any
 	return table.unpack(value, 1, value.n)
 end
-
 
 return Ser

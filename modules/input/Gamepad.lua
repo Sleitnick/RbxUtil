@@ -2,7 +2,6 @@
 -- Stephen Leitnick
 -- December 23, 2021
 
-
 local Trove = require(script.Parent.Parent.Trove)
 local Signal = require(script.Parent.Parent.Signal)
 
@@ -22,14 +21,14 @@ local function GetActiveGamepad(): Enum.UserInputType?
 	local activeGamepad = nil
 	local navGamepads = UserInputService:GetNavigationGamepads()
 	if #navGamepads > 1 then
-		for _,navGamepad in ipairs(navGamepads) do
+		for _, navGamepad in ipairs(navGamepads) do
 			if activeGamepad == nil or navGamepad.Value < activeGamepad.Value then
 				activeGamepad = navGamepad
 			end
 		end
 	else
 		local connectedGamepads = UserInputService:GetConnectedGamepads()
-		for _,connectedGamepad in ipairs(connectedGamepads) do
+		for _, connectedGamepad in ipairs(connectedGamepads) do
 			if activeGamepad == nil or connectedGamepad.Value < activeGamepad.Value then
 				activeGamepad = connectedGamepad
 			end
@@ -209,7 +208,6 @@ Gamepad.__index = Gamepad
 	@type GamepadState {[Enum.KeyCode]: InputObject}
 ]=]
 
-
 --[=[
 	@param gamepad Enum.UserInputType?
 	@return Gamepad
@@ -248,11 +246,11 @@ function Gamepad.new(gamepad: Enum.UserInputType?)
 	return self
 end
 
-
 function Gamepad:_setupActiveGamepad(gamepad: Enum.UserInputType?)
-
 	local lastGamepad = self._gamepad
-	if gamepad == lastGamepad then return end
+	if gamepad == lastGamepad then
+		return
+	end
 
 	self._gamepadTrove:Clean()
 	table.clear(self.State)
@@ -267,7 +265,7 @@ function Gamepad:_setupActiveGamepad(gamepad: Enum.UserInputType?)
 		return
 	end
 
-	for _,inputObject in ipairs(UserInputService:GetGamepadState(gamepad)) do
+	for _, inputObject in ipairs(UserInputService:GetGamepadState(gamepad)) do
 		self.State[inputObject.KeyCode] = inputObject
 	end
 
@@ -289,14 +287,10 @@ function Gamepad:_setupActiveGamepad(gamepad: Enum.UserInputType?)
 		self.Connected:Fire()
 	end
 	self.GamepadChanged:Fire(gamepad)
-
 end
 
-
 function Gamepad:_setupGamepad(forcedGamepad: Enum.UserInputType?)
-
 	if forcedGamepad then
-
 		-- Forced gamepad:
 
 		self._trove:Connect(UserInputService.GamepadConnected, function(gp)
@@ -314,9 +308,7 @@ function Gamepad:_setupGamepad(forcedGamepad: Enum.UserInputType?)
 		if UserInputService:GetGamepadConnected(forcedGamepad) then
 			self:_setupActiveGamepad(forcedGamepad)
 		end
-
 	else
-
 		-- Dynamic gamepad:
 
 		local function CheckToSetupActive()
@@ -329,19 +321,15 @@ function Gamepad:_setupGamepad(forcedGamepad: Enum.UserInputType?)
 		self._trove:Connect(UserInputService.GamepadConnected, CheckToSetupActive)
 		self._trove:Connect(UserInputService.GamepadDisconnected, CheckToSetupActive)
 		self:_setupActiveGamepad(GetActiveGamepad())
-
 	end
-
 end
-
 
 function Gamepad:_setupMotors()
 	self._setMotorIds = {}
-	for _,motor in ipairs(Enum.VibrationMotor:GetEnumItems()) do
+	for _, motor in ipairs(Enum.VibrationMotor:GetEnumItems()) do
 		self._setMotorIds[motor] = 0
 	end
 end
-
 
 --[=[
 	@param thumbstick Enum.KeyCode
@@ -361,12 +349,8 @@ end
 function Gamepad:GetThumbstick(thumbstick: Enum.KeyCode, deadzoneThreshold: number?): Vector2
 	local pos = self.State[thumbstick].Position
 	local deadzone = deadzoneThreshold or self.DefaultDeadzone
-	return Vector2.new(
-		ApplyDeadzone(pos.X, deadzone),
-		ApplyDeadzone(pos.Y, deadzone)
-	)
+	return Vector2.new(ApplyDeadzone(pos.X, deadzone), ApplyDeadzone(pos.Y, deadzone))
 end
-
 
 --[=[
 	@param trigger KeyCode
@@ -386,8 +370,7 @@ end
 ]=]
 function Gamepad:GetTrigger(trigger: Enum.KeyCode, deadzoneThreshold: number?): number
 	return ApplyDeadzone(self.State[trigger].Position.Z, deadzoneThreshold or self.DefaultDeadzone)
-end	
-
+end
 
 --[=[
 	@param gamepadButton KeyCode
@@ -406,7 +389,6 @@ end
 function Gamepad:IsButtonDown(gamepadButton: Enum.KeyCode): boolean
 	return UserInputService:IsGamepadButtonDown(self._gamepad, gamepadButton)
 end
-
 
 --[=[
 	@param motor Enum.VibrationMotor
@@ -427,7 +409,6 @@ function Gamepad:IsMotorSupported(motor: Enum.VibrationMotor): boolean
 	return HapticService:IsMotorSupported(self._gamepad, motor)
 end
 
-
 --[=[
 	@param motor Enum.VibrationMotor
 	@param intensity number
@@ -444,7 +425,6 @@ function Gamepad:SetMotor(motor: Enum.VibrationMotor, intensity: number): number
 	HapticService:SetMotor(self._gamepad, motor, intensity)
 	return id
 end
-
 
 --[=[
 	@param motor Enum.VibrationMotor
@@ -474,12 +454,13 @@ end
 function Gamepad:PulseMotor(motor: Enum.VibrationMotor, intensity: number, duration: number)
 	local id = self:SetMotor(motor, intensity)
 	local heartbeat = HeartbeatDelay(duration, function()
-		if self._setMotorIds[motor] ~= id then return end
+		if self._setMotorIds[motor] ~= id then
+			return
+		end
 		self:StopMotor(motor)
 	end)
 	self._gamepadTrove:Add(heartbeat)
 end
-
 
 --[=[
 	@param motor Enum.VibrationMotor
@@ -496,7 +477,6 @@ function Gamepad:StopMotor(motor: Enum.VibrationMotor)
 	self:SetMotor(motor, 0)
 end
 
-
 --[=[
 	Stops all motors on the gamepad.
 
@@ -508,13 +488,12 @@ end
 	```
 ]=]
 function Gamepad:StopMotors()
-	for _,motor in ipairs(Enum.VibrationMotor:GetEnumItems()) do
+	for _, motor in ipairs(Enum.VibrationMotor:GetEnumItems()) do
 		if self:IsMotorSupported(motor) then
 			self:StopMotor(motor)
 		end
 	end
 end
-
 
 --[=[
 	@return boolean
@@ -524,7 +503,6 @@ function Gamepad:IsConnected(): boolean
 	return if self._gamepad then UserInputService:GetGamepadConnected(self._gamepad) else false
 end
 
-
 --[=[
 	@return Enum.UserInputType?
 	Gets the current gamepad UserInputType that the gamepad object
@@ -533,7 +511,6 @@ end
 function Gamepad:GetUserInputType(): Enum.UserInputType?
 	return self._gamepad
 end
-
 
 --[=[
 	@param enabled boolean
@@ -566,13 +543,11 @@ function Gamepad:IsAutoSelectGuiEnabled(): boolean
 	return GuiService.AutoSelectGuiEnabled
 end
 
-
 --[=[
 	Destroys the gamepad object.
 ]=]
 function Gamepad:Destroy()
 	self._trove:Destroy()
 end
-
 
 return Gamepad

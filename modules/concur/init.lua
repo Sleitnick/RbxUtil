@@ -51,7 +51,6 @@ Concur.Errors = {
 }
 
 function Concur._new(fn: AnyFn, spawner: AnyFn, ...: any): Concur
-
 	local self: Concur = setmetatable({
 		_completed = false,
 		_res = nil,
@@ -65,20 +64,19 @@ function Concur._new(fn: AnyFn, spawner: AnyFn, ...: any): Concur
 		self._completed = true
 		self._err = if not pcallRes[1] then pcallRes[2] else nil
 		if self._err ~= nil then
-			for _,thread in ipairs(self._awaitingThreads) do
+			for _, thread in ipairs(self._awaitingThreads) do
 				task.spawn(thread, self._err)
 			end
 		else
 			local res = table.move(pcallRes, 2, #pcallRes, 1, table.create(#pcallRes - 1))
 			self._res = res
-			for _,thread in ipairs(self._awaitingThreads) do
+			for _, thread in ipairs(self._awaitingThreads) do
 				task.spawn(thread, nil, table.unpack(res, 1, res.n))
 			end
 		end
 	end, ...)
 
 	return self
-
 end
 
 --[=[
@@ -115,7 +113,6 @@ function Concur.defer(fn: AnyFn, ...: any): Concur
 	return Concur._new(fn, task.defer, ...)
 end
 
-
 --[=[
 	Same as `Concur.spawn`, but uses `task.delay` internally.
 ]=]
@@ -123,7 +120,9 @@ function Concur.delay(delayTime: number, fn: AnyFn, ...: any): Concur
 	if type(fn) ~= "function" then
 		error("Concur.delay argument must be a function; got " .. type(fn), 2)
 	end
-	return Concur._new(fn, function(...) return task.delay(delayTime, ...) end, ...)
+	return Concur._new(fn, function(...)
+		return task.delay(delayTime, ...)
+	end, ...)
 end
 
 --[=[
@@ -161,11 +160,12 @@ end
 	```
 ]=]
 function Concur.event(event: RBXScriptSignal, predicate: ((...any) -> boolean)?)
-
 	local connection, thread
 
 	connection = event:Connect(function(...)
-		if not thread then return end
+		if not thread then
+			return
+		end
 		if predicate == nil or predicate(...) then
 			connection:Disconnect()
 			task.spawn(thread, ...)
@@ -185,7 +185,6 @@ function Concur.event(event: RBXScriptSignal, predicate: ((...any) -> boolean)?)
 	end)
 
 	return c
-
 end
 
 --[=[
@@ -212,8 +211,7 @@ end
 	end)
 	```
 ]=]
-function Concur.all(concurs: {Concur}): Concur
-
+function Concur.all(concurs: { Concur }): Concur
 	if #concurs == 0 then
 		return Concur.value(nil)
 	end
@@ -223,7 +221,7 @@ function Concur.all(concurs: {Concur}): Concur
 		local total = #concurs
 		local thread = coroutine.running()
 		local allRes = table.create(total)
-		for i,concur in ipairs(concurs) do
+		for i, concur in ipairs(concurs) do
 			concur:OnCompleted(function(...)
 				allRes[i] = table.pack(...)
 				numCompleted += 1
@@ -237,7 +235,6 @@ function Concur.all(concurs: {Concur}): Concur
 		end
 		return allRes
 	end)
-
 end
 
 --[=[
@@ -258,8 +255,7 @@ end
 	end)
 	```
 ]=]
-function Concur.first(concurs: {Concur}): Concur
-
+function Concur.first(concurs: { Concur }): Concur
 	if #concurs == 0 then
 		return Concur.value(nil)
 	end
@@ -268,9 +264,11 @@ function Concur.first(concurs: {Concur}): Concur
 		local thread = coroutine.running()
 		local res = nil
 		local firstConcur = nil
-		for _,concur in ipairs(concurs) do
+		for _, concur in ipairs(concurs) do
 			concur:OnCompleted(function(err, ...)
-				if res or err ~= nil then return end
+				if res or err ~= nil then
+					return
+				end
 				firstConcur = concur
 				res = table.pack(...)
 				if coroutine.status(thread) == "suspended" then
@@ -281,13 +279,14 @@ function Concur.first(concurs: {Concur}): Concur
 		if res == nil then
 			coroutine.yield()
 		end
-		for _,concur in ipairs(concurs) do
-			if concur == firstConcur then continue end
+		for _, concur in ipairs(concurs) do
+			if concur == firstConcur then
+				continue
+			end
 			concur:Stop()
 		end
 		return table.unpack(res, 1, res.n)
 	end)
-
 end
 
 --[=[
@@ -308,11 +307,13 @@ end
 	```
 ]=]
 function Concur:Stop()
-	if self._completed then return end
+	if self._completed then
+		return
+	end
 	self._completed = true
 	self._err = Concur.Errors.Stopped
 	task.cancel(self._thread)
-	for _,thread: thread in ipairs(self._awaitingThreads) do
+	for _, thread: thread in ipairs(self._awaitingThreads) do
 		task.spawn(thread, Concur.Errors.Stopped)
 	end
 end
@@ -398,7 +399,6 @@ end
 	```
 ]=]
 function Concur:Await(timeout: number?): (Error, ...any?)
-
 	if self._completed then
 		if self._err ~= nil then
 			return self._err
@@ -426,7 +426,6 @@ function Concur:Await(timeout: number?): (Error, ...any?)
 	else
 		return coroutine.yield()
 	end
-
 end
 
 --[=[
@@ -515,7 +514,6 @@ end
 	```
 ]=]
 function Concur:OnCompleted(fn: (Error, ...any?) -> (), timeout: number?): () -> ()
-
 	local thread = task.spawn(function()
 		fn(self:Await(timeout))
 	end)
@@ -528,14 +526,13 @@ function Concur:OnCompleted(fn: (Error, ...any?) -> (), timeout: number?): () ->
 			table.remove(self._awaitingThreads, index)
 		end
 	end
-
 end
 
 type ConcurObj = {
 	_completed: boolean,
-	_res: {any}?,
+	_res: { any }?,
 	_err: string?,
-	_awaitingThreads: {thread},
+	_awaitingThreads: { thread },
 	_thread: thread?,
 }
 

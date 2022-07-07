@@ -21,8 +21,7 @@
 local Loader = {}
 
 type Module = {}
-type Modules = {Module}
-
+type Modules = { Module }
 
 --[=[
 	Requires all children ModuleScripts
@@ -32,7 +31,7 @@ type Modules = {Module}
 ]=]
 function Loader.LoadChildren(parent: Instance): Modules
 	local modules: Modules = {}
-	for _,child in ipairs(parent:GetChildren()) do
+	for _, child in ipairs(parent:GetChildren()) do
 		if child:IsA("ModuleScript") then
 			local m = require(child)
 			table.insert(modules, m)
@@ -40,7 +39,6 @@ function Loader.LoadChildren(parent: Instance): Modules
 	end
 	return modules
 end
-
 
 --[=[
 	Requires all descendant ModuleScripts
@@ -50,7 +48,7 @@ end
 ]=]
 function Loader.LoadDescendants(parent: Instance): Modules
 	local modules: Modules = {}
-	for _,descendant in ipairs(parent:GetDescendants()) do
+	for _, descendant in ipairs(parent:GetDescendants()) do
 		if descendant:IsA("ModuleScript") then
 			local m = require(descendant)
 			table.insert(modules, m)
@@ -58,6 +56,5 @@ function Loader.LoadDescendants(parent: Instance): Modules
 	end
 	return modules
 end
-
 
 return Loader

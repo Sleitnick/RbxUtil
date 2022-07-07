@@ -2,7 +2,6 @@
 -- Stephen Leitnick
 -- January 17, 2022
 
-
 local RunService = game:GetService("RunService")
 
 local Promise = require(script.Parent.Promise)
@@ -64,7 +63,8 @@ function WaitFor.Child(parent: Instance, childName: string, timeout: number?)
 	if child then
 		return Promise.resolve(child)
 	end
-	return PromiseWatchAncestry(parent,
+	return PromiseWatchAncestry(
+		parent,
 		Promise.fromEvent(parent.ChildAdded, function(c)
 			return c.Name == childName
 		end):timeout(timeout or DEFAULT_TIMEOUT)
@@ -89,14 +89,14 @@ end
 	no longer match the given `parent`.
 	:::
 ]=]
-function WaitFor.Children(parent: Instance, childrenNames: {string}, timeout: number?)
+function WaitFor.Children(parent: Instance, childrenNames: { string }, timeout: number?)
 	local all = table.create(#childrenNames)
-	for i,childName in ipairs(childrenNames) do
+	for i, childName in ipairs(childrenNames) do
 		all[i] = WaitFor.Child(parent, childName, timeout)
 	end
 	return Promise.all(all):andThen(function(children)
 		-- Check that all are still parented
-		for _,child in ipairs(children) do
+		for _, child in ipairs(children) do
 			if child.Parent ~= parent then
 				return Promise.reject(WaitFor.Error.ParentChanged)
 			end
@@ -122,7 +122,8 @@ function WaitFor.Descendant(parent: Instance, descendantName: string, timeout: n
 	if descendant then
 		return Promise.resolve(descendant)
 	end
-	return PromiseWatchAncestry(parent,
+	return PromiseWatchAncestry(
+		parent,
 		Promise.fromEvent(parent.DescendantAdded, function(d)
 			return d.Name == descendantName
 		end):timeout(timeout or DEFAULT_TIMEOUT)
@@ -147,14 +148,14 @@ end
 	`parent`.
 	:::
 ]=]
-function WaitFor.Descendants(parent: Instance, descendantNames: {string}, timeout: number?)
+function WaitFor.Descendants(parent: Instance, descendantNames: { string }, timeout: number?)
 	local all = table.create(#descendantNames)
-	for i,descendantName in ipairs(descendantNames) do
+	for i, descendantName in ipairs(descendantNames) do
 		all[i] = WaitFor.Descendant(parent, descendantName, timeout)
 	end
 	return Promise.all(all):andThen(function(descendants)
 		-- Check that all are still parented
-		for _,descendant in ipairs(descendants) do
+		for _, descendant in ipairs(descendants) do
 			if not descendant:IsDescendantOf(parent) then
 				return Promise.reject(WaitFor.Error.ParentChanged)
 			end
@@ -178,13 +179,16 @@ function WaitFor.PrimaryPart(model: Model, timeout: number?)
 	if primary then
 		return Promise.resolve(primary)
 	end
-	return PromiseWatchAncestry(model,
+	return PromiseWatchAncestry(
+		model,
 		Promise.fromEvent(model:GetPropertyChangedSignal("PrimaryPart"), function()
 			primary = model.PrimaryPart
 			return primary ~= nil
-		end):andThen(function()
-			return primary
-		end):timeout(timeout or DEFAULT_TIMEOUT)
+		end)
+			:andThen(function()
+				return primary
+			end)
+			:timeout(timeout or DEFAULT_TIMEOUT)
 	)
 end
 
@@ -203,13 +207,16 @@ function WaitFor.ObjectValue(objectValue: ObjectValue, timeout: number?)
 	if value then
 		return Promise.resolve(value)
 	end
-	return PromiseWatchAncestry(objectValue, 
+	return PromiseWatchAncestry(
+		objectValue,
 		Promise.fromEvent(objectValue.Changed, function(v)
 			value = v
 			return value ~= nil
-		end):andThen(function()
-			return value
-		end):timeout(timeout or DEFAULT_TIMEOUT)
+		end)
+			:andThen(function()
+				return value
+			end)
+			:timeout(timeout or DEFAULT_TIMEOUT)
 	)
 end
 

@@ -2,7 +2,6 @@
 -- Stephen Leitnick
 -- December 20, 2021
 
-
 local Players = game:GetService("Players")
 
 local Util = require(script.Parent.Parent.Util)
@@ -51,7 +50,13 @@ local None = Util.None
 local RemoteProperty = {}
 RemoteProperty.__index = RemoteProperty
 
-function RemoteProperty.new(parent: Instance, name: string, initialValue: any, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?)
+function RemoteProperty.new(
+	parent: Instance,
+	name: string,
+	initialValue: any,
+	inboundMiddleware: Types.ServerMiddleware?,
+	outboundMiddleware: Types.ServerMiddleware?
+)
 	local self = setmetatable({}, RemoteProperty)
 	self._rs = RemoteSignal.new(parent, name, inboundMiddleware, outboundMiddleware)
 	self._value = initialValue
@@ -112,7 +117,7 @@ end
 ]=]
 function RemoteProperty:SetTop(value: any)
 	self._value = value
-	for _,player in ipairs(Players:GetPlayers()) do
+	for _, player in ipairs(Players:GetPlayers()) do
 		if self._perPlayer[player] == nil then
 			self._rs:Fire(player, value)
 		end
@@ -134,7 +139,7 @@ end
 	```
 ]=]
 function RemoteProperty:SetFilter(predicate: (Player, any) -> boolean, value: any)
-	for _,player in ipairs(Players:GetPlayers()) do
+	for _, player in ipairs(Players:GetPlayers()) do
 		if predicate(player, value) then
 			self:SetFor(player, value)
 		end
@@ -171,8 +176,8 @@ end
 	remoteProperty:SetForList(players, "CustomData")
 	```
 ]=]
-function RemoteProperty:SetForList(players: {Player}, value: any)
-	for _,player in ipairs(players) do
+function RemoteProperty:SetForList(players: { Player }, value: any)
+	for _, player in ipairs(players) do
 		self:SetFor(player, value)
 	end
 end
@@ -199,7 +204,9 @@ end
 	```
 ]=]
 function RemoteProperty:ClearFor(player: Player)
-	if self._perPlayer[player] == nil then return end
+	if self._perPlayer[player] == nil then
+		return
+	end
 	self._perPlayer[player] = nil
 	self._rs:Fire(player, self._value)
 end
@@ -209,8 +216,8 @@ end
 	just loops through the list of players and calls
 	the `ClearFor` method for each player.
 ]=]
-function RemoteProperty:ClearForList(players: {Player})
-	for _,player in ipairs(players) do
+function RemoteProperty:ClearForList(players: { Player })
+	for _, player in ipairs(players) do
 		self:ClearFor(player)
 	end
 end
@@ -220,7 +227,7 @@ end
 	for any player that passes the predicate.
 ]=]
 function RemoteProperty:ClearFilter(predicate: (Player) -> boolean)
-	for _,player in ipairs(Players:GetPlayers()) do
+	for _, player in ipairs(Players:GetPlayers()) do
 		if predicate(player) then
 			self:ClearFor(player)
 		end

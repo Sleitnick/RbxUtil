@@ -2,12 +2,10 @@
 -- Stephen Leitnick
 -- October 10, 2021
 
-
 local Trove = require(script.Parent.Parent.Trove)
 local Signal = require(script.Parent.Parent.Signal)
 
 local UserInputService = game:GetService("UserInputService")
-
 
 --[=[
 	@class Keyboard
@@ -45,7 +43,6 @@ Keyboard.__index = Keyboard
 	```
 ]=]
 
-
 --[=[
 	@return Keyboard
 
@@ -64,7 +61,6 @@ function Keyboard.new()
 	return self
 end
 
-
 --[=[
 	Check if the given key is down.
 
@@ -77,7 +73,6 @@ function Keyboard:IsKeyDown(keyCode: Enum.KeyCode): boolean
 	return UserInputService:IsKeyDown(keyCode)
 end
 
-
 --[=[
 	Check if _both_ keys are down. Useful for key combinations.
 
@@ -89,7 +84,6 @@ end
 function Keyboard:AreKeysDown(keyCodeOne: Enum.KeyCode, keyCodeTwo: Enum.KeyCode): boolean
 	return self:IsKeyDown(keyCodeOne) and self:IsKeyDown(keyCodeTwo)
 end
-
 
 --[=[
 	Check if _either_ of the keys are down. Useful when two keys might perform
@@ -106,25 +100,25 @@ function Keyboard:AreEitherKeysDown(keyCodeOne: Enum.KeyCode, keyCodeTwo: Enum.K
 	return self:IsKeyDown(keyCodeOne) or self:IsKeyDown(keyCodeTwo)
 end
 
-
 function Keyboard:_setup()
-
 	self._trove:Connect(UserInputService.InputBegan, function(input, processed)
-		if processed then return end
+		if processed then
+			return
+		end
 		if input.UserInputType == Enum.UserInputType.Keyboard then
 			self.KeyDown:Fire(input.KeyCode)
 		end
 	end)
 
 	self._trove:Connect(UserInputService.InputEnded, function(input, processed)
-		if processed then return end
+		if processed then
+			return
+		end
 		if input.UserInputType == Enum.UserInputType.Keyboard then
 			self.KeyUp:Fire(input.KeyCode)
 		end
 	end)
-
 end
-
 
 --[=[
 	Destroy the keyboard input capturer.
@@ -132,6 +126,5 @@ end
 function Keyboard:Destroy()
 	self._trove:Destroy()
 end
-
 
 return Keyboard
