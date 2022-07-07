@@ -2,7 +2,6 @@
 -- Stephen Leitnick
 -- August 05, 2021
 
-
 --[=[
 	@class Comm
 	Remote communication library.

@@ -4,7 +4,6 @@
 -- Stephen Leitnick
 -- November 20, 2021
 
-
 --[=[
 	@class TaskQueue
 	A queue that flushes all objects at the end of the current
@@ -32,13 +31,12 @@
 local TaskQueue = {}
 TaskQueue.__index = TaskQueue
 
-
 --[=[
 	@param onFlush ({T}) -> nil
 	@return TaskQueue<T>
 	Constructs a new TaskQueue.
 ]=]
-function TaskQueue.new<T>(onFlush: ({T}) -> nil)
+function TaskQueue.new<T>(onFlush: ({ T }) -> nil)
 	local self = setmetatable({}, TaskQueue)
 	self._queue = {}
 	self._flushing = false
@@ -46,7 +44,6 @@ function TaskQueue.new<T>(onFlush: ({T}) -> nil)
 	self._onFlush = onFlush
 	return self
 end
-
 
 --[=[
 	@param object T
@@ -69,7 +66,6 @@ function TaskQueue:Add<T>(object: T)
 	end
 end
 
-
 --[=[
 	Clears the TaskQueue. This will clear any tasks
 	that were scheduled to be flushed on the current
@@ -82,11 +78,12 @@ end
 	```
 ]=]
 function TaskQueue:Clear()
-	if self._flushing then return end
+	if self._flushing then
+		return
+	end
 	table.clear(self._queue)
 	self._flushingScheduled = false
 end
-
 
 --[=[
 	Destroys the TaskQueue. Just an alias for `Clear()`.
@@ -94,6 +91,5 @@ end
 function TaskQueue:Destroy()
 	self:Clear()
 end
-
 
 return TaskQueue

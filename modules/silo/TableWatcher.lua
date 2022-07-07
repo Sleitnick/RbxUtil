@@ -4,8 +4,7 @@
 -- Stephen Leitnick
 -- April 29, 2022
 
-
-type AnyTable = {[any]: any}
+type AnyTable = { [any]: any }
 
 type Watcher = {
 	Changes: AnyTable,
@@ -14,8 +13,8 @@ type Watcher = {
 
 local Util = require(script.Parent.Util)
 
-local watchers: {[TableWatcher]: Watcher} = {}
-setmetatable(watchers, {__mode = "k"})
+local watchers: { [TableWatcher]: Watcher } = {}
+setmetatable(watchers, { __mode = "k" })
 
 local WatcherMt = {}
 
@@ -34,7 +33,9 @@ end
 
 function WatcherMt:__newindex(index, value)
 	local w = watchers[self]
-	if w.Tbl[index] == value then return end
+	if w.Tbl[index] == value then
+		return
+	end
 	if value == nil then
 		w.Changes[index] = Util.None
 	else

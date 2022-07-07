@@ -121,7 +121,6 @@
 
 --]]
 
-
 local IS_STUDIO = game:GetService("RunService"):IsStudio()
 local IS_SERVER = game:GetService("RunService"):IsServer()
 
@@ -130,7 +129,7 @@ local AnalyticsService = game:GetService("AnalyticsService")
 local AnalyticsLogLevel = Enum.AnalyticsLogLevel
 local Players = game:GetService("Players")
 
-local player = ((not IS_SERVER) and Players.LocalPlayer or nil)
+local player = (not IS_SERVER and Players.LocalPlayer or nil)
 
 local configModule = game:GetService("ReplicatedStorage"):FindFirstChild("LogConfig", true)
 local config = (configModule and require(configModule) or "Debug")
@@ -139,23 +138,23 @@ local logLevel = nil
 local timeFunc = os.clock
 
 local logLevels = {
-	Trace = AnalyticsLogLevel.Trace.Value;
-	Debug = AnalyticsLogLevel.Debug.Value;
-	Info = AnalyticsLogLevel.Information.Value;
-	Warning = AnalyticsLogLevel.Warning.Value;
-	Error = AnalyticsLogLevel.Error.Value;
-	Fatal = AnalyticsLogLevel.Fatal.Value;
+	Trace = AnalyticsLogLevel.Trace.Value,
+	Debug = AnalyticsLogLevel.Debug.Value,
+	Info = AnalyticsLogLevel.Information.Value,
+	Warning = AnalyticsLogLevel.Warning.Value,
+	Error = AnalyticsLogLevel.Error.Value,
+	Fatal = AnalyticsLogLevel.Fatal.Value,
 }
 
 local timeUnits = {
-	Milliseconds = 0;
-	Seconds = 1;
-	Minutes = 2;
-	Hours = 3;
-	Days = 4;
-	Weeks = 5;
-	Months = 6;
-	Years = 7;
+	Milliseconds = 0,
+	Seconds = 1,
+	Minutes = 2,
+	Hours = 3,
+	Days = 4,
+	Weeks = 5,
+	Months = 6,
+	Years = 7,
 }
 
 local function ToSeconds(n, timeUnit)
@@ -180,7 +179,6 @@ local function ToSeconds(n, timeUnit)
 	end
 end
 
-
 local function GetPlayerFromCustomData(customData)
 	if type(customData) == "table" then
 		local id = (customData.Player or customData.PlayerId)
@@ -191,7 +189,6 @@ local function GetPlayerFromCustomData(customData)
 	return nil
 end
 
-
 local FireAnalyticsLogEvent
 if IS_STUDIO then
 	FireAnalyticsLogEvent = function(_level, _message, _traceback, _customData) end
@@ -199,7 +196,7 @@ else
 	FireAnalyticsLogEvent = function(level, message, traceback, customData)
 		local success, err = pcall(function()
 			local plr = (player or GetPlayerFromCustomData(customData))
-			AnalyticsService:FireLogEvent(plr, level, message, {stackTrace = traceback}, customData)
+			AnalyticsService:FireLogEvent(plr, level, message, { stackTrace = traceback }, customData)
 		end)
 		if not success then
 			warn(err)
@@ -207,19 +204,18 @@ else
 	end
 end
 
-
 local LogItem = {}
 LogItem.__index = LogItem
 
 function LogItem.new(log, levelName, traceback, key)
 	local self = setmetatable({
-		_log = log;
-		_traceback = traceback;
-		_levelName = levelName;
+		_log = log,
+		_traceback = traceback,
+		_levelName = levelName,
 		_modifiers = {
-			Throw = false;
-		};
-		_key = key;
+			Throw = false,
+		},
+		_key = key,
 	}, LogItem)
 	return self
 end
@@ -251,7 +247,9 @@ end
 
 function LogItem:Log(message, customData)
 	local stats = self._log:_getLogStats(self._key)
-	if not self:_shouldLog(stats) then return end
+	if not self:_shouldLog(stats) then
+		return
+	end
 	if type(message) == "function" then
 		local msg, data = message()
 		message = msg
@@ -286,7 +284,6 @@ function LogItem:Assert(condition, ...)
 	end
 end
 
-
 local LogItemBlank = {}
 LogItemBlank.__index = LogItemBlank
 setmetatable(LogItemBlank, LogItem)
@@ -299,7 +296,6 @@ end
 function LogItemBlank:Log()
 	-- Do nothing
 end
-
 
 local LogStats = {}
 LogStats.__index = LogStats
@@ -324,7 +320,6 @@ end
 function LogStats:_setTimestamp(now)
 	self._lastTimestamp = now
 end
-
 
 --[=[
 	@class Log
@@ -500,15 +495,13 @@ Log.__index = Log
 	@readonly
 ]=]
 
-
 Log.TimeUnit = timeUnits
 Log.Level = logLevels
 
 Log.LevelNames = {}
-for name,num in pairs(Log.Level) do
+for name, num in pairs(Log.Level) do
 	Log.LevelNames[num] = name
 end
-
 
 --[=[
 	@return Log
@@ -526,7 +519,6 @@ function Log.new()
 	return self
 end
 
-
 function Log:_getLogStats(key)
 	local stats = self._stats[key]
 	if not stats then
@@ -535,7 +527,6 @@ function Log:_getLogStats(key)
 	end
 	return stats
 end
-
 
 function Log:_at(level)
 	local l, f = debug.info(3, "lf")
@@ -548,7 +539,6 @@ function Log:_at(level)
 	end
 end
 
-
 --[=[
 	@param level LogLevel
 	@return LogItem
@@ -556,7 +546,6 @@ end
 function Log:At(level)
 	return self:_at(level)
 end
-
 
 --[=[
 	@return LogItem
@@ -566,7 +555,6 @@ function Log:AtTrace()
 	return self:_at(Log.Level.Trace)
 end
 
-
 --[=[
 	@return LogItem
 	Get a LogItem at the Debug log level.
@@ -574,7 +562,6 @@ end
 function Log:AtDebug()
 	return self:_at(Log.Level.Debug)
 end
-
 
 --[=[
 	@return LogItem
@@ -584,7 +571,6 @@ function Log:AtInfo()
 	return self:_at(Log.Level.Info)
 end
 
-
 --[=[
 	@return LogItem
 	Get a LogItem at the Warning log level.
@@ -592,7 +578,6 @@ end
 function Log:AtWarning()
 	return self:_at(Log.Level.Warning)
 end
-
 
 --[=[
 	@return LogItem
@@ -602,7 +587,6 @@ function Log:AtError()
 	return self:_at(Log.Level.Error)
 end
 
-
 --[=[
 	@return LogItem
 	Get a LogItem at the Fatal log level.
@@ -610,7 +594,6 @@ end
 function Log:AtFatal()
 	return self:_at(Log.Level.Fatal)
 end
-
 
 --[=[
 	@param condition boolean
@@ -625,21 +608,17 @@ function Log:Assert(condition, ...)
 	end
 end
 
-
-function Log:Destroy()
-end
-
+function Log:Destroy() end
 
 function Log:__tostring()
 	return ("Log<%s>"):format(self._name)
 end
 
-
 -- Determine log level:
 do
 	local function SetLogLevel(name)
 		local n = name:lower()
-		for levelName,level in pairs(Log.Level) do
+		for levelName, level in pairs(Log.Level) do
 			if levelName:lower() == n then
 				if IS_STUDIO then
 					local attr = (IS_SERVER and "LogLevel" or "LogLevelClient")
@@ -655,13 +634,19 @@ do
 		error("Unknown log level: " .. tostring(name))
 	end
 	local configType = type(config)
-	assert(configType == "table" or configType == "string", "LogConfig must return a table or a string; got " .. configType)
+	assert(
+		configType == "table" or configType == "string",
+		"LogConfig must return a table or a string; got " .. configType
+	)
 	if configType == "string" then
 		SetLogLevel(config)
 	else
 		if IS_STUDIO and config.Studio then
 			local studioConfigType = type(config.Studio)
-			assert(studioConfigType == "table" or studioConfigType == "string", "LogConfig.Studio must be a table or a string; got " .. studioConfigType)
+			assert(
+				studioConfigType == "table" or studioConfigType == "string",
+				"LogConfig.Studio must be a table or a string; got " .. studioConfigType
+			)
 			if studioConfigType == "string" then
 				-- Config for Studio:
 				SetLogLevel(config.Studio)
@@ -669,11 +654,17 @@ do
 				-- Server/Client config for Studio:
 				if IS_SERVER then
 					local studioServerLevel = config.Studio.Server
-					assert(type(studioServerLevel) == "string", "LogConfig.Studio.Server must be a string; got " .. type(studioServerLevel))
+					assert(
+						type(studioServerLevel) == "string",
+						"LogConfig.Studio.Server must be a string; got " .. type(studioServerLevel)
+					)
 					SetLogLevel(studioServerLevel)
 				else
 					local studioClientLevel = config.Studio.Client
-					assert(type(studioClientLevel) == "string", "LogConfig.Studio.Client must be a string; got " .. type(studioClientLevel))
+					assert(
+						type(studioClientLevel) == "string",
+						"LogConfig.Studio.Client must be a string; got " .. type(studioClientLevel)
+					)
 					SetLogLevel(studioClientLevel)
 				end
 			end
@@ -682,8 +673,10 @@ do
 			local numDefault = 0
 			local set = false
 			local setK = nil
-			for k,specialConfig in pairs(config) do
-				if k == "Studio" then continue end
+			for k, specialConfig in pairs(config) do
+				if k == "Studio" then
+					continue
+				end
 				if type(specialConfig) == "string" then
 					default = specialConfig
 					numDefault += 1
@@ -703,18 +696,27 @@ do
 						fallthrough = true
 					end
 					if not fallthrough then
-						assert(not set, ("More than one LogConfig mapping matched (%s and %s)"):format(setK or "", k or ""))
+						assert(
+							not set,
+							("More than one LogConfig mapping matched (%s and %s)"):format(setK or "", k or "")
+						)
 					end
 					if canUse then
 						if IS_SERVER then
 							local serverLevel = specialConfig.Server
-							assert(type(serverLevel) == "string", ("LogConfig.%s.Server must be a string; got %s"):format(k, type(serverLevel)))
+							assert(
+								type(serverLevel) == "string",
+								("LogConfig.%s.Server must be a string; got %s"):format(k, type(serverLevel))
+							)
 							SetLogLevel(serverLevel)
 							set = true
 							setK = k
 						else
 							local clientLevel = specialConfig.Client
-							assert(type(clientLevel) == "string", ("LogConfig.%s.Client must be a string; got %s"):format(k, type(clientLevel)))
+							assert(
+								type(clientLevel) == "string",
+								("LogConfig.%s.Client must be a string; got %s"):format(k, type(clientLevel))
+							)
 							SetLogLevel(clientLevel)
 							set = true
 							setK = k
@@ -740,6 +742,5 @@ do
 		end)
 	end
 end
-
 
 return Log

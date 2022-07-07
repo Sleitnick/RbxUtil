@@ -2,12 +2,10 @@
 -- Stephen Leitnick
 -- March 14, 2021
 
-
 local Trove = require(script.Parent.Parent.Trove)
 local Signal = require(script.Parent.Parent.Signal)
 
 local UserInputService = game:GetService("UserInputService")
-
 
 --[=[
 	@class Touch
@@ -83,12 +81,10 @@ Touch.__index = Touch
 	Proxy for [UserInputService.TouchEnded](https://developer.roblox.com/en-us/api-reference/event/UserInputService/TouchEnded).
 ]=]
 
-
 --[=[
 	Constructs a new Touch input capturer.
 ]=]
 function Touch.new()
-
 	local self = setmetatable({}, Touch)
 
 	self._trove = Trove.new()
@@ -105,9 +101,7 @@ function Touch.new()
 	self.TouchEnded = self._trove:Construct(Signal.Wrap, UserInputService.TouchEnded)
 
 	return self
-
 end
-
 
 --[=[
 	Returns the value of [`UserInputService.TouchEnabled`](https://developer.roblox.com/en-us/api-reference/property/UserInputService/TouchEnabled).
@@ -116,13 +110,11 @@ function Touch:IsTouchEnabled(): boolean
 	return UserInputService.TouchEnabled
 end
 
-
 --[=[
 	Destroys the Touch input capturer.
 ]=]
 function Touch:Destroy()
 	self._trove:Destroy()
 end
-
 
 return Touch

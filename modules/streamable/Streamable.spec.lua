@@ -1,5 +1,4 @@
 return function()
-
 	local Streamable = require(script.Parent.Streamable)
 
 	local instanceFolder
@@ -43,7 +42,6 @@ return function()
 	end)
 
 	describe("Streamable", function()
-
 		it("should detect instance that is immediately available", function()
 			local testInstance = CreateInstance("TestImmediate")
 			local streamable = Streamable.new(instanceFolder, "TestImmediate")
@@ -88,7 +86,7 @@ return function()
 			expect(observed).to.equal(2)
 			expect(cleaned).to.equal(2)
 		end)
-		
+
 		it("should detect primary part that is immediately available", function()
 			local testInstance = CreatePrimary()
 			local streamable = Streamable.primary(instanceModel)
@@ -111,7 +109,7 @@ return function()
 			expect(observed).to.equal(2)
 			expect(cleaned).to.equal(2)
 		end)
-		
+
 		it("should detect primary part that is not immediately available", function()
 			local streamable = Streamable.primary(instanceModel)
 			local observed = 0
@@ -135,7 +133,5 @@ return function()
 			expect(observed).to.equal(2)
 			expect(cleaned).to.equal(2)
 		end)
-
 	end)
-
 end

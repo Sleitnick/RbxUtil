@@ -1,9 +1,7 @@
 return function()
-
 	local Timer = require(script.Parent)
 
 	describe("Timer", function()
-
 		local timer
 
 		beforeEach(function()
@@ -67,7 +65,5 @@ return function()
 			timer:Stop()
 			expect(timer:IsRunning()).to.equal(false)
 		end)
-
 	end)
-
 end

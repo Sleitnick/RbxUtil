@@ -1,9 +1,7 @@
 return function()
-
 	local Symbol = require(script.Parent)
 
 	describe("Constructor", function()
-
 		it("should create a new symbol", function()
 			local symbol = Symbol("Test")
 			expect(symbol).to.be.a("userdata")
@@ -31,7 +29,5 @@ return function()
 			t[symbol] = 100
 			expect(t[symbol]).to.equal(100)
 		end)
-
 	end)
-
 end

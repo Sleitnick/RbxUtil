@@ -1,7 +1,7 @@
 [package]
 name = "sleitnick/task-queue"
 description = "Batches tasks that occur on the same execution step"
-version = "0.1.0"
+version = "0.1.1"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"

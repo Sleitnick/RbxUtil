@@ -1,9 +1,7 @@
 return function()
-
 	local Trove = require(script.Parent)
 
 	describe("Trove", function()
-
 		local trove
 
 		beforeEach(function()
@@ -33,7 +31,7 @@ return function()
 		end)
 
 		it("should add and clean up a table with a destroy method", function()
-			local tbl = {Destroyed = false}
+			local tbl = { Destroyed = false }
 			function tbl:Destroy()
 				self.Destroyed = true
 			end
@@ -43,7 +41,7 @@ return function()
 		end)
 
 		it("should add and clean up a table with a disconnect method", function()
-			local tbl = {Connected = true}
+			local tbl = { Connected = true }
 			function tbl:Disconnect()
 				self.Connected = false
 			end
@@ -62,7 +60,7 @@ return function()
 		end)
 
 		it("should allow a custom cleanup method", function()
-			local tbl = {Cleaned = false}
+			local tbl = { Cleaned = false }
 			function tbl:Cleanup()
 				self.Cleaned = true
 			end
@@ -80,7 +78,9 @@ return function()
 
 		it("should fail to add object without proper cleanup method", function()
 			local tbl = {}
-			expect(function() trove:Add(tbl) end).to.throw()
+			expect(function()
+				trove:Add(tbl)
+			end).to.throw()
 		end)
 
 		it("should construct an object and add it", function()
@@ -137,7 +137,9 @@ return function()
 
 		it("should fail to attach to instance not in hierarchy", function()
 			local part = Instance.new("Part")
-			expect(function() trove:AttachToInstance(part) end).to.throw()
+			expect(function()
+				trove:AttachToInstance(part)
+			end).to.throw()
 		end)
 
 		it("should extend itself", function()
@@ -170,7 +172,5 @@ return function()
 			trove:Clean()
 			expect(coroutine.status(co)).to.equal("dead")
 		end)
-
 	end)
-
 end

@@ -2,7 +2,6 @@
 -- Stephen Leitnick
 -- December 09, 2021
 
-
 --[=[
 	@within Shake
 	@type UpdateCallbackFn () -> (position: Vector3, rotation: Vector3, completed: boolean)
@@ -13,10 +12,8 @@ local RunService = game:GetService("RunService")
 
 local Trove = require(script.Parent.Trove)
 
-
 local rng = Random.new()
 local renderId = 0
-
 
 --[=[
 	@class Shake
@@ -175,7 +172,6 @@ Shake.__index = Shake
 	if desired.
 ]=]
 
-
 --[=[
 	@return Shake
 	Construct a new Shake instance.
@@ -197,7 +193,6 @@ function Shake.new()
 	self._running = false
 	return self
 end
-
 
 --[=[
 	Apply an inverse square intensity multiplier to the given vector based on the
@@ -236,7 +231,6 @@ function Shake.InverseSquare(shake: Vector3, distance: number): Vector3
 	return shake * intensity
 end
 
-
 --[=[
 	Returns a unique render name for every call, which can
 	be used with the `BindToRenderStep` method optionally.
@@ -249,7 +243,6 @@ function Shake.NextRenderName(): string
 	renderId += 1
 	return ("__shake_%.4i__"):format(renderId)
 end
-
 
 --[=[
 	Start the shake effect.
@@ -267,7 +260,6 @@ function Shake:Start()
 	end)
 end
 
-
 --[=[
 	Stops the shake effect. If using `OnSignal` or `BindToRenderStep`, those bound
 	functions will be disconnected/unbound.
@@ -279,7 +271,6 @@ function Shake:Stop()
 	self._trove:Clean()
 end
 
-
 --[=[
 	Returns `true` if the shake instance is currently running,
 	otherwise returns `false`.
@@ -287,7 +278,6 @@ end
 function Shake:IsShaking(): boolean
 	return self._running
 end
-
 
 --[=[
 	Schedules a sustained shake to stop. This works by setting the
@@ -299,7 +289,6 @@ function Shake:StopSustain()
 	self.Sustain = false
 	self.SustainTime = (now - self._startTime) - self.FadeInTime
 end
-
 
 --[=[
 	Calculates the current shake vector. This should be continuously
@@ -324,7 +313,6 @@ end
 	```
 ]=]
 function Shake:Update(): (Vector3, Vector3, boolean)
-
 	local done = false
 
 	local now = self.TimeFunction()
@@ -344,7 +332,7 @@ function Shake:Update(): (Vector3, Vector3, boolean)
 		else
 			-- Fade out
 			multiplierFadeOut = 1 - (dur - self.FadeInTime - self.SustainTime) / self.FadeOutTime
-			if (not self.Sustain) and dur >= self.FadeInTime + self.SustainTime + self.FadeOutTime then
+			if not self.Sustain and dur >= self.FadeInTime + self.SustainTime + self.FadeOutTime then
 				done = true
 			end
 		end
@@ -361,9 +349,7 @@ function Shake:Update(): (Vector3, Vector3, boolean)
 	end
 
 	return self.PositionInfluence * offset, self.RotationInfluence * offset, done
-
 end
-
 
 --[=[
 	@param signal Signal | RBXScriptSignal
@@ -390,7 +376,6 @@ function Shake:OnSignal(signal, callbackFn: UpdateCallbackFn)
 	end)
 end
 
-
 --[=[
 	@param name string -- Name passed to `RunService:BindToRenderStep`
 	@param priority number -- Priority passed to `RunService:BindToRenderStep`
@@ -416,7 +401,6 @@ function Shake:BindToRenderStep(name: string, priority: number, callbackFn: Upda
 		callbackFn(self:Update())
 	end)
 end
-
 
 --[=[
 	@return Shake
@@ -450,17 +434,21 @@ end
 function Shake:Clone()
 	local shake = Shake.new()
 	local cloneFields = {
-		"Amplitude", "Frequency", "FadeInTime",
-		"FadeOutTime", "SustainTime", "Sustain",
-		"PositionInfluence", "RotationInfluence",
-		"TimeFunction"
+		"Amplitude",
+		"Frequency",
+		"FadeInTime",
+		"FadeOutTime",
+		"SustainTime",
+		"Sustain",
+		"PositionInfluence",
+		"RotationInfluence",
+		"TimeFunction",
 	}
-	for _,field in cloneFields do
+	for _, field in cloneFields do
 		shake[field] = self[field]
 	end
 	return shake
 end
-
 
 --[=[
 	Alias for `Stop()`.
@@ -468,6 +456,5 @@ end
 function Shake:Destroy()
 	self:Stop()
 end
-
 
 return Shake

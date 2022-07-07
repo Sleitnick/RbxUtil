@@ -80,7 +80,6 @@
 
 --]]
 
-
 local CLASSNAME = "Option"
 
 --[=[
@@ -92,16 +91,14 @@ local CLASSNAME = "Option"
 local Option = {}
 Option.__index = Option
 
-
 function Option._new(value)
 	local self = setmetatable({
-		ClassName = CLASSNAME;
-		_v = value;
-		_s = (value ~= nil);
+		ClassName = CLASSNAME,
+		_v = value,
+		_s = (value ~= nil),
 	}, Option)
 	return self
 end
-
 
 --[=[
 	@param value T
@@ -114,7 +111,6 @@ function Option.Some(value)
 	assert(value ~= nil, "Option.Some() value cannot be nil")
 	return Option._new(value)
 end
-
 
 --[=[
 	@param value T
@@ -132,7 +128,6 @@ function Option.Wrap(value)
 	end
 end
 
-
 --[=[
 	@param obj any
 	@return boolean
@@ -142,7 +137,6 @@ function Option.Is(obj)
 	return type(obj) == "table" and getmetatable(obj) == Option
 end
 
-
 --[=[
 	@param obj any
 	Throws an error if `obj` is not an Option.
@@ -150,7 +144,6 @@ end
 function Option.Assert(obj)
 	assert(Option.Is(obj), "Result was not of type Option")
 end
-
 
 --[=[
 	@param data table
@@ -163,18 +156,16 @@ function Option.Deserialize(data) -- type data = {ClassName: string, Value: any}
 	return data.Value == nil and Option.None or Option.Some(data.Value)
 end
 
-
 --[=[
 	@return table
 	Returns a serialized version of the option.
 ]=]
 function Option:Serialize()
 	return {
-		ClassName = self.ClassName;
-		Value = self._v;
+		ClassName = self.ClassName,
+		Value = self._v,
 	}
 end
-
 
 --[=[
 	@param matches {Some: (value: any) -> any, None: () -> any}
@@ -202,7 +193,6 @@ function Option:Match(matches)
 	end
 end
 
-
 --[=[
 	@return boolean
 	Returns `true` if the option has a value.
@@ -211,7 +201,6 @@ function Option:IsSome()
 	return self._s
 end
 
-
 --[=[
 	@return boolean
 	Returns `true` if the option is None.
@@ -219,7 +208,6 @@ end
 function Option:IsNone()
 	return not self._s
 end
-
 
 --[=[
 	@param msg string
@@ -236,7 +224,6 @@ function Option:Expect(msg)
 	return self._v
 end
 
-
 --[=[
 	@param msg string
 	Throws an error with `msg` as the error message if the value is _not_ None.
@@ -245,7 +232,6 @@ function Option:ExpectNone(msg)
 	assert(self:IsNone(), msg)
 end
 
-
 --[=[
 	@return value: any
 	Returns the value in the option, or throws an error if the option is None.
@@ -253,7 +239,6 @@ end
 function Option:Unwrap()
 	return self:Expect("Cannot unwrap option of None type")
 end
-
 
 --[=[
 	@param default any
@@ -268,7 +253,6 @@ function Option:UnwrapOr(default)
 	end
 end
 
-
 --[=[
 	@param defaultFn () -> any
 	@return value: any
@@ -282,7 +266,6 @@ function Option:UnwrapOrElse(defaultFn)
 		return defaultFn()
 	end
 end
-
 
 --[=[
 	@param optionB Option
@@ -310,7 +293,6 @@ function Option:And(optionB)
 	end
 end
 
-
 --[=[
 	@param andThenFn (value: any) -> Option
 	@return value: Option
@@ -337,7 +319,6 @@ function Option:AndThen(andThenFn)
 	end
 end
 
-
 --[=[
 	@param optionB Option
 	@return Option
@@ -350,7 +331,6 @@ function Option:Or(optionB)
 		return optionB
 	end
 end
-
 
 --[=[
 	@param orElseFn () -> Option
@@ -367,7 +347,6 @@ function Option:OrElse(orElseFn)
 		return result
 	end
 end
-
 
 --[=[
 	@param optionB Option
@@ -388,7 +367,6 @@ function Option:XOr(optionB)
 	end
 end
 
-
 --[=[
 	@param predicate (value: any) -> boolean
 	@return Option
@@ -403,7 +381,6 @@ function Option:Filter(predicate)
 	end
 end
 
-
 --[=[
 	@param value any
 	@return boolean
@@ -412,7 +389,6 @@ end
 function Option:Contains(value)
 	return self:IsSome() and self._v == value
 end
-
 
 --[=[
 	@return string
@@ -431,7 +407,6 @@ function Option:__tostring()
 		return "Option<None>"
 	end
 end
-
 
 --[=[
 	@return boolean
@@ -462,13 +437,11 @@ function Option:__eq(opt)
 	return false
 end
 
-
 --[=[
 	@prop None Option<None>
 	@within Option
 	Represents no value.
 ]=]
 Option.None = Option._new()
-
 
 return Option
