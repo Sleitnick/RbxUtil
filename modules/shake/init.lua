@@ -335,12 +335,18 @@ function Shake:Update(): (Vector3, Vector3, boolean)
 	local multiplierFadeIn = 1
 	local multiplierFadeOut = 1
 	if dur < self.FadeInTime then
+		-- Fade in
 		multiplierFadeIn = dur / self.FadeInTime
 	end
 	if not self.Sustain and dur > self.FadeInTime + self.SustainTime then
-		multiplierFadeOut = 1 - (dur - self.FadeInTime - self.SustainTime) / self.FadeOutTime
-		if (not self.Sustain) and dur >= self.FadeInTime + self.SustainTime + self.FadeOutTime then
+		if self.FadeOutTime == 0 then
 			done = true
+		else
+			-- Fade out
+			multiplierFadeOut = 1 - (dur - self.FadeInTime - self.SustainTime) / self.FadeOutTime
+			if (not self.Sustain) and dur >= self.FadeInTime + self.SustainTime + self.FadeOutTime then
+				done = true
+			end
 		end
 	end
 
@@ -449,7 +455,7 @@ function Shake:Clone()
 		"PositionInfluence", "RotationInfluence",
 		"TimeFunction"
 	}
-	for _,field in ipairs(cloneFields) do
+	for _,field in cloneFields do
 		shake[field] = self[field]
 	end
 	return shake
@@ -457,7 +463,7 @@ end
 
 
 --[=[
-	Destroy the Shake instance. Will call `Stop()`.
+	Alias for `Stop()`.
 ]=]
 function Shake:Destroy()
 	self:Stop()
