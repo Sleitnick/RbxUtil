@@ -117,7 +117,7 @@ end
 ]=]
 function RemoteProperty:SetTop(value: any)
 	self._value = value
-	for _, player in ipairs(Players:GetPlayers()) do
+	for _, player in Players:GetPlayers() do
 		if self._perPlayer[player] == nil then
 			self._rs:Fire(player, value)
 		end
@@ -139,7 +139,7 @@ end
 	```
 ]=]
 function RemoteProperty:SetFilter(predicate: (Player, any) -> boolean, value: any)
-	for _, player in ipairs(Players:GetPlayers()) do
+	for _, player in Players:GetPlayers() do
 		if predicate(player, value) then
 			self:SetFor(player, value)
 		end
@@ -177,7 +177,7 @@ end
 	```
 ]=]
 function RemoteProperty:SetForList(players: { Player }, value: any)
-	for _, player in ipairs(players) do
+	for _, player in players do
 		self:SetFor(player, value)
 	end
 end
@@ -217,7 +217,7 @@ end
 	the `ClearFor` method for each player.
 ]=]
 function RemoteProperty:ClearForList(players: { Player })
-	for _, player in ipairs(players) do
+	for _, player in players do
 		self:ClearFor(player)
 	end
 end
@@ -227,7 +227,7 @@ end
 	for any player that passes the predicate.
 ]=]
 function RemoteProperty:ClearFilter(predicate: (Player) -> boolean)
-	for _, player in ipairs(Players:GetPlayers()) do
+	for _, player in Players:GetPlayers() do
 		if predicate(player) then
 			self:ClearFor(player)
 		end

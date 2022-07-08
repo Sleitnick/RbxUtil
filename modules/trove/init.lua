@@ -290,7 +290,7 @@ end
 
 function Trove:_findAndRemoveFromObjects(object: any, cleanup: boolean): boolean
 	local objects = self._objects
-	for i, obj in ipairs(objects) do
+	for i, obj in objects do
 		if obj[1] == object then
 			local n = #objects
 			objects[i] = objects[n]

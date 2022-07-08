@@ -87,7 +87,7 @@ function Silo.new<S>(defaultState: State<S>, modifiers: { Modifier<S> }?)
 	self.Actions = {}
 
 	-- Create modifiers and action creators:
-	for actionName, modifier in pairs(modifiers or {}) do
+	for actionName, modifier in (modifiers or {}) do
 		self._Modifiers[actionName] = function(state: State<S>, payload: any)
 			-- Create a watcher to virtually watch for state mutations:
 			local watcher = TableWatcher(state)
@@ -115,7 +115,7 @@ end
 function Silo.combine<S>(silos, initialState: State<S>?)
 	-- Combine state:
 	local state = {}
-	for name, silo in pairs(silos) do
+	for name, silo in silos do
 		if silo._Dispatching then
 			error("cannot combine silos from a modifier", 2)
 		end
@@ -125,9 +125,9 @@ function Silo.combine<S>(silos, initialState: State<S>?)
 	local combinedSilo = Silo.new(Util.Extend(state, initialState or {}))
 
 	-- Combine modifiers and actions:
-	for name, silo in pairs(silos) do
+	for name, silo in silos do
 		silo._Parent = combinedSilo
-		for actionName, modifier in pairs(silo._Modifiers) do
+		for actionName, modifier in silo._Modifiers do
 			-- Prefix action name to keep it unique:
 			local fullActionName = name .. "/" .. actionName
 			combinedSilo._Modifiers[fullActionName] = function(s, payload)
@@ -137,7 +137,7 @@ function Silo.combine<S>(silos, initialState: State<S>?)
 				})
 			end
 		end
-		for actionName in pairs(silo.Actions) do
+		for actionName in silo.Actions do
 			-- Update the action creator to include the correct prefixed action name:
 			local fullActionName = name .. "/" .. actionName
 			silo.Actions[actionName] = function(p)
@@ -196,7 +196,7 @@ function Silo:Dispatch<A>(action: Action<A>)
 		self._State = Util.DeepFreeze(newState)
 
 		-- Notify subscribers of state change:
-		for _, subscriber in ipairs(self._Subscribers) do
+		for _, subscriber in self._Subscribers do
 			subscriber(newState, oldState)
 		end
 	end

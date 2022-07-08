@@ -499,7 +499,7 @@ Log.TimeUnit = timeUnits
 Log.Level = logLevels
 
 Log.LevelNames = {}
-for name, num in pairs(Log.Level) do
+for name, num in Log.Level do
 	Log.LevelNames[num] = name
 end
 

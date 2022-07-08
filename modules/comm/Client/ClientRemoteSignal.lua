@@ -37,7 +37,7 @@ function ClientRemoteSignal.new(
 		self._signal = Signal.new()
 		self._reConn = self._re.OnClientEvent:Connect(function(...)
 			local args = table.pack(...)
-			for _, middlewareFunc in ipairs(inboundMiddleware) do
+			for _, middlewareFunc in inboundMiddleware do
 				local middlewareResult = table.pack(middlewareFunc(args))
 				if not middlewareResult[1] then
 					return
@@ -54,7 +54,7 @@ end
 
 function ClientRemoteSignal:_processOutboundMiddleware(...: any)
 	local args = table.pack(...)
-	for _, middlewareFunc in ipairs(self._outbound) do
+	for _, middlewareFunc in self._outbound do
 		local middlewareResult = table.pack(middlewareFunc(args))
 		if not middlewareResult[1] then
 			return table.unpack(middlewareResult, 2, middlewareResult.n)

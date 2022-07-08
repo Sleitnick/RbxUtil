@@ -20,7 +20,7 @@ function Client.GetFunction(
 	local hasInbound = type(inboundMiddleware) == "table" and #inboundMiddleware > 0
 	local hasOutbound = type(outboundMiddleware) == "table" and #outboundMiddleware > 0
 	local function ProcessOutbound(args)
-		for _, middlewareFunc in ipairs(outboundMiddleware) do
+		for _, middlewareFunc in outboundMiddleware do
 			local middlewareResult = table.pack(middlewareFunc(args))
 			if not middlewareResult[1] then
 				return table.unpack(middlewareResult, 2, middlewareResult.n)
@@ -42,7 +42,7 @@ function Client.GetFunction(
 						end
 					end)
 					if success then
-						for _, middlewareFunc in ipairs(inboundMiddleware) do
+						for _, middlewareFunc in inboundMiddleware do
 							local middlewareResult = table.pack(middlewareFunc(res))
 							if not middlewareResult[1] then
 								return table.unpack(middlewareResult, 2, middlewareResult.n)
@@ -63,7 +63,7 @@ function Client.GetFunction(
 				else
 					res = table.pack(rf:InvokeServer(...))
 				end
-				for _, middlewareFunc in ipairs(inboundMiddleware) do
+				for _, middlewareFunc in inboundMiddleware do
 					local middlewareResult = table.pack(middlewareFunc(res))
 					if not middlewareResult[1] then
 						return table.unpack(middlewareResult, 2, middlewareResult.n)

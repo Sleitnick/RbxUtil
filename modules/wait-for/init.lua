@@ -91,12 +91,12 @@ end
 ]=]
 function WaitFor.Children(parent: Instance, childrenNames: { string }, timeout: number?)
 	local all = table.create(#childrenNames)
-	for i, childName in ipairs(childrenNames) do
+	for i, childName in childrenNames do
 		all[i] = WaitFor.Child(parent, childName, timeout)
 	end
 	return Promise.all(all):andThen(function(children)
 		-- Check that all are still parented
-		for _, child in ipairs(children) do
+		for _, child in children do
 			if child.Parent ~= parent then
 				return Promise.reject(WaitFor.Error.ParentChanged)
 			end
@@ -150,12 +150,12 @@ end
 ]=]
 function WaitFor.Descendants(parent: Instance, descendantNames: { string }, timeout: number?)
 	local all = table.create(#descendantNames)
-	for i, descendantName in ipairs(descendantNames) do
+	for i, descendantName in descendantNames do
 		all[i] = WaitFor.Descendant(parent, descendantName, timeout)
 	end
 	return Promise.all(all):andThen(function(descendants)
 		-- Check that all are still parented
-		for _, descendant in ipairs(descendants) do
+		for _, descendant in descendants do
 			if not descendant:IsDescendantOf(parent) then
 				return Promise.reject(WaitFor.Error.ParentChanged)
 			end

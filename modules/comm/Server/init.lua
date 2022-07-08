@@ -49,7 +49,7 @@ function Server.BindFunction(
 	local hasOutbound = type(outboundMiddleware) == "table" and #outboundMiddleware > 0
 	local function ProcessOutbound(player, ...)
 		local args = table.pack(...)
-		for _, middlewareFunc in ipairs(outboundMiddleware) do
+		for _, middlewareFunc in outboundMiddleware do
 			local middlewareResult = table.pack(middlewareFunc(player, args))
 			if not middlewareResult[1] then
 				return table.unpack(middlewareResult, 2, middlewareResult.n)
@@ -61,7 +61,7 @@ function Server.BindFunction(
 	if hasInbound and hasOutbound then
 		local function OnServerInvoke(player, ...)
 			local args = table.pack(...)
-			for _, middlewareFunc in ipairs(inboundMiddleware) do
+			for _, middlewareFunc in inboundMiddleware do
 				local middlewareResult = table.pack(middlewareFunc(player, args))
 				if not middlewareResult[1] then
 					return table.unpack(middlewareResult, 2, middlewareResult.n)
@@ -74,7 +74,7 @@ function Server.BindFunction(
 	elseif hasInbound then
 		local function OnServerInvoke(player, ...)
 			local args = table.pack(...)
-			for _, middlewareFunc in ipairs(inboundMiddleware) do
+			for _, middlewareFunc in inboundMiddleware do
 				local middlewareResult = table.pack(middlewareFunc(player, args))
 				if not middlewareResult[1] then
 					return table.unpack(middlewareResult, 2, middlewareResult.n)

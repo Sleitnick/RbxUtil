@@ -195,7 +195,7 @@ function ClientComm:BuildObject(inboundMiddleware: Types.ClientMiddleware?, outb
 	local reFolder = self._instancesFolder:FindFirstChild("RE")
 	local rpFolder = self._instancesFolder:FindFirstChild("RP")
 	if rfFolder then
-		for _, rf in ipairs(rfFolder:GetChildren()) do
+		for _, rf in rfFolder:GetChildren() do
 			if not rf:IsA("RemoteFunction") then
 				continue
 			end
@@ -206,7 +206,7 @@ function ClientComm:BuildObject(inboundMiddleware: Types.ClientMiddleware?, outb
 		end
 	end
 	if reFolder then
-		for _, re in ipairs(reFolder:GetChildren()) do
+		for _, re in reFolder:GetChildren() do
 			if not re:IsA("RemoteEvent") then
 				continue
 			end
@@ -214,7 +214,7 @@ function ClientComm:BuildObject(inboundMiddleware: Types.ClientMiddleware?, outb
 		end
 	end
 	if rpFolder then
-		for _, re in ipairs(rpFolder:GetChildren()) do
+		for _, re in rpFolder:GetChildren() do
 			if not re:IsA("RemoteEvent") then
 				continue
 			end
