@@ -24,6 +24,7 @@ type AnyFn = (...any) -> ...any
 			local save = Concur.spawn(function()
 				DoSomethingToSaveData(player)
 			end)
+			table.insert(all)
 		end
 		local allConcur = Concur.all(all)
 		allConcur:Await()
