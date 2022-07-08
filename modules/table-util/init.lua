@@ -50,7 +50,7 @@ local function Copy(t: Table, deep: boolean?): Table
 	end
 	local function DeepCopy(tbl)
 		local tCopy = table.clone(tbl)
-		for k, v in pairs(tCopy) do
+		for k, v in tCopy do
 			if type(v) == "table" then
 				tCopy[k] = DeepCopy(v)
 			end
@@ -97,7 +97,7 @@ local function Sync(srcTbl: Table, templateTbl: Table): Table
 	-- If 'tbl' has something 'templateTbl' doesn't, then remove it from 'tbl'
 	-- If 'tbl' has something of a different type than 'templateTbl', copy from 'templateTbl'
 	-- If 'templateTbl' has something 'tbl' doesn't, then add it to 'tbl'
-	for k, v in pairs(tbl) do
+	for k, v in tbl do
 		local vTemplate = templateTbl[k]
 
 		-- Remove keys not within template:
@@ -119,7 +119,7 @@ local function Sync(srcTbl: Table, templateTbl: Table): Table
 	end
 
 	-- Add any missing keys:
-	for k, vTemplate in pairs(templateTbl) do
+	for k, vTemplate in templateTbl do
 		local v = tbl[k]
 
 		if v == nil then
@@ -157,7 +157,7 @@ end
 	local data = {kills = 10, abc = 20}
 	local correctedData = TableUtil.Reconcile(data, template)
 	
-	print(correctedData) --> {kills = 10, deaths = 0, xp = 0, abc = 30}
+	print(correctedData) --> {kills = 10, deaths = 0, xp = 0, abc = 20}
 	```
 ]=]
 local function Reconcile(src: Table, template: Table): Table
@@ -166,7 +166,7 @@ local function Reconcile(src: Table, template: Table): Table
 
 	local tbl = table.clone(src)
 
-	for k, v in pairs(template) do
+	for k, v in template do
 		local sv = src[k]
 		if sv == nil then
 			if type(v) == "table" then
@@ -270,7 +270,7 @@ local function Map(t: Table, f: MapPredicate): Table
 	assert(type(t) == "table", "First argument must be a table")
 	assert(type(f) == "function", "Second argument must be a function")
 	local newT = table.create(#t)
-	for k, v in pairs(t) do
+	for k, v in t do
 		newT[k] = f(v, k, t)
 	end
 	return newT
@@ -302,14 +302,14 @@ local function Filter(t: Table, f: FilterPredicate): Table
 	local newT = table.create(#t)
 	if #t > 0 then
 		local n = 0
-		for i, v in ipairs(t) do
+		for i, v in t do
 			if f(v, i, t) then
 				n += 1
 				newT[n] = v
 			end
 		end
 	else
-		for k, v in pairs(t) do
+		for k, v in t do
 			if f(v, k, t) then
 				newT[k] = v
 			end
@@ -384,8 +384,8 @@ end
 ]=]
 local function Assign(target: Table, ...: Table): Table
 	local tbl = table.clone(target)
-	for _, src in ipairs({ ... }) do
-		for k, v in pairs(src) do
+	for _, src in { ... } do
+		for k, v in src do
 			tbl[k] = v
 		end
 	end
@@ -413,7 +413,7 @@ end
 ]=]
 local function Extend(target: Table, extension: Table): Table
 	local tbl = table.clone(target)
-	for _, v in ipairs(extension) do
+	for _, v in extension do
 		table.insert(tbl, v)
 	end
 	return tbl
@@ -534,7 +534,7 @@ local function Flat(tbl: Table, depth: number?): Table
 	local maxDepth: number = if type(depth) == "number" then depth else 1
 	local flatTbl = table.create(#tbl)
 	local function Scan(t: Table, d: number)
-		for _, v in ipairs(t) do
+		for _, v in t do
 			if type(v) == "table" and d < maxDepth then
 				Scan(v, d + 1)
 			else
@@ -595,7 +595,7 @@ end
 ]=]
 local function Keys(tbl: Table): Table
 	local keys = table.create(#tbl)
-	for k in pairs(tbl) do
+	for k in tbl do
 		table.insert(keys, k)
 	end
 	return keys
@@ -625,7 +625,7 @@ end
 ]=]
 local function Values(tbl: Table): Table
 	local values = table.create(#tbl)
-	for _, v in pairs(tbl) do
+	for _, v in tbl do
 		table.insert(values, v)
 	end
 	return values
@@ -663,7 +663,7 @@ end
 	than one possible matches given the data and callback function.
 ]=]
 local function Find(tbl: Table, callback: FindCallback): (any?, any?)
-	for k, v in pairs(tbl) do
+	for k, v in tbl do
 		if callback(v, k, tbl) then
 			return v, k
 		end
@@ -692,7 +692,7 @@ end
 	```
 ]=]
 local function Every(tbl: Table, callback: FindCallback): boolean
-	for k, v in pairs(tbl) do
+	for k, v in tbl do
 		if not callback(v, k, tbl) then
 			return false
 		end
@@ -721,7 +721,7 @@ end
 	```
 ]=]
 local function Some(tbl: Table, callback: FindCallback): boolean
-	for k, v in pairs(tbl) do
+	for k, v in tbl do
 		if callback(v, k, tbl) then
 			return true
 		end
@@ -787,7 +787,7 @@ local function Zip(...): (IteratorFunc, Table, any)
 	local function ZipIteratorArray(all: Table, k: number): (number?, { any }?)
 		k += 1
 		local values = {}
-		for i, t in ipairs(all) do
+		for i, t in all do
 			local v = t[k]
 			if v ~= nil then
 				values[i] = v
@@ -799,7 +799,7 @@ local function Zip(...): (IteratorFunc, Table, any)
 	end
 	local function ZipIteratorMap(all: Table, k: any): (number?, { any }?)
 		local values = {}
-		for i, t in ipairs(all) do
+		for i, t in all do
 			local v = next(t, k)
 			if v ~= nil then
 				values[i] = v
@@ -837,7 +837,7 @@ end
 ]=]
 local function Lock(tbl: Table): Table
 	local function Freeze(t: Table)
-		for k, v in pairs(t) do
+		for k, v in t do
 			if type(v) == "table" then
 				t[k] = Freeze(v)
 			end
