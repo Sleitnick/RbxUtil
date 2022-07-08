@@ -20,7 +20,7 @@ type AnyFn = (...any) -> ...any
 	```lua
 	game:BindToClose(function()
 		local all = {}
-		for _,player in ipairs(Players:GetPlayers()) do
+		for _,player in Players:GetPlayers() do
 			local save = Concur.spawn(function()
 				DoSomethingToSaveData(player)
 			end)
@@ -64,13 +64,13 @@ function Concur._new(fn: AnyFn, spawner: AnyFn, ...: any): Concur
 		self._completed = true
 		self._err = if not pcallRes[1] then pcallRes[2] else nil
 		if self._err ~= nil then
-			for _, thread in ipairs(self._awaitingThreads) do
+			for _, thread in self._awaitingThreads do
 				task.spawn(thread, self._err)
 			end
 		else
 			local res = table.move(pcallRes, 2, #pcallRes, 1, table.create(#pcallRes - 1))
 			self._res = res
-			for _, thread in ipairs(self._awaitingThreads) do
+			for _, thread in self._awaitingThreads do
 				task.spawn(thread, nil, table.unpack(res, 1, res.n))
 			end
 		end
@@ -221,7 +221,7 @@ function Concur.all(concurs: { Concur }): Concur
 		local total = #concurs
 		local thread = coroutine.running()
 		local allRes = table.create(total)
-		for i, concur in ipairs(concurs) do
+		for i, concur in concurs do
 			concur:OnCompleted(function(...)
 				allRes[i] = table.pack(...)
 				numCompleted += 1
@@ -264,7 +264,7 @@ function Concur.first(concurs: { Concur }): Concur
 		local thread = coroutine.running()
 		local res = nil
 		local firstConcur = nil
-		for _, concur in ipairs(concurs) do
+		for _, concur in concurs do
 			concur:OnCompleted(function(err, ...)
 				if res or err ~= nil then
 					return
@@ -279,7 +279,7 @@ function Concur.first(concurs: { Concur }): Concur
 		if res == nil then
 			coroutine.yield()
 		end
-		for _, concur in ipairs(concurs) do
+		for _, concur in concurs do
 			if concur == firstConcur then
 				continue
 			end
@@ -313,7 +313,7 @@ function Concur:Stop()
 	self._completed = true
 	self._err = Concur.Errors.Stopped
 	task.cancel(self._thread)
-	for _, thread: thread in ipairs(self._awaitingThreads) do
+	for _, thread: thread in self._awaitingThreads do
 		task.spawn(thread, Concur.Errors.Stopped)
 	end
 end

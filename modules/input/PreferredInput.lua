@@ -99,7 +99,7 @@ local function SetPreferred(preferred: InputType)
 		return
 	end
 	PreferredInput.Current = preferred
-	for _, subscriber in ipairs(subscribers) do
+	for _, subscriber in subscribers do
 		task.spawn(subscriber, preferred)
 	end
 end

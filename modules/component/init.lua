@@ -195,7 +195,7 @@ local function NextRenderName(): string
 end
 
 local function InvokeExtensionFn(component, fnName: string)
-	for _, extension in ipairs(component[KEY_ACTIVE_EXTENSIONS]) do
+	for _, extension in component[KEY_ACTIVE_EXTENSIONS] do
 		local fn = extension[fnName]
 		if type(fn) == "function" then
 			fn(component)
@@ -204,7 +204,7 @@ local function InvokeExtensionFn(component, fnName: string)
 end
 
 local function ShouldConstruct(component): boolean
-	for _, extension in ipairs(component[KEY_ACTIVE_EXTENSIONS]) do
+	for _, extension in component[KEY_ACTIVE_EXTENSIONS] do
 		local fn = extension.ShouldConstruct
 		if type(fn) == "function" then
 			local shouldConstruct = fn(component)
@@ -219,7 +219,7 @@ end
 local function GetActiveExtensions(component, extensionList)
 	local activeExtensions = table.create(#extensionList)
 	local allActive = true
-	for _, extension in ipairs(extensionList) do
+	for _, extension in extensionList do
 		local fn = extension.ShouldExtend
 		local shouldExtend = type(fn) ~= "function" or not not fn(component)
 		if shouldExtend then
@@ -442,7 +442,7 @@ function Component:_setup()
 			return
 		end
 		local function IsInAncestorList(): boolean
-			for _, parent in ipairs(self[KEY_ANCESTORS]) do
+			for _, parent in self[KEY_ANCESTORS] do
 				if instance:IsDescendantOf(parent) then
 					return true
 				end
@@ -479,7 +479,7 @@ function Component:_setup()
 	self[KEY_TROVE]:Connect(CollectionService:GetInstanceRemovedSignal(self.Tag), InstanceUntagged)
 
 	local tagged = CollectionService:GetTagged(self.Tag)
-	for _, instance in ipairs(tagged) do
+	for _, instance in tagged do
 		task.defer(InstanceTagged, instance)
 	end
 end
@@ -498,7 +498,7 @@ end
 	-- ...
 
 	local components = MyComponent:GetAll()
-	for _,component in ipairs(components) do
+	for _,component in components do
 		component:DoSomethingHere()
 	end
 	```

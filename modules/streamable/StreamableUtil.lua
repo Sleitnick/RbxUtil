@@ -52,7 +52,7 @@ function StreamableUtil.Compound(streamables: Streamables, handler: CompoundHand
 		if allAvailable then
 			return
 		end
-		for _, streamable in pairs(streamables) do
+		for _, streamable in streamables do
 			if not streamable.Instance then
 				return
 			end
@@ -67,7 +67,7 @@ function StreamableUtil.Compound(streamables: Streamables, handler: CompoundHand
 		allAvailable = false
 		observeAllTrove:Clean()
 	end
-	for _, streamable in pairs(streamables) do
+	for _, streamable in streamables do
 		compoundTrove:Add(streamable:Observe(function(_child, trove)
 			Check()
 			trove:Add(Cleanup)

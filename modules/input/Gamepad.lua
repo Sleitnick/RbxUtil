@@ -21,14 +21,14 @@ local function GetActiveGamepad(): Enum.UserInputType?
 	local activeGamepad = nil
 	local navGamepads = UserInputService:GetNavigationGamepads()
 	if #navGamepads > 1 then
-		for _, navGamepad in ipairs(navGamepads) do
+		for _, navGamepad in navGamepads do
 			if activeGamepad == nil or navGamepad.Value < activeGamepad.Value then
 				activeGamepad = navGamepad
 			end
 		end
 	else
 		local connectedGamepads = UserInputService:GetConnectedGamepads()
-		for _, connectedGamepad in ipairs(connectedGamepads) do
+		for _, connectedGamepad in connectedGamepads do
 			if activeGamepad == nil or connectedGamepad.Value < activeGamepad.Value then
 				activeGamepad = connectedGamepad
 			end
@@ -265,7 +265,7 @@ function Gamepad:_setupActiveGamepad(gamepad: Enum.UserInputType?)
 		return
 	end
 
-	for _, inputObject in ipairs(UserInputService:GetGamepadState(gamepad)) do
+	for _, inputObject in UserInputService:GetGamepadState(gamepad) do
 		self.State[inputObject.KeyCode] = inputObject
 	end
 
@@ -326,7 +326,7 @@ end
 
 function Gamepad:_setupMotors()
 	self._setMotorIds = {}
-	for _, motor in ipairs(Enum.VibrationMotor:GetEnumItems()) do
+	for _, motor in Enum.VibrationMotor:GetEnumItems() do
 		self._setMotorIds[motor] = 0
 	end
 end
@@ -488,7 +488,7 @@ end
 	```
 ]=]
 function Gamepad:StopMotors()
-	for _, motor in ipairs(Enum.VibrationMotor:GetEnumItems()) do
+	for _, motor in Enum.VibrationMotor:GetEnumItems() do
 		if self:IsMotorSupported(motor) then
 			self:StopMotor(motor)
 		end

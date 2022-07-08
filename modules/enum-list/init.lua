@@ -62,7 +62,7 @@ function EnumList.new(name: string, enums: EnumNames)
 	local self = setmetatable({}, EnumList)
 	self[LIST_KEY] = {}
 	self[NAME_KEY] = name
-	for i, enumName in ipairs(enums) do
+	for i, enumName in enums do
 		assert(type(enumName) == "string", "Enum name must be a string")
 		local enumItem = CreateEnumItem(enumName, i, self)
 		self[enumName] = enumItem
