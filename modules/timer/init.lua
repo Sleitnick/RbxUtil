@@ -232,6 +232,7 @@ function Timer:Destroy()
 end
 
 function Timer:OnStart(callback)
+	if type(callback) ~= "function" then error("OnStart callback must be a function") end
 	if self.Started.Connected then
 		self.Started:Disconnect()
 	end
@@ -239,6 +240,7 @@ function Timer:OnStart(callback)
 end
 
 function Timer:OnStop(callback)
+	if type(callback) ~= "function" then error("OnStop callback must be a function") end
 	if self.Stopped.Connected then
 		self.Stopped:Disconnect()
 	end
