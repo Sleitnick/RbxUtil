@@ -434,6 +434,12 @@ function Component:_setup()
 		end
 		if component[KEY_STARTED] then
 			task.spawn(StopComponent, component)
+		else
+			Promise.fromEvent(self.Started, function(c)
+				return component == c
+			end):andThen(function()
+				StopComponent(component)
+			end)
 		end
 	end
 
@@ -545,7 +551,7 @@ end
 ]=]
 function Component:WaitForInstance(instance: Instance, timeout: number?)
 	local componentInstance = self:FromInstance(instance)
-	if componentInstance then
+	if componentInstance and componentInstance[KEY_STARTED] == true then
 		return Promise.resolve(componentInstance)
 	end
 	return Promise.fromEvent(self.Started, function(c)
