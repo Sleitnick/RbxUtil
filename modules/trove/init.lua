@@ -57,6 +57,7 @@ Trove.__index = Trove
 function Trove.new()
 	local self = setmetatable({}, Trove)
 	self._objects = {}
+	self._cleaning = false
 	return self
 end
 
@@ -80,6 +81,9 @@ end
 	```
 ]=]
 function Trove:Extend()
+	if self._cleaning then
+		error("Cannot call trove:Extend() while cleaning", 2)
+	end
 	return self:Construct(Trove)
 end
 
@@ -88,6 +92,9 @@ end
 	`trove:Add(instance:Clone())`.
 ]=]
 function Trove:Clone(instance: Instance): Instance
+	if self._cleaning then
+		error("Cannot call trove:Clone() while cleaning", 2)
+	end
 	return self:Add(instance:Clone())
 end
 
@@ -125,6 +132,9 @@ end
 	```
 ]=]
 function Trove:Construct(class, ...)
+	if self._cleaning then
+		error("Cannot call trove:Construct() while cleaning", 2)
+	end
 	local object = nil
 	local t = type(class)
 	if t == "table" then
@@ -151,6 +161,9 @@ end
 	```
 ]=]
 function Trove:Connect(signal, fn)
+	if self._cleaning then
+		error("Cannot call trove:Connect() while cleaning", 2)
+	end
 	return self:Add(signal:Connect(fn))
 end
 
@@ -168,6 +181,9 @@ end
 	```
 ]=]
 function Trove:BindToRenderStep(name: string, priority: number, fn: (dt: number) -> ())
+	if self._cleaning then
+		error("Cannot call trove:BindToRenderStep() while cleaning", 2)
+	end
 	RunService:BindToRenderStep(name, priority, fn)
 	self:Add(function()
 		RunService:UnbindFromRenderStep(name)
@@ -198,10 +214,16 @@ end
 	:::
 ]=]
 function Trove:AddPromise(promise)
+	if self._cleaning then
+		error("Cannot call trove:AddPromise() while cleaning", 2)
+	end
 	AssertPromiseLike(promise)
 	if promise:getStatus() == "Started" then
 		promise:finally(function()
-			return self:_findAndRemoveFromObjects(promise, false)
+			if self._cleaning then
+				return
+			end
+			self:_findAndRemoveFromObjects(promise, false)
 		end)
 		self:Add(promise, "cancel")
 	end
@@ -257,6 +279,9 @@ end
 	```
 ]=]
 function Trove:Add(object: any, cleanupMethod: string?): any
+	if self._cleaning then
+		error("Cannot call trove:Add() while cleaning", 2)
+	end
 	local cleanup = GetObjectCleanupFunction(object, cleanupMethod)
 	table.insert(self._objects, { object, cleanup })
 	return object
@@ -273,20 +298,27 @@ end
 	```
 ]=]
 function Trove:Remove(object: any): boolean
+	if self._cleaning then
+		error("Cannot call trove:Remove() while cleaning", 2)
+	end
 	return self:_findAndRemoveFromObjects(object, true)
 end
 
 --[=[
 	Cleans up all objects in the trove. This is
 	similar to calling `Remove` on each object
-	within the trove.
+	within the trove. The ordering of the objects
+	removed is _not_ guaranteed.
 ]=]
 function Trove:Clean()
-	local objs = table.clone(self._objects)
-	table.clear(self._objects)
-	for _, obj in objs do
+	if self._cleaning then
+		return
+	end
+	self._cleaning = true
+	for _, obj in self._objects do
 		self:_cleanupObject(obj[1], obj[2])
 	end
+	self._cleaning = false
 end
 
 function Trove:_findAndRemoveFromObjects(object: any, cleanup: boolean): boolean
@@ -329,14 +361,18 @@ end
 	:::
 ]=]
 function Trove:AttachToInstance(instance: Instance)
-	assert(instance:IsDescendantOf(game), "Instance is not a descendant of the game hierarchy")
+	if self._cleaning then
+		error("Cannot call trove:AttachToInstance() while cleaning", 2)
+	elseif not instance:IsDescendantOf(game) then
+		error("Instance is not a descendant of the game hierarchy", 2)
+	end
 	return self:Connect(instance.Destroying, function()
 		self:Destroy()
 	end)
 end
 
 --[=[
-	Destroys the Trove object. Forces `Clean` to run.
+	Alias for `trove:Clean()`.
 ]=]
 function Trove:Destroy()
 	self:Clean()
