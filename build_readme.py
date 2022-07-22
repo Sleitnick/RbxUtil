@@ -21,7 +21,7 @@ def build():
 	]
 	name_pattern = re.compile(r"name\s*=\s*\"(.+)\"$")
 	version_pattern = re.compile(r"version\s*=\s*\"(.+)\"$")
-	deescription_pattern = re.compile(r"description\s*=\s*\"(.+)\"$")
+	description_pattern = re.compile(r"description\s*=\s*\"(.+)\"$")
 	display_name_pattern = re.compile(r".+/(.+)")
 	for path in Path("./modules").iterdir():
 		with open(Path.joinpath(path, Path("wally.toml")), "r") as f:
@@ -29,7 +29,7 @@ def build():
 			for line in lines:
 				match_name = name_pattern.match(line)
 				match_version = version_pattern.match(line)
-				match_description = deescription_pattern.match(line)
+				match_description = description_pattern.match(line)
 				if match_name:
 					name = match_name.group(1)
 				elif match_version:
