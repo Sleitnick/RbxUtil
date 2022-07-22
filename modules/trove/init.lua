@@ -318,6 +318,7 @@ function Trove:Clean()
 	for _, obj in self._objects do
 		self:_cleanupObject(obj[1], obj[2])
 	end
+	table.clear(self._objects)
 	self._cleaning = false
 end
 
