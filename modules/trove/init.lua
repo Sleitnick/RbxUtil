@@ -282,10 +282,11 @@ end
 	within the trove.
 ]=]
 function Trove:Clean()
-	for _, obj in ipairs(self._objects) do
+	local objs = table.clone(self._objects)
+	table.clear(self._objects)
+	for _, obj in objs do
 		self:_cleanupObject(obj[1], obj[2])
 	end
-	table.clear(self._objects)
 end
 
 function Trove:_findAndRemoveFromObjects(object: any, cleanup: boolean): boolean
