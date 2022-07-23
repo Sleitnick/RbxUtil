@@ -80,6 +80,8 @@ function Timer.new(interval: number)
 	self.TimeFunction = time
 	self.AllowDrift = true
 	self.Tick = Signal.new()
+	self.Started = Signal.new()
+	self.Stopped = Signal.new()
 	return self
 end
 
@@ -173,6 +175,7 @@ function Timer:Start()
 	else
 		self:_startTimerNoDrift()
 	end
+	self.Started:Fire()
 end
 
 --[=[
@@ -204,6 +207,7 @@ function Timer:Stop()
 	end
 	self._runHandle:Disconnect()
 	self._runHandle = nil
+	self.Stopped:Fire()
 end
 
 --[=[
@@ -225,6 +229,22 @@ end
 function Timer:Destroy()
 	self.Tick:Destroy()
 	self:Stop()
+end
+
+function Timer:OnStart(callback)
+	if type(callback) ~= "function" then error("OnStart callback must be a function") end
+	if self.Started.Connected then
+		self.Started:Disconnect()
+	end
+	self.Started:Connect(callback)
+end
+
+function Timer:OnStop(callback)
+	if type(callback) ~= "function" then error("OnStop callback must be a function") end
+	if self.Stopped.Connected then
+		self.Stopped:Disconnect()
+	end
+	self.Stopped:Connect(callback)
 end
 
 return Timer
