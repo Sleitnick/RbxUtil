@@ -10,7 +10,7 @@
 | [Concur](https://sleitnick.github.io/RbxUtil/api/Concur) | `Concur = "sleitnick/concur@0.1.1"` | Concurrent task handler |
 | [EnumList](https://sleitnick.github.io/RbxUtil/api/EnumList) | `EnumList = "sleitnick/enum-list@2.0.1"` | Enum List class |
 | [Input](https://sleitnick.github.io/RbxUtil/api/Input) | `Input = "sleitnick/input@2.1.1"` | Basic input classes |
-| [Loader](https://sleitnick.github.io/RbxUtil/api/Loader) | `Loader = "sleitnick/loader@1.0.3"` | Requires all modules within a given instance |
+| [Loader](https://sleitnick.github.io/RbxUtil/api/Loader) | `Loader = "sleitnick/loader@2.0.0"` | Requires all modules within a given instance |
 | [Log](https://sleitnick.github.io/RbxUtil/api/Log) | `Log = "sleitnick/log@0.1.1"` | Log class for logging to PlayFab |
 | [Net](https://sleitnick.github.io/RbxUtil/api/Net) | `Net = "sleitnick/net@0.1.0"` | Static networking module |
 | [Option](https://sleitnick.github.io/RbxUtil/api/Option) | `Option = "sleitnick/option@1.0.4"` | Represent optional values in Lua |
