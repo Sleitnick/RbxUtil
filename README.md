@@ -12,6 +12,7 @@
 | [Input](https://sleitnick.github.io/RbxUtil/api/Input) | `Input = "sleitnick/input@2.1.1"` | Basic input classes |
 | [Loader](https://sleitnick.github.io/RbxUtil/api/Loader) | `Loader = "sleitnick/loader@1.0.3"` | Requires all modules within a given instance |
 | [Log](https://sleitnick.github.io/RbxUtil/api/Log) | `Log = "sleitnick/log@0.1.1"` | Log class for logging to PlayFab |
+| [Net](https://sleitnick.github.io/RbxUtil/api/Net) | `Net = "sleitnick/net@0.1.0"` | Static networking module |
 | [Option](https://sleitnick.github.io/RbxUtil/api/Option) | `Option = "sleitnick/option@1.0.4"` | Represent optional values in Lua |
 | [PID](https://sleitnick.github.io/RbxUtil/api/PID) | `PID = "sleitnick/pid@1.0.2"` | PID Controller class |
 | [Ser](https://sleitnick.github.io/RbxUtil/api/Ser) | `Ser = "sleitnick/ser@1.0.5"` | Ser class for serialization and deserialization |
