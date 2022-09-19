@@ -20,10 +20,11 @@ type AnyFn = (...any) -> ...any
 	```lua
 	game:BindToClose(function()
 		local all = {}
-		for _,player in ipairs(Players:GetPlayers()) do
+		for _,player in Players:GetPlayers() do
 			local save = Concur.spawn(function()
 				DoSomethingToSaveData(player)
 			end)
+			table.insert(all, save)
 		end
 		local allConcur = Concur.all(all)
 		allConcur:Await()
