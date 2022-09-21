@@ -2,8 +2,7 @@
 -- Stephen Leitnick
 -- November 26, 2021
 
-
-type AncestorList = {Instance}
+type AncestorList = { Instance }
 
 --[=[
 	@type ExtensionFn (component) -> ()
@@ -16,7 +15,6 @@ type ExtensionFn = (any) -> ()
 	@within Component
 ]=]
 type ExtensionShouldFn = (any) -> boolean
-
 
 --[=[
 	@interface Extension
@@ -118,7 +116,7 @@ type Extension = {
 type ComponentConfig = {
 	Tag: string,
 	Ancestors: AncestorList?,
-	Extensions: {Extension}?,
+	Extensions: { Extension }?,
 }
 
 --[=[
@@ -177,7 +175,7 @@ local Trove = require(script.Parent.Trove)
 local Promise = require(script.Parent.Promise)
 
 local IS_SERVER = RunService:IsServer()
-local DEFAULT_ANCESTORS = {workspace, game:GetService("Players")}
+local DEFAULT_ANCESTORS = { workspace, game:GetService("Players") }
 local DEFAULT_TIMEOUT = 60
 
 -- Symbol keys:
@@ -190,16 +188,14 @@ local KEY_EXTENSIONS = Symbol("Extensions")
 local KEY_ACTIVE_EXTENSIONS = Symbol("ActiveExtensions")
 local KEY_STARTED = Symbol("Started")
 
-
 local renderId = 0
 local function NextRenderName(): string
 	renderId += 1
 	return "ComponentRender" .. tostring(renderId)
 end
 
-
 local function InvokeExtensionFn(component, fnName: string)
-	for _,extension in ipairs(component[KEY_ACTIVE_EXTENSIONS]) do
+	for _, extension in ipairs(component[KEY_ACTIVE_EXTENSIONS]) do
 		local fn = extension[fnName]
 		if type(fn) == "function" then
 			fn(component)
@@ -207,9 +203,8 @@ local function InvokeExtensionFn(component, fnName: string)
 	end
 end
 
-
 local function ShouldConstruct(component): boolean
-	for _,extension in ipairs(component[KEY_ACTIVE_EXTENSIONS]) do
+	for _, extension in ipairs(component[KEY_ACTIVE_EXTENSIONS]) do
 		local fn = extension.ShouldConstruct
 		if type(fn) == "function" then
 			local shouldConstruct = fn(component)
@@ -221,11 +216,10 @@ local function ShouldConstruct(component): boolean
 	return true
 end
 
-
 local function GetActiveExtensions(component, extensionList)
 	local activeExtensions = table.create(#extensionList)
 	local allActive = true
-	for _,extension in ipairs(extensionList) do
+	for _, extension in ipairs(extensionList) do
 		local fn = extension.ShouldExtend
 		local shouldExtend = type(fn) ~= "function" or not not fn(component)
 		if shouldExtend then
@@ -236,7 +230,6 @@ local function GetActiveExtensions(component, extensionList)
 	end
 	return if allActive then extensionList else activeExtensions
 end
-
 
 --[=[
 	@class Component
@@ -253,7 +246,6 @@ end
 ]=]
 local Component = {}
 Component.__index = Component
-
 
 --[=[
 	@tag Component
@@ -324,7 +316,6 @@ function Component.new(config: ComponentConfig)
 	return customComponent
 end
 
-
 function Component:_instantiate(instance: Instance)
 	local component = setmetatable({}, self)
 	component.Instance = instance
@@ -340,11 +331,9 @@ function Component:_instantiate(instance: Instance)
 	return component
 end
 
-
 function Component:_setup()
-	
 	local watchingInstances = {}
-	
+
 	local function StartComponent(component)
 		InvokeExtensionFn(component, "Starting")
 		component:Start()
@@ -377,7 +366,7 @@ function Component:_setup()
 		component[KEY_STARTED] = true
 		self.Started:Fire(component)
 	end
-	
+
 	local function StopComponent(component)
 		if component._heartbeatUpdate then
 			component._heartbeatUpdate:Disconnect()
@@ -406,9 +395,11 @@ function Component:_setup()
 		end
 		return component
 	end
-	
+
 	local function TryConstructComponent(instance)
-		if self[KEY_INST_TO_COMPONENTS][instance] then return end
+		if self[KEY_INST_TO_COMPONENTS][instance] then
+			return
+		end
 		local id = self[KEY_LOCK_CONSTRUCT][instance] or 0
 		id += 1
 		self[KEY_LOCK_CONSTRUCT][instance] = id
@@ -426,10 +417,12 @@ function Component:_setup()
 			end)
 		end)
 	end
-	
+
 	local function TryDeconstructComponent(instance)
 		local component = self[KEY_INST_TO_COMPONENTS][instance]
-		if not component then return end
+		if not component then
+			return
+		end
 		self[KEY_INST_TO_COMPONENTS][instance] = nil
 		self[KEY_LOCK_CONSTRUCT][instance] = nil
 		local components = self[KEY_COMPONENTS]
@@ -449,11 +442,13 @@ function Component:_setup()
 			end)
 		end
 	end
-	
+
 	local function StartWatchingInstance(instance)
-		if watchingInstances[instance] then return end
+		if watchingInstances[instance] then
+			return
+		end
 		local function IsInAncestorList(): boolean
-			for _,parent in ipairs(self[KEY_ANCESTORS]) do
+			for _, parent in ipairs(self[KEY_ANCESTORS]) do
 				if instance:IsDescendantOf(parent) then
 					return true
 				end
@@ -472,11 +467,11 @@ function Component:_setup()
 			TryConstructComponent(instance)
 		end
 	end
-	
+
 	local function InstanceTagged(instance: Instance)
 		StartWatchingInstance(instance)
 	end
-	
+
 	local function InstanceUntagged(instance: Instance)
 		local watchHandle = watchingInstances[instance]
 		if watchHandle then
@@ -485,17 +480,15 @@ function Component:_setup()
 		end
 		TryDeconstructComponent(instance)
 	end
-	
+
 	self[KEY_TROVE]:Connect(CollectionService:GetInstanceAddedSignal(self.Tag), InstanceTagged)
 	self[KEY_TROVE]:Connect(CollectionService:GetInstanceRemovedSignal(self.Tag), InstanceUntagged)
-	
+
 	local tagged = CollectionService:GetTagged(self.Tag)
-	for _,instance in ipairs(tagged) do
+	for _, instance in ipairs(tagged) do
 		task.defer(InstanceTagged, instance)
 	end
-	
 end
-
 
 --[=[
 	@tag Component Class
@@ -520,7 +513,6 @@ function Component:GetAll()
 	return self[KEY_COMPONENTS]
 end
 
-
 --[=[
 	@tag Component Class
 	@return Component?
@@ -537,7 +529,6 @@ end
 function Component:FromInstance(instance: Instance)
 	return self[KEY_INST_TO_COMPONENTS][instance]
 end
-
 
 --[=[
 	@tag Component Class
@@ -569,11 +560,12 @@ function Component:WaitForInstance(instance: Instance, timeout: number?)
 			componentInstance = c
 		end
 		return match
-	end):andThen(function()
-		return componentInstance
-	end):timeout(if type(timeout) == "number" then timeout else DEFAULT_TIMEOUT)
+	end)
+		:andThen(function()
+			return componentInstance
+		end)
+		:timeout(if type(timeout) == "number" then timeout else DEFAULT_TIMEOUT)
 end
-
 
 --[=[
 	@tag Component Class
@@ -589,9 +581,7 @@ end
 	end
 	```
 ]=]
-function Component:Construct()
-end
-
+function Component:Construct() end
 
 --[=[
 	@tag Component Class
@@ -608,9 +598,7 @@ end
 	end
 	```
 ]=]
-function Component:Start()
-end
-
+function Component:Start() end
 
 --[=[
 	@tag Component Class
@@ -630,9 +618,7 @@ end
 	end
 	```
 ]=]
-function Component:Stop()
-end
-
+function Component:Stop() end
 
 --[=[
 	@tag Component Instance
@@ -654,7 +640,6 @@ end
 function Component:GetComponent(componentClass)
 	return componentClass[KEY_INST_TO_COMPONENTS][self.Instance]
 end
-
 
 --[=[
 	@tag Component Class
@@ -737,10 +722,8 @@ end
 	```
 ]=]
 
-
 function Component:Destroy()
 	self[KEY_TROVE]:Destroy()
 end
-
 
 return Component

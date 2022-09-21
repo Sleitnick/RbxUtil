@@ -4,8 +4,7 @@
 -- Stephen Leitnick
 -- September 13, 2017
 
-
-type Table = {any}
+type Table = { any }
 type MapPredicate = (any, any, Table) -> any
 type FilterPredicate = (any, any, Table) -> boolean
 type ReducePredicate = (any, any, any, Table) -> any
@@ -29,7 +28,6 @@ local TableUtil = {}
 local HttpService = game:GetService("HttpService")
 local rng = Random.new()
 
-
 --[=[
 	@within TableUtil
 	@function Copy
@@ -52,7 +50,7 @@ local function Copy(t: Table, deep: boolean?): Table
 	end
 	local function DeepCopy(tbl)
 		local tCopy = table.clone(tbl)
-		for k,v in pairs(tCopy) do
+		for k, v in pairs(tCopy) do
 			if type(v) == "table" then
 				tCopy[k] = DeepCopy(v)
 			end
@@ -61,7 +59,6 @@ local function Copy(t: Table, deep: boolean?): Table
 	end
 	return DeepCopy(t)
 end
-
 
 --[=[
 	@within TableUtil
@@ -92,7 +89,6 @@ end
 	For player data, use `TableUtil.Reconcile` instead.
 ]=]
 local function Sync(srcTbl: Table, templateTbl: Table): Table
-
 	assert(type(srcTbl) == "table", "First argument must be a table")
 	assert(type(templateTbl) == "table", "Second argument must be a table")
 
@@ -101,8 +97,7 @@ local function Sync(srcTbl: Table, templateTbl: Table): Table
 	-- If 'tbl' has something 'templateTbl' doesn't, then remove it from 'tbl'
 	-- If 'tbl' has something of a different type than 'templateTbl', copy from 'templateTbl'
 	-- If 'templateTbl' has something 'tbl' doesn't, then add it to 'tbl'
-	for k,v in pairs(tbl) do
-
+	for k, v in pairs(tbl) do
 		local vTemplate = templateTbl[k]
 
 		-- Remove keys not within template:
@@ -121,12 +116,10 @@ local function Sync(srcTbl: Table, templateTbl: Table): Table
 		elseif type(v) == "table" then
 			tbl[k] = Sync(v, vTemplate)
 		end
-
 	end
 
 	-- Add any missing keys:
-	for k,vTemplate in pairs(templateTbl) do
-
+	for k, vTemplate in pairs(templateTbl) do
 		local v = tbl[k]
 
 		if v == nil then
@@ -136,13 +129,10 @@ local function Sync(srcTbl: Table, templateTbl: Table): Table
 				tbl[k] = vTemplate
 			end
 		end
-
 	end
 
 	return tbl
-
 end
-
 
 --[=[
 	@within TableUtil
@@ -171,13 +161,12 @@ end
 	```
 ]=]
 local function Reconcile(src: Table, template: Table): Table
-
 	assert(type(src) == "table", "First argument must be a table")
 	assert(type(template) == "table", "Second argument must be a table")
 
 	local tbl = table.clone(src)
 
-	for k,v in pairs(template) do
+	for k, v in pairs(template) do
 		local sv = src[k]
 		if sv == nil then
 			if type(v) == "table" then
@@ -195,9 +184,7 @@ local function Reconcile(src: Table, template: Table): Table
 	end
 
 	return tbl
-
 end
-
 
 --[=[
 	@within TableUtil
@@ -232,7 +219,6 @@ local function SwapRemove(t: Table, i: number)
 	t[n] = nil
 end
 
-
 --[=[
 	@within TableUtil
 	@function SwapRemoveFirstValue
@@ -260,7 +246,6 @@ local function SwapRemoveFirstValue(t: Table, v: any): number?
 	return index
 end
 
-
 --[=[
 	@within TableUtil
 	@function Map
@@ -285,12 +270,11 @@ local function Map(t: Table, f: MapPredicate): Table
 	assert(type(t) == "table", "First argument must be a table")
 	assert(type(f) == "function", "Second argument must be a function")
 	local newT = table.create(#t)
-	for k,v in pairs(t) do
+	for k, v in pairs(t) do
 		newT[k] = f(v, k, t)
 	end
 	return newT
 end
-
 
 --[=[
 	@within TableUtil
@@ -318,14 +302,14 @@ local function Filter(t: Table, f: FilterPredicate): Table
 	local newT = table.create(#t)
 	if #t > 0 then
 		local n = 0
-		for i,v in ipairs(t) do
+		for i, v in ipairs(t) do
 			if f(v, i, t) then
 				n += 1
 				newT[n] = v
 			end
 		end
 	else
-		for k,v in pairs(t) do
+		for k, v in pairs(t) do
 			if f(v, k, t) then
 				newT[k] = v
 			end
@@ -333,7 +317,6 @@ local function Filter(t: Table, f: FilterPredicate): Table
 	end
 	return newT
 end
-
 
 --[=[
 	@within TableUtil
@@ -366,7 +349,7 @@ local function Reduce(t: Table, f: ReducePredicate, init: any?): any
 			result = t[1]
 			start = 2
 		end
-		for i = start,#t do
+		for i = start, #t do
 			result = f(result, t[i], i, t)
 		end
 	else
@@ -375,13 +358,12 @@ local function Reduce(t: Table, f: ReducePredicate, init: any?): any
 			result = next(t)
 			start = result
 		end
-		for k,v in next,t,start do
+		for k, v in next, t, start do
 			result = f(result, v, k, t)
 		end
 	end
 	return result
 end
-
 
 --[=[
 	@within TableUtil
@@ -402,14 +384,13 @@ end
 ]=]
 local function Assign(target: Table, ...: Table): Table
 	local tbl = table.clone(target)
-	for _,src in ipairs({...}) do
-		for k,v in pairs(src) do
+	for _, src in ipairs({ ... }) do
+		for k, v in pairs(src) do
 			tbl[k] = v
 		end
 	end
 	return tbl
 end
-
 
 --[=[
 	@within TableUtil
@@ -432,12 +413,11 @@ end
 ]=]
 local function Extend(target: Table, extension: Table): Table
 	local tbl = table.clone(target)
-	for _,v in ipairs(extension) do
+	for _, v in ipairs(extension) do
 		table.insert(tbl, v)
 	end
 	return tbl
 end
-
 
 --[=[
 	@within TableUtil
@@ -459,12 +439,11 @@ end
 local function Reverse(tbl: Table): Table
 	local n = #tbl
 	local tblRev = table.create(n)
-	for i = 1,n do
+	for i = 1, n do
 		tblRev[i] = tbl[n - i + 1]
 	end
 	return tblRev
 end
-
 
 --[=[
 	@within TableUtil
@@ -495,7 +474,6 @@ local function Shuffle(tbl: Table, rngOverride: Random?): Table
 	return shuffled
 end
 
-
 --[=[
 	@within TableUtil
 	@function Sample
@@ -523,14 +501,13 @@ local function Sample(tbl: Table, size: number, rngOverride: Random?): Table
 	local random = if typeof(rngOverride) == "Random" then rngOverride else rng
 	local len = #tbl
 	size = math.clamp(size, 1, len)
-	for i = 1,size do
+	for i = 1, size do
 		local j = random:NextInteger(i, len)
 		shuffled[i], shuffled[j] = shuffled[j], shuffled[i]
 	end
 	table.move(shuffled, 1, size, 1, sample)
 	return sample
 end
-
 
 --[=[
 	@within TableUtil
@@ -557,7 +534,7 @@ local function Flat(tbl: Table, depth: number?): Table
 	local maxDepth: number = if type(depth) == "number" then depth else 1
 	local flatTbl = table.create(#tbl)
 	local function Scan(t: Table, d: number)
-		for _,v in ipairs(t) do
+		for _, v in ipairs(t) do
 			if type(v) == "table" and d < maxDepth then
 				Scan(v, d + 1)
 			else
@@ -568,7 +545,6 @@ local function Flat(tbl: Table, depth: number?): Table
 	Scan(tbl, 0)
 	return flatTbl
 end
-
 
 --[=[
 	@within TableUtil
@@ -594,7 +570,6 @@ end
 local function FlatMap(tbl: Table, callback: MapPredicate): Table
 	return Flat(Map(tbl, callback))
 end
-
 
 --[=[
 	@within TableUtil
@@ -626,7 +601,6 @@ local function Keys(tbl: Table): Table
 	return keys
 end
 
-
 --[=[
 	@within TableUtil
 	@function Values
@@ -656,7 +630,6 @@ local function Values(tbl: Table): Table
 	end
 	return values
 end
-
 
 --[=[
 	@within TableUtil
@@ -690,14 +663,13 @@ end
 	than one possible matches given the data and callback function.
 ]=]
 local function Find(tbl: Table, callback: FindCallback): (any?, any?)
-	for k,v in pairs(tbl) do
+	for k, v in pairs(tbl) do
 		if callback(v, k, tbl) then
 			return v, k
 		end
 	end
 	return nil, nil
 end
-
 
 --[=[
 	@within TableUtil
@@ -720,14 +692,13 @@ end
 	```
 ]=]
 local function Every(tbl: Table, callback: FindCallback): boolean
-	for k,v in pairs(tbl) do
+	for k, v in pairs(tbl) do
 		if not callback(v, k, tbl) then
 			return false
 		end
 	end
 	return true
 end
-
 
 --[=[
 	@within TableUtil
@@ -750,14 +721,13 @@ end
 	```
 ]=]
 local function Some(tbl: Table, callback: FindCallback): boolean
-	for k,v in pairs(tbl) do
+	for k, v in pairs(tbl) do
 		if callback(v, k, tbl) then
 			return true
 		end
 	end
 	return false
 end
-
 
 --[=[
 	@within TableUtil
@@ -784,7 +754,6 @@ local function Truncate(tbl: Table, len: number): Table
 	end
 	return table.move(tbl, 1, len, 1, table.create(len))
 end
-
 
 --[=[
 	@within TableUtil
@@ -815,10 +784,10 @@ end
 ]=]
 local function Zip(...): (IteratorFunc, Table, any)
 	assert(select("#", ...) > 0, "Must supply at least 1 table")
-	local function ZipIteratorArray(all: Table, k: number): (number?, {any}?)
+	local function ZipIteratorArray(all: Table, k: number): (number?, { any }?)
 		k += 1
 		local values = {}
-		for i,t in ipairs(all) do
+		for i, t in ipairs(all) do
 			local v = t[k]
 			if v ~= nil then
 				values[i] = v
@@ -828,9 +797,9 @@ local function Zip(...): (IteratorFunc, Table, any)
 		end
 		return k, values
 	end
-	local function ZipIteratorMap(all: Table, k: any): (number?, {any}?)
+	local function ZipIteratorMap(all: Table, k: any): (number?, { any }?)
 		local values = {}
-		for i,t in ipairs(all) do
+		for i, t in ipairs(all) do
 			local v = next(t, k)
 			if v ~= nil then
 				values[i] = v
@@ -840,14 +809,13 @@ local function Zip(...): (IteratorFunc, Table, any)
 		end
 		return k, values
 	end
-	local all = {...}
+	local all = { ... }
 	if #all[1] > 0 then
 		return ZipIteratorArray, all, 0
 	else
 		return ZipIteratorMap, all, nil
 	end
 end
-
 
 --[=[
 	@within TableUtil
@@ -869,7 +837,7 @@ end
 ]=]
 local function Lock(tbl: Table): Table
 	local function Freeze(t: Table)
-		for k,v in pairs(t) do
+		for k, v in pairs(t) do
 			if type(v) == "table" then
 				t[k] = Freeze(v)
 			end
@@ -878,7 +846,6 @@ local function Lock(tbl: Table): Table
 	end
 	return Freeze(tbl)
 end
-
 
 --[=[
 	@within TableUtil
@@ -902,7 +869,6 @@ local function IsEmpty(tbl)
 	return next(tbl) == nil
 end
 
-
 --[=[
 	@within TableUtil
 	@function EncodeJSON
@@ -915,7 +881,6 @@ local function EncodeJSON(value: any): string
 	return HttpService:JSONEncode(value)
 end
 
-
 --[=[
 	@within TableUtil
 	@function DecodeJSON
@@ -927,7 +892,6 @@ end
 local function DecodeJSON(str: string): any
 	return HttpService:JSONDecode(str)
 end
-
 
 TableUtil.Copy = Copy
 TableUtil.Sync = Sync

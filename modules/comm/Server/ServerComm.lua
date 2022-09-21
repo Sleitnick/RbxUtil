@@ -2,7 +2,6 @@
 -- Stephen Leitnick
 -- December 20, 2021
 
-
 local Comm = require(script.Parent)
 local Util = require(script.Parent.Parent.Util)
 local Types = require(script.Parent.Parent.Types)
@@ -74,7 +73,12 @@ end
 	serverComm:BindFunction("GetSomething", GetSomething)
 	```
 ]=]
-function ServerComm:BindFunction(name: string, fn: Types.FnBind, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?): RemoteFunction
+function ServerComm:BindFunction(
+	name: string,
+	fn: Types.FnBind,
+	inboundMiddleware: Types.ServerMiddleware?,
+	outboundMiddleware: Types.ServerMiddleware?
+): RemoteFunction
 	return Comm.BindFunction(self._instancesFolder, name, fn, inboundMiddleware, outboundMiddleware)
 end
 
@@ -101,7 +105,12 @@ end
 	serverComm:WrapMethod(MyObject, "GetData")
 	```
 ]=]
-function ServerComm:WrapMethod(tbl: {}, name: string, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?): RemoteFunction
+function ServerComm:WrapMethod(
+	tbl: {},
+	name: string,
+	inboundMiddleware: Types.ServerMiddleware?,
+	outboundMiddleware: Types.ServerMiddleware?
+): RemoteFunction
 	return Comm.WrapMethod(self._instancesFolder, tbl, name, inboundMiddleware, outboundMiddleware)
 end
 
@@ -129,7 +138,11 @@ end
 	end)
 	```
 ]=]
-function ServerComm:CreateSignal(name: string, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?)
+function ServerComm:CreateSignal(
+	name: string,
+	inboundMiddleware: Types.ServerMiddleware?,
+	outboundMiddleware: Types.ServerMiddleware?
+)
 	return Comm.CreateSignal(self._instancesFolder, name, inboundMiddleware, outboundMiddleware)
 end
 
@@ -173,7 +186,12 @@ end
 	})
 	```
 ]=]
-function ServerComm:CreateProperty(name: string, initialValue: any, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?)
+function ServerComm:CreateProperty(
+	name: string,
+	initialValue: any,
+	inboundMiddleware: Types.ServerMiddleware?,
+	outboundMiddleware: Types.ServerMiddleware?
+)
 	return Comm.CreateProperty(self._instancesFolder, name, initialValue, inboundMiddleware, outboundMiddleware)
 end
 

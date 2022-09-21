@@ -11,21 +11,17 @@ local function AwaitStop(shake): number
 end
 
 return function()
-
 	local Shake = require(script.Parent)
 
 	describe("Construct", function()
-
 		it("should construct a new shake instance", function()
 			expect(function()
 				local _shake = Shake.new()
 			end).to.never.throw()
 		end)
-	
 	end)
 
 	describe("Static Functions", function()
-
 		it("should get next render name", function()
 			local r1 = Shake.NextRenderName()
 			local r2 = Shake.NextRenderName()
@@ -47,11 +43,9 @@ return function()
 			expect(typeof(vectorInverseSq)).to.equal("Vector3")
 			expect(vectorInverseSq).to.equal(expectedVector)
 		end)
-		
 	end)
 
 	describe("Cloning", function()
-
 		it("should clone a shake instance", function()
 			local shake1 = Shake.new()
 			shake1.Amplitude = 5
@@ -62,18 +56,25 @@ return function()
 			shake1.Sustain = true
 			shake1.PositionInfluence = Vector3.new(1, 2, 3)
 			shake1.RotationInfluence = Vector3.new(3, 2, 1)
-			shake1.TimeFunction = function() return os.clock() end
+			shake1.TimeFunction = function()
+				return os.clock()
+			end
 			local shake2 = shake1:Clone()
 			expect(shake2).to.be.a("table")
 			expect(getmetatable(shake2)).to.equal(Shake)
 			expect(shake2).to.never.equal(shake1)
 			local clonedFields = {
-				"Amplitude", "Frequency", "FadeInTime",
-				"FadeOutTime", "SustainTime", "Sustain",
-				"PositionInfluence", "RotationInfluence",
-				"TimeFunction"
+				"Amplitude",
+				"Frequency",
+				"FadeInTime",
+				"FadeOutTime",
+				"SustainTime",
+				"Sustain",
+				"PositionInfluence",
+				"RotationInfluence",
+				"TimeFunction",
 			}
-			for _,field in ipairs(clonedFields) do
+			for _, field in ipairs(clonedFields) do
 				expect(shake1[field]).to.equal(shake2[field])
 			end
 		end)
@@ -85,11 +86,9 @@ return function()
 			expect(shake1:IsShaking()).to.equal(true)
 			expect(shake2:IsShaking()).to.equal(false)
 		end)
-	
 	end)
 
 	describe("Shaking", function()
-
 		it("should start", function()
 			local shake = Shake.new()
 			expect(shake:IsShaking()).to.equal(false)
@@ -256,7 +255,5 @@ return function()
 			AwaitStop(shake)
 			expect(bound).to.equal(true)
 		end)
-	
 	end)
-
 end

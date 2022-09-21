@@ -2,7 +2,6 @@
 -- Stephen Leitnick
 -- December 20, 2021
 
-
 local Promise = require(script.Parent.Parent.Parent.Promise)
 local Signal = require(script.Parent.Parent.Parent.Signal)
 local ClientRemoteSignal = require(script.Parent.ClientRemoteSignal)
@@ -30,7 +29,11 @@ local Types = require(script.Parent.Parent.Types)
 local ClientRemoteProperty = {}
 ClientRemoteProperty.__index = ClientRemoteProperty
 
-function ClientRemoteProperty.new(re: RemoteEvent, inboundMiddleware: Types.ClientMiddleware?, outboudMiddleware: Types.ClientMiddleware?)
+function ClientRemoteProperty.new(
+	re: RemoteEvent,
+	inboundMiddleware: Types.ClientMiddleware?,
+	outboudMiddleware: Types.ClientMiddleware?
+)
 	local self = setmetatable({}, ClientRemoteProperty)
 	self._rs = ClientRemoteSignal.new(re, inboundMiddleware, outboudMiddleware)
 	self._ready = false
@@ -40,7 +43,9 @@ function ClientRemoteProperty.new(re: RemoteEvent, inboundMiddleware: Types.Clie
 		self._readyPromise = nil
 		self.Changed:Fire(self._value)
 		self._changed = self._rs:Connect(function(value)
-			if value == self._value then return end
+			if value == self._value then
+				return
+			end
 			self._value = value
 			self.Changed:Fire(value)
 		end)

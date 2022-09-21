@@ -1,5 +1,4 @@
 return function()
-
 	local Streamable = require(script.Parent.Streamable)
 	local StreamableUtil = require(script.Parent.StreamableUtil)
 
@@ -29,13 +28,12 @@ return function()
 	end)
 
 	describe("Compound", function()
-
 		it("should capture multiple streams", function()
 			local s1 = Streamable.new(instanceFolder, "ABC")
 			local s2 = Streamable.new(instanceFolder, "XYZ")
 			local observe = 0
 			local cleaned = 0
-			StreamableUtil.Compound({S1 = s1; S2 = s2}, function(_streamables, trove)
+			StreamableUtil.Compound({ S1 = s1, S2 = s2 }, function(_streamables, trove)
 				observe += 1
 				trove:Add(function()
 					cleaned += 1
@@ -58,7 +56,5 @@ return function()
 			s1:Destroy()
 			s2:Destroy()
 		end)
-
 	end)
-
 end

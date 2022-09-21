@@ -2,7 +2,6 @@
 -- Stephen Leitnick
 -- July 28, 2021
 
-
 --[=[
 	@within Timer
 	@type CallbackFn () -> ()
@@ -21,7 +20,6 @@ local Signal = require(script.Parent.Signal)
 
 local RunService = game:GetService("RunService")
 
-
 --[=[
 	@class Timer
 
@@ -37,7 +35,6 @@ local RunService = game:GetService("RunService")
 ]=]
 local Timer = {}
 Timer.__index = Timer
-
 
 --[=[
 	@within Timer
@@ -68,7 +65,6 @@ Timer.__index = Timer
 	The event which is fired every time the timer hits its interval.
 ]=]
 
-
 --[=[
 	@return Timer
 	
@@ -87,7 +83,6 @@ function Timer.new(interval: number)
 	return self
 end
 
-
 --[=[
 	@return RBXScriptConnection
 
@@ -105,7 +100,13 @@ end
 	end, true, RunService.Heartbeat, os.clock)
 	```
 ]=]
-function Timer.Simple(interval: number, callback: CallbackFn, startNow: boolean?, updateSignal: RBXScriptSignal?, timeFn: TimeFn?)
+function Timer.Simple(
+	interval: number,
+	callback: CallbackFn,
+	startNow: boolean?,
+	updateSignal: RBXScriptSignal?,
+	timeFn: TimeFn?
+)
 	local update = updateSignal or RunService.Heartbeat
 	local t = timeFn or time
 	local nextTick = t() + interval
@@ -121,14 +122,12 @@ function Timer.Simple(interval: number, callback: CallbackFn, startNow: boolean?
 	end)
 end
 
-
 --[=[
 	Returns `true` if the given object is a Timer.
 ]=]
 function Timer.Is(obj: any): boolean
 	return type(obj) == "table" and getmetatable(obj) == Timer
 end
-
 
 function Timer:_startTimer()
 	local t = self.TimeFunction
@@ -141,7 +140,6 @@ function Timer:_startTimer()
 		end
 	end)
 end
-
 
 function Timer:_startTimerNoDrift()
 	assert(self.Interval > 0, "Interval must be greater than 0 when AllowDrift is set to false")
@@ -159,7 +157,6 @@ function Timer:_startTimerNoDrift()
 	end)
 end
 
-
 --[=[
 	Starts the timer. Will do nothing if the timer is already running.
 
@@ -168,14 +165,15 @@ end
 	```
 ]=]
 function Timer:Start()
-	if self._runHandle then return end
+	if self._runHandle then
+		return
+	end
 	if self.AllowDrift then
 		self:_startTimer()
 	else
 		self:_startTimerNoDrift()
 	end
 end
-
 
 --[=[
 	Starts the timer and fires off the Tick event immediately. Will do
@@ -186,11 +184,12 @@ end
 	```
 ]=]
 function Timer:StartNow()
-	if self._runHandle then return end
+	if self._runHandle then
+		return
+	end
 	self.Tick:Fire()
 	self:Start()
 end
-
 
 --[=[
 	Stops the timer. Will do nothing if the timer is already stopped.
@@ -200,11 +199,12 @@ end
 	```
 ]=]
 function Timer:Stop()
-	if not self._runHandle then return end
+	if not self._runHandle then
+		return
+	end
 	self._runHandle:Disconnect()
 	self._runHandle = nil
 end
-
 
 --[=[
 	Returns `true` if the timer is currently running.
@@ -219,7 +219,6 @@ function Timer:IsRunning(): boolean
 	return self._runHandle ~= nil
 end
 
-
 --[=[
 	Destroys the timer. This will also stop the timer.
 ]=]
@@ -227,6 +226,5 @@ function Timer:Destroy()
 	self.Tick:Destroy()
 	self:Stop()
 end
-
 
 return Timer

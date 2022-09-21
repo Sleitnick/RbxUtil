@@ -4,10 +4,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TestEZ = require(ReplicatedStorage.Test.Packages.TestEZ)
 
 -- Clear out package test files
-for _,testFolder in ipairs(ReplicatedStorage.Test.modules:GetChildren()) do
+for _, testFolder in ipairs(ReplicatedStorage.Test.modules:GetChildren()) do
 	local index = testFolder:FindFirstChild("_Index")
 	if index then
-		for _,item in ipairs(index:GetDescendants()) do
+		for _, item in ipairs(index:GetDescendants()) do
 			if item.Name:match("%.spec$") and item:IsA("ModuleScript") then
 				item:Destroy()
 			end
@@ -16,4 +16,4 @@ for _,testFolder in ipairs(ReplicatedStorage.Test.modules:GetChildren()) do
 end
 
 -- Run tests
-TestEZ.TestBootstrap:run({ReplicatedStorage.Test.modules})
+TestEZ.TestBootstrap:run({ ReplicatedStorage.Test.modules })

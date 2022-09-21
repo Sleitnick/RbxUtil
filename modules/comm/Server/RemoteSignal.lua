@@ -2,12 +2,10 @@
 -- Stephen Leitnick
 -- December 20, 2021
 
-
 local Players = game:GetService("Players")
 
 local Signal = require(script.Parent.Parent.Parent.Signal)
 local Types = require(script.Parent.Parent.Types)
-
 
 --[=[
 	@class RemoteSignal
@@ -24,7 +22,12 @@ RemoteSignal.__index = RemoteSignal
 	.Connected boolean
 ]=]
 
-function RemoteSignal.new(parent: Instance, name: string, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?)
+function RemoteSignal.new(
+	parent: Instance,
+	name: string,
+	inboundMiddleware: Types.ServerMiddleware?,
+	outboundMiddleware: Types.ServerMiddleware?
+)
 	local self = setmetatable({}, RemoteSignal)
 	self._re = Instance.new("RemoteEvent")
 	self._re.Name = name
@@ -40,7 +43,7 @@ function RemoteSignal.new(parent: Instance, name: string, inboundMiddleware: Typ
 		self._signal = Signal.new()
 		self._re.OnServerEvent:Connect(function(player, ...)
 			local args = table.pack(...)
-			for _,middlewareFunc in ipairs(inboundMiddleware) do
+			for _, middlewareFunc in ipairs(inboundMiddleware) do
 				local middlewareResult = table.pack(middlewareFunc(player, args))
 				if not middlewareResult[1] then
 					return
@@ -75,7 +78,7 @@ function RemoteSignal:_processOutboundMiddleware(player: Player?, ...: any)
 		return ...
 	end
 	local args = table.pack(...)
-	for _,middlewareFunc in ipairs(self._outbound) do
+	for _, middlewareFunc in ipairs(self._outbound) do
 		local middlewareResult = table.pack(middlewareFunc(player, args))
 		if not middlewareResult[1] then
 			return table.unpack(middlewareResult, 2, middlewareResult.n)
@@ -154,7 +157,7 @@ end
 	```
 ]=]
 function RemoteSignal:FireFilter(predicate: (Player, ...any) -> boolean, ...: any)
-	for _,player in ipairs(Players:GetPlayers()) do
+	for _, player in ipairs(Players:GetPlayers()) do
 		if predicate(player, ...) then
 			self._re:FireClient(player, self:_processOutboundMiddleware(nil, ...))
 		end
@@ -177,8 +180,8 @@ end
 	remoteSignal:FireFor(players, "Hello, players!")
 	```
 ]=]
-function RemoteSignal:FireFor(players: {Player}, ...: any)
-	for _,player in ipairs(players) do
+function RemoteSignal:FireFor(players: { Player }, ...: any)
+	for _, player in ipairs(players) do
 		self._re:FireClient(player, self:_processOutboundMiddleware(nil, ...))
 	end
 end

@@ -1,5 +1,4 @@
 return function()
-
 	local Component = require(script.Parent)
 
 	local CollectionService = game:GetService("CollectionService")
@@ -46,11 +45,11 @@ return function()
 
 	local TestComponentMain = Component.new({
 		Tag = TAG,
-		Ancestors = {workspace, game:GetService("Lighting")},
-		Extensions = {ExtensionTest}
+		Ancestors = { workspace, game:GetService("Lighting") },
+		Extensions = { ExtensionTest },
 	})
 
-	local AnotherComponent = Component.new({Tag = TAG})
+	local AnotherComponent = Component.new({ Tag = TAG })
 	function AnotherComponent:GetData()
 		return true
 	end
@@ -97,7 +96,6 @@ return function()
 	end)
 
 	describe("Component", function()
-
 		it("should capture start and stop events", function()
 			local didStart = 0
 			local didStop = 0
@@ -127,7 +125,7 @@ return function()
 		it("should be able to get all component instances existing", function()
 			local numComponents = 3
 			local instances = table.create(numComponents)
-			for i = 1,numComponents do
+			for i = 1, numComponents do
 				local instance = CreateTaggedInstance()
 				instances[i] = instance
 			end
@@ -135,7 +133,7 @@ return function()
 			local components = TestComponentMain:GetAll()
 			expect(components).to.be.a("table")
 			expect(#components).to.equal(numComponents)
-			for _,c in ipairs(components) do
+			for _, c in ipairs(components) do
 				expect(table.find(instances, c.Instance)).to.be.ok()
 			end
 		end)
@@ -164,25 +162,24 @@ return function()
 		end)
 
 		it("should use extension to decide whether or not to construct", function()
-
-			local e1 = {c = true}
+			local e1 = { c = true }
 			function e1.ShouldConstruct(_component)
 				return e1.c
 			end
 
-			local e2 = {c = true}
+			local e2 = { c = true }
 			function e2.ShouldConstruct(_component)
 				return e2.c
 			end
 
-			local e3 = {c = true}
+			local e3 = { c = true }
 			function e3.ShouldConstruct(_component)
 				return e3.c
 			end
 
-			local c1 = Component.new({Tag = TAG, Extensions = {e1}})
-			local c2 = Component.new({Tag = TAG, Extensions = {e1, e2}})
-			local c3 = Component.new({Tag = TAG, Extensions = {e1, e2, e3}})
+			local c1 = Component.new({ Tag = TAG, Extensions = { e1 } })
+			local c2 = Component.new({ Tag = TAG, Extensions = { e1, e2 } })
+			local c3 = Component.new({ Tag = TAG, Extensions = { e1, e2, e3 } })
 
 			local function SetE(a, b, c)
 				e1.c = a
@@ -222,12 +219,10 @@ return function()
 			-- One green:
 			SetE(false, false, true)
 			CreateAndCheckAll(false, false, false)
-			
 		end)
 
 		it("should decide whether or not to use extend", function()
-
-			local e1 = {extend = true}
+			local e1 = { extend = true }
 			function e1.ShouldExtend(_component)
 				return e1.extend
 			end
@@ -235,7 +230,7 @@ return function()
 				component.E1 = true
 			end
 
-			local e2 = {extend = true}
+			local e2 = { extend = true }
 			function e2.ShouldExtend(_component)
 				return e2.extend
 			end
@@ -243,7 +238,7 @@ return function()
 				component.E2 = true
 			end
 
-			local TestComponent = Component.new({Tag = TAG, Extensions = {e1, e2}})
+			local TestComponent = Component.new({ Tag = TAG, Extensions = { e1, e2 } })
 
 			local function SetAndCheck(ex1, ex2)
 				e1.extend = ex1
@@ -268,14 +263,12 @@ return function()
 			SetAndCheck(false, false)
 			SetAndCheck(true, false)
 			SetAndCheck(false, true)
-
 		end)
 
 		it("should allow yielding within construct", function()
-
 			local CUSTOM_TAG = "CustomTag"
 
-			local TestComponent = Component.new({Tag = CUSTOM_TAG})
+			local TestComponent = Component.new({ Tag = CUSTOM_TAG })
 
 			local numConstruct = 0
 
@@ -296,7 +289,6 @@ return function()
 			expect(numConstruct).to.equal(1)
 			p:Destroy()
 			newP:Destroy()
-
 		end)
 
 		it("should wait for instance", function()
@@ -312,7 +304,5 @@ return function()
 			expect(c.Instance).to.equal(p)
 			p:Destroy()
 		end)
-
 	end)
-
 end

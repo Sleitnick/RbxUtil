@@ -4,14 +4,11 @@
 -- Stephen Leitnick
 -- March 03, 2021
 
-
 local Trove = require(script.Parent.Parent.Trove)
 local _Streamable = require(script.Parent.Streamable)
 
-
-type Streamables = {_Streamable.Streamable}
+type Streamables = { _Streamable.Streamable }
 type CompoundHandler = (Streamables, any) -> nil
-
 
 --[=[
 	@class StreamableUtil
@@ -23,7 +20,6 @@ type CompoundHandler = (Streamables, any) -> nil
 	```
 ]=]
 local StreamableUtil = {}
-
 
 --[=[
 	@param streamables {Streamable}
@@ -53,8 +49,10 @@ function StreamableUtil.Compound(streamables: Streamables, handler: CompoundHand
 	local observeAllTrove = Trove.new()
 	local allAvailable = false
 	local function Check()
-		if allAvailable then return end
-		for _,streamable in pairs(streamables) do
+		if allAvailable then
+			return
+		end
+		for _, streamable in pairs(streamables) do
 			if not streamable.Instance then
 				return
 			end
@@ -63,11 +61,13 @@ function StreamableUtil.Compound(streamables: Streamables, handler: CompoundHand
 		handler(streamables, observeAllTrove)
 	end
 	local function Cleanup()
-		if not allAvailable then return end
+		if not allAvailable then
+			return
+		end
 		allAvailable = false
 		observeAllTrove:Clean()
 	end
-	for _,streamable in pairs(streamables) do
+	for _, streamable in pairs(streamables) do
 		compoundTrove:Add(streamable:Observe(function(_child, trove)
 			Check()
 			trove:Add(Cleanup)
@@ -76,6 +76,5 @@ function StreamableUtil.Compound(streamables: Streamables, handler: CompoundHand
 	compoundTrove:Add(Cleanup)
 	return compoundTrove
 end
-
 
 return StreamableUtil

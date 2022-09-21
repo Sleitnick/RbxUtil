@@ -92,7 +92,11 @@ end
 	end)
 	```
 ]=]
-function ClientComm:GetFunction(name: string, inboundMiddleware: Types.ClientMiddleware?, outboundMiddleware: Types.ClientMiddleware?)
+function ClientComm:GetFunction(
+	name: string,
+	inboundMiddleware: Types.ClientMiddleware?,
+	outboundMiddleware: Types.ClientMiddleware?
+)
 	return Comm.GetFunction(self._instancesFolder, name, self._usePromise, inboundMiddleware, outboundMiddleware)
 end
 
@@ -116,7 +120,11 @@ end
 	mySignal:Fire("Hello!")
 	```
 ]=]
-function ClientComm:GetSignal(name: string, inboundMiddleware: Types.ClientMiddleware?, outboundMiddleware: Types.ClientMiddleware?)
+function ClientComm:GetSignal(
+	name: string,
+	inboundMiddleware: Types.ClientMiddleware?,
+	outboundMiddleware: Types.ClientMiddleware?
+)
 	return Comm.GetSignal(self._instancesFolder, name, inboundMiddleware, outboundMiddleware)
 end
 
@@ -154,7 +162,11 @@ end
 	local success, info = mapInfo:OnReady():await()
 	```
 ]=]
-function ClientComm:GetProperty(name: string, inboundMiddleware: Types.ClientMiddleware?, outboundMiddleware: Types.ClientMiddleware?)
+function ClientComm:GetProperty(
+	name: string,
+	inboundMiddleware: Types.ClientMiddleware?,
+	outboundMiddleware: Types.ClientMiddleware?
+)
 	return Comm.GetProperty(self._instancesFolder, name, inboundMiddleware, outboundMiddleware)
 end
 
@@ -183,8 +195,10 @@ function ClientComm:BuildObject(inboundMiddleware: Types.ClientMiddleware?, outb
 	local reFolder = self._instancesFolder:FindFirstChild("RE")
 	local rpFolder = self._instancesFolder:FindFirstChild("RP")
 	if rfFolder then
-		for _,rf in ipairs(rfFolder:GetChildren()) do
-			if not rf:IsA("RemoteFunction") then continue end
+		for _, rf in ipairs(rfFolder:GetChildren()) do
+			if not rf:IsA("RemoteFunction") then
+				continue
+			end
 			local f = self:GetFunction(rf.Name, inboundMiddleware, outboundMiddleware)
 			obj[rf.Name] = function(_self, ...)
 				return f(...)
@@ -192,14 +206,18 @@ function ClientComm:BuildObject(inboundMiddleware: Types.ClientMiddleware?, outb
 		end
 	end
 	if reFolder then
-		for _,re in ipairs(reFolder:GetChildren()) do
-			if not re:IsA("RemoteEvent") then continue end
+		for _, re in ipairs(reFolder:GetChildren()) do
+			if not re:IsA("RemoteEvent") then
+				continue
+			end
 			obj[re.Name] = self:GetSignal(re.Name, inboundMiddleware, outboundMiddleware)
 		end
 	end
 	if rpFolder then
-		for _,re in ipairs(rpFolder:GetChildren()) do
-			if not re:IsA("RemoteEvent") then continue end
+		for _, re in ipairs(rpFolder:GetChildren()) do
+			if not re:IsA("RemoteEvent") then
+				continue
+			end
 			obj[re.Name] = self:GetProperty(re.Name, inboundMiddleware, outboundMiddleware)
 		end
 	end
@@ -209,7 +227,6 @@ end
 --[=[
 	Destroys the ClientComm object.
 ]=]
-function ClientComm:Destroy()
-end
+function ClientComm:Destroy() end
 
 return ClientComm

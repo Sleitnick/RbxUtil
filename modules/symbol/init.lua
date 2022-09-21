@@ -2,7 +2,6 @@
 -- Stephen Leitnick
 -- January 04, 2022
 
-
 --[=[
 	@class Symbol
 

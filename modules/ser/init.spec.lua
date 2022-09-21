@@ -1,5 +1,4 @@
 return function()
-
 	local Ser = require(script.Parent)
 	local Option = require(script.Parent.Parent.Option)
 
@@ -24,8 +23,8 @@ return function()
 	describe("DeserializeArgs", function()
 		it("should deserialize args to option", function()
 			local serOpt = {
-				ClassName = "Option";
-				Value = 32;
+				ClassName = "Option",
+				Value = 32,
 			}
 			local opt = table.unpack(Ser.DeserializeArgs(serOpt))
 			expect(Option.Is(opt)).to.equal(true)
@@ -36,13 +35,12 @@ return function()
 	describe("DeserializeArgsAndUnpack", function()
 		it("should deserialize args to option", function()
 			local serOpt = {
-				ClassName = "Option";
-				Value = 32;
+				ClassName = "Option",
+				Value = 32,
 			}
 			local opt = Ser.DeserializeArgsAndUnpack(serOpt)
 			expect(Option.Is(opt)).to.equal(true)
 			expect(opt:Contains(32)).to.equal(true)
 		end)
 	end)
-
 end

@@ -6,7 +6,13 @@ local ClientRemoteProperty = require(script.ClientRemoteProperty)
 
 local Client = {}
 
-function Client.GetFunction(parent: Instance, name: string, usePromise: boolean, inboundMiddleware: Types.ClientMiddleware?, outboundMiddleware: Types.ClientMiddleware?)
+function Client.GetFunction(
+	parent: Instance,
+	name: string,
+	usePromise: boolean,
+	inboundMiddleware: Types.ClientMiddleware?,
+	outboundMiddleware: Types.ClientMiddleware?
+)
 	assert(not Util.IsServer, "GetFunction must be called from the client")
 	local folder = Util.GetCommSubFolder(parent, "RF"):Expect("Failed to get Comm RF folder")
 	local rf = folder:WaitForChild(name, Util.WaitForChildTimeout)
@@ -14,7 +20,7 @@ function Client.GetFunction(parent: Instance, name: string, usePromise: boolean,
 	local hasInbound = type(inboundMiddleware) == "table" and #inboundMiddleware > 0
 	local hasOutbound = type(outboundMiddleware) == "table" and #outboundMiddleware > 0
 	local function ProcessOutbound(args)
-		for _,middlewareFunc in ipairs(outboundMiddleware) do
+		for _, middlewareFunc in ipairs(outboundMiddleware) do
 			local middlewareResult = table.pack(middlewareFunc(args))
 			if not middlewareResult[1] then
 				return table.unpack(middlewareResult, 2, middlewareResult.n)
@@ -36,7 +42,7 @@ function Client.GetFunction(parent: Instance, name: string, usePromise: boolean,
 						end
 					end)
 					if success then
-						for _,middlewareFunc in ipairs(inboundMiddleware) do
+						for _, middlewareFunc in ipairs(inboundMiddleware) do
 							local middlewareResult = table.pack(middlewareFunc(res))
 							if not middlewareResult[1] then
 								return table.unpack(middlewareResult, 2, middlewareResult.n)
@@ -57,7 +63,7 @@ function Client.GetFunction(parent: Instance, name: string, usePromise: boolean,
 				else
 					res = table.pack(rf:InvokeServer(...))
 				end
-				for _,middlewareFunc in ipairs(inboundMiddleware) do
+				for _, middlewareFunc in ipairs(inboundMiddleware) do
 					local middlewareResult = table.pack(middlewareFunc(res))
 					if not middlewareResult[1] then
 						return table.unpack(middlewareResult, 2, middlewareResult.n)
@@ -100,8 +106,12 @@ function Client.GetFunction(parent: Instance, name: string, usePromise: boolean,
 	end
 end
 
-
-function Client.GetSignal(parent: Instance, name: string, inboundMiddleware: Types.ClientMiddleware?, outboundMiddleware: Types.ClientMiddleware?)
+function Client.GetSignal(
+	parent: Instance,
+	name: string,
+	inboundMiddleware: Types.ClientMiddleware?,
+	outboundMiddleware: Types.ClientMiddleware?
+)
 	assert(not Util.IsServer, "GetSignal must be called from the client")
 	local folder = Util.GetCommSubFolder(parent, "RE"):Expect("Failed to get Comm RE folder")
 	local re = folder:WaitForChild(name, Util.WaitForChildTimeout)
@@ -109,8 +119,12 @@ function Client.GetSignal(parent: Instance, name: string, inboundMiddleware: Typ
 	return ClientRemoteSignal.new(re, inboundMiddleware, outboundMiddleware)
 end
 
-
-function Client.GetProperty(parent: Instance, name: string, inboundMiddleware: Types.ClientMiddleware?, outboundMiddleware: Types.ClientMiddleware?)
+function Client.GetProperty(
+	parent: Instance,
+	name: string,
+	inboundMiddleware: Types.ClientMiddleware?,
+	outboundMiddleware: Types.ClientMiddleware?
+)
 	assert(not Util.IsServer, "GetProperty must be called from the client")
 	local folder = Util.GetCommSubFolder(parent, "RP"):Expect("Failed to get Comm RP folder")
 	local re = folder:WaitForChild(name, Util.WaitForChildTimeout)

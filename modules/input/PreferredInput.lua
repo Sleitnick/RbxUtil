@@ -92,13 +92,14 @@ PreferredInput = {
 			end
 		end
 	end,
-
 }
 
 local function SetPreferred(preferred: InputType)
-	if preferred == PreferredInput.Current then return end
+	if preferred == PreferredInput.Current then
+		return
+	end
 	PreferredInput.Current = preferred
-	for _,subscriber in ipairs(subscribers) do
+	for _, subscriber in ipairs(subscribers) do
 		task.spawn(subscriber, preferred)
 	end
 end

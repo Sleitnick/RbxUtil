@@ -34,8 +34,13 @@ local Server = {}
 	Client Comm
 ]=]
 
-
-function Server.BindFunction(parent: Instance, name: string, func: Types.FnBind, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?): RemoteFunction
+function Server.BindFunction(
+	parent: Instance,
+	name: string,
+	func: Types.FnBind,
+	inboundMiddleware: Types.ServerMiddleware?,
+	outboundMiddleware: Types.ServerMiddleware?
+): RemoteFunction
 	assert(Util.IsServer, "BindFunction must be called from the server")
 	local folder = Util.GetCommSubFolder(parent, "RF"):Expect("Failed to get Comm RF folder")
 	local rf = Instance.new("RemoteFunction")
@@ -44,7 +49,7 @@ function Server.BindFunction(parent: Instance, name: string, func: Types.FnBind,
 	local hasOutbound = type(outboundMiddleware) == "table" and #outboundMiddleware > 0
 	local function ProcessOutbound(player, ...)
 		local args = table.pack(...)
-		for _,middlewareFunc in ipairs(outboundMiddleware) do
+		for _, middlewareFunc in ipairs(outboundMiddleware) do
 			local middlewareResult = table.pack(middlewareFunc(player, args))
 			if not middlewareResult[1] then
 				return table.unpack(middlewareResult, 2, middlewareResult.n)
@@ -56,7 +61,7 @@ function Server.BindFunction(parent: Instance, name: string, func: Types.FnBind,
 	if hasInbound and hasOutbound then
 		local function OnServerInvoke(player, ...)
 			local args = table.pack(...)
-			for _,middlewareFunc in ipairs(inboundMiddleware) do
+			for _, middlewareFunc in ipairs(inboundMiddleware) do
 				local middlewareResult = table.pack(middlewareFunc(player, args))
 				if not middlewareResult[1] then
 					return table.unpack(middlewareResult, 2, middlewareResult.n)
@@ -69,7 +74,7 @@ function Server.BindFunction(parent: Instance, name: string, func: Types.FnBind,
 	elseif hasInbound then
 		local function OnServerInvoke(player, ...)
 			local args = table.pack(...)
-			for _,middlewareFunc in ipairs(inboundMiddleware) do
+			for _, middlewareFunc in ipairs(inboundMiddleware) do
 				local middlewareResult = table.pack(middlewareFunc(player, args))
 				if not middlewareResult[1] then
 					return table.unpack(middlewareResult, 2, middlewareResult.n)
@@ -91,24 +96,40 @@ function Server.BindFunction(parent: Instance, name: string, func: Types.FnBind,
 	return rf
 end
 
-
-function Server.WrapMethod(parent: Instance, tbl: {}, name: string, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?): RemoteFunction
+function Server.WrapMethod(
+	parent: Instance,
+	tbl: {},
+	name: string,
+	inboundMiddleware: Types.ServerMiddleware?,
+	outboundMiddleware: Types.ServerMiddleware?
+): RemoteFunction
 	assert(Util.IsServer, "WrapMethod must be called from the server")
 	local fn = tbl[name]
 	assert(type(fn) == "function", "Value at index " .. name .. " must be a function; got " .. type(fn))
-	return Server.BindFunction(parent, name, function(...) return fn(tbl, ...) end, inboundMiddleware, outboundMiddleware)
+	return Server.BindFunction(parent, name, function(...)
+		return fn(tbl, ...)
+	end, inboundMiddleware, outboundMiddleware)
 end
 
-
-function Server.CreateSignal(parent: Instance, name: string, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?)
+function Server.CreateSignal(
+	parent: Instance,
+	name: string,
+	inboundMiddleware: Types.ServerMiddleware?,
+	outboundMiddleware: Types.ServerMiddleware?
+)
 	assert(Util.IsServer, "CreateSignal must be called from the server")
 	local folder = Util.GetCommSubFolder(parent, "RE"):Expect("Failed to get Comm RE folder")
 	local rs = RemoteSignal.new(folder, name, inboundMiddleware, outboundMiddleware)
 	return rs
 end
 
-
-function Server.CreateProperty(parent: Instance, name: string, initialValue: any, inboundMiddleware: Types.ServerMiddleware?, outboundMiddleware: Types.ServerMiddleware?)
+function Server.CreateProperty(
+	parent: Instance,
+	name: string,
+	initialValue: any,
+	inboundMiddleware: Types.ServerMiddleware?,
+	outboundMiddleware: Types.ServerMiddleware?
+)
 	assert(Util.IsServer, "CreateProperty must be called from the server")
 	local folder = Util.GetCommSubFolder(parent, "RP"):Expect("Failed to get Comm RP folder")
 	local rp = RemoteProperty.new(folder, name, initialValue, inboundMiddleware, outboundMiddleware)
