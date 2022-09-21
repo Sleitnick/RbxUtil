@@ -419,12 +419,12 @@ function Component:_setup()
 	end
 
 	local function TryDeconstructComponent(instance)
+		self[KEY_LOCK_CONSTRUCT][instance] = nil
 		local component = self[KEY_INST_TO_COMPONENTS][instance]
 		if not component then
 			return
 		end
 		self[KEY_INST_TO_COMPONENTS][instance] = nil
-		self[KEY_LOCK_CONSTRUCT][instance] = nil
 		local components = self[KEY_COMPONENTS]
 		local index = table.find(components, component)
 		if index then
