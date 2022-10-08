@@ -60,18 +60,18 @@ local function Copy(t: Table, deep: boolean?): Table
 	return DeepCopy(t)
 end
 
+
 --[=[
 	@within TableUtil
 	@function Merge
 	@param a table -- Table to be merged into
-	@param b table -- Table to merged with table `a`
+	@param b table -- Table to merged with first table
 	@param copy boolean? -- Whether to return a new table or merge into table a
 	@return table
 	
 	Merges table `b` into table `a`. Can also return a new table without affecting
 	the original tables.
 ]=]
-
 local function Merge (a: Table, b: Table, copy: boolean?): Table
 	if copy then
 		local tCopy = Copy(a, true)
@@ -90,7 +90,8 @@ local function Merge (a: Table, b: Table, copy: boolean?): Table
 		return a
 	end
 end
-		
+
+
 --[=[
 	@within TableUtil
 	@function Sync
