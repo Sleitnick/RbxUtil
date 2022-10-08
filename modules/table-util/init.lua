@@ -62,6 +62,37 @@ end
 
 --[=[
 	@within TableUtil
+	@function Merge
+	@param a table -- Table to be merged into
+	@param b table -- Table to merged with table `a`
+	@param copy boolean? -- Whether to return a new table or merge into table a
+	@return table
+	
+	Merges table `b` into table `a`. Can also return a new table without affecting
+	the original tables.
+]=]
+
+local function Merge (a: Table, b: Table, copy: boolean?): Table
+	if (copy) then
+		local tCopy = Copy(a, true)
+		for k,v in pairs(b)  do
+			if (type(v) == "table") then
+				tCopy[k] = Copy(v, true)
+			end
+		end
+		return tCopy
+	else
+		for k,v in pairs(b)  do
+			if (type(v) == "table") then
+				a[k] = Copy(v, true)
+			end
+		end
+		return a
+	end
+end
+		
+--[=[
+	@within TableUtil
 	@function Sync
 	@param srcTbl table -- Source table
 	@param templateTbl table -- Template table
