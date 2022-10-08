@@ -73,17 +73,17 @@ end
 ]=]
 
 local function Merge (a: Table, b: Table, copy: boolean?): Table
-	if (copy) then
+	if copy then
 		local tCopy = Copy(a, true)
 		for k,v in pairs(b)  do
-			if (type(v) == "table") then
+			if type(v) == "table" then
 				tCopy[k] = Copy(v, true)
 			end
 		end
 		return tCopy
 	else
 		for k,v in pairs(b)  do
-			if (type(v) == "table") then
+			if type(v) == "table" then
 				a[k] = Copy(v, true)
 			end
 		end
