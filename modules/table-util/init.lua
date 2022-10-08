@@ -925,6 +925,7 @@ local function DecodeJSON(str: string): any
 end
 
 TableUtil.Copy = Copy
+TableUtil.Merge = Merge
 TableUtil.Sync = Sync
 TableUtil.Reconcile = Reconcile
 TableUtil.SwapRemove = SwapRemove
