@@ -80,6 +80,33 @@ function ClientRemoteSignal:Connect(fn: (...any) -> ())
 end
 
 --[=[
+	@param fn (player: Player, ...: any) -> nil -- The function to connect
+	@return Connection
+	Connects a function to the remote signal. The function will be
+	called anytime the equivalent server-side RemoteSignal is
+	fired at this specific client that created this client signal.
+	Once the connection is triggered, it will disconnect itself.
+]=]
+function ClientRemoteSignal:Once(fn)
+	if self._directConnect then
+		return self._re.OnClientEvent:Once(fn)
+	else
+		return self._signal:Once(fn)
+	end
+end
+
+--[=[
+	Yields the current thread until the remote signal is fired, and returns the arguments fired from the signal.
+]=]
+function ClientRemoteSignal:Wait(fn)
+	if self._directConnect then
+		return self._re.OnClientEvent:Wait(fn)
+	else
+		return self._signal:Wait(fn)
+	end
+end
+
+--[=[
 	Fires the equivalent server-side signal with the given arguments.
 
 	:::note Outbound Middleware
