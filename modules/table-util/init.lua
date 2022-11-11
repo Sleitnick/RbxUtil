@@ -52,6 +52,7 @@ local function Copy(t: Table, deep: boolean?): Table
 				tCopy[k] = seen[v] or DeepCopy(v, seen)
 			end
 		end
+		setmetatable(tCopy, DeepCopy(getmetatable(tbl), seen))
 		return tCopy
 	end
 	return DeepCopy(t)
