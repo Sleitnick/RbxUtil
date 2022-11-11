@@ -217,6 +217,8 @@ end
 
 	Connects a function to the signal, which will be called the next time the signal fires. Once
 	the connection is triggered, it will disconnect itself.
+
+	Alias: `Once`
 	```lua
 	signal:ConnectOnce(function(msg, num)
 		print(msg, num)
@@ -360,6 +362,8 @@ function Signal:Destroy()
 		proxyHandler:Disconnect()
 	end
 end
+
+Signal.Once = Signal.ConnectOnce
 
 -- Make signal strict
 setmetatable(Signal, {
