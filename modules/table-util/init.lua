@@ -37,22 +37,19 @@ local rng = Random.new()
 
 	Creates a copy of the given table. By default, a shallow copy is
 	performed. For deep copies, a second boolean argument must be
-	passed to the function.
-
-	:::caution No cyclical references
-	Deep copies are _not_ protected against cyclical references. Passing
-	a table with cyclical references _and_ the `deep` parameter set to
-	`true` will result in a stack-overflow.
+	passed to the function. Properly handles cyclical references.
 ]=]
 local function Copy(t: Table, deep: boolean?): Table
 	if not deep then
 		return table.clone(t)
 	end
-	local function DeepCopy(tbl)
+	local function DeepCopy(tbl, seen)
 		local tCopy = table.clone(tbl)
+		seen = seen or {}
+		seen[tbl] = tCopy
 		for k, v in pairs(tCopy) do
 			if type(v) == "table" then
-				tCopy[k] = DeepCopy(v)
+				tCopy[k] = seen[v] or DeepCopy(v, seen)
 			end
 		end
 		return tCopy
