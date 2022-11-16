@@ -260,7 +260,7 @@ end
 
 	```lua
 	local t = {A = 10, B = 20, C = 30}
-	local t2 = TableUtil.Map(t, function(key, value)
+	local t2 = TableUtil.Map(t, function(value)
 		return value * 2
 	end)
 	print(t2) --> {A = 20, B = 40, C = 60}
