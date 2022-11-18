@@ -21,7 +21,7 @@
 | [Silo](https://sleitnick.github.io/RbxUtil/api/Silo) | `Silo = "sleitnick/silo@0.1.1"` | State container class |
 | [Streamable](https://sleitnick.github.io/RbxUtil/api/Streamable) | `Streamable = "sleitnick/streamable@1.2.4"` | Streamable class and StreamableUtil |
 | [Symbol](https://sleitnick.github.io/RbxUtil/api/Symbol) | `Symbol = "sleitnick/symbol@2.0.1"` | Symbol |
-| [TableUtil](https://sleitnick.github.io/RbxUtil/api/TableUtil) | `TableUtil = "sleitnick/table-util@1.1.5"` | Table utility functions |
+| [TableUtil](https://sleitnick.github.io/RbxUtil/api/TableUtil) | `TableUtil = "sleitnick/table-util@1.2.0"` | Table utility functions |
 | [TaskQueue](https://sleitnick.github.io/RbxUtil/api/TaskQueue) | `TaskQueue = "sleitnick/task-queue@0.1.1"` | Batches tasks that occur on the same execution step |
 | [Timer](https://sleitnick.github.io/RbxUtil/api/Timer) | `Timer = "sleitnick/timer@1.1.2"` | Timer class |
 | [Trove](https://sleitnick.github.io/RbxUtil/api/Trove) | `Trove = "sleitnick/trove@0.5.0"` | Trove class for tracking and cleaning up objects |
