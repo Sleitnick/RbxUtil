@@ -298,7 +298,7 @@ end
 ]=]
 local function Filter<T>(t: { T }, predicate: (T, any, { T }) -> boolean): { T }
 	assert(type(t) == "table", "First argument must be a table")
-	assert(type(f) == "function", "Second argument must be a function")
+	assert(type(predicate) == "function", "Second argument must be a function")
 	local newT = table.create(#t)
 	if #t > 0 then
 		local n = 0
@@ -341,7 +341,7 @@ end
 ]=]
 local function Reduce<T, R>(t: { T }, predicate: (R, T, any, { T }) -> R, init: R): R
 	assert(type(t) == "table", "First argument must be a table")
-	assert(type(f) == "function", "Second argument must be a function")
+	assert(type(predicate) == "function", "Second argument must be a function")
 	local result = init :: R
 	if #t > 0 then
 		local start = 1
