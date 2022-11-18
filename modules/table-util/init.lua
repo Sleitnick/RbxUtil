@@ -4,13 +4,6 @@
 -- Stephen Leitnick
 -- September 13, 2017
 
-type Table = { any }
-type MapPredicate = (any, any, Table) -> any
-type FilterPredicate = (any, any, Table) -> boolean
-type ReducePredicate = (any, any, any, Table) -> any
-type FindCallback = (any, any, Table) -> boolean
-type IteratorFunc = (t: Table, k: any) -> (any, any)
-
 --[=[
 	@class TableUtil
 
@@ -48,7 +41,7 @@ local function Copy<T>(t: T, deep: boolean?): T
 	if not deep then
 		return (table.clone(t :: any) :: any) :: T
 	end
-	local function DeepCopy(tbl: Table)
+	local function DeepCopy(tbl: { any })
 		local tCopy = table.clone(tbl)
 		for k, v in tCopy do
 			if type(v) == "table" then
@@ -57,7 +50,7 @@ local function Copy<T>(t: T, deep: boolean?): T
 		end
 		return tCopy
 	end
-	return (DeepCopy((t :: any) :: Table) :: any) :: T
+	return DeepCopy(t :: any) :: T
 end
 
 --[=[
@@ -164,7 +157,7 @@ local function Reconcile<S, T>(src: S, template: T): S & T
 	assert(type(src) == "table", "First argument must be a table")
 	assert(type(template) == "table", "Second argument must be a table")
 
-	local tbl = table.clone(src) :: Table
+	local tbl = table.clone(src)
 
 	for k, v in template do
 		local sv = src[k]
@@ -779,9 +772,9 @@ end
 	--]]
 	```
 ]=]
-local function Zip(...: { [any]: any }): (IteratorFunc, Table, any)
+local function Zip(...: { [any]: any }): ((t: { any }, k: any) -> (any, any), { any }, any)
 	assert(select("#", ...) > 0, "Must supply at least 1 table")
-	local function ZipIteratorArray(all: Table, k: number): (number?, { any }?)
+	local function ZipIteratorArray(all: { any }, k: number): (number?, { any }?)
 		k += 1
 		local values = {}
 		for i, t in all do
@@ -794,7 +787,7 @@ local function Zip(...: { [any]: any }): (IteratorFunc, Table, any)
 		end
 		return k, values
 	end
-	local function ZipIteratorMap(all: Table, k: any): (number?, { any }?)
+	local function ZipIteratorMap(all: { [any]: any }, k: any): (number?, { any }?)
 		local values = {}
 		for i, t in all do
 			local v = next(t, k)
