@@ -59,7 +59,11 @@ EnumList.__index = EnumList
 function EnumList.new(name: string, enums: EnumNames)
 	assert(type(name) == "string", "Name string required")
 	assert(type(enums) == "table", "Enums table required")
-	local self = setmetatable({}, EnumList)
+	local self = setmetatable({}, {__index = function(self, key)
+	    local val = EnumList[key] 
+	    assert(val ~= nil, ("Key %s was not found in EnumList %s"):format(tostring(key), name))
+	    return val
+	end})
 	self[LIST_KEY] = {}
 	self[NAME_KEY] = name
 	for i, enumName in ipairs(enums) do
