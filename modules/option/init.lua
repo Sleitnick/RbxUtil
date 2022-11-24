@@ -80,6 +80,41 @@
 
 --]]
 
+export type MatchTable<T> = {
+	Some: (value: T) -> any,
+	None: () -> any,
+}
+
+export type MatchFn<T> = (matches: MatchTable<T>) -> any
+
+export type DefaultFn<T> = () -> T
+
+export type AndThenFn<T> = (value: T) -> Option<T>
+
+export type OrElseFn<T> = () -> Option<T>
+
+export type Option<T> = typeof(setmetatable(
+	{} :: {
+		Match: (self: Option<T>) -> MatchFn<T>,
+		IsSome: (self: Option<T>) -> boolean,
+		IsNone: (self: Option<T>) -> boolean,
+		Contains: (self: Option<T>, value: T) -> boolean,
+		Unwrap: (self: Option<T>) -> T,
+		Expect: (self: Option<T>, errMsg: string) -> T,
+		ExpectNone: (self: Option<T>, errMsg: string) -> nil,
+		UnwrapOr: (self: Option<T>, default: T) -> T,
+		UnwrapOrElse: (self: Option<T>, defaultFn: DefaultFn<T>) -> T,
+		And: (self: Option<T>, opt2: Option<T>) -> Option<T>,
+		AndThen: (self: Option<T>, predicate: AndThenFn<T>) -> Option<T>,
+		Or: (self: Option<T>, opt2: Option<T>) -> Option<T>,
+		OrElse: (self: Option<T>, orElseFunc: OrElseFn<T>) -> Option<T>,
+		XOr: (self: Option<T>, opt2: Option<T>) -> Option<T>,
+	},
+	{} :: {
+		__index: Option<T>,
+	}
+))
+
 local CLASSNAME = "Option"
 
 --[=[
@@ -444,4 +479,11 @@ end
 ]=]
 Option.None = Option._new()
 
-return Option
+return (Option :: any) :: {
+	Some: <T>(value: T) -> Option<T>,
+	Wrap: <T>(value: T) -> Option<T>,
+
+	Is: (obj: any) -> boolean,
+
+	None: Option<never>,
+}
