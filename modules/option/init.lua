@@ -485,5 +485,5 @@ return (Option :: any) :: {
 
 	Is: (obj: any) -> boolean,
 
-	None: Option<never>,
+	None: Option<any>,
 }
