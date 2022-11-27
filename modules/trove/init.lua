@@ -4,6 +4,7 @@
 
 local FN_MARKER = newproxy()
 local THREAD_MARKER = newproxy()
+local TABLE_MARKER = newproxy()
 
 local RunService = game:GetService("RunService")
 
@@ -27,6 +28,7 @@ local function GetObjectCleanupFunction(object, cleanupMethod)
 		elseif typeof(object.Disconnect) == "function" then
 			return "Disconnect"
 		end
+		return TABLE_MARKER
 	end
 	error("Failed to get cleanup function for object " .. t .. ": " .. tostring(object), 3)
 end
@@ -172,10 +174,8 @@ end
 	@param fn (...: any) -> ()
 	@return RBXScriptConnection
 	Connects the function to the signal, adds the connection
-	to the trove, and then returns the connection.
-
+	to the trove, and then returns the connection. Once the signal is fired, the signal will be disconnected.
 	This is shorthand for `trove:Add(signal:Once(fn))`.
-
 	```lua
 	trove:ConnectOnce(workspace.ChildAdded, function(instance)
 		print(instance.Name .. " added to workspace")
@@ -364,7 +364,10 @@ function Trove:_cleanupObject(object, cleanupMethod)
 	if cleanupMethod == FN_MARKER then
 		object()
 	elseif cleanupMethod == THREAD_MARKER then
-		coroutine.close(object)
+		pcall(task.cancel, object)
+	elseif cleanupMethod == TABLE_MARKER then
+		table.clear(object)
+		setmetatable(object, nil)
 	else
 		object[cleanupMethod](object)
 	end
@@ -386,10 +389,21 @@ end
 function Trove:AttachToInstance(instance: Instance)
 	if self._cleaning then
 		error("Cannot call trove:AttachToInstance() while cleaning", 2)
+	elseif not instance:IsDescendantOf(game) then
+		error("Instance is not a descendant of the game hierarchy", 2)
 	end
-	return self:ConnectOnce(instance.Destroying, function()
-		self:Destroy()
-	end)
+
+	if instance:IsA("Humanoid") or instance:FindFirstChildOfClass("Humanoid") then
+		return self:Connect(instance.AncestryChanged, function(_child, parent)
+			if not parent then
+				self:Destroy()
+			end
+		end)
+	else
+		return self:Connect(instance.Destroying, function()
+			self:Destroy()
+		end)
+	end
 end
 
 --[=[
