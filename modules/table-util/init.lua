@@ -626,6 +626,29 @@ end
 
 --[=[
 	@within TableUtil
+	@function Len
+	@param tbl table
+	@return number
+
+	Returns the length of the table. Meant for dictionaries.
+
+	```lua
+	local t = {A = "1", B = "2", C = "3"}
+	local len = TableUtil.Len(t)
+	print(len) --> 3
+	```
+]=]
+local function Len<K, V>(tbl: { [K]: V }): number
+	local len = 0
+	for _, _ in pairs(tbl) do
+		len += 1
+	end
+
+	return len
+end
+
+--[=[
+	@within TableUtil
 	@function Find
 	@param tbl table
 	@param callback (value: any, index: any, tbl: table) -> boolean
@@ -900,6 +923,7 @@ TableUtil.Flat = Flat
 TableUtil.FlatMap = FlatMap
 TableUtil.Keys = Keys
 TableUtil.Values = Values
+TableUtil.Len = Len
 TableUtil.Find = Find
 TableUtil.Every = Every
 TableUtil.Some = Some
