@@ -36,7 +36,7 @@ local function Copy<T>(t: T, deep: boolean?): T
 	if not deep then
 		return (table.clone(t :: any) :: any) :: T
 	end
-	local function DeepCopy(tbl: {}, seen: { [any]: any }): T
+	local function DeepCopy(tbl: any, seen: { [any]: any }): any
 		local tCopy = table.clone(tbl)
 		seen = seen or {}
 		seen[tbl] = tCopy
