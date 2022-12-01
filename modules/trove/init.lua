@@ -5,7 +5,7 @@
 --!strict
 
 local TroveApi = require(script.TroveApi)
-local Promise = require(script.Parent.Promise)
+local _Promise = require(script.Parent.Promise)
 
 -- this will have to wait until PR on the Promise repo gets approved
 -- type Promise = Promise.ClassType
