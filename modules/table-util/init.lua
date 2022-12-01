@@ -5,6 +5,7 @@
 -- September 13, 2017
 
 type Table = { any }
+type Dictionary = { [any]: any }
 type MapPredicate = (any, any, Table) -> any
 type FilterPredicate = (any, any, Table) -> boolean
 type ReducePredicate = (any, any, any, Table) -> any
@@ -43,8 +44,8 @@ local function Copy(t: Table, deep: boolean?): Table
 	if not deep then
 		return table.clone(t)
 	end
-	local function DeepCopy(tbl, seen)
-		local tCopy = table.clone(tbl)
+	local function DeepCopy(tbl: Table, seen: Dictionary): Table
+		local tCopy: Dictionary = table.clone(tbl)
 		seen = seen or {}
 		seen[tbl] = tCopy
 		for k, v in pairs(tCopy) do
@@ -55,7 +56,7 @@ local function Copy(t: Table, deep: boolean?): Table
 		setmetatable(tCopy, DeepCopy(getmetatable(tbl), seen))
 		return tCopy
 	end
-	return DeepCopy(t)
+	return DeepCopy(t, {})
 end
 
 --[=[
