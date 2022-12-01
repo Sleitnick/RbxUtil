@@ -103,10 +103,10 @@ return function()
 		end)
 	end)
 
-	describe("ConnectOnce", function()
+	describe("Once", function()
 		it("should only capture first fire", function()
 			local value
-			local c = signal:ConnectOnce(function(v)
+			local c = signal:Once(function(v)
 				value = v
 			end)
 			expect(c.Connected).to.equal(true)
