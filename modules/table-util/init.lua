@@ -4,14 +4,6 @@
 -- Stephen Leitnick
 -- September 13, 2017
 
-type Table = { any }
-type Dictionary = { [any]: any }
-type MapPredicate = (any, any, Table) -> any
-type FilterPredicate = (any, any, Table) -> boolean
-type ReducePredicate = (any, any, any, Table) -> any
-type FindCallback = (any, any, Table) -> boolean
-type IteratorFunc = (t: Table, k: any) -> (any, any)
-
 --[=[
 	@class TableUtil
 
@@ -40,12 +32,12 @@ local rng = Random.new()
 	performed. For deep copies, a second boolean argument must be
 	passed to the function. Properly handles cyclical references.
 ]=]
-local function Copy(t: Table, deep: boolean?): Table
+local function Copy<T>(t: T, deep: boolean?): T
 	if not deep then
-		return table.clone(t)
+		return (table.clone(t :: any) :: any) :: T
 	end
-	local function DeepCopy(tbl: Table, seen: Dictionary): Table
-		local tCopy: Dictionary = table.clone(tbl)
+	local function DeepCopy(tbl: {}, seen: { [any]: any }): T
+		local tCopy = table.clone(tbl)
 		seen = seen or {}
 		seen[tbl] = tCopy
 		for k, v in pairs(tCopy) do
@@ -56,7 +48,7 @@ local function Copy(t: Table, deep: boolean?): Table
 		setmetatable(tCopy, DeepCopy(getmetatable(tbl), seen))
 		return tCopy
 	end
-	return DeepCopy(t, {})
+	return DeepCopy(t :: any, {}) :: T
 end
 
 --[=[
@@ -87,7 +79,7 @@ end
 
 	For player data, use `TableUtil.Reconcile` instead.
 ]=]
-local function Sync(srcTbl: Table, templateTbl: Table): Table
+local function Sync<S, T>(srcTbl: S, templateTbl: T): T
 	assert(type(srcTbl) == "table", "First argument must be a table")
 	assert(type(templateTbl) == "table", "Second argument must be a table")
 
@@ -103,7 +95,7 @@ local function Sync(srcTbl: Table, templateTbl: Table): Table
 		if vTemplate == nil then
 			tbl[k] = nil
 
-		-- Synchronize data types:
+			-- Synchronize data types:
 		elseif type(v) ~= type(vTemplate) then
 			if type(vTemplate) == "table" then
 				tbl[k] = Copy(vTemplate, true)
@@ -111,7 +103,7 @@ local function Sync(srcTbl: Table, templateTbl: Table): Table
 				tbl[k] = vTemplate
 			end
 
-		-- Synchronize sub-tables:
+			-- Synchronize sub-tables:
 		elseif type(v) == "table" then
 			tbl[k] = Sync(v, vTemplate)
 		end
@@ -130,7 +122,7 @@ local function Sync(srcTbl: Table, templateTbl: Table): Table
 		end
 	end
 
-	return tbl
+	return (tbl :: any) :: T
 end
 
 --[=[
@@ -156,16 +148,16 @@ end
 	local data = {kills = 10, abc = 20}
 	local correctedData = TableUtil.Reconcile(data, template)
 	
-	print(correctedData) --> {kills = 10, deaths = 0, xp = 0, abc = 30}
+	print(correctedData) --> {kills = 10, deaths = 0, xp = 0, abc = 20}
 	```
 ]=]
-local function Reconcile(src: Table, template: Table): Table
+local function Reconcile<S, T>(src: S, template: T): S & T
 	assert(type(src) == "table", "First argument must be a table")
 	assert(type(template) == "table", "Second argument must be a table")
 
 	local tbl = table.clone(src)
 
-	for k, v in pairs(template) do
+	for k, v in template do
 		local sv = src[k]
 		if sv == nil then
 			if type(v) == "table" then
@@ -182,7 +174,7 @@ local function Reconcile(src: Table, template: Table): Table
 		end
 	end
 
-	return tbl
+	return (tbl :: any) :: S & T
 end
 
 --[=[
@@ -212,7 +204,7 @@ end
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
 ]=]
-local function SwapRemove(t: Table, i: number)
+local function SwapRemove<T>(t: { T }, i: number)
 	local n = #t
 	t[i] = t[n]
 	t[n] = nil
@@ -237,7 +229,7 @@ end
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
 ]=]
-local function SwapRemoveFirstValue(t: Table, v: any): number?
+local function SwapRemoveFirstValue<T>(t: { T }, v: T): number?
 	local index: number? = table.find(t, v)
 	if index then
 		SwapRemove(t, index)
@@ -265,11 +257,11 @@ end
 	print(t2) --> {A = 20, B = 40, C = 60}
 	```
 ]=]
-local function Map(t: Table, f: MapPredicate): Table
+local function Map<T, M>(t: { T }, f: (T, number, { T }) -> M): { M }
 	assert(type(t) == "table", "First argument must be a table")
 	assert(type(f) == "function", "Second argument must be a function")
 	local newT = table.create(#t)
-	for k, v in pairs(t) do
+	for k, v in t do
 		newT[k] = f(v, k, t)
 	end
 	return newT
@@ -295,21 +287,21 @@ end
 	print(t2) --> {B = 40, C = 60}
 	```
 ]=]
-local function Filter(t: Table, f: FilterPredicate): Table
+local function Filter<T>(t: { T }, predicate: (T, any, { T }) -> boolean): { T }
 	assert(type(t) == "table", "First argument must be a table")
-	assert(type(f) == "function", "Second argument must be a function")
+	assert(type(predicate) == "function", "Second argument must be a function")
 	local newT = table.create(#t)
 	if #t > 0 then
 		local n = 0
-		for i, v in ipairs(t) do
-			if f(v, i, t) then
+		for i, v in t do
+			if predicate(v, i, t) then
 				n += 1
 				newT[n] = v
 			end
 		end
 	else
-		for k, v in pairs(t) do
-			if f(v, k, t) then
+		for k, v in t do
+			if predicate(v, k, t) then
 				newT[k] = v
 			end
 		end
@@ -338,27 +330,27 @@ end
 	print(result) --> 100
 	```
 ]=]
-local function Reduce(t: Table, f: ReducePredicate, init: any?): any
+local function Reduce<T, R>(t: { T }, predicate: (R, T, any, { T }) -> R, init: R): R
 	assert(type(t) == "table", "First argument must be a table")
-	assert(type(f) == "function", "Second argument must be a function")
-	local result = init
+	assert(type(predicate) == "function", "Second argument must be a function")
+	local result = init :: R
 	if #t > 0 then
 		local start = 1
 		if init == nil then
-			result = t[1]
+			result = (t[1] :: any) :: R
 			start = 2
 		end
 		for i = start, #t do
-			result = f(result, t[i], i, t)
+			result = predicate(result, t[i], i, t)
 		end
 	else
 		local start = nil
 		if init == nil then
-			result = next(t)
+			result = (next(t) :: any) :: R
 			start = result
 		end
-		for k, v in next, t, start do
-			result = f(result, v, k, t)
+		for k, v in next, t, start :: any? do
+			result = predicate(result, v, k, t)
 		end
 	end
 	return result
@@ -381,10 +373,10 @@ end
 	print(newT) --> {A = 10, B = 20, C = 30, D = 40}
 	```
 ]=]
-local function Assign(target: Table, ...: Table): Table
+local function Assign<T>(target: { T }, ...: { any }): { T } & { any }
 	local tbl = table.clone(target)
-	for _, src in ipairs({ ... }) do
-		for k, v in pairs(src) do
+	for _, src in { ... } do
+		for k, v in src do
 			tbl[k] = v
 		end
 	end
@@ -410,9 +402,9 @@ end
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
 ]=]
-local function Extend(target: Table, extension: Table): Table
-	local tbl = table.clone(target)
-	for _, v in ipairs(extension) do
+local function Extend<T, E>(target: { T }, extension: { E }): { T } & { E }
+	local tbl = table.clone(target) :: { any }
+	for _, v in extension do
 		table.insert(tbl, v)
 	end
 	return tbl
@@ -435,7 +427,7 @@ end
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
 ]=]
-local function Reverse(tbl: Table): Table
+local function Reverse<T>(tbl: { T }): { T }
 	local n = #tbl
 	local tblRev = table.create(n)
 	for i = 1, n do
@@ -462,7 +454,7 @@ end
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
 ]=]
-local function Shuffle(tbl: Table, rngOverride: Random?): Table
+local function Shuffle<T>(tbl: { T }, rngOverride: Random?): { T }
 	assert(type(tbl) == "table", "First argument must be a table")
 	local shuffled = table.clone(tbl)
 	local random = if typeof(rngOverride) == "Random" then rngOverride else rng
@@ -492,7 +484,7 @@ end
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
 ]=]
-local function Sample(tbl: Table, size: number, rngOverride: Random?): Table
+local function Sample<T>(tbl: { T }, size: number, rngOverride: Random?): { T }
 	assert(type(tbl) == "table", "First argument must be a table")
 	assert(type(size) == "number", "Second argument must be a number")
 	local shuffled = table.clone(tbl)
@@ -529,11 +521,11 @@ end
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
 ]=]
-local function Flat(tbl: Table, depth: number?): Table
+local function Flat<T>(tbl: { T }, depth: number?): { T }
 	local maxDepth: number = if type(depth) == "number" then depth else 1
 	local flatTbl = table.create(#tbl)
-	local function Scan(t: Table, d: number)
-		for _, v in ipairs(t) do
+	local function Scan(t: { any }, d: number)
+		for _, v in t do
 			if type(v) == "table" and d < maxDepth then
 				Scan(v, d + 1)
 			else
@@ -566,7 +558,7 @@ end
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
 ]=]
-local function FlatMap(tbl: Table, callback: MapPredicate): Table
+local function FlatMap<T, M>(tbl: { T }, callback: (T, number, { T }) -> M): { M }
 	return Flat(Map(tbl, callback))
 end
 
@@ -592,9 +584,9 @@ end
 	table.sort(keys)
 	```
 ]=]
-local function Keys(tbl: Table): Table
+local function Keys<K, V>(tbl: { [K]: V }): { K }
 	local keys = table.create(#tbl)
-	for k in pairs(tbl) do
+	for k in tbl do
 		table.insert(keys, k)
 	end
 	return keys
@@ -622,9 +614,9 @@ end
 	table.sort(values)
 	```
 ]=]
-local function Values(tbl: Table): Table
+local function Values<K, V>(tbl: { [K]: V }): { V }
 	local values = table.create(#tbl)
-	for _, v in pairs(tbl) do
+	for _, v in tbl do
 		table.insert(values, v)
 	end
 	return values
@@ -661,8 +653,8 @@ end
 	guaranteed, and thus the result could be different if there are more
 	than one possible matches given the data and callback function.
 ]=]
-local function Find(tbl: Table, callback: FindCallback): (any?, any?)
-	for k, v in pairs(tbl) do
+local function Find<K, V>(tbl: { [K]: V }, callback: (V, K, { [K]: V }) -> boolean): (V?, K?)
+	for k, v in tbl do
 		if callback(v, k, tbl) then
 			return v, k
 		end
@@ -690,8 +682,8 @@ end
 	print("All above zero:", allAboveZero) --> All above zero: true
 	```
 ]=]
-local function Every(tbl: Table, callback: FindCallback): boolean
-	for k, v in pairs(tbl) do
+local function Every<K, V>(tbl: { [K]: V }, callback: (V, K, { [K]: V }) -> boolean): boolean
+	for k, v in tbl do
 		if not callback(v, k, tbl) then
 			return false
 		end
@@ -719,8 +711,8 @@ end
 	print("Some below twenty:", someBelowTwenty) --> Some below twenty: true
 	```
 ]=]
-local function Some(tbl: Table, callback: FindCallback): boolean
-	for k, v in pairs(tbl) do
+local function Some<K, V>(tbl: { [K]: V }, callback: (V, K, { [K]: V }) -> boolean): boolean
+	for k, v in tbl do
 		if callback(v, k, tbl) then
 			return true
 		end
@@ -745,13 +737,10 @@ end
 	print(tTruncated) --> {10, 20, 30}
 	```
 ]=]
-local function Truncate(tbl: Table, len: number): Table
+local function Truncate<T>(tbl: { T }, len: number): { T }
 	local n = #tbl
 	len = math.clamp(len, 1, n)
-	if len == n then
-		return table.clone(tbl)
-	end
-	return table.move(tbl, 1, len, 1, table.create(len))
+	return if len == n then table.clone(tbl) else table.move(tbl, 1, len, 1, table.create(len))
 end
 
 --[=[
@@ -781,12 +770,12 @@ end
 	--]]
 	```
 ]=]
-local function Zip(...): (IteratorFunc, Table, any)
+local function Zip(...: { [any]: any }): ((t: { any }, k: any) -> (any, any), { any }, any)
 	assert(select("#", ...) > 0, "Must supply at least 1 table")
-	local function ZipIteratorArray(all: Table, k: number): (number?, { any }?)
+	local function ZipIteratorArray(all: { any }, k: number): (number?, { any }?)
 		k += 1
 		local values = {}
-		for i, t in ipairs(all) do
+		for i, t in all do
 			local v = t[k]
 			if v ~= nil then
 				values[i] = v
@@ -796,9 +785,9 @@ local function Zip(...): (IteratorFunc, Table, any)
 		end
 		return k, values
 	end
-	local function ZipIteratorMap(all: Table, k: any): (number?, { any }?)
+	local function ZipIteratorMap(all: { [any]: any }, k: any): (number?, { any }?)
 		local values = {}
-		for i, t in ipairs(all) do
+		for i, t in all do
 			local v = next(t, k)
 			if v ~= nil then
 				values[i] = v
@@ -834,8 +823,8 @@ end
 	tbl.xyz.abc = 64 -- Will throw an error (cannot modify readonly table)
 	```
 ]=]
-local function Lock(tbl: Table): Table
-	local function Freeze(t: Table)
+local function Lock<T>(tbl: T): T
+	local function Freeze(t: { [any]: any })
 		for k, v in pairs(t) do
 			if type(v) == "table" then
 				t[k] = Freeze(v)
@@ -843,7 +832,7 @@ local function Lock(tbl: Table): Table
 		end
 		return table.freeze(t)
 	end
-	return Freeze(tbl)
+	return Freeze(tbl :: any)
 end
 
 --[=[
@@ -864,7 +853,7 @@ end
 	TableUtil.IsEmpty({abc = 32}) -- false
 	```
 ]=]
-local function IsEmpty(tbl)
+local function IsEmpty(tbl: { any }): boolean
 	return next(tbl) == nil
 end
 
