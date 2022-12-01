@@ -20,7 +20,6 @@ jobs:
     - uses: ok-nick/setup-aftman@v0.3.0
       name: Install Aftman
       with:
-          version: "^1.0.0"
           token: ${{ SECRETS.GITHUB_TOKEN }}
 
     - name: Lint
