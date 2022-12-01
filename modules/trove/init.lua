@@ -7,12 +7,15 @@
 local TroveApi = require(script.TroveApi)
 local Promise = require(script.Parent.Promise)
 
-type Promise = Promise.Class
+-- this will have to wait until PR on the Promise repo gets approved
+-- type Promise = Promise.ClassType
+type Promise = any
 
 export type ClassType = {
 	Extend: (self: ClassType) -> ClassType,
 	Clone: (self: ClassType, instance: Instance) -> Instance,
-	Construct: (<T>(self: ClassType, createFunc: (...any) -> ...any, ...any) -> T) & (<T>(self: ClassType, classTable: { new: (...any) -> ...any }, ...any) -> T),
+	Construct: (<T>(self: ClassType, createFunc: (...any) -> ...any, ...any) -> T)
+		& (<T>(self: ClassType, classTable: { new: (...any) -> ...any }, ...any) -> T),
 	Connect: (signal: RBXScriptSignal, fn: (...any) -> ()) -> RBXScriptConnection,
 	BindToRenderStep: (name: string, priority: number, fn: (dt: number) -> ()) -> (),
 	AddPromise: (promise: Promise) -> Promise,
