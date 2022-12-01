@@ -5,7 +5,7 @@
 
 | Module | Dependency | Description |
 | -- | -- | -- |
-| [Comm](https://sleitnick.github.io/RbxUtil/api/Comm) | `Comm = "sleitnick/comm@0.3.1"` | Comm library for remote communication |
+| [Comm](https://sleitnick.github.io/RbxUtil/api/Comm) | `Comm = "sleitnick/comm@0.3.2"` | Comm library for remote communication |
 | [Component](https://sleitnick.github.io/RbxUtil/api/Component) | `Component = "sleitnick/component@2.4.6"` | Component class |
 | [Concur](https://sleitnick.github.io/RbxUtil/api/Concur) | `Concur = "sleitnick/concur@0.1.2"` | Concurrent task handler |
 | [EnumList](https://sleitnick.github.io/RbxUtil/api/EnumList) | `EnumList = "sleitnick/enum-list@2.0.1"` | Enum List class |
