@@ -9,10 +9,10 @@ local Promise = require(script.Parent.Promise)
 
 type Promise = Promise.Class
 
-export type Trove = {
-	Extend: (self: Trove) -> Trove,
-	Clone: (self: Trove, instance: Instance) -> Instance,
-	Construct: (<T>(self: Trove, createFunc: (...any) -> ...any, ...any) -> T) & (<T>(self: Trove, classTable: { new: (...any) -> ...any }, ...any) -> T),
+export type ClassType = {
+	Extend: (self: ClassType) -> ClassType,
+	Clone: (self: ClassType, instance: Instance) -> Instance,
+	Construct: (<T>(self: ClassType, createFunc: (...any) -> ...any, ...any) -> T) & (<T>(self: ClassType, classTable: { new: (...any) -> ...any }, ...any) -> T),
 	Connect: (signal: RBXScriptSignal, fn: (...any) -> ()) -> RBXScriptConnection,
 	BindToRenderStep: (name: string, priority: number, fn: (dt: number) -> ()) -> (),
 	AddPromise: (promise: Promise) -> Promise,
@@ -24,5 +24,5 @@ export type Trove = {
 }
 
 return TroveApi :: {
-	new: () -> Trove,
+	new: () -> ClassType,
 }

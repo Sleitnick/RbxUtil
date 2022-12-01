@@ -11,12 +11,12 @@ local Signal = require(script.Parent.Signal)
 local Trove = require(script.Parent.Trove)
 
 type Connection = Signal.Connection
-type Signal = Signal.Class
-type Trove = Trove.Class
+type Signal = Signal.ClassType
+type Trove = Trove.ClassType
 
-export type Streamable = {
-	Observe: (self: Streamable, handler: (instance: Instance, trove: Trove) -> ()) -> Connection,
-	Destroy: (self: Streamable) -> (),
+export type ClassType = {
+	Observe: (self: ClassType, handler: (instance: Instance, trove: Trove) -> ()) -> Connection,
+	Destroy: (self: ClassType) -> (),
 }
 
 return {
@@ -24,11 +24,11 @@ return {
 	StreamableUtil = StreamableUtilApi,
 } :: {
 	Streamable: {
-		new: (parent: Instance, childName: string) -> Streamable,
-		primary: (parent: Model) -> Streamable,
+		new: (parent: Instance, childName: string) -> ClassType,
+		primary: (parent: Model) -> ClassType,
 	},
 
 	StreamableUtil: {
-		Compound: (streamables: { Streamable }, handler: ({ [string]: Instance }, trove: Trove) -> ()) -> Trove,
+		Compound: (streamables: { ClassType }, handler: ({ [string]: Instance }, trove: Trove) -> ()) -> Trove,
 	},
 }

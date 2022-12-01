@@ -12,21 +12,21 @@ export type Connection = {
 	Destroy: (Connection) -> (),
 }
 
-export type Signal = {
-	Connect: (self: Signal, func: (...any) -> ()) -> Connection,
-	ConnectOnce: (self: Signal, func: (...any) -> ()) -> Connection,
-	Once: (self: Signal, func: (...any) -> ()) -> Connection,
-	GetConnections: (self: Signal) -> { Connection },
-	DisconnectAll: (self: Signal) -> (),
-	Fire: <T...>(self: Signal, T...) -> (),
-	FireDeferred: <T...>(self: Signal, T...) -> (),
-	Wait: <T...>(self: Signal) -> (T...),
-	Destroy: (self: Signal) -> (),
+export type ClassType = {
+	Connect: (self: ClassType, func: (...any) -> ()) -> Connection,
+	ConnectOnce: (self: ClassType, func: (...any) -> ()) -> Connection,
+	Once: (self: ClassType, func: (...any) -> ()) -> Connection,
+	GetConnections: (self: ClassType) -> { Connection },
+	DisconnectAll: (self: ClassType) -> (),
+	Fire: <T...>(self: ClassType, T...) -> (),
+	FireDeferred: <T...>(self: ClassType, T...) -> (),
+	Wait: <T...>(self: ClassType) -> (T...),
+	Destroy: (self: ClassType) -> (),
 }
 
 -- stylua: ignore
 return SignalApi :: {
-	new: () -> Signal,
+	new: () -> ClassType,
 	Is: (object: any) -> boolean,
-	Wrap: (signal: RBXScriptSignal) -> Signal,
+	Wrap: (signal: RBXScriptSignal) -> ClassType,
 }
