@@ -1,8 +1,11 @@
 [package]
 name = "sleitnick/trove"
 description = "Trove class for tracking and cleaning up objects"
-version = "0.5.0"
+version = "0.5.1"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
+
+[dependencies]
+Promise = "evaera/promise@^4"
