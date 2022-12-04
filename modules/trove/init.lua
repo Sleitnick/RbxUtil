@@ -9,6 +9,8 @@ local TABLE_MARKER = newproxy()
 local RunService = game:GetService("RunService")
 local ContextActionService = game:GetService("ContextActionService")
 
+local IsServer = RunService:IsServer()
+
 local function GetObjectCleanupFunction(object, cleanupMethod)
 	local t = typeof(object)
 	if t == "function" then
@@ -178,12 +180,12 @@ end
 	to the trove, and then returns the connection. Once the signal is fired, the signal will be disconnected.
 	This is shorthand for `trove:Add(signal:Once(fn))`.
 	```lua
-	trove:ConnectOnce(workspace.ChildAdded, function(instance)
+	trove:Once(workspace.ChildAdded, function(instance)
 		print(instance.Name .. " added to workspace")
 	end)
 	```
 ]=]
-function Trove:ConnectOnce(signal, fn)
+function Trove:Once(signal, fn)
 	if self._cleaning then
 		error("Cannot call trove:Connect() while cleaning", 2)
 	end
@@ -230,10 +232,9 @@ function Trove:BindAction<KeyCodes>(name: string, createMobileButton: boolean, .
 	if self._cleaning then
 		error("Cannot call trove:BindAction() while cleaning", 2)
 	end
-	if RunService:IsServer() then
+	if IsServer then
 		error("Cannot call trove:BindAction() on the server", 2)
 	end
-	
 	ContextActionService:BindToRenderStep(name, createMobileButton, ...)
 	self:Add(function()
 		ContextActionService:UnbindAction(name)
@@ -421,17 +422,16 @@ function Trove:AttachToInstance(instance: Instance)
 		error("Instance is not a descendant of the game hierarchy", 2)
 	end
 
-	if instance:IsA("Humanoid") or instance:FindFirstChildOfClass("Humanoid") then
+	if instance:IsA("Player") or instance:IsA("Humanoid") or instance:FindFirstChildOfClass("Humanoid") then
 		return self:Connect(instance.AncestryChanged, function(_child, parent)
 			if not parent then
 				self:Destroy()
 			end
 		end)
-	else
-		return self:Connect(instance.Destroying, function()
-			self:Destroy()
-		end)
 	end
+	return self:Connect(instance.Destroying, function()
+		self:Destroy()
+	end)
 end
 
 --[=[
