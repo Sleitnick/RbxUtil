@@ -212,13 +212,22 @@ function Signal:Connect(fn)
 end
 
 --[=[
+	@deprecated v1.3.0 -- Use `Signal:Once` instead.
+	@param fn ConnectionFn
+	@return SignalConnection
+]=]
+function Signal:ConnectOnce(fn)
+	return self:Once(fn)
+end
+
+--[=[
 	@param fn ConnectionFn
 	@return SignalConnection
 
 	Connects a function to the signal, which will be called the next time the signal fires. Once
 	the connection is triggered, it will disconnect itself.
 	```lua
-	signal:ConnectOnce(function(msg, num)
+	signal:Once(function(msg, num)
 		print(msg, num)
 	end)
 
@@ -226,7 +235,7 @@ end
 	signal:Fire("This message will not go through", 10)
 	```
 ]=]
-function Signal:ConnectOnce(fn)
+function Signal:Once(fn)
 	local connection
 	local done = false
 	connection = self:Connect(function(...)
