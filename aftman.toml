@@ -1,0 +1,1 @@
+tools = { rojo = "rojo-rbx/rojo@7.2.1" , run-in-roblox = "rojo-rbx/run-in-roblox@0.3.0" , wally = "UpliftGames/wally@0.3.1" , selene = "Kampfkarren/selene@0.24.0" , stylua = "JohnnyMorganz/StyLua@0.16.0" }
