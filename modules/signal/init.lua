@@ -66,30 +66,21 @@ end
 ]=]
 
 -- Signal types
-type Connection = {
-	Disconnect: (self: any) -> (),
-	Destroy: (self: any) -> (),
-}
 
-type HandlerListHead = {
-	Connected: boolean,
-	_fn: () -> (),
-	_next: boolean,
-	_signal: {
-		_handlerListHead: any,
-	},
+type Connection = {
+	Disconnect: (self: Signal<T...>) -> (),
+	Destroy: (self: Signal<T...>) -> (),
 }
 
 export type Signal<T...> = {
 	Fire: (self: Signal<T...>, T...) -> (),
 	FireDeferred: (self: Signal<T...>, T...) -> (),
-	Connect: (self: any, fn: (T...) -> ()) -> Connection,
-	Once: (self: any, fn: (T...) -> ()) -> Connection,
-	ConnectOnce: (self: any, fn: (T...) -> ()) -> Connection,
-	DisconnectAll: (self: any) -> (),
-	GetConnections: (self: any) -> HandlerListHead,
-	Destroy: (self: any) -> (),
-	Wait: (self: any) -> T...,
+	Connect: (self: Connection, fn: (T...) -> ()) -> Connection,
+	Once: (self: Connection, fn: (T...) -> ()) -> Connection,
+	DisconnectAll: (self: Signal<T...>) -> (),
+	GetConnections: (self: Signal<T...>) -> { Connection },
+	Destroy: (self: Signal<T...>) -> (),
+	Wait: (self: Signal<T...>) -> T...,
 }
 
 -- Connection class
