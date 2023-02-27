@@ -563,6 +563,25 @@ end
 
 --[=[
 	@tag Component Class
+
+	Removes the component tag from the given Roblox instance. This will
+	call the `Stop` method and cause the component to be deconstructed.
+
+	```lua
+	local MyComponent = require(somewhere.MyComponent)
+
+	-- ...
+
+	local myComponent = MyComponent:FromInstance(workspace.SomeInstance)
+	myComponent:RemoveTag()
+	```
+]=]
+function Component:RemoveTag()
+	CollectionService:RemoveTag(self.Instance, self.Tag)
+end
+
+--[=[
+	@tag Component Class
 	`Construct` is called before the component is started, and should be used
 	to construct the component instance.
 
