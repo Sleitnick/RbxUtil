@@ -65,6 +65,24 @@ end
 	```
 ]=]
 
+-- Signal types
+
+type Connection = {
+	Disconnect: (self: Signal<T...>) -> (),
+	Destroy: (self: Signal<T...>) -> (),
+}
+
+export type Signal<T...> = {
+	Fire: (self: Signal<T...>, T...) -> (),
+	FireDeferred: (self: Signal<T...>, T...) -> (),
+	Connect: (self: Connection, fn: (T...) -> ()) -> Connection,
+	Once: (self: Connection, fn: (T...) -> ()) -> Connection,
+	DisconnectAll: (self: Signal<T...>) -> (),
+	GetConnections: (self: Signal<T...>) -> { Connection },
+	Destroy: (self: Signal<T...>) -> (),
+	Wait: (self: Signal<T...>) -> T...,
+}
+
 -- Connection class
 local Connection = {}
 Connection.__index = Connection
@@ -144,7 +162,7 @@ Signal.__index = Signal
 
 	@return Signal
 ]=]
-function Signal.new()
+function Signal.new<T...>(): Signal<T...>
 	local self = setmetatable({
 		_handlerListHead = false,
 		_proxyHandler = nil,
