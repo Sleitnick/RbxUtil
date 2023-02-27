@@ -343,7 +343,7 @@ end
 
 	Yields the current thread until the signal is fired, and returns the arguments fired from the signal.
 	Yielding the current thread is not always desirable. If the desire is to only capture the next event
-	fired, using `ConnectOnce` might be a better solution.
+	fired, using `Once` might be a better solution.
 	```lua
 	task.spawn(function()
 		local msg, num = signal:Wait()
