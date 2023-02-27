@@ -24,6 +24,23 @@
 --   sleitnick - August 3rd, 2021 - Modified for Knit.                        --
 -- -----------------------------------------------------------------------------
 
+-- Signal types
+type Connection = {
+	Disconnect: (self: Connection) -> (),
+	Destroy: (self: Connection) -> (),
+}
+
+export type Signal<T...> = {
+	Fire: (self: Signal<T...>, T...) -> (),
+	FireDeferred: (self: Signal<T...>, T...) -> (),
+	Connect: (self: Signal<T...>, fn: (T...) -> ()) -> Connection,
+	Once: (self: Signal<T...>, fn: (T...) -> ()) -> Connection,
+	DisconnectAll: (self: Signal<T...>) -> (),
+	GetConnections: (self: Signal<T...>) -> { Connection },
+	Destroy: (self: Signal<T...>) -> (),
+	Wait: (self: Signal<T...>) -> T...,
+}
+
 -- The currently idle thread to run the next handler on
 local freeRunnerThread = nil
 
@@ -64,24 +81,6 @@ end
 	print(connection.Connected) --> false
 	```
 ]=]
-
--- Signal types
-
-type Connection = {
-	Disconnect: (self: Signal<T...>) -> (),
-	Destroy: (self: Signal<T...>) -> (),
-}
-
-export type Signal<T...> = {
-	Fire: (self: Signal<T...>, T...) -> (),
-	FireDeferred: (self: Signal<T...>, T...) -> (),
-	Connect: (self: Connection, fn: (T...) -> ()) -> Connection,
-	Once: (self: Connection, fn: (T...) -> ()) -> Connection,
-	DisconnectAll: (self: Signal<T...>) -> (),
-	GetConnections: (self: Signal<T...>) -> { Connection },
-	Destroy: (self: Signal<T...>) -> (),
-	Wait: (self: Signal<T...>) -> T...,
-}
 
 -- Connection class
 local Connection = {}
@@ -398,4 +397,6 @@ setmetatable(Signal, {
 	end,
 })
 
-return Signal
+return {
+	new = Signal.new,
+}
