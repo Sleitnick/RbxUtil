@@ -49,7 +49,7 @@ end
 ]=]
 local Trove = {}
 Trove.__index = Trove
-Trove._objects = {} :: {any}
+Trove._objects = {} :: { any }
 Trove._cleaning = false :: boolean
 
 --[=[
