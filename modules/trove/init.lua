@@ -7,7 +7,7 @@ local THREAD_MARKER = newproxy()
 
 local RunService = game:GetService("RunService")
 
-local function GetObjectCleanupFunction(object, cleanupMethod)
+local function GetObjectCleanupFunction(object, cleanupMethod): string
 	local t = typeof(object)
 	if t == "function" then
 		return FN_MARKER
@@ -31,7 +31,7 @@ local function GetObjectCleanupFunction(object, cleanupMethod)
 	error("Failed to get cleanup function for object " .. t .. ": " .. tostring(object), 3)
 end
 
-local function AssertPromiseLike(object)
+local function AssertPromiseLike(object): ()
 	if
 		type(object) ~= "table"
 		or type(object.getStatus) ~= "function"
@@ -49,15 +49,18 @@ end
 ]=]
 local Trove = {}
 Trove.__index = Trove
+Trove._objects = {} :: {any}
+Trove._cleaning = false :: boolean
 
 --[=[
 	@return Trove
 	Constructs a Trove object.
 ]=]
-function Trove.new()
+function Trove.new(): Trove
 	local self = setmetatable({}, Trove)
 	self._objects = {}
 	self._cleaning = false
+
 	return self
 end
 
@@ -80,7 +83,7 @@ end
 	trove:Clean() -- Cleans up the subTrove too
 	```
 ]=]
-function Trove:Extend()
+function Trove:Extend(): ()
 	if self._cleaning then
 		error("Cannot call trove:Extend() while cleaning", 2)
 	end
@@ -91,7 +94,7 @@ end
 	Clones the given instance and adds it to the trove. Shorthand for
 	`trove:Add(instance:Clone())`.
 ]=]
-function Trove:Clone(instance: Instance): Instance
+function Trove:Clone(instance: Instance): Instance?
 	if self._cleaning then
 		error("Cannot call trove:Clone() while cleaning", 2)
 	end
@@ -131,7 +134,7 @@ end
 	local part = trove:Construct(Instance, "Part")
 	```
 ]=]
-function Trove:Construct(class, ...)
+function Trove:Construct(class, ...): any
 	if self._cleaning then
 		error("Cannot call trove:Construct() while cleaning", 2)
 	end
@@ -160,7 +163,7 @@ end
 	end)
 	```
 ]=]
-function Trove:Connect(signal, fn)
+function Trove:Connect(signal, fn): any
 	if self._cleaning then
 		error("Cannot call trove:Connect() while cleaning", 2)
 	end
@@ -180,7 +183,7 @@ end
 	end)
 	```
 ]=]
-function Trove:BindToRenderStep(name: string, priority: number, fn: (dt: number) -> ())
+function Trove:BindToRenderStep(name: string, priority: number, fn: (dt: number) -> ()): ()
 	if self._cleaning then
 		error("Cannot call trove:BindToRenderStep() while cleaning", 2)
 	end
@@ -213,7 +216,7 @@ end
 	This is only compatible with the [roblox-lua-promise](https://eryn.io/roblox-lua-promise/) library, version 4.
 	:::
 ]=]
-function Trove:AddPromise(promise)
+function Trove:AddPromise(promise: any): any
 	if self._cleaning then
 		error("Cannot call trove:AddPromise() while cleaning", 2)
 	end
@@ -310,7 +313,7 @@ end
 	within the trove. The ordering of the objects
 	removed is _not_ guaranteed.
 ]=]
-function Trove:Clean()
+function Trove:Clean(): ()
 	if self._cleaning then
 		return
 	end
@@ -338,7 +341,7 @@ function Trove:_findAndRemoveFromObjects(object: any, cleanup: boolean): boolean
 	return false
 end
 
-function Trove:_cleanupObject(object, cleanupMethod)
+function Trove:_cleanupObject(object, cleanupMethod): ()
 	if cleanupMethod == FN_MARKER then
 		object()
 	elseif cleanupMethod == THREAD_MARKER then
@@ -361,7 +364,7 @@ end
 	of the game hierarchy.
 	:::
 ]=]
-function Trove:AttachToInstance(instance: Instance)
+function Trove:AttachToInstance(instance: Instance): any
 	if self._cleaning then
 		error("Cannot call trove:AttachToInstance() while cleaning", 2)
 	elseif not instance:IsDescendantOf(game) then
@@ -375,8 +378,10 @@ end
 --[=[
 	Alias for `trove:Clean()`.
 ]=]
-function Trove:Destroy()
+function Trove:Destroy(): ()
 	self:Clean()
 end
+
+export type Trove = typeof(Trove.new())
 
 return Trove
