@@ -225,7 +225,16 @@ end
 	end, Enum.KeyCode.E)
 	```
 ]=]
-function Trove:BindAction(name: string, createMobileButton: boolean, fn: (actionName: string, inputState: Enum.UserInputState, inputObject: InputObject) -> (Enum.ContextActionResult?), ...: Enum.KeyCode?)
+function Trove:BindAction(
+	name: string,
+	createMobileButton: boolean,
+	fn: (
+		actionName: string,
+		inputState: Enum.UserInputState,
+		inputObject: InputObject
+	) -> Enum.ContextActionResult?,
+	...: Enum.KeyCode?
+)
 	if self._cleaning then
 		error("Cannot call trove:BindAction() while cleaning", 2)
 	end
