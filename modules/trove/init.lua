@@ -5,6 +5,7 @@
 local FN_MARKER = newproxy()
 local THREAD_MARKER = newproxy()
 
+local ContextActionService = game:GetService("ContextActionService")
 local RunService = game:GetService("RunService")
 
 local function GetObjectCleanupFunction(object, cleanupMethod)
@@ -168,6 +169,27 @@ function Trove:Connect(signal, fn)
 end
 
 --[=[
+	@param signal RBXScriptSignal
+	@param fn (...: any) -> ()
+	@return RBXScriptConnection
+	Connects the function to the signal, adds the connection
+	to the trove, and then returns the connection. 
+	Once the signal is fired, the signal will be disconnected.
+	This is shorthand for `trove:Add(signal:Once(fn))`.
+	```lua
+	trove:Once(workspace.ChildAdded, function(instance)
+		print(instance.Name .. " added to workspace")
+	end)
+	```
+]=]
+function Trove:Once(signal, fn)
+	if self._cleaning then
+		error("Cannot call trove:Once() while cleaning", 2)
+	end
+	return self:Add(signal:Once(fn))
+end
+
+--[=[
 	@param name string
 	@param priority number
 	@param fn (dt: number) -> ()
@@ -187,6 +209,33 @@ function Trove:BindToRenderStep(name: string, priority: number, fn: (dt: number)
 	RunService:BindToRenderStep(name, priority, fn)
 	self:Add(function()
 		RunService:UnbindFromRenderStep(name)
+	end)
+end
+
+--[=[
+	@param name string
+	@param priority number
+	@param fn (dt: number) -> ()
+	Calls `CollectionService:BindAction` and registers a function in the
+	trove that will call `CollectionService:UnbindAction` on cleanup.
+
+	```lua
+	trove:BindToRenderStep("Test", Enum.RenderPriority.Last.Value, function(dt)
+		-- Do something
+	end)
+	```
+]=]
+function Trove:BindAction(name: string, createMobileButton: boolean, ...: Enum.KeyCode?)
+	if self._cleaning then
+		error("Cannot call trove:BindAction() while cleaning", 2)
+	end
+	if RunService:IsServer() then
+		error("Cannot call trove:BindAction() on the server", 2)
+	end
+
+	ContextActionService:BindToRenderStep(name, createMobileButton, ...)
+	self:Add(function()
+		ContextActionService:UnbindAction(name)
 	end)
 end
 
@@ -244,7 +293,7 @@ end
 	| `Instance` | `object:Destroy()` |
 	| `RBXScriptConnection` | `object:Disconnect()` |
 	| `function` | `object()` |
-	| `thread` | `coroutine.close(object)` |
+	| `thread` | `task.cancel(object)` |
 	| `table` | `object:Destroy()` _or_ `object:Disconnect()` |
 	| `table` with `cleanupMethod` | `object:<cleanupMethod>()` |
 
@@ -342,7 +391,7 @@ function Trove:_cleanupObject(object, cleanupMethod)
 	if cleanupMethod == FN_MARKER then
 		object()
 	elseif cleanupMethod == THREAD_MARKER then
-		coroutine.close(object)
+		task.cancel(object)
 	else
 		object[cleanupMethod](object)
 	end
@@ -367,6 +416,15 @@ function Trove:AttachToInstance(instance: Instance)
 	elseif not instance:IsDescendantOf(game) then
 		error("Instance is not a descendant of the game hierarchy", 2)
 	end
+
+	if instance:IsA("Player") or instance:IsA("Humanoid") or instance:FindFirstChildOfClass("Humanoid") then
+		return self:Connect(instance.AncestryChanged, function(_child, parent)
+			if not parent then
+				self:Destroy()
+			end
+		end)
+	end
+
 	return self:Connect(instance.Destroying, function()
 		self:Destroy()
 	end)
