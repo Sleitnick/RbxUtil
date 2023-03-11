@@ -214,18 +214,18 @@ end
 
 --[=[
 	@param name string
-	@param priority number
-	@param fn (dt: number) -> ()
+	@param createMobileButton boolean
+	@param fn (actionName: string, inputState: Enum.UserInputState, inputObject: InputObject) -> (Enum.ContextActionResult?)
 	Calls `CollectionService:BindAction` and registers a function in the
 	trove that will call `CollectionService:UnbindAction` on cleanup.
 
 	```lua
-	trove:BindAction("Test", Enum.RenderPriority.Last.Value, function(dt)
+	trove:BindAction("Test", true, function()
 		-- Do something
-	end)
+	end, Enum.KeyCode.E)
 	```
 ]=]
-function Trove:BindAction(name: string, createMobileButton: boolean, ...: Enum.KeyCode?)
+function Trove:BindAction(name: string, createMobileButton: boolean, fn: (actionName: string, inputState: Enum.UserInputState, inputObject: InputObject) -> (Enum.ContextActionResult?), ...: Enum.KeyCode?)
 	if self._cleaning then
 		error("Cannot call trove:BindAction() while cleaning", 2)
 	end
@@ -233,7 +233,7 @@ function Trove:BindAction(name: string, createMobileButton: boolean, ...: Enum.K
 		error("Cannot call trove:BindAction() on the server", 2)
 	end
 
-	ContextActionService:BindAction(name, createMobileButton, ...)
+	ContextActionService:BindAction(name, createMobileButton, fn, ...)
 	self:Add(function()
 		ContextActionService:UnbindAction(name)
 	end)
