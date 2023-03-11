@@ -220,7 +220,7 @@ end
 	trove that will call `CollectionService:UnbindAction` on cleanup.
 
 	```lua
-	trove:BindToRenderStep("Test", Enum.RenderPriority.Last.Value, function(dt)
+	trove:BindAction("Test", Enum.RenderPriority.Last.Value, function(dt)
 		-- Do something
 	end)
 	```
@@ -233,7 +233,7 @@ function Trove:BindAction(name: string, createMobileButton: boolean, ...: Enum.K
 		error("Cannot call trove:BindAction() on the server", 2)
 	end
 
-	ContextActionService:BindToRenderStep(name, createMobileButton, ...)
+	ContextActionService:BindAction(name, createMobileButton, ...)
 	self:Add(function()
 		ContextActionService:UnbindAction(name)
 	end)
