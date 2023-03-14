@@ -182,7 +182,7 @@ end
 	Instance.new("Part").Parent = workspace
 	```
 ]=]
-function Signal.Wrap(rbxScriptSignal)
+function Signal.Wrap<T...>(rbxScriptSignal: RBXScriptSignal): Signal<T...>
 	assert(
 		typeof(rbxScriptSignal) == "RBXScriptSignal",
 		"Argument #1 to Signal.Wrap must be a RBXScriptSignal; got " .. typeof(rbxScriptSignal)
@@ -200,7 +200,7 @@ end
 	@param obj any -- Object to check
 	@return boolean -- `true` if the object is a Signal.
 ]=]
-function Signal.Is(obj)
+function Signal.Is(obj: any): boolean
 	return type(obj) == "table" and getmetatable(obj) == Signal
 end
 
@@ -399,4 +399,6 @@ setmetatable(Signal, {
 
 return {
 	new = Signal.new,
+	Wrap = Signal.Wrap,
+	Is = Signal.Is,
 }
