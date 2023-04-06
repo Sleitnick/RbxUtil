@@ -25,9 +25,10 @@
 -- -----------------------------------------------------------------------------
 
 -- Signal types
-type Connection = {
+export type Connection = {
 	Disconnect: (self: Connection) -> (),
 	Destroy: (self: Connection) -> (),
+	Connected: boolean,
 }
 
 export type Signal<T...> = {
