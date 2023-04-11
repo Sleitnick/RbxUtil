@@ -2,9 +2,6 @@ gitRepoUrl = "https://github.com/Sleitnick/RbxUtil"
 gitSourceBranch = "main"
 
 [[classOrder]]
-classes = ["Signal", "TableUtil", "Component"]
-
-[[classOrder]]
 section = "Input"
 classes = ["Input", "PreferredInput", "Keyboard", "Mouse", "Touch", "Gamepad"]
 

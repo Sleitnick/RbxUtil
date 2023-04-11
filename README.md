@@ -15,7 +15,7 @@
 | [Net](https://sleitnick.github.io/RbxUtil/api/Net) | `Net = "sleitnick/net@0.1.0"` | Static networking module |
 | [Option](https://sleitnick.github.io/RbxUtil/api/Option) | `Option = "sleitnick/option@1.0.4"` | Represent optional values in Lua |
 | [PID](https://sleitnick.github.io/RbxUtil/api/PID) | `PID = "sleitnick/pid@1.0.2"` | PID Controller class |
-| [Quaternion](https://sleitnick.github.io/RbxUtil/api/Quaternion) | `Quaternion = "sleitnick/quaternion@0.1.0"` | Quaternion class |
+| [Quaternion](https://sleitnick.github.io/RbxUtil/api/Quaternion) | `Quaternion = "sleitnick/quaternion@0.2.0"` | Quaternion class |
 | [Ser](https://sleitnick.github.io/RbxUtil/api/Ser) | `Ser = "sleitnick/ser@1.0.5"` | Ser class for serialization and deserialization |
 | [Shake](https://sleitnick.github.io/RbxUtil/api/Shake) | `Shake = "sleitnick/shake@0.1.7"` | Shake class for making things shake |
 | [Signal](https://sleitnick.github.io/RbxUtil/api/Signal) | `Signal = "sleitnick/signal@1.5.0"` | Signal class |
