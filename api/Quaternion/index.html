@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="plugin-moonwave plugin-id-moonwave">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v2.3.1">
+<title data-rh="true">Quaternion | RbxUtil</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Sleitnick.github.io/RbxUtil/api/Quaternion"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docusaurus_tag" content="default"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docsearch:docusaurus_tag" content="default"><meta data-rh="true" property="og:title" content="Quaternion | RbxUtil"><meta data-rh="true" name="description" content="Represents a Quaternion. Quaternions are 4D structs that represent rotations
+in 3D space. Quaternions are often used in 3D graphics to avoid the ambiguity
+that comes with Euler angles (e.g. gimbal lock).
+
+Roblox represents the transformation of an object via CFrame values, which are
+matrices that hold position and rotation in 3D space. Quaternions can be converted
+to CFrame values through the `ToCFrame` method."><meta data-rh="true" property="og:description" content="Represents a Quaternion. Quaternions are 4D structs that represent rotations
+in 3D space. Quaternions are often used in 3D graphics to avoid the ambiguity
+that comes with Euler angles (e.g. gimbal lock).
+
+Roblox represents the transformation of an object via CFrame values, which are
+matrices that hold position and rotation in 3D space. Quaternions can be converted
+to CFrame values through the `ToCFrame` method."><link data-rh="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/Quaternion"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/Quaternion" hreflang="en"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/Quaternion" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.a5aeb1da.css">
+<link rel="preload" href="/RbxUtil/assets/js/runtime~main.334173d9.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/main.2659f584.js" as="script">
+</head>
+<body class="navigation-with-keyboard">
+<script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
+<div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="navbar navbar--fixed-top"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/RbxUtil/"><b class="navbar__title text--truncate">RbxUtil</b></a><a class="navbar__item navbar__link" href="/RbxUtil/docs/intro">Docs</a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/RbxUtil/api/">API</a></div><div class="navbar__items navbar__items--right"><a href="https://github.com/Sleitnick/RbxUtil" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="Switch between dark and light mode (currently light mode)" aria-label="Switch between dark and light mode (currently light mode)" aria-live="polite"><svg viewBox="0 0 24 24" width="24" height="24" class="lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" class="darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg></button></div><div class="searchBox_ZlJk"><div class="navbar__search"><span aria-label="expand searchbar" role="button" class="search-icon" tabindex="0"></span><input type="search" id="search_input_react" placeholder="Press S to Search..." aria-label="Search" class="navbar__search-input search-bar"></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="docusaurus_skipToContent_fallback" class="main-wrapper mainWrapper_z2l0 docPageContainer_wNNk"><div class="docPage_Dpn1"><div class="docSidebarContainer_o_re"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Signal">​Signal</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/TableUtil">​Table​Util</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Component">​Component</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" aria-expanded="false" href="/RbxUtil/api/Input">Input</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" aria-expanded="false" href="/RbxUtil/api/Comm">Remote Comm</a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Concur">​Concur</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/EnumList">​Enum​List</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Loader">​Loader</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Log">​Log</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Net">​Net</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Option">​Option</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/PID">​P​I​D</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" href="/RbxUtil/api/Quaternion">​Quaternion</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Ser">​Ser</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Shake">​Shake</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Silo">​Silo</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Streamable">​Streamable</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/StreamableUtil">​Streamable​Util</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Symbol">​Symbol</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/TaskQueue">​Task​Queue</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Timer">​Timer</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Trove">​Trove</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/WaitFor">​Wait​For</a></li></ul></nav></div></div><main class="docMainContainer_HJE1"><div class="container padding-vert--lg"><div class="row"><div class="col docItemCol_MU3C"><div class="docItemContainer_Wv98"><article><div class="member_J0w1 markdown"><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_oUs_"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><header><h1 class="docTitle_mZRt" style="text-decoration:none"><span style="display:inline-block">Quaternion</span></h1><div class="luaClassTags_EipM"></div><div>
+<p>
+  Represents a Quaternion. Quaternions are 4D structs that represent rotations
+  in 3D space. Quaternions are often used in 3D graphics to avoid the ambiguity
+  that comes with Euler angles (e.g. gimbal lock).
+</p>
+<p>
+  Roblox represents the transformation of an object via CFrame values, which are
+  matrices that hold position and rotation in 3D space. Quaternions can be converted
+  to CFrame values through the <code>ToCFrame</code> method.
+</p>
+</div></header><h2 class="anchor anchorWithStickyNavbar_LWe7" id="properties">Properties<a href="#properties" class="hash-link" aria-label="Direct link to Properties" title="Direct link to Properties">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="identity"><code style="text-decoration:none">identity</code><a href="#identity" class="hash-link" aria-label="Direct link to identity" title="Direct link to identity">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/quaternion/init.lua#L339"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Quaternion<!-- -->.<!-- -->identity<!-- -->:<!-- --> </code> <code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Quaternion">Quaternion</a></code></div><div>
+<p>Identity Quaternion.</p>
+</div><h2 class="anchor anchorWithStickyNavbar_LWe7" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="new"><code style="text-decoration:none">new</code><a href="#new" class="hash-link" aria-label="Direct link to new" title="Direct link to new">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/quaternion/init.lua#L43"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Quaternion<!-- -->.</code><code class="green_DgR4">new</code><code>(</code><div class="inset_uKQm"><div><code>x<!-- -->: </code><code class="blue_P4bS">number</code><code>,</code></div><div><code>y<!-- -->: </code><code class="blue_P4bS">number</code><code>,</code></div><div><code>z<!-- -->: </code><code class="blue_P4bS">number</code><code>,</code></div><div><code>w<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Quaternion">Quaternion</a></code></div><div>
+<p>Constructs a Quaternion.</p>
+<div class="admonition admonition-caution alert alert--warning">
+  <div class="admonition-heading">
+    <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+          <path d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path>
+        </svg></span>caution</h5>
+  </div>
+  <div class="admonition-content">
+    <p>
+      The <code>new</code> constructor assumes the given arguments represent a proper Quaternion. This
+      constructor should only be used if you really know what you're doing.
+    </p>
+  </div>
+</div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="euler"><code style="text-decoration:none">euler</code><a href="#euler" class="hash-link" aria-label="Direct link to euler" title="Direct link to euler">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/quaternion/init.lua#L59"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Quaternion<!-- -->.</code><code class="green_DgR4">euler</code><code>(</code><div class="inset_uKQm"><div><code>x<!-- -->: </code><code class="blue_P4bS">number</code><code>,</code></div><div><code>y<!-- -->: </code><code class="blue_P4bS">number</code><code>,</code></div><div><code>z<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Quaternion">Quaternion</a></code></div><div>
+<p>Constructs a Quaternion from Euler angles.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="axisAngle"><code style="text-decoration:none">axisAngle</code><a href="#axisAngle" class="hash-link" aria-label="Direct link to axisAngle" title="Direct link to axisAngle">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/quaternion/init.lua#L78"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Quaternion<!-- -->.</code><code class="green_DgR4">axisAngle</code><code>(</code><div class="inset_uKQm"><div><code>axis<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Vector3" target="_blank" rel="noopener noreferrer">Vector3<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code>,</code></div><div><code>angle<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Quaternion">Quaternion</a></code></div><div>
+<p>Constructs a Quaternion representing a rotation of <code>angle</code> radians around <code>axis</code>.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="lookRotation"><code style="text-decoration:none">lookRotation</code><a href="#lookRotation" class="hash-link" aria-label="Direct link to lookRotation" title="Direct link to lookRotation">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/quaternion/init.lua#L89"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Quaternion<!-- -->.</code><code class="green_DgR4">lookRotation</code><code>(</code><div class="inset_uKQm"><div><code>forward<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Vector3" target="_blank" rel="noopener noreferrer">Vector3<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code>,</code></div><div><code>upwards<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Vector3" target="_blank" rel="noopener noreferrer">Vector3?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Quaternion">Quaternion</a></code></div><div>
+<p>
+  Constructs a Quaternion representing a rotation facing <code>forward</code> direction, where
+  <code>upwards</code> represents the upwards direction (this defaults to <code>Vector3.yAxis</code>).
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Dot"><code style="text-decoration:none">Dot</code><a href="#Dot" class="hash-link" aria-label="Direct link to Dot" title="Direct link to Dot">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/quaternion/init.lua#L138"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Quaternion<!-- -->:</code><code class="green_DgR4">Dot</code><code>(</code><code>other<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Quaternion">Quaternion</a></code><code>) → </code><code class="blue_P4bS">number</code></div><div>
+<p>Calculates the dot product between the two Quaternions.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Slerp"><code style="text-decoration:none">Slerp</code><a href="#Slerp" class="hash-link" aria-label="Direct link to Slerp" title="Direct link to Slerp">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/quaternion/init.lua#L146"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Quaternion<!-- -->:</code><code class="green_DgR4">Slerp</code><code>(</code><div class="inset_uKQm"><div><code>b<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Quaternion">Quaternion</a></code><code>,</code></div><div><code>t<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Quaternion">Quaternion</a></code></div><div>
+<p>
+  Calculates a spherical interpolation between the two Quaternions. Parameter <code>t</code> represents
+  the percentage between the two rotations, from a range of <code>[0, 1]</code>.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Angle"><code style="text-decoration:none">Angle</code><a href="#Angle" class="hash-link" aria-label="Direct link to Angle" title="Direct link to Angle">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/quaternion/init.lua#L180"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Quaternion<!-- -->:</code><code class="green_DgR4">Angle</code><code>(</code><code>other<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Quaternion">Quaternion</a></code><code>) → </code><code class="blue_P4bS">number</code></div><div>
+<p>Calculates the angle between the two Quaternions.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="RotateTowards"><code style="text-decoration:none">RotateTowards</code><a href="#RotateTowards" class="hash-link" aria-label="Direct link to RotateTowards" title="Direct link to RotateTowards">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/quaternion/init.lua#L191"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Quaternion<!-- -->:</code><code class="green_DgR4">RotateTowards</code><code>(</code><div class="inset_uKQm"><div><code>other<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Quaternion">Quaternion</a></code><code>,</code></div><div><code>maxRadiansDelta<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Quaternion">Quaternion</a></code></div><div>
+<p>
+  Constructs a new Quaternion that rotates from this Quaternion to the <code>other</code> quaternion, with a maximum
+  rotation of <code>maxRadiansDelta</code>.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ToCFrame"><code style="text-decoration:none">ToCFrame</code><a href="#ToCFrame" class="hash-link" aria-label="Direct link to ToCFrame" title="Direct link to ToCFrame">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/quaternion/init.lua#L207"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Quaternion<!-- -->:</code><code class="green_DgR4">ToCFrame</code><code>(</code><code>position<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Vector3" target="_blank" rel="noopener noreferrer">Vector3?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/CFrame" target="_blank" rel="noopener noreferrer">CFrame<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code></div><div>
+<p>
+  Constructs a CFrame value representing the Quaternion. An optional <code>position</code> Vector can be given to
+  represent the position of the CFrame in 3D space. This defaults to <code>Vector3.zero</code>.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ToEulerAngles"><code style="text-decoration:none">ToEulerAngles</code><a href="#ToEulerAngles" class="hash-link" aria-label="Direct link to ToEulerAngles" title="Direct link to ToEulerAngles">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/quaternion/init.lua#L216"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Quaternion<!-- -->:</code><code class="green_DgR4">ToEulerAngles</code><code>(</code><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Vector3" target="_blank" rel="noopener noreferrer">Vector3<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code></div><div>
+<p>Calculates the euler angles that represent the Quaternion.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ToAxisAngle"><code style="text-decoration:none">ToAxisAngle</code><a href="#ToAxisAngle" class="hash-link" aria-label="Direct link to ToAxisAngle" title="Direct link to ToAxisAngle">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/quaternion/init.lua#L235"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Quaternion<!-- -->:</code><code class="green_DgR4">ToAxisAngle</code><code>(</code><code>) → </code><code>(</code><div class="inset_uKQm"><div><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Vector3" target="_blank" rel="noopener noreferrer">Vector3<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code>,</code></div><div><code class="blue_P4bS">number</code></div></div><code>)</code></div><div>
+<p>Calculates the axis and angle representing the Quaternion.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Inverse"><code style="text-decoration:none">Inverse</code><a href="#Inverse" class="hash-link" aria-label="Direct link to Inverse" title="Direct link to Inverse">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/quaternion/init.lua#L253"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Quaternion<!-- -->:</code><code class="green_DgR4">Inverse</code><code>(</code><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Quaternion">Quaternion</a></code></div><div>
+<p>Returns the inverse of the Quaternion. (Identical to Conjugate.)</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Conjugate"><code style="text-decoration:none">Conjugate</code><a href="#Conjugate" class="hash-link" aria-label="Direct link to Conjugate" title="Direct link to Conjugate">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/quaternion/init.lua#L260"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Quaternion<!-- -->:</code><code class="green_DgR4">Conjugate</code><code>(</code><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Quaternion">Quaternion</a></code></div><div>
+<p>Returns the conjugate of the Quaternion. (Identical to Inverse.)</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Normalize"><code style="text-decoration:none">Normalize</code><a href="#Normalize" class="hash-link" aria-label="Direct link to Normalize" title="Direct link to Normalize">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/quaternion/init.lua#L267"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Quaternion<!-- -->:</code><code class="green_DgR4">Normalize</code><code>(</code><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Quaternion">Quaternion</a></code></div><div>
+<p>Returns the normalized representation of the Quaternion.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Magnitude"><code style="text-decoration:none">Magnitude</code><a href="#Magnitude" class="hash-link" aria-label="Direct link to Magnitude" title="Direct link to Magnitude">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/quaternion/init.lua#L280"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Quaternion<!-- -->:</code><code class="green_DgR4">Magnitude</code><code>(</code><code>) → </code><code class="blue_P4bS">number</code></div><div>
+<p>Calculates the magnitude of the Quaternion.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="SqrMagnitude"><code style="text-decoration:none">SqrMagnitude</code><a href="#SqrMagnitude" class="hash-link" aria-label="Direct link to SqrMagnitude" title="Direct link to SqrMagnitude">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/quaternion/init.lua#L287"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Quaternion<!-- -->:</code><code class="green_DgR4">SqrMagnitude</code><code>(</code><code>) → </code><code class="blue_P4bS">number</code></div><div>
+<p>Calculates the square magnitude of the Quaternion.</p>
+</div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
+    &quot;functions&quot;: [
+        {
+            &quot;name&quot;: &quot;new&quot;,
+            &quot;desc&quot;: &quot;Constructs a Quaternion.\n\n:::caution\nThe `new` constructor assumes the given arguments represent a proper Quaternion. This\nconstructor should only be used if you really know what you&#x27;re doing.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;x&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;y&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;z&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;w&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Quaternion\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 43,
+                &quot;path&quot;: &quot;modules/quaternion/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;euler&quot;,
+            &quot;desc&quot;: &quot;Constructs a Quaternion from Euler angles.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;x&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;y&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;z&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Quaternion\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 59,
+                &quot;path&quot;: &quot;modules/quaternion/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;axisAngle&quot;,
+            &quot;desc&quot;: &quot;Constructs a Quaternion representing a rotation of `angle` radians around `axis`.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;axis&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Vector3&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;angle&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Quaternion\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 78,
+                &quot;path&quot;: &quot;modules/quaternion/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;lookRotation&quot;,
+            &quot;desc&quot;: &quot;Constructs a Quaternion representing a rotation facing `forward` direction, where\n`upwards` represents the upwards direction (this defaults to `Vector3.yAxis`).&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;forward&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Vector3&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;upwards&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Vector3?&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Quaternion\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 89,
+                &quot;path&quot;: &quot;modules/quaternion/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Dot&quot;,
+            &quot;desc&quot;: &quot;Calculates the dot product between the two Quaternions.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;other&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Quaternion&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 138,
+                &quot;path&quot;: &quot;modules/quaternion/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Slerp&quot;,
+            &quot;desc&quot;: &quot;Calculates a spherical interpolation between the two Quaternions. Parameter `t` represents\nthe percentage between the two rotations, from a range of `[0, 1]`.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;b&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Quaternion&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;t&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Quaternion\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 146,
+                &quot;path&quot;: &quot;modules/quaternion/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Angle&quot;,
+            &quot;desc&quot;: &quot;Calculates the angle between the two Quaternions.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;other&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Quaternion&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 180,
+                &quot;path&quot;: &quot;modules/quaternion/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;RotateTowards&quot;,
+            &quot;desc&quot;: &quot;Constructs a new Quaternion that rotates from this Quaternion to the `other` quaternion, with a maximum\nrotation of `maxRadiansDelta`.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;other&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Quaternion&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;maxRadiansDelta&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Quaternion\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 191,
+                &quot;path&quot;: &quot;modules/quaternion/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;ToCFrame&quot;,
+            &quot;desc&quot;: &quot;Constructs a CFrame value representing the Quaternion. An optional `position` Vector can be given to\nrepresent the position of the CFrame in 3D space. This defaults to `Vector3.zero`.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;position&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Vector3?&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;CFrame\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 207,
+                &quot;path&quot;: &quot;modules/quaternion/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;ToEulerAngles&quot;,
+            &quot;desc&quot;: &quot;Calculates the euler angles that represent the Quaternion.&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Vector3\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 216,
+                &quot;path&quot;: &quot;modules/quaternion/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;ToAxisAngle&quot;,
+            &quot;desc&quot;: &quot;Calculates the axis and angle representing the Quaternion.&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Vector3&quot;
+                },
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 235,
+                &quot;path&quot;: &quot;modules/quaternion/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Inverse&quot;,
+            &quot;desc&quot;: &quot;Returns the inverse of the Quaternion. (Identical to Conjugate.)&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Quaternion\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 253,
+                &quot;path&quot;: &quot;modules/quaternion/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Conjugate&quot;,
+            &quot;desc&quot;: &quot;Returns the conjugate of the Quaternion. (Identical to Inverse.)&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Quaternion\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 260,
+                &quot;path&quot;: &quot;modules/quaternion/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Normalize&quot;,
+            &quot;desc&quot;: &quot;Returns the normalized representation of the Quaternion.&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Quaternion\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 267,
+                &quot;path&quot;: &quot;modules/quaternion/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Magnitude&quot;,
+            &quot;desc&quot;: &quot;Calculates the magnitude of the Quaternion.&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 280,
+                &quot;path&quot;: &quot;modules/quaternion/init.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;SqrMagnitude&quot;,
+            &quot;desc&quot;: &quot;Calculates the square magnitude of the Quaternion.&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 287,
+                &quot;path&quot;: &quot;modules/quaternion/init.lua&quot;
+            }
+        }
+    ],
+    &quot;properties&quot;: [
+        {
+            &quot;name&quot;: &quot;identity&quot;,
+            &quot;desc&quot;: &quot;Identity Quaternion.&quot;,
+            &quot;lua_type&quot;: &quot;Quaternion&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 339,
+                &quot;path&quot;: &quot;modules/quaternion/init.lua&quot;
+            }
+        }
+    ],
+    &quot;types&quot;: [],
+    &quot;name&quot;: &quot;Quaternion&quot;,
+    &quot;desc&quot;: &quot;Represents a Quaternion. Quaternions are 4D structs that represent rotations\nin 3D space. Quaternions are often used in 3D graphics to avoid the ambiguity\nthat comes with Euler angles (e.g. gimbal lock).\n\nRoblox represents the transformation of an object via CFrame values, which are\nmatrices that hold position and rotation in 3D space. Quaternions can be converted\nto CFrame values through the `ToCFrame` method.&quot;,
+    &quot;source&quot;: {
+        &quot;line&quot;: 33,
+        &quot;path&quot;: &quot;modules/quaternion/init.lua&quot;
+    }
+}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#identity" class="table-of-contents__link toc-highlight">identity</a></li></ul></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#Angle" class="table-of-contents__link toc-highlight">:Angle</a></li><li><a href="#Conjugate" class="table-of-contents__link toc-highlight">:Conjugate</a></li><li><a href="#Dot" class="table-of-contents__link toc-highlight">:Dot</a></li><li><a href="#Inverse" class="table-of-contents__link toc-highlight">:Inverse</a></li><li><a href="#Magnitude" class="table-of-contents__link toc-highlight">:Magnitude</a></li><li><a href="#Normalize" class="table-of-contents__link toc-highlight">:Normalize</a></li><li><a href="#RotateTowards" class="table-of-contents__link toc-highlight">:RotateTowards</a></li><li><a href="#Slerp" class="table-of-contents__link toc-highlight">:Slerp</a></li><li><a href="#SqrMagnitude" class="table-of-contents__link toc-highlight">:SqrMagnitude</a></li><li><a href="#ToAxisAngle" class="table-of-contents__link toc-highlight">:ToAxisAngle</a></li><li><a href="#ToCFrame" class="table-of-contents__link toc-highlight">:ToCFrame</a></li><li><a href="#ToEulerAngles" class="table-of-contents__link toc-highlight">:ToEulerAngles</a></li><li><a href="#axisAngle" class="table-of-contents__link toc-highlight">.axisAngle</a></li><li><a href="#euler" class="table-of-contents__link toc-highlight">.euler</a></li><li><a href="#lookRotation" class="table-of-contents__link toc-highlight">.lookRotation</a></li><li><a href="#new" class="table-of-contents__link toc-highlight">.new</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2023 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
+<script src="/RbxUtil/assets/js/runtime~main.334173d9.js"></script>
+<script src="/RbxUtil/assets/js/main.2659f584.js"></script>
+</body>
+</html>
