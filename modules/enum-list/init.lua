@@ -68,10 +68,8 @@ function EnumList.new(name: string, enums: EnumNames)
 		self[enumName] = enumItem
 		table.insert(self[LIST_KEY], enumItem)
 	end
-	table.freeze(self)
-	return setmetatable(self, EnumList)
+	return table.freeze(setmetatable(self, EnumList))
 end
-export type EnumList = typeof(EnumList.new(...))
 
 --[=[
 	@param obj any
@@ -99,5 +97,7 @@ end
 function EnumList:GetName()
 	return self[NAME_KEY]
 end
+
+export type EnumList = typeof(EnumList.new(...))
 
 return EnumList
