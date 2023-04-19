@@ -13,7 +13,7 @@ type EnumNames = { string }
 	.EnumType EnumList
 	@within EnumList
 ]=]
-type EnumItem = {
+export type EnumItem = {
 	Name: string,
 	Value: number,
 	EnumType: any,
@@ -59,7 +59,7 @@ EnumList.__index = EnumList
 function EnumList.new(name: string, enums: EnumNames)
 	assert(type(name) == "string", "Name string required")
 	assert(type(enums) == "table", "Enums table required")
-	local self = setmetatable({}, EnumList)
+	local self = {}
 	self[LIST_KEY] = {}
 	self[NAME_KEY] = name
 	for i, enumName in ipairs(enums) do
@@ -69,8 +69,9 @@ function EnumList.new(name: string, enums: EnumNames)
 		table.insert(self[LIST_KEY], enumItem)
 	end
 	table.freeze(self)
-	return self
+	return setmetatable(self, EnumList)
 end
+export type EnumList = typeof(EnumList.new(...))
 
 --[=[
 	@param obj any
@@ -98,7 +99,5 @@ end
 function EnumList:GetName()
 	return self[NAME_KEY]
 end
-
-export type EnumList = typeof(EnumList.new("", { "" }))
 
 return EnumList
