@@ -6,3 +6,4 @@ packages/*/Packages
 /test/modules
 *.rbxl
 *.rbxl.lock
+sourcemap.json

@@ -356,19 +356,22 @@ end
 	```
 ]=]
 function Quaternion.ToEulerAngles(self: Quaternion): Vector3
-	local sinrCosp = 2 * (self.W * self.X + self.Y * self.Z)
-	local cosrCosp = 1 - 2 * (self.X * self.X + self.Y * self.Y)
-	local x = math.atan2(sinrCosp, cosrCosp)
+	local test = self.X * self.Y + self.Z * self.W
+	if test > 0.49999 then
+		return Vector3.new(0, 2 * math.atan2(self.X, self.W), math.pi / 2)
+	elseif test < -0.49999 then
+		return Vector3.new(0, -2 * math.atan2(self.X, self.W), -math.pi / 2)
+	end
 
-	local sinp = math.sqrt(1 + 2 * (self.W * self.Y - self.X * self.Z))
-	local cosp = math.sqrt(1 - 2 * (self.W * self.Y - self.X * self.Z))
-	local z = 2 * math.atan2(sinp, cosp) - math.pi / 2
+	local sqx = self.X * self.X
+	local sqy = self.Y * self.Y
+	local sqz = self.Z * self.Z
 
-	local sinyCosp = 2 * (self.W * self.Z + self.X * self.Y)
-	local cosyCosp = 1 - 2 * (self.Y * self.Y + self.Z * self.Z)
-	local y = math.atan2(sinyCosp, cosyCosp)
-
-	return Vector3.new(x, y, z)
+	return Vector3.new(
+		math.atan2(2 * self.X * self.W - 2 * self.Y * self.Z, 1 - 2 * sqx - 2 * sqz),
+		math.atan2(2 * self.Y * self.W - 2 * self.X * self.Z, 1 - 2 * sqy - 2 * sqz),
+		math.asin(2 * test)
+	)
 end
 
 --[=[
