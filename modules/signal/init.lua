@@ -24,6 +24,24 @@
 --   sleitnick - August 3rd, 2021 - Modified for Knit.                        --
 -- -----------------------------------------------------------------------------
 
+-- Signal types
+export type Connection = {
+	Disconnect: (self: Connection) -> (),
+	Destroy: (self: Connection) -> (),
+	Connected: boolean,
+}
+
+export type Signal<T...> = {
+	Fire: (self: Signal<T...>, T...) -> (),
+	FireDeferred: (self: Signal<T...>, T...) -> (),
+	Connect: (self: Signal<T...>, fn: (T...) -> ()) -> Connection,
+	Once: (self: Signal<T...>, fn: (T...) -> ()) -> Connection,
+	DisconnectAll: (self: Signal<T...>) -> (),
+	GetConnections: (self: Signal<T...>) -> { Connection },
+	Destroy: (self: Signal<T...>) -> (),
+	Wait: (self: Signal<T...>) -> T...,
+}
+
 -- The currently idle thread to run the next handler on
 local freeRunnerThread = nil
 
@@ -144,7 +162,7 @@ Signal.__index = Signal
 
 	@return Signal
 ]=]
-function Signal.new()
+function Signal.new<T...>(): Signal<T...>
 	local self = setmetatable({
 		_handlerListHead = false,
 		_proxyHandler = nil,
@@ -165,7 +183,7 @@ end
 	Instance.new("Part").Parent = workspace
 	```
 ]=]
-function Signal.Wrap(rbxScriptSignal)
+function Signal.Wrap<T...>(rbxScriptSignal: RBXScriptSignal): Signal<T...>
 	assert(
 		typeof(rbxScriptSignal) == "RBXScriptSignal",
 		"Argument #1 to Signal.Wrap must be a RBXScriptSignal; got " .. typeof(rbxScriptSignal)
@@ -183,7 +201,7 @@ end
 	@param obj any -- Object to check
 	@return boolean -- `true` if the object is a Signal.
 ]=]
-function Signal.Is(obj)
+function Signal.Is(obj: any): boolean
 	return type(obj) == "table" and getmetatable(obj) == Signal
 end
 
@@ -326,7 +344,7 @@ end
 
 	Yields the current thread until the signal is fired, and returns the arguments fired from the signal.
 	Yielding the current thread is not always desirable. If the desire is to only capture the next event
-	fired, using `ConnectOnce` might be a better solution.
+	fired, using `Once` might be a better solution.
 	```lua
 	task.spawn(function()
 		local msg, num = signal:Wait()
@@ -380,4 +398,8 @@ setmetatable(Signal, {
 	end,
 })
 
-return Signal
+return {
+	new = Signal.new,
+	Wrap = Signal.Wrap,
+	Is = Signal.Is,
+}
