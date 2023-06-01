@@ -15,9 +15,10 @@
 | [Net](https://sleitnick.github.io/RbxUtil/api/Net) | `Net = "sleitnick/net@0.1.0"` | Static networking module |
 | [Option](https://sleitnick.github.io/RbxUtil/api/Option) | `Option = "sleitnick/option@1.0.4"` | Represent optional values in Lua |
 | [PID](https://sleitnick.github.io/RbxUtil/api/PID) | `PID = "sleitnick/pid@1.0.2"` | PID Controller class |
+| [Quaternion](https://sleitnick.github.io/RbxUtil/api/Quaternion) | `Quaternion = "sleitnick/quaternion@0.2.1"` | Quaternion class |
 | [Ser](https://sleitnick.github.io/RbxUtil/api/Ser) | `Ser = "sleitnick/ser@1.0.5"` | Ser class for serialization and deserialization |
 | [Shake](https://sleitnick.github.io/RbxUtil/api/Shake) | `Shake = "sleitnick/shake@0.1.7"` | Shake class for making things shake |
-| [Signal](https://sleitnick.github.io/RbxUtil/api/Signal) | `Signal = "sleitnick/signal@1.2.1"` | Signal class |
+| [Signal](https://sleitnick.github.io/RbxUtil/api/Signal) | `Signal = "sleitnick/signal@1.5.0"` | Signal class |
 | [Silo](https://sleitnick.github.io/RbxUtil/api/Silo) | `Silo = "sleitnick/silo@0.1.1"` | State container class |
 | [Streamable](https://sleitnick.github.io/RbxUtil/api/Streamable) | `Streamable = "sleitnick/streamable@1.2.4"` | Streamable class and StreamableUtil |
 | [Symbol](https://sleitnick.github.io/RbxUtil/api/Symbol) | `Symbol = "sleitnick/symbol@2.0.1"` | Symbol |
