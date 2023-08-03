@@ -33,10 +33,10 @@ end
 
 local function AssertPromiseLike(object)
 	if
-		type(object) ~= "table"
-		or type(object.getStatus) ~= "function"
-		or type(object.finally) ~= "function"
-		or type(object.cancel) ~= "function"
+		typeof(object) ~= "table"
+		or typeof(object.getStatus) ~= "function"
+		or typeof(object.finally) ~= "function"
+		or typeof(object.cancel) ~= "function"
 	then
 		error("Did not receive a Promise as an argument", 3)
 	end
