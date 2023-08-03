@@ -244,7 +244,7 @@ end
 	| `Instance` | `object:Destroy()` |
 	| `RBXScriptConnection` | `object:Disconnect()` |
 	| `function` | `object()` |
-	| `thread` | `coroutine.close(object)` |
+	| `thread` | `task.cancel(object)` |
 	| `table` | `object:Destroy()` _or_ `object:Disconnect()` |
 	| `table` with `cleanupMethod` | `object:<cleanupMethod>()` |
 
@@ -342,7 +342,7 @@ function Trove:_cleanupObject(object, cleanupMethod)
 	if cleanupMethod == FN_MARKER then
 		object()
 	elseif cleanupMethod == THREAD_MARKER then
-		coroutine.close(object)
+		task.cancel(object)
 	else
 		object[cleanupMethod](object)
 	end
