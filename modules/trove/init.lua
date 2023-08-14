@@ -342,7 +342,7 @@ function Trove:_cleanupObject(object, cleanupMethod)
 	if cleanupMethod == FN_MARKER then
 		object()
 	elseif cleanupMethod == THREAD_MARKER then
-		task.cancel(object)
+		pcall(task.cancel, object)
 	else
 		object[cleanupMethod](object)
 	end
