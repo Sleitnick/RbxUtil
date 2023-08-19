@@ -169,10 +169,11 @@ return function()
 
 	describe("Extend", function()
 		it("should extend tables", function()
-			local tbl = { "a", "b", "c" }
-			local extension = { "d", "e", "f" }
-			local extended = TableUtil.Extend(tbl, extension)
-			expect(table.concat(extended)).to.equal("abcdef")
+			local t1 = { "a", "b", "c" }
+			local t2 = { "d", "e", "f" }
+			local t3 = { "g", "h", "i" }
+			local extended = TableUtil.Extend(t1, t2, t3)
+			expect(table.concat(extended)).to.equal("abcdefghi")
 		end)
 	end)
 
