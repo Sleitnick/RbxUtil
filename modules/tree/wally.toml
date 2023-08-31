@@ -1,7 +1,7 @@
 [package]
-name = "sleitnick/trove"
-description = "Trove class for tracking and cleaning up objects"
-version = "1.0.1"
+name = "sleitnick/tree"
+description = "Utility functions for accessing instances in the game hierarchy"
+version = "1.0.0"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"

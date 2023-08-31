@@ -25,5 +25,6 @@
 | [TableUtil](https://sleitnick.github.io/RbxUtil/api/TableUtil) | `TableUtil = "sleitnick/table-util@1.2.0"` | Table utility functions |
 | [TaskQueue](https://sleitnick.github.io/RbxUtil/api/TaskQueue) | `TaskQueue = "sleitnick/task-queue@0.1.1"` | Batches tasks that occur on the same execution step |
 | [Timer](https://sleitnick.github.io/RbxUtil/api/Timer) | `Timer = "sleitnick/timer@1.1.2"` | Timer class |
-| [Trove](https://sleitnick.github.io/RbxUtil/api/Trove) | `Trove = "sleitnick/trove@1.0.0"` | Trove class for tracking and cleaning up objects |
+| [Tree](https://sleitnick.github.io/RbxUtil/api/Tree) | `Tree = "sleitnick/tree@1.0.0"` | Utility functions for accessing instances in the game hierarchy |
+| [Trove](https://sleitnick.github.io/RbxUtil/api/Trove) | `Trove = "sleitnick/trove@1.0.1"` | Trove class for tracking and cleaning up objects |
 | [WaitFor](https://sleitnick.github.io/RbxUtil/api/WaitFor) | `WaitFor = "sleitnick/wait-for@0.2.2"` | WaitFor class for awaiting instances |
