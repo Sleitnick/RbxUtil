@@ -1,5 +1,3 @@
---!strict
-
 -- EnumList
 -- Stephen Leitnick
 -- January 08, 2021
