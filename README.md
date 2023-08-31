@@ -15,7 +15,7 @@
 | [Net](https://sleitnick.github.io/RbxUtil/api/Net) | `Net = "sleitnick/net@0.1.0"` | Static networking module |
 | [Option](https://sleitnick.github.io/RbxUtil/api/Option) | `Option = "sleitnick/option@1.0.4"` | Represent optional values in Lua |
 | [PID](https://sleitnick.github.io/RbxUtil/api/PID) | `PID = "sleitnick/pid@1.0.2"` | PID Controller class |
-| [Quaternion](https://sleitnick.github.io/RbxUtil/api/Quaternion) | `Quaternion = "sleitnick/quaternion@0.2.0"` | Quaternion class |
+| [Quaternion](https://sleitnick.github.io/RbxUtil/api/Quaternion) | `Quaternion = "sleitnick/quaternion@0.2.1"` | Quaternion class |
 | [Ser](https://sleitnick.github.io/RbxUtil/api/Ser) | `Ser = "sleitnick/ser@1.0.5"` | Ser class for serialization and deserialization |
 | [Shake](https://sleitnick.github.io/RbxUtil/api/Shake) | `Shake = "sleitnick/shake@0.1.7"` | Shake class for making things shake |
 | [Signal](https://sleitnick.github.io/RbxUtil/api/Signal) | `Signal = "sleitnick/signal@1.5.0"` | Signal class |
@@ -25,5 +25,6 @@
 | [TableUtil](https://sleitnick.github.io/RbxUtil/api/TableUtil) | `TableUtil = "sleitnick/table-util@1.2.0"` | Table utility functions |
 | [TaskQueue](https://sleitnick.github.io/RbxUtil/api/TaskQueue) | `TaskQueue = "sleitnick/task-queue@0.1.1"` | Batches tasks that occur on the same execution step |
 | [Timer](https://sleitnick.github.io/RbxUtil/api/Timer) | `Timer = "sleitnick/timer@1.1.2"` | Timer class |
-| [Trove](https://sleitnick.github.io/RbxUtil/api/Trove) | `Trove = "sleitnick/trove@0.5.0"` | Trove class for tracking and cleaning up objects |
+| [Tree](https://sleitnick.github.io/RbxUtil/api/Tree) | `Tree = "sleitnick/tree@1.0.0"` | Utility functions for accessing instances in the game hierarchy |
+| [Trove](https://sleitnick.github.io/RbxUtil/api/Trove) | `Trove = "sleitnick/trove@1.0.1"` | Trove class for tracking and cleaning up objects |
 | [WaitFor](https://sleitnick.github.io/RbxUtil/api/WaitFor) | `WaitFor = "sleitnick/wait-for@0.2.2"` | WaitFor class for awaiting instances |

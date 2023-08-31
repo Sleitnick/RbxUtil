@@ -33,10 +33,10 @@ end
 
 local function AssertPromiseLike(object)
 	if
-		type(object) ~= "table"
-		or type(object.getStatus) ~= "function"
-		or type(object.finally) ~= "function"
-		or type(object.cancel) ~= "function"
+		typeof(object) ~= "table"
+		or typeof(object.getStatus) ~= "function"
+		or typeof(object.finally) ~= "function"
+		or typeof(object.cancel) ~= "function"
 	then
 		error("Did not receive a Promise as an argument", 3)
 	end
@@ -244,7 +244,7 @@ end
 	| `Instance` | `object:Destroy()` |
 	| `RBXScriptConnection` | `object:Disconnect()` |
 	| `function` | `object()` |
-	| `thread` | `coroutine.close(object)` |
+	| `thread` | `task.cancel(object)` |
 	| `table` | `object:Destroy()` _or_ `object:Disconnect()` |
 	| `table` with `cleanupMethod` | `object:<cleanupMethod>()` |
 
@@ -342,7 +342,7 @@ function Trove:_cleanupObject(object, cleanupMethod)
 	if cleanupMethod == FN_MARKER then
 		object()
 	elseif cleanupMethod == THREAD_MARKER then
-		coroutine.close(object)
+		pcall(task.cancel, object)
 	else
 		object[cleanupMethod](object)
 	end
