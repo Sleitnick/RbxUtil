@@ -389,27 +389,31 @@ end
 	@within TableUtil
 	@function Extend
 	@param target table
-	@param extension table
+	@param ... table
 	@return table
 
 	Extends the target array with the extension array.
 
 	```lua
-	local t = {10, 20, 30}
+	local t1 = {10, 20, 30}
 	local t2 = {30, 40, 50}
-	local tNew = TableUtil.Extend(t, t2)
-	print(tNew) --> {10, 20, 30, 30, 40, 50}
+	local t3 = {5, 15}
+	local tNew = TableUtil.Extend(t1, t2, t3)
+	print(tNew) --> {10, 20, 30, 30, 40, 50, 5, 15}
 	```
 
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
 ]=]
-local function Extend<T, E>(target: { T }, extension: { E }): { T } & { E }
-	local tbl = table.clone(target) :: { any }
-	for _, v in extension do
-		table.insert(tbl, v)
+local function Extend<T>(target: { T }, ...): { T }
+	local result = target
+	for i = 1, select("#", ...) do
+		local extension = select(i, ...)
+		for _, v in ipairs(extension) do
+			table.insert(result, v)
+		end
 	end
-	return tbl
+	return result
 end
 
 --[=[
