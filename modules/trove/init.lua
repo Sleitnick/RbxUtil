@@ -4,8 +4,7 @@
 
 local FN_MARKER = newproxy()
 local THREAD_MARKER = newproxy()
-local GENERIC_OBJECT_CLEANUP_METHODS =
-	{ "Destroy", "Disconnect", "Cleanup", "destroy", "disconnect", "cleanup" }
+local GENERIC_OBJECT_CLEANUP_METHODS = { "Destroy", "Disconnect", "Cleanup", "destroy", "disconnect", "cleanup" }
 
 local RunService = game:GetService("RunService")
 
@@ -24,9 +23,9 @@ local function GetObjectCleanupFunction(object, cleanupMethod)
 	elseif t == "RBXScriptConnection" then
 		return "Disconnect"
 	elseif t == "table" then
-		for _, cleanupMethod in GENERIC_OBJECT_CLEANUP_METHODS do
-			if typeof(object[cleanupMethod]) == "function" then
-				return cleanupMethod
+		for _, genericCleanupMethod in GENERIC_OBJECT_CLEANUP_METHODS do
+			if typeof(object[genericCleanupMethod]) == "function" then
+				return genericCleanupMethod
 			end
 		end
 	end
