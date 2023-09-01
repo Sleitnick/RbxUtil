@@ -4,7 +4,8 @@
 
 local FN_MARKER = newproxy()
 local THREAD_MARKER = newproxy()
-local GENERIC_OBJECT_CLEANUP_METHODS = {"Destroy", "Disconnect", "Cleanup", "destroy", "disconnect", "cleanup"}
+local GENERIC_OBJECT_CLEANUP_METHODS =
+	{ "Destroy", "Disconnect", "Cleanup", "destroy", "disconnect", "cleanup" }
 
 local RunService = game:GetService("RunService")
 
@@ -24,7 +25,9 @@ local function GetObjectCleanupFunction(object, cleanupMethod)
 		return "Disconnect"
 	elseif t == "table" then
 		for _, cleanupMethod in GENERIC_OBJECT_CLEANUP_METHODS do
-			if typeof(object[cleanupMethod]) == "function" then return cleanupMethod end
+			if typeof(object[cleanupMethod]) == "function" then
+				return cleanupMethod
+			end
 		end
 	end
 	error("Failed to get cleanup function for object " .. t .. ": " .. tostring(object), 3)
