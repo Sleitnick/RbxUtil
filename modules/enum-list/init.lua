@@ -1,5 +1,3 @@
---!strict
-
 -- EnumList
 -- Stephen Leitnick
 -- January 08, 2021
@@ -13,7 +11,7 @@ type EnumNames = { string }
 	.EnumType EnumList
 	@within EnumList
 ]=]
-type EnumItem = {
+export type EnumItem = {
 	Name: string,
 	Value: number,
 	EnumType: any,
@@ -59,7 +57,7 @@ EnumList.__index = EnumList
 function EnumList.new(name: string, enums: EnumNames)
 	assert(type(name) == "string", "Name string required")
 	assert(type(enums) == "table", "Enums table required")
-	local self = setmetatable({}, EnumList)
+	local self = {}
 	self[LIST_KEY] = {}
 	self[NAME_KEY] = name
 	for i, enumName in ipairs(enums) do
@@ -68,8 +66,7 @@ function EnumList.new(name: string, enums: EnumNames)
 		self[enumName] = enumItem
 		table.insert(self[LIST_KEY], enumItem)
 	end
-	table.freeze(self)
-	return self
+	return table.freeze(setmetatable(self, EnumList))
 end
 
 --[=[
@@ -99,6 +96,6 @@ function EnumList:GetName()
 	return self[NAME_KEY]
 end
 
-export type EnumList = typeof(EnumList.new("", { "" }))
+export type EnumList = typeof(EnumList.new(...))
 
 return EnumList
