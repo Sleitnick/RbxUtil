@@ -95,9 +95,17 @@ end
 function ClientComm:GetFunction(
 	name: string,
 	inboundMiddleware: Types.ClientMiddleware?,
-	outboundMiddleware: Types.ClientMiddleware?
+	outboundMiddleware: Types.ClientMiddleware?,
+	subFolders: { string }?
 )
-	return Comm.GetFunction(self._instancesFolder, name, self._usePromise, inboundMiddleware, outboundMiddleware)
+	return Comm.GetFunction(
+		self._instancesFolder,
+		name,
+		self._usePromise,
+		inboundMiddleware,
+		outboundMiddleware,
+		subFolders
+	)
 end
 
 --[=[
@@ -123,9 +131,10 @@ end
 function ClientComm:GetSignal(
 	name: string,
 	inboundMiddleware: Types.ClientMiddleware?,
-	outboundMiddleware: Types.ClientMiddleware?
+	outboundMiddleware: Types.ClientMiddleware?,
+	subFolders: { string }?
 )
-	return Comm.GetSignal(self._instancesFolder, name, inboundMiddleware, outboundMiddleware)
+	return Comm.GetSignal(self._instancesFolder, name, inboundMiddleware, outboundMiddleware, subFolders)
 end
 
 --[=[
@@ -165,9 +174,10 @@ end
 function ClientComm:GetProperty(
 	name: string,
 	inboundMiddleware: Types.ClientMiddleware?,
-	outboundMiddleware: Types.ClientMiddleware?
+	outboundMiddleware: Types.ClientMiddleware?,
+	subFolders: { string }?
 )
-	return Comm.GetProperty(self._instancesFolder, name, inboundMiddleware, outboundMiddleware)
+	return Comm.GetProperty(self._instancesFolder, name, inboundMiddleware, outboundMiddleware, subFolders)
 end
 
 --[=[
@@ -195,31 +205,67 @@ function ClientComm:BuildObject(inboundMiddleware: Types.ClientMiddleware?, outb
 	local reFolder = self._instancesFolder:FindFirstChild("RE")
 	local rpFolder = self._instancesFolder:FindFirstChild("RP")
 	if rfFolder then
-		for _, rf in ipairs(rfFolder:GetChildren()) do
-			if not rf:IsA("RemoteFunction") then
-				continue
-			end
-			local f = self:GetFunction(rf.Name, inboundMiddleware, outboundMiddleware)
-			obj[rf.Name] = function(_self, ...)
-				return f(...)
+		local subFolders = {}
+		local function recursive(folder)
+			for _, rf in ipairs(folder:GetChildren()) do
+				if rf:IsA("RemoteFunction") then
+					local f = self:GetFunction(rf.Name, inboundMiddleware, outboundMiddleware, subFolders)
+					obj[rf.Name] = function(_self, ...)
+						return f(...)
+					end
+				elseif rf:IsA("Folder") then
+					local parent = obj
+					obj = parent[rf.Name] or {}
+					table.insert(subFolders, rf.Name)
+					recursive(rf)
+					parent[rf.Name] = obj
+					obj = parent
+					table.remove(subFolders)
+				end
 			end
 		end
+
+		recursive(rfFolder)
 	end
 	if reFolder then
-		for _, re in ipairs(reFolder:GetChildren()) do
-			if not re:IsA("RemoteEvent") then
-				continue
+		local subFolders = {}
+		local function recursive(folder)
+			for _, re in ipairs(folder:GetChildren()) do
+				if re:IsA("RemoteEvent") then
+					obj[re.Name] = self:GetSignal(re.Name, inboundMiddleware, outboundMiddleware, subFolders)
+				elseif re:IsA("Folder") then
+					local parent = obj
+					obj = parent[re.Name] or {}
+					table.insert(subFolders, re.Name)
+					recursive(re)
+					parent[re.Name] = obj
+					obj = parent
+					table.remove(subFolders)
+				end
 			end
-			obj[re.Name] = self:GetSignal(re.Name, inboundMiddleware, outboundMiddleware)
 		end
+
+		recursive(reFolder)
 	end
 	if rpFolder then
-		for _, re in ipairs(rpFolder:GetChildren()) do
-			if not re:IsA("RemoteEvent") then
-				continue
+		local subFolders = {}
+		local function recursive(folder)
+			for _, rp in ipairs(folder:GetChildren()) do
+				if rp:IsA("RemoteEvent") then
+					obj[rp.Name] = self:GetProperty(rp.Name, inboundMiddleware, outboundMiddleware, subFolders)
+				elseif rp:IsA("Folder") then
+					local parent = obj
+					obj = parent[rp.Name] or {}
+					table.insert(subFolders, rp.Name)
+					recursive(rp)
+					parent[rp.Name] = obj
+					obj = parent
+					table.remove(subFolders)
+				end
 			end
-			obj[re.Name] = self:GetProperty(re.Name, inboundMiddleware, outboundMiddleware)
 		end
+
+		recursive(rpFolder)
 	end
 	return obj
 end

@@ -77,9 +77,10 @@ function ServerComm:BindFunction(
 	name: string,
 	fn: Types.FnBind,
 	inboundMiddleware: Types.ServerMiddleware?,
-	outboundMiddleware: Types.ServerMiddleware?
+	outboundMiddleware: Types.ServerMiddleware?,
+	subFolders: { string }?
 ): RemoteFunction
-	return Comm.BindFunction(self._instancesFolder, name, fn, inboundMiddleware, outboundMiddleware)
+	return Comm.BindFunction(self._instancesFolder, name, fn, inboundMiddleware, outboundMiddleware, subFolders)
 end
 
 --[=[
@@ -109,9 +110,10 @@ function ServerComm:WrapMethod(
 	tbl: {},
 	name: string,
 	inboundMiddleware: Types.ServerMiddleware?,
-	outboundMiddleware: Types.ServerMiddleware?
+	outboundMiddleware: Types.ServerMiddleware?,
+	subFolders: { string }?
 ): RemoteFunction
-	return Comm.WrapMethod(self._instancesFolder, tbl, name, inboundMiddleware, outboundMiddleware)
+	return Comm.WrapMethod(self._instancesFolder, tbl, name, inboundMiddleware, outboundMiddleware, subFolders)
 end
 
 --[=[
@@ -141,9 +143,10 @@ end
 function ServerComm:CreateSignal(
 	name: string,
 	inboundMiddleware: Types.ServerMiddleware?,
-	outboundMiddleware: Types.ServerMiddleware?
+	outboundMiddleware: Types.ServerMiddleware?,
+	subFolders: { string }?
 )
-	return Comm.CreateSignal(self._instancesFolder, name, inboundMiddleware, outboundMiddleware)
+	return Comm.CreateSignal(self._instancesFolder, name, inboundMiddleware, outboundMiddleware, subFolders)
 end
 
 --[=[
@@ -190,9 +193,17 @@ function ServerComm:CreateProperty(
 	name: string,
 	initialValue: any,
 	inboundMiddleware: Types.ServerMiddleware?,
-	outboundMiddleware: Types.ServerMiddleware?
+	outboundMiddleware: Types.ServerMiddleware?,
+	subFolders: { string }?
 )
-	return Comm.CreateProperty(self._instancesFolder, name, initialValue, inboundMiddleware, outboundMiddleware)
+	return Comm.CreateProperty(
+		self._instancesFolder,
+		name,
+		initialValue,
+		inboundMiddleware,
+		outboundMiddleware,
+		subFolders
+	)
 end
 
 --[=[

@@ -39,10 +39,11 @@ function Server.BindFunction(
 	name: string,
 	func: Types.FnBind,
 	inboundMiddleware: Types.ServerMiddleware?,
-	outboundMiddleware: Types.ServerMiddleware?
+	outboundMiddleware: Types.ServerMiddleware?,
+	subFolders: { string }?
 ): RemoteFunction
 	assert(Util.IsServer, "BindFunction must be called from the server")
-	local folder = Util.GetCommSubFolder(parent, "RF"):Expect("Failed to get Comm RF folder")
+	local folder = Util.GetCommSubFolder(parent, "RF", subFolders):Expect("Failed to get Comm RF folder")
 	local rf = Instance.new("RemoteFunction")
 	rf.Name = name
 	local hasInbound = type(inboundMiddleware) == "table" and #inboundMiddleware > 0
@@ -101,24 +102,26 @@ function Server.WrapMethod(
 	tbl: {},
 	name: string,
 	inboundMiddleware: Types.ServerMiddleware?,
-	outboundMiddleware: Types.ServerMiddleware?
+	outboundMiddleware: Types.ServerMiddleware?,
+	subFolders: { string }?
 ): RemoteFunction
 	assert(Util.IsServer, "WrapMethod must be called from the server")
 	local fn = tbl[name]
 	assert(type(fn) == "function", "Value at index " .. name .. " must be a function; got " .. type(fn))
 	return Server.BindFunction(parent, name, function(...)
 		return fn(tbl, ...)
-	end, inboundMiddleware, outboundMiddleware)
+	end, inboundMiddleware, outboundMiddleware, subFolders)
 end
 
 function Server.CreateSignal(
 	parent: Instance,
 	name: string,
 	inboundMiddleware: Types.ServerMiddleware?,
-	outboundMiddleware: Types.ServerMiddleware?
+	outboundMiddleware: Types.ServerMiddleware?,
+	subFolders: { string }?
 )
 	assert(Util.IsServer, "CreateSignal must be called from the server")
-	local folder = Util.GetCommSubFolder(parent, "RE"):Expect("Failed to get Comm RE folder")
+	local folder = Util.GetCommSubFolder(parent, "RE", subFolders):Expect("Failed to get Comm RE folder")
 	local rs = RemoteSignal.new(folder, name, inboundMiddleware, outboundMiddleware)
 	return rs
 end
@@ -128,10 +131,11 @@ function Server.CreateProperty(
 	name: string,
 	initialValue: any,
 	inboundMiddleware: Types.ServerMiddleware?,
-	outboundMiddleware: Types.ServerMiddleware?
+	outboundMiddleware: Types.ServerMiddleware?,
+	subFolders: { string }?
 )
 	assert(Util.IsServer, "CreateProperty must be called from the server")
-	local folder = Util.GetCommSubFolder(parent, "RP"):Expect("Failed to get Comm RP folder")
+	local folder = Util.GetCommSubFolder(parent, "RP", subFolders):Expect("Failed to get Comm RP folder")
 	local rp = RemoteProperty.new(folder, name, initialValue, inboundMiddleware, outboundMiddleware)
 	return rp
 end

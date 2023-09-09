@@ -11,10 +11,11 @@ function Client.GetFunction(
 	name: string,
 	usePromise: boolean,
 	inboundMiddleware: Types.ClientMiddleware?,
-	outboundMiddleware: Types.ClientMiddleware?
+	outboundMiddleware: Types.ClientMiddleware?,
+	subFolders: { string }?
 )
 	assert(not Util.IsServer, "GetFunction must be called from the client")
-	local folder = Util.GetCommSubFolder(parent, "RF"):Expect("Failed to get Comm RF folder")
+	local folder = Util.GetCommSubFolder(parent, "RF", subFolders):Expect("Failed to get Comm RF folder")
 	local rf = folder:WaitForChild(name, Util.WaitForChildTimeout)
 	assert(rf ~= nil, "Failed to find RemoteFunction: " .. name)
 	local hasInbound = type(inboundMiddleware) == "table" and #inboundMiddleware > 0
@@ -110,10 +111,11 @@ function Client.GetSignal(
 	parent: Instance,
 	name: string,
 	inboundMiddleware: Types.ClientMiddleware?,
-	outboundMiddleware: Types.ClientMiddleware?
+	outboundMiddleware: Types.ClientMiddleware?,
+	subFolders: { string }?
 )
 	assert(not Util.IsServer, "GetSignal must be called from the client")
-	local folder = Util.GetCommSubFolder(parent, "RE"):Expect("Failed to get Comm RE folder")
+	local folder = Util.GetCommSubFolder(parent, "RE", subFolders):Expect("Failed to get Comm RE folder")
 	local re = folder:WaitForChild(name, Util.WaitForChildTimeout)
 	assert(re ~= nil, "Failed to find RemoteEvent: " .. name)
 	return ClientRemoteSignal.new(re, inboundMiddleware, outboundMiddleware)
@@ -123,10 +125,11 @@ function Client.GetProperty(
 	parent: Instance,
 	name: string,
 	inboundMiddleware: Types.ClientMiddleware?,
-	outboundMiddleware: Types.ClientMiddleware?
+	outboundMiddleware: Types.ClientMiddleware?,
+	subFolders: { string }?
 )
 	assert(not Util.IsServer, "GetProperty must be called from the client")
-	local folder = Util.GetCommSubFolder(parent, "RP"):Expect("Failed to get Comm RP folder")
+	local folder = Util.GetCommSubFolder(parent, "RP", subFolders):Expect("Failed to get Comm RP folder")
 	local re = folder:WaitForChild(name, Util.WaitForChildTimeout)
 	assert(re ~= nil, "Failed to find RemoteEvent for RemoteProperty: " .. name)
 	return ClientRemoteProperty.new(re, inboundMiddleware, outboundMiddleware)
