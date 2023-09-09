@@ -34,7 +34,6 @@ function Util.GetCommSubFolder(parent: Instance, subFolderName: string, subFolde
 		subFolder = parent:WaitForChild(subFolderName, Util.WaitForChildTimeout)
 
 		if subFolders then
-			local parent
 			for _, t in subFolders do
 				subFolder = subFolder:WaitForChild(t, Util.WaitForChildTimeout)
 			end
