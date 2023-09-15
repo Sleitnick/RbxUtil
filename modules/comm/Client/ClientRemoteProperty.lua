@@ -36,10 +36,8 @@ function ClientRemoteProperty.new(
 )
 	local self = setmetatable({}, ClientRemoteProperty)
 	self._rs = ClientRemoteSignal.new(re, inboundMiddleware, outboudMiddleware)
-
 	self._ready = false
 	self._value = nil
-
 	self.Changed = Signal.new()
 	self._rs:Fire()
 
