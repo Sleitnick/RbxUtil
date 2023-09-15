@@ -133,7 +133,9 @@ end
 ]=]
 function ClientRemoteProperty:Observe(observer: (any) -> ())
 	if self._ready then
-		task.defer(observer, self._value)
+		task.defer(function()
+			observer(self._value)
+		end)
 	end
 	return self.Changed:Connect(observer)
 end
