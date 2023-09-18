@@ -3,6 +3,18 @@
 -- TaskQueue
 -- Stephen Leitnick
 -- November 20, 2021
+export type OnFlushInvoke<T> = ({[number]: T}) -> nil
+export type TaskQueue<T> = {
+	__index: TaskQueue<T>,
+	_queue: {[number]: T},
+	_flushing: boolean,
+	_flushingScheduled: boolean,
+	_onFlush: OnFlushInvoke<T>,
+	new: (onFlush: OnFlushInvoke<T>) -> TaskQueue<T>,
+	Add: (self: TaskQueue<T>, object: T) -> (),
+	Clear: (self: TaskQueue<T>) -> (),
+	Destroy: (self: TaskQueue<T>) -> (),
+}
 
 --[=[
 	@class TaskQueue
@@ -36,8 +48,8 @@ TaskQueue.__index = TaskQueue
 	@return TaskQueue<T>
 	Constructs a new TaskQueue.
 ]=]
-function TaskQueue.new<T>(onFlush: ({ T }) -> nil)
-	local self = setmetatable({}, TaskQueue)
+function TaskQueue.new<T>(onFlush: OnFlushInvoke<T>):  TaskQueue<T>
+	local self: TaskQueue<T> = setmetatable({}, TaskQueue) :: any
 	self._queue = {}
 	self._flushing = false
 	self._flushingScheduled = false
@@ -49,7 +61,7 @@ end
 	@param object T
 	Add an object to the queue.
 ]=]
-function TaskQueue:Add<T>(object: T)
+function TaskQueue:Add<T>(object: T): ()
 	table.insert(self._queue, object)
 	if not self._flushingScheduled then
 		self._flushingScheduled = true
