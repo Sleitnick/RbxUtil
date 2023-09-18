@@ -48,8 +48,8 @@ TaskQueue.__index = TaskQueue
 	@return TaskQueue<T>
 	Constructs a new TaskQueue.
 ]=]
-function TaskQueue.new<T>(onFlush: OnFlushInvoke<T>):  TaskQueue<T>
-	local self: TaskQueue<T> = setmetatable({}, TaskQueue) :: any
+function TaskQueue.new<T>(onFlush: OnFlushInvoke<T>)
+	local self = setmetatable({}, TaskQueue)
 	self._queue = {}
 	self._flushing = false
 	self._flushingScheduled = false
