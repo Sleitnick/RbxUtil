@@ -46,12 +46,15 @@ function ClientRemoteProperty.new(
 		resolveOnReadyPromise = resolve
 	end)
 	self._changed = self._rs:Connect(function(value)
+		local changed = value ~= self._value
 		self._value = value
 		if not self._ready then
 			self._ready = true
 			resolveOnReadyPromise(value)
 		end
-		self.Changed:Fire(value)
+		if changed then
+			self.Changed:Fire(value)
+		end
 	end)
 
 	return self
@@ -131,9 +134,7 @@ end
 ]=]
 function ClientRemoteProperty:Observe(observer: (any) -> ())
 	if self._ready then
-		task.defer(function()
-			observer(self._value)
-		end)
+		task.defer(observer, self._value)
 	end
 	return self.Changed:Connect(observer)
 end
