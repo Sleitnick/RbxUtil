@@ -14,8 +14,8 @@
 | [Log](https://sleitnick.github.io/RbxUtil/api/Log) | `Log = "sleitnick/log@0.1.1"` | Log class for logging to PlayFab |
 | [Net](https://sleitnick.github.io/RbxUtil/api/Net) | `Net = "sleitnick/net@0.1.0"` | Static networking module |
 | [Option](https://sleitnick.github.io/RbxUtil/api/Option) | `Option = "sleitnick/option@1.0.4"` | Represent optional values in Lua |
-| [PID](https://sleitnick.github.io/RbxUtil/api/PID) | `PID = "sleitnick/pid@1.0.2"` | PID Controller class |
-| [Quaternion](https://sleitnick.github.io/RbxUtil/api/Quaternion) | `Quaternion = "sleitnick/quaternion@0.2.1"` | Quaternion class |
+| [PID](https://sleitnick.github.io/RbxUtil/api/PID) | `PID = "sleitnick/pid@1.1.0"` | PID Controller class |
+| [Quaternion](https://sleitnick.github.io/RbxUtil/api/Quaternion) | `Quaternion = "sleitnick/quaternion@0.2.2"` | Quaternion class |
 | [Ser](https://sleitnick.github.io/RbxUtil/api/Ser) | `Ser = "sleitnick/ser@1.0.5"` | Ser class for serialization and deserialization |
 | [Shake](https://sleitnick.github.io/RbxUtil/api/Shake) | `Shake = "sleitnick/shake@0.1.7"` | Shake class for making things shake |
 | [Signal](https://sleitnick.github.io/RbxUtil/api/Signal) | `Signal = "sleitnick/signal@1.5.0"` | Signal class |
@@ -23,8 +23,8 @@
 | [Streamable](https://sleitnick.github.io/RbxUtil/api/Streamable) | `Streamable = "sleitnick/streamable@1.2.4"` | Streamable class and StreamableUtil |
 | [Symbol](https://sleitnick.github.io/RbxUtil/api/Symbol) | `Symbol = "sleitnick/symbol@2.0.1"` | Symbol |
 | [TableUtil](https://sleitnick.github.io/RbxUtil/api/TableUtil) | `TableUtil = "sleitnick/table-util@1.2.0"` | Table utility functions |
-| [TaskQueue](https://sleitnick.github.io/RbxUtil/api/TaskQueue) | `TaskQueue = "sleitnick/task-queue@0.1.1"` | Batches tasks that occur on the same execution step |
+| [TaskQueue](https://sleitnick.github.io/RbxUtil/api/TaskQueue) | `TaskQueue = "sleitnick/task-queue@1.0.0"` | Batches tasks that occur on the same execution step |
 | [Timer](https://sleitnick.github.io/RbxUtil/api/Timer) | `Timer = "sleitnick/timer@1.1.2"` | Timer class |
-| [Tree](https://sleitnick.github.io/RbxUtil/api/Tree) | `Tree = "sleitnick/tree@1.0.0"` | Utility functions for accessing instances in the game hierarchy |
+| [Tree](https://sleitnick.github.io/RbxUtil/api/Tree) | `Tree = "sleitnick/tree@1.1.0"` | Utility functions for accessing instances in the game hierarchy |
 | [Trove](https://sleitnick.github.io/RbxUtil/api/Trove) | `Trove = "sleitnick/trove@1.0.1"` | Trove class for tracking and cleaning up objects |
-| [WaitFor](https://sleitnick.github.io/RbxUtil/api/WaitFor) | `WaitFor = "sleitnick/wait-for@0.2.2"` | WaitFor class for awaiting instances |
+| [WaitFor](https://sleitnick.github.io/RbxUtil/api/WaitFor) | `WaitFor = "sleitnick/wait-for@1.0.0"` | WaitFor class for awaiting instances |

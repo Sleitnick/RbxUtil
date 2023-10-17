@@ -1,7 +1,7 @@
 [package]
 name = "sleitnick/tree"
 description = "Utility functions for accessing instances in the game hierarchy"
-version = "1.0.0"
+version = "1.1.0"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"
