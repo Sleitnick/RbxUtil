@@ -10,7 +10,7 @@ For a full listing of the available NPM packages, visit the [RbxUtil NPM org](ht
 
 ## Installation
 
-Installing modules works like any other roblox-ts package, except that the suffix will be `@rbxutil`. For instance, to install the quaternion library, run the following command:
+Installing modules works like any other roblox-ts package, except that the prefix will be `@rbxutil`. For instance, to install the quaternion library, run the following command:
 
 ```bash
 $ npm install @rbxutil/quaternion
