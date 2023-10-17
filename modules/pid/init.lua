@@ -1,6 +1,14 @@
 -- PID
 -- August 11, 2020
 
+export type PID = {
+	POnE: boolean,
+	Reset: (self: PID) -> (),
+	Calculate: (self: PID, setpoint: number, input: number) -> number,
+	Debug: (self: PID, name: string, parent: Instance?) -> (),
+	Destroy: (self: PID) -> (),
+}
+
 --[=[
 	@class PID
 	The PID class simulates a [PID controller](https://en.wikipedia.org/wiki/PID_controller). PID is an acronym
@@ -51,7 +59,7 @@ PID.__index = PID
 	local pid = PID.new(0, 1, 0.1, 0, 0)
 	```
 ]=]
-function PID.new(min: number, max: number, kp: number, ki: number, kd: number)
+function PID.new(min: number, max: number, kp: number, ki: number, kd: number): PID
 	local self = setmetatable({}, PID)
 	self._min = min
 	self._max = max
@@ -127,14 +135,17 @@ end
 	this function will do nothing.
 ]=]
 function PID:Debug(name: string, parent: Instance?)
-	if self._debug then
-		return
-	end
 	if not game:GetService("RunService"):IsStudio() then
 		return
 	end
+	if self._debug then
+		return
+	end
+
 	local folder = Instance.new("Folder")
 	folder.Name = name
+	folder:AddTag("__pidebug__")
+
 	local function Bind(attrName, propName)
 		folder:SetAttribute(attrName, self[propName])
 		folder:GetAttributeChangedSignal(attrName):Connect(function()
@@ -142,11 +153,13 @@ function PID:Debug(name: string, parent: Instance?)
 			self:Reset()
 		end)
 	end
+
 	Bind("Min", "_min")
 	Bind("Max", "_max")
 	Bind("KP", "_kp")
 	Bind("KI", "_ki")
 	Bind("KD", "_kd")
+
 	folder.Parent = parent or workspace
 	self._debug = folder
 end
@@ -161,4 +174,6 @@ function PID:Destroy()
 	end
 end
 
-return PID
+return {
+	new = PID.new,
+}
