@@ -546,6 +546,9 @@ function Quaternion.__tostring(self: Quaternion): string
 	return `{self.X}, {self.Y}, {self.Z}, {self.W}`
 end
 
+-- Kind of support roblox-ts multiplication (not really, but follows the same pattern):
+Quaternion.mul = Quaternion.__mul
+
 --[=[
 	@prop identity Quaternion
 	@readonly
