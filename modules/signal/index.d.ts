@@ -22,12 +22,12 @@ declare namespace Signal {
 		 * of doing this is the ability to hook into Roblox signals and easily manage
 		 * them in once place.
 		 */
-		Wrap<T extends unknown[] | unknown>(rbxScriptSignal: RBXScriptSignalType<T>): Signal<T>;
+		Wrap: <T extends unknown[] | unknown>(rbxScriptSignal: RBXScriptSignalType<T>) => Signal<T>;
 
 		/**
 		 * Returns `true` if the given object is a Signal.
 		 */
-		Is<T>(obj: T): boolean;
+		Is: <T>(obj: T) => boolean;
 	}
 
 	export interface Connection {

@@ -15,24 +15,24 @@ declare namespace Quaternion {
 		/**
 		 * Constructs a quaternion from Euler angles (radians).
 		 */
-		euler(x: number, y: number, z: number): Quaternion;
+		euler: (x: number, y: number, z: number) => Quaternion;
 
 		/**
 		 * Constructs a quaternion from the axis and angle (radians).
 		 */
-		axisAngle(axis: Vector3, angle: number): Quaternion;
+		axisAngle: (axis: Vector3, angle: number) => Quaternion;
 
 		/**
 		 * Constructs a quaternion looking at `forward` direction. An
 		 * optional `upwards` axis can be provided.
 		 */
-		lookRotation(forward: Vector3, upwards?: Vector3): Quaternion;
+		lookRotation: (forward: Vector3, upwards?: Vector3) => Quaternion;
 
 		/**
 		 * Constructs a quaternion from the rotation components of the
 		 * given CFrame.
 		 */
-		cframe(cframe: CFrame): Quaternion;
+		cframe: (cframe: CFrame) => Quaternion;
 	}
 }
 

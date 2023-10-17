@@ -16,13 +16,13 @@ declare namespace Timer {
 		 * @param updateSignal The update signal (defaults to `RunService.Heartbeat`).
 		 * @param timeFn The time function (defaults to `time`).
 		 */
-		Simple(
+		Simple: (
 			interval: number,
 			callback: () => void,
 			startNow?: boolean,
 			updateSignal?: RBXScriptSignal,
 			timeFn?: () => number,
-		): Timer;
+		) => Timer;
 	}
 }
 
