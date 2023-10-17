@@ -1,5 +1,8 @@
 *.zip
 packages/*/Packages
+/node_modules
+/include
+/out
 /build
 /Packages
 /test/Packages
