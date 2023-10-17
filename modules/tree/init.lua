@@ -108,7 +108,7 @@ end
 	local child = Tree.Await(parent, "Path/To/Child", 30)
 	```
 ]=]
-function Tree.Await(parent: Instance, path: string, timeout: number?): Instance
+function Tree.Await(parent: Instance, path: string, timeout: number?, assertIsA: string?): Instance
 	local instance = parent
 	local paths = path:split(DELIM)
 
@@ -124,6 +124,11 @@ function Tree.Await(parent: Instance, path: string, timeout: number?): Instance
 		if instance == nil then
 			error(`Failed to await {path} in {FullNameToPath(parent)} (timeout reached)`, 2)
 		end
+	end
+
+	-- Assert class type if argument is supplied:
+	if assertIsA and not instance:IsA(assertIsA) then
+		error(`Got class {instance.ClassName}; expected to be of type {assertIsA}`, 2)
 	end
 
 	return instance
