@@ -22,8 +22,8 @@ and the desired speed, and the PID controller would return the desired throttle 
 desired speed.
 
 Original code based upon the [Arduino PID Library](https://github.com/br3ttb/Arduino-PID-Library)."><link data-rh="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/PID"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/PID" hreflang="en"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/PID" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.e1adec2f.css">
-<link rel="preload" href="/RbxUtil/assets/js/runtime~main.fb4c5cb2.js" as="script">
-<link rel="preload" href="/RbxUtil/assets/js/main.ff8f0a3a.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/runtime~main.b77a8321.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/main.4d396bc8.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -40,7 +40,7 @@ Original code based upon the [Arduino PID Library](https://github.com/br3ttb/Ard
   desired speed.
 </p>
 <p>Original code based upon the <a href="https://github.com/br3ttb/Arduino-PID-Library" target="_blank">Arduino PID Library</a>.</p>
-</div></header><h2 class="anchor anchorWithStickyNavbar_LWe7" id="properties">Properties<a href="#properties" class="hash-link" aria-label="Direct link to Properties" title="Direct link to Properties">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="POnE"><code style="text-decoration:none">POnE</code><a href="#POnE" class="hash-link" aria-label="Direct link to POnE" title="Direct link to POnE">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/pid/init.lua#L39"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PID<!-- -->.<!-- -->POnE<!-- -->:<!-- --> </code> <code class="blue_P4bS">boolean</code></div><div>
+</div></header><h2 class="anchor anchorWithStickyNavbar_LWe7" id="properties">Properties<a href="#properties" class="hash-link" aria-label="Direct link to Properties" title="Direct link to Properties">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="POnE"><code style="text-decoration:none">POnE</code><a href="#POnE" class="hash-link" aria-label="Direct link to POnE" title="Direct link to POnE">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/pid/init.lua#L47"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PID<!-- -->.<!-- -->POnE<!-- -->:<!-- --> </code> <code class="blue_P4bS">boolean</code></div><div>
 <p>POnE stands for "Proportional on Error".</p>
 <p>Set to <code>true</code> by default.</p>
 <ul>
@@ -54,7 +54,7 @@ Original code based upon the [Arduino PID Library](https://github.com/br3ttb/Ard
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> pid <span class="token operator">=</span> PID<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">...</span><span class="token punctuation">)</span>
 pid<span class="token punctuation">.</span>POnE <span class="token operator">=</span> <span class="token keyword">true</span><span class="token operator">|</span><span class="token keyword">false</span>
 </code></pre>
-</div><h2 class="anchor anchorWithStickyNavbar_LWe7" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="new"><code style="text-decoration:none">new</code><a href="#new" class="hash-link" aria-label="Direct link to new" title="Direct link to new">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/pid/init.lua#L54"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PID<!-- -->.</code><code class="green_DgR4">new</code><code>(</code><div class="inset_uKQm"><div><code>min<!-- -->: </code><code class="blue_P4bS">number</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+</div><h2 class="anchor anchorWithStickyNavbar_LWe7" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="new"><code style="text-decoration:none">new</code><a href="#new" class="hash-link" aria-label="Direct link to new" title="Direct link to new">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/pid/init.lua#L62"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PID<!-- -->.</code><code class="green_DgR4">new</code><code>(</code><div class="inset_uKQm"><div><code>min<!-- -->: </code><code class="blue_P4bS">number</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
 <p>Minimum value the PID can output</p>
 </span></span></div><div><code>max<!-- -->: </code><code class="blue_P4bS">number</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
 <p>Maximum value the PID can output</p>
@@ -68,9 +68,9 @@ pid<span class="token punctuation">.</span>POnE <span class="token operator">=</
 <p>Constructs a new PID.</p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> pid <span class="token operator">=</span> PID<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0.1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Reset"><code style="text-decoration:none">Reset</code><a href="#Reset" class="hash-link" aria-label="Direct link to Reset" title="Direct link to Reset">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/pid/init.lua#L70"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PID<!-- -->:</code><code class="green_DgR4">Reset</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Reset"><code style="text-decoration:none">Reset</code><a href="#Reset" class="hash-link" aria-label="Direct link to Reset" title="Direct link to Reset">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/pid/init.lua#L78"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PID<!-- -->:</code><code class="green_DgR4">Reset</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
 <p>Resets the PID to a zero start state.</p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Calculate"><code style="text-decoration:none">Calculate</code><a href="#Calculate" class="hash-link" aria-label="Direct link to Calculate" title="Direct link to Calculate">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/pid/init.lua#L94"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PID<!-- -->:</code><code class="green_DgR4">Calculate</code><code>(</code><div class="inset_uKQm"><div><code>setpoint<!-- -->: </code><code class="blue_P4bS">number</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Calculate"><code style="text-decoration:none">Calculate</code><a href="#Calculate" class="hash-link" aria-label="Direct link to Calculate" title="Direct link to Calculate">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/pid/init.lua#L102"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PID<!-- -->:</code><code class="green_DgR4">Calculate</code><code>(</code><div class="inset_uKQm"><div><code>setpoint<!-- -->: </code><code class="blue_P4bS">number</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
 <p>The desired point to reach</p>
 </span></span></div><div><code>input<!-- -->: </code><code class="blue_P4bS">number</code><span class="inlineDescription_G7Er">-- <span>
 <p>The current inputted value</p>
@@ -89,7 +89,7 @@ RunService<span class="token punctuation">.</span>Heartbeat<span class="token pu
 	car<span class="token punctuation">:</span><span class="token function">SetThrottle</span><span class="token punctuation">(</span>throttle<span class="token punctuation">)</span>
 <span class="token keyword">end</span><span class="token punctuation">)</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Debug"><code style="text-decoration:none">Debug</code><a href="#Debug" class="hash-link" aria-label="Direct link to Debug" title="Direct link to Debug">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/pid/init.lua#L129"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PID<!-- -->:</code><code class="green_DgR4">Debug</code><code>(</code><div class="inset_uKQm"><div><code>name<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Debug"><code style="text-decoration:none">Debug</code><a href="#Debug" class="hash-link" aria-label="Direct link to Debug" title="Direct link to Debug">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/pid/init.lua#L137"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PID<!-- -->:</code><code class="green_DgR4">Debug</code><code>(</code><div class="inset_uKQm"><div><code>name<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
 <p>Folder name</p>
 </span></span></div><div><code>parent<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Instance" target="_blank" rel="noopener noreferrer">Instance?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
 <p>Folder parent</p>
@@ -111,7 +111,7 @@ RunService<span class="token punctuation">.</span>Heartbeat<span class="token pu
     </p>
   </div>
 </div>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Destroy"><code style="text-decoration:none">Destroy</code><a href="#Destroy" class="hash-link" aria-label="Direct link to Destroy" title="Direct link to Destroy">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/pid/init.lua#L157"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PID<!-- -->:</code><code class="green_DgR4">Destroy</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Destroy"><code style="text-decoration:none">Destroy</code><a href="#Destroy" class="hash-link" aria-label="Direct link to Destroy" title="Direct link to Destroy">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/pid/init.lua#L170"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PID<!-- -->:</code><code class="green_DgR4">Destroy</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
 <p>Destroys the PID. This is only necessary if calling <code>PID:Debug</code>.</p>
 </div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
     &quot;functions&quot;: [
@@ -153,7 +153,7 @@ RunService<span class="token punctuation">.</span>Heartbeat<span class="token pu
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 54,
+                &quot;line&quot;: 62,
                 &quot;path&quot;: &quot;modules/pid/init.lua&quot;
             }
         },
@@ -164,7 +164,7 @@ RunService<span class="token punctuation">.</span>Heartbeat<span class="token pu
             &quot;returns&quot;: [],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 70,
+                &quot;line&quot;: 78,
                 &quot;path&quot;: &quot;modules/pid/init.lua&quot;
             }
         },
@@ -191,7 +191,7 @@ RunService<span class="token punctuation">.</span>Heartbeat<span class="token pu
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 94,
+                &quot;line&quot;: 102,
                 &quot;path&quot;: &quot;modules/pid/init.lua&quot;
             }
         },
@@ -213,7 +213,7 @@ RunService<span class="token punctuation">.</span>Heartbeat<span class="token pu
             &quot;returns&quot;: [],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 129,
+                &quot;line&quot;: 137,
                 &quot;path&quot;: &quot;modules/pid/init.lua&quot;
             }
         },
@@ -224,7 +224,7 @@ RunService<span class="token punctuation">.</span>Heartbeat<span class="token pu
             &quot;returns&quot;: [],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 157,
+                &quot;line&quot;: 170,
                 &quot;path&quot;: &quot;modules/pid/init.lua&quot;
             }
         }
@@ -235,7 +235,7 @@ RunService<span class="token punctuation">.</span>Heartbeat<span class="token pu
             &quot;desc&quot;: &quot;POnE stands for \&quot;Proportional on Error\&quot;.\n\nSet to `true` by default.\n\n- `true`: The PID applies the proportional calculation on the _error_.\n- `false`: The PID applies the proportional calculation on the _measurement_.\n\nSetting this value to `false` may help the PID move smoother and help\neliminate overshoot.\n\n```lua\nlocal pid = PID.new(...)\npid.POnE = true|false\n```&quot;,
             &quot;lua_type&quot;: &quot;boolean&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 39,
+                &quot;line&quot;: 47,
                 &quot;path&quot;: &quot;modules/pid/init.lua&quot;
             }
         }
@@ -244,11 +244,11 @@ RunService<span class="token punctuation">.</span>Heartbeat<span class="token pu
     &quot;name&quot;: &quot;PID&quot;,
     &quot;desc&quot;: &quot;The PID class simulates a [PID controller](https://en.wikipedia.org/wiki/PID_controller). PID is an acronym\nfor _proportional, integral, derivative_. PIDs are input feedback loops that try to reach a specific\ngoal by measuring the difference between the input and the desired value, and then returning a new\ndesired input.\n\nA common example is a car&#x27;s cruise control, which would give a PID the current speed\nand the desired speed, and the PID controller would return the desired throttle input to reach the\ndesired speed.\n\nOriginal code based upon the [Arduino PID Library](https://github.com/br3ttb/Arduino-PID-Library).&quot;,
     &quot;source&quot;: {
-        &quot;line&quot;: 17,
+        &quot;line&quot;: 25,
         &quot;path&quot;: &quot;modules/pid/init.lua&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#POnE" class="table-of-contents__link toc-highlight">POnE</a></li></ul></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#Calculate" class="table-of-contents__link toc-highlight">:Calculate</a></li><li><a href="#Debug" class="table-of-contents__link toc-highlight">:Debug</a></li><li><a href="#Destroy" class="table-of-contents__link toc-highlight">:Destroy</a></li><li><a href="#Reset" class="table-of-contents__link toc-highlight">:Reset</a></li><li><a href="#new" class="table-of-contents__link toc-highlight">.new</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2023 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/RbxUtil/assets/js/runtime~main.fb4c5cb2.js"></script>
-<script src="/RbxUtil/assets/js/main.ff8f0a3a.js"></script>
+<script src="/RbxUtil/assets/js/runtime~main.b77a8321.js"></script>
+<script src="/RbxUtil/assets/js/main.4d396bc8.js"></script>
 </body>
 </html>
