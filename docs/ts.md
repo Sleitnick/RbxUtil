@@ -18,6 +18,28 @@ $ npm install @rbxutil/quaternion
 
 ## Configuration
 
+In order for modules from `@rbxutil` to work, two changes will need to be made:
+1. Add the modules to the Rojo project file
+1. Expose the types to TypeScript
+
+### Rojo Project
+
+In the `default.project.json` file, add the `@rbxutil` directory into ReplicatedStorage, right alongside `@rbxts`:
+
+```json
+"node_modules": {
+	"$className": "Folder",
+	"@rbxts": {
+		"$path": "node_modules/@rbxts"
+	},
+	"@rbxutil": {
+		"$path": "node_modules/@rbxutil"
+	}
+}
+```
+
+### Types Configuration
+
 In the `tsconfig.json` file, add the `@rbxutil` directory to the types list. The `@rbxts` org should already be there:
 
 ```json
