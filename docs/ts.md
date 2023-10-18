@@ -6,7 +6,7 @@ sidebar_position: 2
 
 Some modules can be used in [roblox-ts](https://roblox-ts.com/). These modules live within their own `@rbxutil` NPM org.
 
-For a full listing of the available NPM packages, visit the [RbxUtil NPM org](https://www.npmjs.com/settings/rbxutil/packages).
+For a full listing of the available NPM packages, visit the [RbxUtil NPM org](https://www.npmjs.com/org/rbxutil).
 
 ## Installation
 
