@@ -2,8 +2,8 @@
 -- Stephen Leitnick
 -- November 07, 2020
 
-local Trove = require(script.Parent.Parent.Trove)
 local Signal = require(script.Parent.Parent.Signal)
+local Trove = require(script.Parent.Parent.Trove)
 
 local UserInputService = game:GetService("UserInputService")
 
@@ -44,6 +44,14 @@ Mouse.__index = Mouse
 ]=]
 --[=[
 	@within Mouse
+	@prop Moved Signal<Vector2>
+	@tag Event
+	```lua
+	mouse.Moved:Connect(function(position) ... end)
+	```
+]=]
+--[=[
+	@within Mouse
 	@prop Scrolled Signal<number>
 	@tag Event
 	```lua
@@ -70,6 +78,7 @@ function Mouse.new()
 	self.RightDown = self._trove:Construct(Signal)
 	self.RightUp = self._trove:Construct(Signal)
 	self.Scrolled = self._trove:Construct(Signal)
+	self.Moved = self._trove:Construct(Signal)
 
 	self._trove:Connect(UserInputService.InputBegan, function(input, processed)
 		if processed then
@@ -97,7 +106,10 @@ function Mouse.new()
 		if processed then
 			return
 		end
-		if input.UserInputType == Enum.UserInputType.MouseWheel then
+		if input.UserInputType == Enum.UserInputType.MouseMovement then
+			local position = input.Position
+			self.Moved:Fire(Vector2.new(position.X, position.Y))
+		elseif input.UserInputType == Enum.UserInputType.MouseWheel then
 			self.Scrolled:Fire(input.Position.Z)
 		end
 	end)
