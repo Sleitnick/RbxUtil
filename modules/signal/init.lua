@@ -340,9 +340,11 @@ end
 function Signal:FireDeferred(...)
 	local item = self._handlerListHead
 	while item do
-		if item.Connected then
-			task.defer(item._fn, ...)
-		end
+		task.defer(function(...)
+			if item.Connected then
+				item._fn(...)
+			end
+		end, ...)
 		item = item._next
 	end
 end
