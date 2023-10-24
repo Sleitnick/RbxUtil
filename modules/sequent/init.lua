@@ -18,8 +18,8 @@ export type Sequent<T> = {
 	```
 ]=]
 export type SequentConnection = {
-	Disconnect: (self: SequentConnection) -> (),
 	Connected: boolean,
+	Disconnect: (self: SequentConnection) -> (),
 }
 
 --[=[
@@ -333,7 +333,7 @@ function Sequent:_removeConnection(connection)
 	end
 end
 
-return {
+return table.freeze({
 	new = Sequent.new,
 	Priority = Priority,
-}
+})
