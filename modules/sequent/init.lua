@@ -152,6 +152,7 @@ function Sequent:Fire<T>(value: T)
 		Cancellable = self._cancellable,
 		Cancel = function(evt)
 			if not self._cancellable then
+				warn("attempted to cancel non-cancellable event")
 				return
 			end
 			cancelled = true
@@ -231,7 +232,7 @@ end
 	`Sequent.Priority`.
 ]=]
 function Sequent:Connect(callback: (...unknown) -> (), priority: number): SequentConnection
-	assert(self._firing, "cannot connect while firing")
+	assert(not self._firing, "cannot connect while firing")
 
 	local connection = setmetatable({
 		Connected = true,
