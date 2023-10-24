@@ -219,7 +219,7 @@ end
 --[=[
 	Returns `true` if the Sequent is currently firing.
 ]=]
-function Sequent:IsFiring()
+function Sequent:IsFiring(): boolean
 	return self._firing
 end
 
@@ -259,7 +259,7 @@ end
 	`Once()` is the same as `Connect()`, except the connection is automatically
 	disconnected after being fired once.
 ]=]
-function Sequent:Once(callback: (...unknown) -> (), priority: number)
+function Sequent:Once(callback: (...unknown) -> (), priority: number): SequentConnection
 	local connection: SequentConnection
 
 	connection = self:Connect(function(...)
