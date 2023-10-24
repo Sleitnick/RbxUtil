@@ -150,7 +150,7 @@ function Sequent:Fire<T>(value: T)
 	local event: SequentEvent<T> = table.freeze({
 		Value = value,
 		Cancellable = self._cancellable,
-		Cancel = function(evt)
+		Cancel = function(_evt)
 			if not self._cancellable then
 				warn("attempted to cancel non-cancellable event")
 				return
