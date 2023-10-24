@@ -14,6 +14,7 @@
 | [Shake](https://sleitnick.github.io/RbxUtil/api/Shake) | `Shake = "sleitnick/shake@0.1.7"` | Shake class for making things shake |
 | [Input](https://sleitnick.github.io/RbxUtil/api/Input) | `Input = "sleitnick/input@2.2.0"` | Basic input classes |
 | [Timer](https://sleitnick.github.io/RbxUtil/api/Timer) | `Timer = "sleitnick/timer@1.1.2"` | Timer class |
+| [Sequent](https://sleitnick.github.io/RbxUtil/api/Sequent) | `Sequent = "sleitnick/sequent@0.1.0"` | Sequent class |
 | [Trove](https://sleitnick.github.io/RbxUtil/api/Trove) | `Trove = "sleitnick/trove@1.0.1"` | Trove class for tracking and cleaning up objects |
 | [Comm](https://sleitnick.github.io/RbxUtil/api/Comm) | `Comm = "sleitnick/comm@0.3.2"` | Comm library for remote communication |
 | [Component](https://sleitnick.github.io/RbxUtil/api/Component) | `Component = "sleitnick/component@2.4.6"` | Component class |
