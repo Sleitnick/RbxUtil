@@ -6,11 +6,41 @@ export type Sequent<T> = {
 	Destroy: (self: Sequent<T>) -> (),
 }
 
+--[=[
+	@interface SequentConnection
+	@within Sequent
+	.Connected boolean
+	.Disconnect (self: SequentConnection) -> ()
+
+	```lua
+	print(sequent.Connected)
+	sequent:Disconnect()
+	```
+]=]
 export type SequentConnection = {
 	Disconnect: (self: SequentConnection) -> (),
 	Connected: boolean,
 }
 
+--[=[
+	@interface SequentEvent<T>
+	@within Sequent
+	.Value T
+	.Cancellable boolean
+	.Cancel (self: SequentEvent<T>) -> ()
+
+	Events are passed to connected callbacks when sequents are fired. Events
+	can be cancelled as well, which prevents the event from propagating to
+	other connected callbacks during the same firing. This can be used to
+	sink events if desired.
+
+	```lua
+	sequent:Connect(function(event)
+		print(event.Value)
+		event:Cancel()
+	end, 0)
+	```
+]=]
 export type SequentEvent<T> = {
 	Value: T,
 	Cancellable: boolean,
@@ -34,6 +64,19 @@ end
 -----------------------------------------------------------------------------
 -- Sequent
 
+--[=[
+	@interface Priority
+	@within Sequent
+	.Highest math.huge
+	.High 1000
+	.Normal 0
+	.Low -1000
+	.Lowest -math.huge
+
+	```lua
+	sequent:Connect(fn, Sequent.Priority.Highest)
+	```
+]=]
 local Priority = {
 	Highest = math.huge,
 	High = 1000,
@@ -42,9 +85,41 @@ local Priority = {
 	Lowest = -math.huge,
 }
 
+--[=[
+	@class Sequent
+
+	Sequent is a signal-like structure that executes connections in a serial nature. Each
+	connection must fully complete before the next is run. Connections can be prioritized
+	and cancelled.
+
+	```lua
+	local sequent = Sequent.new()
+
+	sequent:Connect(
+		function(event)
+			print("Got value", event.Value)
+			event:Cancel()
+		end,
+		Sequent.Priority.Highest,
+	)
+
+	sequent:Connect(
+		function(event)
+			print("This won't print!")
+		end,
+		Sequent.Priority.Lowest,
+	)
+
+	sequent:Fire("Test")
+	```
+]=]
 local Sequent = {}
 Sequent.__index = Sequent
 
+--[=[
+	Constructs a new Sequent. If `cancellable` is `true`, then
+	connected handlers can cancel event propagation.
+]=]
 function Sequent.new<T>(cancellable: boolean?): Sequent<T>
 	local self = setmetatable({
 		_connections = {},
@@ -60,6 +135,13 @@ function Sequent.new<T>(cancellable: boolean?): Sequent<T>
 	return self
 end
 
+--[=[
+	@yields
+	Fires the Sequent with the given value.
+
+	This method will yield until all connections complete. Errors will
+	bubble up if they occur within a connection.
+]=]
 function Sequent:Fire<T>(value: T)
 	assert(not self._firing, "cannot fire while already firing")
 	self._firing = true
@@ -88,7 +170,7 @@ function Sequent:Fire<T>(value: T)
 		local taskThread = task.spawn(function()
 			self._taskThread = coroutine.running()
 
-			success, err = pcall(function()
+			local s, e = pcall(function()
 				connection._callback(event)
 			end)
 
@@ -96,13 +178,15 @@ function Sequent:Fire<T>(value: T)
 
 			-- Resume the parent thread if it yielded:
 			if coroutine.status(thread) == "suspended" then
-				task.spawn(thread)
+				task.spawn(thread, s, e)
+			else
+				success, err = s, e
 			end
 		end)
 
 		-- If the task thread yielded, yield this thread too:
 		if success == nil then
-			coroutine.yield()
+			success, err = coroutine.yield()
 		end
 
 		self._firingThread = nil
@@ -131,11 +215,22 @@ function Sequent:Fire<T>(value: T)
 	self._firing = false
 end
 
+--[=[
+	Returns `true` if the Sequent is currently firing.
+]=]
 function Sequent:IsFiring()
 	return self._firing
 end
 
-function Sequent:Connect(callback: (...unknown) -> (), priority: number)
+--[=[
+	Connects a callback to the Sequent, which gets called anytime `Fire`
+	is called.
+
+	The given `priority` indicates the firing priority of the callback. Higher
+	priority values will be run first. There are a few defaults available via
+	`Sequent.Priority`.
+]=]
+function Sequent:Connect(callback: (...unknown) -> (), priority: number): SequentConnection
 	assert(self._firing, "cannot connect while firing")
 
 	local connection = setmetatable({
@@ -159,6 +254,10 @@ function Sequent:Connect(callback: (...unknown) -> (), priority: number)
 	return connection
 end
 
+--[=[
+	`Once()` is the same as `Connect()`, except the connection is automatically
+	disconnected after being fired once.
+]=]
 function Sequent:Once(callback: (...unknown) -> (), priority: number)
 	local connection: SequentConnection
 
@@ -173,6 +272,9 @@ function Sequent:Once(callback: (...unknown) -> (), priority: number)
 	return connection
 end
 
+--[=[
+	Cancels a currently-firing Sequent.
+]=]
 function Sequent:Cancel()
 	if not self._firing then
 		return
@@ -192,11 +294,16 @@ function Sequent:Cancel()
 	end
 
 	if self._firingThread then
-		task.cancel(self._firingThread)
+		local thread = self._firingThread
 		self._firingThread = nil
+		task.spawn(thread, true)
 	end
 end
 
+--[=[
+	Cleans up the Sequent. All connections are disconnected. The Sequent is cancelled
+	if it is currently firing.
+]=]
 function Sequent:Destroy()
 	self:Cancel()
 
