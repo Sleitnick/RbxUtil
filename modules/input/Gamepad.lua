@@ -233,6 +233,7 @@ function Gamepad.new(gamepad: Enum.UserInputType?)
 	local self = setmetatable({}, Gamepad)
 	self._trove = Trove.new()
 	self._gamepadTrove = self._trove:Construct(Trove)
+	self._observers = {} :: { [ Enum.KeyCode ]: { (inputObject: InputObject) -> () } }
 	self.ButtonDown = self._trove:Construct(Signal)
 	self.ButtonUp = self._trove:Construct(Signal)
 	self.Connected = self._trove:Construct(Signal)
@@ -253,6 +254,7 @@ function Gamepad:_setupActiveGamepad(gamepad: Enum.UserInputType?)
 	end
 
 	self._gamepadTrove:Clean()
+	table.clear(self._observers)
 	table.clear(self.State)
 	self.SupportsVibration = if gamepad then HapticService:IsVibrationSupported(gamepad) else false
 
@@ -280,6 +282,19 @@ function Gamepad:_setupActiveGamepad(gamepad: Enum.UserInputType?)
 	self._gamepadTrove:Connect(UserInputService.InputEnded, function(input, processed)
 		if input.UserInputType == gamepad then
 			self.ButtonUp:Fire(input.KeyCode, processed)
+		end
+	end)
+
+	self._gamepadTrove:Connect(UserInputService.InputChanged, function(input)
+		if input.UserInputType ~= gamepad then
+			return
+		end
+
+		local handlers = self._observers[input.KeyCode]
+		if handlers then
+			for _, handler in handlers do
+				handler(input)
+			end
 		end
 	end)
 
@@ -331,6 +346,26 @@ function Gamepad:_setupMotors()
 	end
 end
 
+function Gamepad:_setupObserverForKeyCode(keyCode: Enum.KeyCode, handler: (inputObject: InputObject) -> ()): ()
+	local observers = self._observers[keyCode]
+	if not observers then
+		observers = {}
+		self._observers[keyCode] = observers
+	end
+	if table.find(observers, handler) then
+		error("function already subscribed", 2)
+	end
+	table.insert(observers, handler)
+	task.spawn(handler, self.State[keyCode])
+	return function()
+		local index = table.find(observers, handler)
+		if index then
+			local n = #observers
+			observers[index], observers[n] = observers[n], nil
+		end
+	end
+end
+
 --[=[
 	@param thumbstick Enum.KeyCode
 	@param deadzoneThreshold number?
@@ -370,6 +405,64 @@ end
 ]=]
 function Gamepad:GetTrigger(trigger: Enum.KeyCode, deadzoneThreshold: number?): number
 	return ApplyDeadzone(self.State[trigger].Position.Z, deadzoneThreshold or self.DefaultDeadzone)
+end
+
+--[=[
+	@param thumbstick Enum.KeyCode
+	@param handler (position: Vector2) -> ()
+	@param deadzoneThreshold number?
+	@return Connection
+
+	Observes the given thumbstick. In other words, the handler function will
+	be fired immediately, as well as any time the thumbstick position changes.
+
+	If `deadzoneThreshold` is not included, the `DefaultDeadzone` value is
+	used instead.
+
+	```lua
+	local disconnect = Gamepad:ObserveThumbstick(Enum.KeyCode.Thumbstick1, function(position: Vector2)
+		-- Fires immediately & any time the thumbstick position changes
+		print(position)
+	end)
+
+	-- If/when desired, the connection can be cleaned up:
+	disconnect()
+	```
+]=]
+function Gamepad:ObserveThumbstick(thumbstick: Enum.KeyCode, handler: (position: Vector2) -> (), deadzoneThreshold: number?): ()
+	return self:_setupObserverForKeyCode(thumbstick, function()
+		handler(self:GetThumbstick(thumbstick, deadzoneThreshold))
+	end)
+end
+
+--[=[
+	@param trigger Enum.KeyCode
+	@param handler (position: number) -> ()
+	@param deadzoneThreshold number?
+	@return Connection
+
+	Observes the given trigger. In other words, the handler function will
+	be fired immediately, as well as any time the trigger position changes.
+	Like `GetTrigger()`, these trigger buttons are analog and will output
+	a value between the range of [0, 1].
+
+	If `deadzoneThreshold` is not included, the `DefaultDeadzone` value is
+	used instead.
+
+	```lua
+	local disconnect = Gamepad:ObserveTrigger(Enum.KeyCode.ButtonL2, function(position: number)
+		-- Fires immediately & any time the trigger position changes
+		print(position)
+	end)
+
+	-- If/when desired, the connection can be cleaned up:
+	disconnect()
+	```
+]=]
+function Gamepad:ObserveTrigger(trigger: Enum.KeyCode, handler: (position: number) -> (), deadzoneThreshold: number?): ()
+	return self:_setupObserverForKeyCode(trigger, function()
+		handler(self:GetTrigger(trigger, deadzoneThreshold))
+	end)
 end
 
 --[=[
