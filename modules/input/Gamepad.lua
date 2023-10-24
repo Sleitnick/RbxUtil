@@ -233,7 +233,7 @@ function Gamepad.new(gamepad: Enum.UserInputType?)
 	local self = setmetatable({}, Gamepad)
 	self._trove = Trove.new()
 	self._gamepadTrove = self._trove:Construct(Trove)
-	self._observers = {} :: { [ Enum.KeyCode ]: { (inputObject: InputObject) -> () } }
+	self._observers = {} :: { [Enum.KeyCode]: { (inputObject: InputObject) -> () } }
 	self.ButtonDown = self._trove:Construct(Signal)
 	self.ButtonUp = self._trove:Construct(Signal)
 	self.Connected = self._trove:Construct(Signal)
@@ -429,7 +429,11 @@ end
 	disconnect()
 	```
 ]=]
-function Gamepad:ObserveThumbstick(thumbstick: Enum.KeyCode, handler: (position: Vector2) -> (), deadzoneThreshold: number?): ()
+function Gamepad:ObserveThumbstick(
+	thumbstick: Enum.KeyCode,
+	handler: (position: Vector2) -> (),
+	deadzoneThreshold: number?
+): ()
 	return self:_setupObserverForKeyCode(thumbstick, function()
 		handler(self:GetThumbstick(thumbstick, deadzoneThreshold))
 	end)
@@ -459,7 +463,11 @@ end
 	disconnect()
 	```
 ]=]
-function Gamepad:ObserveTrigger(trigger: Enum.KeyCode, handler: (position: number) -> (), deadzoneThreshold: number?): ()
+function Gamepad:ObserveTrigger(
+	trigger: Enum.KeyCode,
+	handler: (position: number) -> (),
+	deadzoneThreshold: number?
+): ()
 	return self:_setupObserverForKeyCode(trigger, function()
 		handler(self:GetTrigger(trigger, deadzoneThreshold))
 	end)
