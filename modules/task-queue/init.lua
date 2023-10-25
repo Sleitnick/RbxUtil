@@ -3,10 +3,10 @@
 -- TaskQueue
 -- Stephen Leitnick
 -- November 20, 2021
-export type OnFlushInvoke<T> = ({[number]: T}) -> nil
+export type OnFlushInvoke<T> = ({ [number]: T }) -> nil
 export type TaskQueue<T> = {
 	__index: TaskQueue<T>,
-	_queue: {[number]: T},
+	_queue: { [number]: T },
 	_flushing: boolean,
 	_flushingScheduled: boolean,
 	_onFlush: OnFlushInvoke<T>,
