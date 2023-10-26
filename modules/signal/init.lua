@@ -355,14 +355,7 @@ end
 ]=]
 function Signal:Wait()
 	local waitingCoroutine = coroutine.running()
-	local connection
-	local done = false
-	connection = self:Connect(function(...)
-		if done then
-			return
-		end
-		done = true
-		connection:Disconnect()
+	self:Once(function(...)
 		task.spawn(waitingCoroutine, ...)
 	end)
 	return coroutine.yield()
