@@ -16,6 +16,7 @@
 | [Option](https://sleitnick.github.io/RbxUtil/api/Option) | `Option = "sleitnick/option@1.0.4"` | Represent optional values in Lua |
 | [PID](https://sleitnick.github.io/RbxUtil/api/PID) | `PID = "sleitnick/pid@1.1.0"` | PID Controller class |
 | [Quaternion](https://sleitnick.github.io/RbxUtil/api/Quaternion) | `Quaternion = "sleitnick/quaternion@0.2.3"` | Quaternion class |
+| [Sequent](https://sleitnick.github.io/RbxUtil/api/Sequent) | `Sequent = "sleitnick/sequent@0.1.0"` | Sequent class |
 | [Ser](https://sleitnick.github.io/RbxUtil/api/Ser) | `Ser = "sleitnick/ser@1.0.5"` | Ser class for serialization and deserialization |
 | [Shake](https://sleitnick.github.io/RbxUtil/api/Shake) | `Shake = "sleitnick/shake@0.1.7"` | Shake class for making things shake |
 | [Signal](https://sleitnick.github.io/RbxUtil/api/Signal) | `Signal = "sleitnick/signal@2.0.0"` | Signal class |
