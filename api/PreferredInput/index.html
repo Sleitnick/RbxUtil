@@ -24,8 +24,8 @@ The Preferred class is part of the Input package.
 ```lua
 local PreferredInput = require(packages.Input).PreferredInput
 ```"><link data-rh="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/PreferredInput"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/PreferredInput" hreflang="en"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/PreferredInput" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.e1adec2f.css">
-<link rel="preload" href="/RbxUtil/assets/js/runtime~main.3bf73018.js" as="script">
-<link rel="preload" href="/RbxUtil/assets/js/main.d6cb09fb.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/runtime~main.8a883140.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/main.b78cf320.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -49,24 +49,25 @@ local PreferredInput = require(packages.Input).PreferredInput
 <p>The current preferred InputType.</p>
 <pre class="language-lua"><code class="language-lua"><span class="token function">print</span><span class="token punctuation">(</span>PreferredInput<span class="token punctuation">.</span>Current<span class="token punctuation">)</span>
 </code></pre>
-</div><h2 class="anchor anchorWithStickyNavbar_LWe7" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Observe"><code style="text-decoration:none">Observe</code><a href="#Observe" class="hash-link" aria-label="Direct link to Observe" title="Direct link to Observe">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/input/PreferredInput.lua#L72"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PreferredInput<!-- -->.</code><code class="green_DgR4">Observe</code><code>(</code><code>handler<!-- -->: </code><code class="purple_ieR2">(</code><code>preferred<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/PreferredInput#InputType">InputType</a></code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/RemoteSignal#Connection">Connection</a></code></div><div>
+</div><h2 class="anchor anchorWithStickyNavbar_LWe7" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Observe"><code style="text-decoration:none">Observe</code><a href="#Observe" class="hash-link" aria-label="Direct link to Observe" title="Direct link to Observe">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/input/PreferredInput.lua#L74"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PreferredInput<!-- -->.</code><code class="green_DgR4">Observe</code><code>(</code><code>handler<!-- -->: </code><code class="purple_ieR2">(</code><code>preferred<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/PreferredInput#InputType">InputType</a></code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code><code>) → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div><div>
 <p>
   Observes the preferred input. In other words, the handler function will
   be fired immediately, as well as any time the preferred input changes.
 </p>
-<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> connection <span class="token operator">=</span> PreferredInput<span class="token punctuation">.</span><span class="token function">Observe</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>preferred<span class="token punctuation">)</span>
+<p>The returned function can be called to disconnect the observer.</p>
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> disconnect <span class="token operator">=</span> PreferredInput<span class="token punctuation">.</span><span class="token function">Observe</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>preferred<span class="token punctuation">)</span>
 	<span class="token comment">-- Fires immediately &#x26; any time the preferred input changes</span>
 	<span class="token function">print</span><span class="token punctuation">(</span>preferred<span class="token punctuation">)</span>
 <span class="token keyword">end</span><span class="token punctuation">)</span>
 
-<span class="token comment">-- If/when desired, the connection to Observe can be cleaned up:</span>
-connection<span class="token punctuation">:</span><span class="token function">Disconnect</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">-- If/when desired, observer can be stopped by calling the returned function:</span>
+<span class="token function">disconnect</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 </code></pre>
 </div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
     &quot;functions&quot;: [
         {
             &quot;name&quot;: &quot;Observe&quot;,
-            &quot;desc&quot;: &quot;Observes the preferred input. In other words, the handler function will\nbe fired immediately, as well as any time the preferred input changes.\n\n```lua\nlocal connection = PreferredInput.Observe(function(preferred)\n\t-- Fires immediately &amp; any time the preferred input changes\n\tprint(preferred)\nend)\n\n-- If/when desired, the connection to Observe can be cleaned up:\nconnection:Disconnect()\n```&quot;,
+            &quot;desc&quot;: &quot;Observes the preferred input. In other words, the handler function will\nbe fired immediately, as well as any time the preferred input changes.\n\nThe returned function can be called to disconnect the observer.\n\n```lua\nlocal disconnect = PreferredInput.Observe(function(preferred)\n\t-- Fires immediately &amp; any time the preferred input changes\n\tprint(preferred)\nend)\n\n-- If/when desired, observer can be stopped by calling the returned function:\ndisconnect()\n```&quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;handler&quot;,
@@ -77,12 +78,12 @@ connection<span class="token punctuation">:</span><span class="token function">D
             &quot;returns&quot;: [
                 {
                     &quot;desc&quot;: &quot;&quot;,
-                    &quot;lua_type&quot;: &quot;Connection&quot;
+                    &quot;lua_type&quot;: &quot;() -&gt; ()&quot;
                 }
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 72,
+                &quot;line&quot;: 74,
                 &quot;path&quot;: &quot;modules/input/PreferredInput.lua&quot;
             }
         }
@@ -120,7 +121,7 @@ connection<span class="token punctuation">:</span><span class="token function">D
         &quot;path&quot;: &quot;modules/input/PreferredInput.lua&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a><ul><li><a href="#InputType" class="table-of-contents__link toc-highlight">InputType</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#Current" class="table-of-contents__link toc-highlight">Current</a></li></ul></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#Observe" class="table-of-contents__link toc-highlight">.Observe</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2023 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/RbxUtil/assets/js/runtime~main.3bf73018.js"></script>
-<script src="/RbxUtil/assets/js/main.d6cb09fb.js"></script>
+<script src="/RbxUtil/assets/js/runtime~main.8a883140.js"></script>
+<script src="/RbxUtil/assets/js/main.b78cf320.js"></script>
 </body>
 </html>
