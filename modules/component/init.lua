@@ -169,10 +169,10 @@ type ComponentConfig = {
 local CollectionService = game:GetService("CollectionService")
 local RunService = game:GetService("RunService")
 
+local Promise = require(script.Parent.Promise)
 local Signal = require(script.Parent.Signal)
 local Symbol = require(script.Parent.Symbol)
 local Trove = require(script.Parent.Trove)
-local Promise = require(script.Parent.Promise)
 
 local IS_SERVER = RunService:IsServer()
 local DEFAULT_ANCESTORS = { workspace, game:GetService("Players") }
@@ -469,8 +469,8 @@ function Component:_setup()
 	local function InstanceUntagged(instance: Instance)
 		local watchHandle = watchingInstances[instance]
 		if watchHandle then
-			watchHandle:Disconnect()
 			watchingInstances[instance] = nil
+			self[KEY_TROVE]:Remove(watchHandle)
 		end
 		TryDeconstructComponent(instance)
 	end
