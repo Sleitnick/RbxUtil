@@ -42,6 +42,40 @@ function Net:RemoteEvent(name: string): RemoteEvent
 end
 
 --[=[
+	Gets an UnreliableRemoteEvent with the given name.
+
+	On the server, if the UnreliableRemoteEvent does not
+	exist, then it will be created with the given name.
+
+	On the client, if the UnreliableRemoteEvent does not
+	exist, then it will wait until it exists for at least
+	10 seconds. If the UnreliableRemoteEvent does not exist
+	after 10 seconds, an error will be thrown.
+
+	```lua
+	local unreliableRemoteEvent = Net:UnreliableRemoteEvent("PositionChanged")
+	```
+]=]
+function Net:UnreliableRemoteEvent(name: string): UnreliableRemoteEvent
+	name = "URE/" .. name
+	if RunService:IsServer() then
+		local r = script:FindFirstChild(name)
+		if not r then
+			r = Instance.new("UnreliableRemoteEvent")
+			r.Name = name
+			r.Parent = script
+		end
+		return r
+	else
+		local r = script:WaitForChild(name, 10)
+		if not r then
+			error("Failed to find UnreliableRemoteEvent: " .. name, 2)
+		end
+		return r
+	end
+end
+
+--[=[
 	Connects a handler function to the given RemoteEvent.
 
 	```lua
@@ -59,6 +93,27 @@ function Net:Connect(name: string, handler: (...any) -> ()): RBXScriptConnection
 		return self:RemoteEvent(name).OnServerEvent:Connect(handler)
 	else
 		return self:RemoteEvent(name).OnClientEvent:Connect(handler)
+	end
+end
+
+--[=[
+	Connects a handler function to the given UnreliableRemoteEvent.
+
+	```lua
+	-- Client
+	Net:ConnectUnreliable("PositionChanged", function(position)
+		print("Position", position)
+	end)
+
+	-- Server
+	Net:ConnectUnreliable("SomeEvent", function(player, ...) end)
+	```
+]=]
+function Net:ConnectUnreliable(name: string, handler: (...any) -> ()): RBXScriptConnection
+	if RunService:IsServer() then
+		return self:UnreliableRemoteEvent(name).OnServerEvent:Connect(handler)
+	else
+		return self:UnreliableRemoteEvent(name).OnClientEvent:Connect(handler)
 	end
 end
 
