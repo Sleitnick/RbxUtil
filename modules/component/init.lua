@@ -186,6 +186,7 @@ local KEY_COMPONENTS = Symbol("Components")
 local KEY_TROVE = Symbol("Trove")
 local KEY_EXTENSIONS = Symbol("Extensions")
 local KEY_ACTIVE_EXTENSIONS = Symbol("ActiveExtensions")
+local KEY_STARTING = Symbol("Starting")
 local KEY_STARTED = Symbol("Started")
 
 local renderId = 0
@@ -335,22 +336,34 @@ function Component:_setup()
 	local watchingInstances = {}
 
 	local function StartComponent(component)
+		component[KEY_STARTING] = coroutine.running()
+
 		InvokeExtensionFn(component, "Starting")
+
 		component:Start()
+		if component[KEY_STARTING] == nil then
+			-- Component's Start method stopped the component
+			return
+		end
+
 		InvokeExtensionFn(component, "Started")
+
 		local hasHeartbeatUpdate = typeof(component.HeartbeatUpdate) == "function"
 		local hasSteppedUpdate = typeof(component.SteppedUpdate) == "function"
 		local hasRenderSteppedUpdate = typeof(component.RenderSteppedUpdate) == "function"
+
 		if hasHeartbeatUpdate then
 			component._heartbeatUpdate = RunService.Heartbeat:Connect(function(dt)
 				component:HeartbeatUpdate(dt)
 			end)
 		end
+
 		if hasSteppedUpdate then
 			component._steppedUpdate = RunService.Stepped:Connect(function(_, dt)
 				component:SteppedUpdate(dt)
 			end)
 		end
+
 		if hasRenderSteppedUpdate and not IS_SERVER then
 			if component.RenderPriority then
 				component._renderName = NextRenderName()
@@ -363,22 +376,45 @@ function Component:_setup()
 				end)
 			end
 		end
+
 		component[KEY_STARTED] = true
+		component[KEY_STARTING] = nil
+
 		self.Started:Fire(component)
 	end
 
 	local function StopComponent(component)
+		if component[KEY_STARTING] then
+			-- Stop the component during its start method invocation:
+			local startThread = component[KEY_STARTING]
+			if coroutine.status(startThread) ~= "normal" then
+				pcall(function()
+					task.cancel(startThread)
+				end)
+			else
+				task.defer(function()
+					pcall(function()
+						task.cancel(startThread)
+					end)
+				end)
+			end
+			component[KEY_STARTING] = nil
+		end
+
 		if component._heartbeatUpdate then
 			component._heartbeatUpdate:Disconnect()
 		end
+
 		if component._steppedUpdate then
 			component._steppedUpdate:Disconnect()
 		end
+
 		if component._renderSteppedUpdate then
 			component._renderSteppedUpdate:Disconnect()
 		elseif component._renderName then
 			RunService:UnbindFromRenderStep(component._renderName)
 		end
+
 		InvokeExtensionFn(component, "Stopping")
 		component:Stop()
 		InvokeExtensionFn(component, "Stopped")
@@ -432,7 +468,7 @@ function Component:_setup()
 			components[index] = components[n]
 			components[n] = nil
 		end
-		if component[KEY_STARTED] then
+		if component[KEY_STARTED] or component[KEY_STARTING] then
 			task.spawn(StopComponent, component)
 		end
 	end
@@ -545,7 +581,7 @@ end
 ]=]
 function Component:WaitForInstance(instance: Instance, timeout: number?)
 	local componentInstance = self:FromInstance(instance)
-	if componentInstance then
+	if componentInstance and componentInstance[KEY_STARTED] then
 		return Promise.resolve(componentInstance)
 	end
 	return Promise.fromEvent(self.Started, function(c)
