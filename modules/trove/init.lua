@@ -4,8 +4,7 @@
 
 local FN_MARKER = newproxy()
 local THREAD_MARKER = newproxy()
-local GENERIC_OBJECT_CLEANUP_METHODS =
-	{ "Destroy", "Disconnect", "destroy", "disconnect" }
+local GENERIC_OBJECT_CLEANUP_METHODS = { "Destroy", "Disconnect", "destroy", "disconnect" }
 
 local RunService = game:GetService("RunService")
 
