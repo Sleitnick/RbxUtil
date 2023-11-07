@@ -489,16 +489,27 @@ end
 local function Sample<T>(tbl: { T }, size: number, rngOverride: Random?): { T }
 	assert(type(tbl) == "table", "First argument must be a table")
 	assert(type(size) == "number", "Second argument must be a number")
+
+	-- If given table is empty, just return a new empty table:
+	local len = #tbl
+	if len == 0 then
+		return {}
+	end
+
 	local shuffled = table.clone(tbl)
 	local sample = table.create(size)
 	local random = if typeof(rngOverride) == "Random" then rngOverride else rng
-	local len = #tbl
+
+	-- Clamp sample size to be no larger than the given table size:
 	size = math.clamp(size, 1, len)
+
 	for i = 1, size do
 		local j = random:NextInteger(i, len)
 		shuffled[i], shuffled[j] = shuffled[j], shuffled[i]
 	end
+
 	table.move(shuffled, 1, size, 1, sample)
+
 	return sample
 end
 

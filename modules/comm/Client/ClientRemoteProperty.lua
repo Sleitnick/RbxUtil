@@ -39,18 +39,24 @@ function ClientRemoteProperty.new(
 	self._ready = false
 	self._value = nil
 	self.Changed = Signal.new()
-	self._readyPromise = self:OnReady():andThen(function()
-		self._readyPromise = nil
-		self.Changed:Fire(self._value)
-		self._changed = self._rs:Connect(function(value)
-			if value == self._value then
-				return
-			end
-			self._value = value
-			self.Changed:Fire(value)
-		end)
-	end)
 	self._rs:Fire()
+
+	local resolveOnReadyPromise
+	self._readyPromise = Promise.new(function(resolve)
+		resolveOnReadyPromise = resolve
+	end)
+	self._changed = self._rs:Connect(function(value)
+		local changed = value ~= self._value
+		self._value = value
+		if not self._ready then
+			self._ready = true
+			resolveOnReadyPromise(value)
+		end
+		if changed then
+			self.Changed:Fire(value)
+		end
+	end)
+
 	return self
 end
 
@@ -86,16 +92,7 @@ end
 	```
 ]=]
 function ClientRemoteProperty:OnReady()
-	if self._ready then
-		return Promise.resolve(self._value)
-	end
-	return Promise.fromEvent(self._rs, function(value)
-		self._value = value
-		self._ready = true
-		return true
-	end):andThen(function()
-		return self._value
-	end)
+	return self._readyPromise
 end
 
 --[=[

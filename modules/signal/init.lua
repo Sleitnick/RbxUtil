@@ -7,15 +7,6 @@
 -- the signal handlers comes at minimal extra cost over a naive signal        --
 -- implementation that either always or never spawns a thread.                --
 --                                                                            --
--- API:                                                                       --
---   local Signal = require(THIS MODULE)                                      --
---   local sig = Signal.new()                                                 --
---   local connection = sig:Connect(function(arg1, arg2, ...) ... end)        --
---   sig:Fire(arg1, arg2, ...)                                                --
---   connection:Disconnect()                                                  --
---   sig:DisconnectAll()                                                      --
---   local arg1, arg2, ... = sig:Wait()                                       --
---                                                                            --
 -- License:                                                                   --
 --   Licensed under the MIT license.                                          --
 --                                                                            --
@@ -87,15 +78,6 @@ end
 local Connection = {}
 Connection.__index = Connection
 
-function Connection.new(signal, fn)
-	return setmetatable({
-		Connected = true,
-		_signal = signal,
-		_fn = fn,
-		_next = false,
-	}, Connection)
-end
-
 function Connection:Disconnect()
 	if not self.Connected then
 		return
@@ -166,7 +148,9 @@ function Signal.new<T...>(): Signal<T...>
 	local self = setmetatable({
 		_handlerListHead = false,
 		_proxyHandler = nil,
+		_yieldedThreads = nil,
 	}, Signal)
+
 	return self
 end
 
@@ -188,10 +172,12 @@ function Signal.Wrap<T...>(rbxScriptSignal: RBXScriptSignal): Signal<T...>
 		typeof(rbxScriptSignal) == "RBXScriptSignal",
 		"Argument #1 to Signal.Wrap must be a RBXScriptSignal; got " .. typeof(rbxScriptSignal)
 	)
+
 	local signal = Signal.new()
 	signal._proxyHandler = rbxScriptSignal:Connect(function(...)
 		signal:Fire(...)
 	end)
+
 	return signal
 end
 
@@ -219,13 +205,20 @@ end
 	```
 ]=]
 function Signal:Connect(fn)
-	local connection = Connection.new(self, fn)
+	local connection = setmetatable({
+		Connected = true,
+		_signal = self,
+		_fn = fn,
+		_next = false,
+	}, Connection)
+
 	if self._handlerListHead then
 		connection._next = self._handlerListHead
 		self._handlerListHead = connection
 	else
 		self._handlerListHead = connection
 	end
+
 	return connection
 end
 
@@ -256,24 +249,29 @@ end
 function Signal:Once(fn)
 	local connection
 	local done = false
+
 	connection = self:Connect(function(...)
 		if done then
 			return
 		end
+
 		done = true
 		connection:Disconnect()
 		fn(...)
 	end)
+
 	return connection
 end
 
 function Signal:GetConnections()
 	local items = {}
+
 	local item = self._handlerListHead
 	while item do
 		table.insert(items, item)
 		item = item._next
 	end
+
 	return items
 end
 
@@ -292,6 +290,17 @@ function Signal:DisconnectAll()
 		item = item._next
 	end
 	self._handlerListHead = false
+
+	local yieldedThreads = rawget(self, "_yieldedThreads")
+	if yieldedThreads then
+		for thread in yieldedThreads do
+			if coroutine.status(thread) == "suspended" then
+				warn(debug.traceback(thread, "signal disconnected; yielded thread cancelled", 2))
+				task.cancel(thread)
+			end
+		end
+		table.clear(self._yieldedThreads)
+	end
 end
 
 -- Signal:Fire(...) implemented by running the handler functions on the
@@ -333,7 +342,12 @@ end
 function Signal:FireDeferred(...)
 	local item = self._handlerListHead
 	while item do
-		task.defer(item._fn, ...)
+		local conn = item
+		task.defer(function(...)
+			if conn.Connected then
+				conn._fn(...)
+			end
+		end, ...)
 		item = item._next
 	end
 end
@@ -354,17 +368,20 @@ end
 	```
 ]=]
 function Signal:Wait()
-	local waitingCoroutine = coroutine.running()
-	local connection
-	local done = false
-	connection = self:Connect(function(...)
-		if done then
-			return
-		end
-		done = true
-		connection:Disconnect()
-		task.spawn(waitingCoroutine, ...)
+	local yieldedThreads = rawget(self, "_yieldedThreads")
+	if not yieldedThreads then
+		yieldedThreads = {}
+		rawset(self, "_yieldedThreads", yieldedThreads)
+	end
+
+	local thread = coroutine.running()
+	yieldedThreads[thread] = true
+
+	self:Once(function(...)
+		yieldedThreads[thread] = nil
+		task.spawn(thread, ...)
 	end)
+
 	return coroutine.yield()
 end
 
@@ -382,6 +399,7 @@ end
 ]=]
 function Signal:Destroy()
 	self:DisconnectAll()
+
 	local proxyHandler = rawget(self, "_proxyHandler")
 	if proxyHandler then
 		proxyHandler:Disconnect()
@@ -398,8 +416,8 @@ setmetatable(Signal, {
 	end,
 })
 
-return {
+return table.freeze({
 	new = Signal.new,
 	Wrap = Signal.Wrap,
 	Is = Signal.Is,
-}
+})
