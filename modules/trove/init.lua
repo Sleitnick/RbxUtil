@@ -175,7 +175,7 @@ end
 --[=[
 	@param signal RBXScriptSignal
 	@param fn (...: any) -> ()
-	@return RBXScriptConnection
+	@return Object
 	Connects the function to the signal, adds the connection
 	to the trove, and then returns the connection.
 
