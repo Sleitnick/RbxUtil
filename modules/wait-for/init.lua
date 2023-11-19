@@ -232,7 +232,7 @@ end
 	end)
 	```
 ]=]
-function WaitFor.Custom(predicate: () -> T?, timeout: number?)
+function WaitFor.Custom<T>(predicate: () -> T?, timeout: number?)
 	local value = predicate()
 	if value ~= nil then
 		return Promise.resolve(value)

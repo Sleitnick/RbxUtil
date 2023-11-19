@@ -1,7 +1,19 @@
 {
+	"typescript.tsdk": "node_modules/typescript/lib",
 	"[lua]": {
 		"editor.defaultFormatter": "JohnnyMorganz.stylua",
 		"editor.formatOnSave": true,
 	},
+	"[typescript]": {
+		"editor.defaultFormatter": "dbaeumer.vscode-eslint",
+		"editor.formatOnSave": true
+	},
+	"editor.codeActionsOnSave": {
+		"source.addMissingImports": true,
+		"source.organizeImports": true,
+		"source.fixAll.eslint": true
+	},
+	"eslint.run": "onType",
+	"eslint.format.enable": true,
 	"files.eol": "\n"
 }

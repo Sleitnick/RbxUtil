@@ -1,8 +1,9 @@
 [package]
 name = "sleitnick/quaternion"
 description = "Quaternion class"
-version = "0.2.1"
+version = "0.2.3"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
+exclude = ["node_modules", "package.json", "**/*.ts"]
