@@ -7,6 +7,12 @@ local THREAD_MARKER = newproxy()
 
 local RunService = game:GetService("RunService")
 
+type Object = Instance | RBXScriptConnection | () -> () | thread | {}
+
+export type Trove = {
+	Extend: ()->()
+}
+
 local function GetObjectCleanupFunction(object, cleanupMethod): string
 	local t = typeof(object)
 	if t == "function" then
@@ -87,6 +93,7 @@ function Trove:Extend(): ()
 	if self._cleaning then
 		error("Cannot call trove:Extend() while cleaning", 2)
 	end
+
 	return self:Construct(Trove)
 end
 
@@ -140,11 +147,13 @@ function Trove:Construct(class, ...): any
 	end
 	local object = nil
 	local t = type(class)
+
 	if t == "table" then
 		object = class.new(...)
 	elseif t == "function" then
 		object = class(...)
 	end
+
 	return self:Add(object)
 end
 
@@ -381,7 +390,5 @@ end
 function Trove:Destroy(): ()
 	self:Clean()
 end
-
-export type Trove = typeof(Trove.new())
 
 return Trove
