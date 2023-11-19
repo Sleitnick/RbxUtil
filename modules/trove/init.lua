@@ -1,3 +1,4 @@
+--!strict
 -- Trove
 -- Stephen Leitnick
 -- October 16, 2021
@@ -7,13 +8,27 @@ local THREAD_MARKER = newproxy()
 
 local RunService = game:GetService("RunService")
 
-type Object = Instance | RBXScriptConnection | () -> () | thread | {}
-
-export type Trove = {
-	Extend: ()->()
+type Table = {Destroy: (()-> ())?, Disconnect: (()->())?}
+type Object = Table | {} | Instance | RBXScriptConnection | () -> () | thread
+type CachedObject = {
+	Object: Object,
+	CleanupName: string
 }
 
-local function GetObjectCleanupFunction(object, cleanupMethod): string
+export type Trove = {
+	Extend: ()->(),
+	Clone: (Instance) -> Instance?,
+	Construct: ({} | (...any) -> any) -> any,
+	Connect: (RBXScriptSignal, (...any) -> ()) -> Object,
+	BindToRenderStep: (string, number, (dt: number) -> ()) -> (),
+	AddPromise: (any)-> any,
+	Add: (Object, string?) -> Object,
+	Remove: (Object) -> boolean,
+	Clean: () -> (),
+	AttachToInstance: (Instance) -> Object
+}
+
+local function GetObjectCleanupFunction(object: Object, cleanupMethod: string?): string
 	local t = typeof(object)
 	if t == "function" then
 		return FN_MARKER
@@ -28,9 +43,9 @@ local function GetObjectCleanupFunction(object, cleanupMethod): string
 	elseif t == "RBXScriptConnection" then
 		return "Disconnect"
 	elseif t == "table" then
-		if typeof(object.Destroy) == "function" then
+		if typeof((object :: Table).Destroy) == "function" then
 			return "Destroy"
-		elseif typeof(object.Disconnect) == "function" then
+		elseif typeof((object :: Table).Disconnect) == "function" then
 			return "Disconnect"
 		end
 	end
@@ -55,7 +70,7 @@ end
 ]=]
 local Trove = {}
 Trove.__index = Trove
-Trove._objects = {} :: { any }
+Trove._objects = {} :: { CachedObject }
 Trove._cleaning = false :: boolean
 
 --[=[
@@ -63,7 +78,7 @@ Trove._cleaning = false :: boolean
 	Constructs a Trove object.
 ]=]
 function Trove.new(): Trove
-	local self = setmetatable({}, Trove)
+	local self = setmetatable({}, Trove) :: Trove
 	self._objects = {}
 	self._cleaning = false
 
@@ -141,7 +156,7 @@ end
 	local part = trove:Construct(Instance, "Part")
 	```
 ]=]
-function Trove:Construct(class, ...): any
+function Trove:Construct(class, ...)
 	if self._cleaning then
 		error("Cannot call trove:Construct() while cleaning", 2)
 	end
@@ -150,7 +165,7 @@ function Trove:Construct(class, ...): any
 
 	if t == "table" then
 		object = class.new(...)
-	elseif t == "function" then
+	elseif type(class) == "function" then
 		object = class(...)
 	end
 
@@ -172,7 +187,7 @@ end
 	end)
 	```
 ]=]
-function Trove:Connect(signal, fn): any
+function Trove:Connect(signal: RBXScriptSignal, fn:(...any) -> ()): Object
 	if self._cleaning then
 		error("Cannot call trove:Connect() while cleaning", 2)
 	end
@@ -225,7 +240,7 @@ end
 	This is only compatible with the [roblox-lua-promise](https://eryn.io/roblox-lua-promise/) library, version 4.
 	:::
 ]=]
-function Trove:AddPromise(promise: any): any
+function Trove:AddPromise(promise)
 	if self._cleaning then
 		error("Cannot call trove:AddPromise() while cleaning", 2)
 	end
@@ -290,12 +305,15 @@ end
 	trove:Add(tbl, "DoSomething")
 	```
 ]=]
-function Trove:Add(object: any, cleanupMethod: string?): any
+function Trove:Add(object: Object, cleanupMethod: string?): Object
 	if self._cleaning then
 		error("Cannot call trove:Add() while cleaning", 2)
 	end
 	local cleanup = GetObjectCleanupFunction(object, cleanupMethod)
-	table.insert(self._objects, { object, cleanup })
+	table.insert(self._objects, {
+		Object = object,
+		CleanupName = cleanup
+	})
 	return object
 end
 
@@ -309,7 +327,7 @@ end
 	trove:Remove(part)
 	```
 ]=]
-function Trove:Remove(object: any): boolean
+function Trove:Remove(object: Object): boolean
 	if self._cleaning then
 		error("Cannot call trove:Remove() while cleaning", 2)
 	end
@@ -327,8 +345,8 @@ function Trove:Clean(): ()
 		return
 	end
 	self._cleaning = true
-	for _, obj in self._objects do
-		self:_cleanupObject(obj[1], obj[2])
+	for _, obj: CachedObject in self._objects do
+		self:_cleanupObject(obj.Object, obj.CleanupName)
 	end
 	table.clear(self._objects)
 	self._cleaning = false
@@ -350,13 +368,13 @@ function Trove:_findAndRemoveFromObjects(object: any, cleanup: boolean): boolean
 	return false
 end
 
-function Trove:_cleanupObject(object, cleanupMethod): ()
+function Trove:_cleanupObject(object: Object, cleanupMethod: string): ()
 	if cleanupMethod == FN_MARKER then
-		object()
+		(object :: ()->())()
 	elseif cleanupMethod == THREAD_MARKER then
-		coroutine.close(object)
+		coroutine.close(object :: thread)
 	else
-		object[cleanupMethod](object)
+		(object :: {})[cleanupMethod](object)
 	end
 end
 
@@ -373,7 +391,7 @@ end
 	of the game hierarchy.
 	:::
 ]=]
-function Trove:AttachToInstance(instance: Instance): any
+function Trove:AttachToInstance(instance: Instance): Object
 	if self._cleaning then
 		error("Cannot call trove:AttachToInstance() while cleaning", 2)
 	elseif not instance:IsDescendantOf(game) then
