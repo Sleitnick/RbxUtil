@@ -8,24 +8,24 @@ local THREAD_MARKER = newproxy()
 
 local RunService = game:GetService("RunService")
 
-type Table = {Destroy: (()-> ())?, Disconnect: (()->())?}
+type Table = { Destroy: (() -> ())?, Disconnect: (() -> ())? }
 type Object = Table | {} | Instance | RBXScriptConnection | () -> () | thread
 type CachedObject = {
 	Object: Object,
-	CleanupName: string
+	CleanupName: string,
 }
 
 export type Trove = {
-	Extend: ()->(),
+	Extend: () -> (),
 	Clone: (Instance) -> Instance?,
 	Construct: ({} | (...any) -> any) -> any,
 	Connect: (RBXScriptSignal, (...any) -> ()) -> Object,
 	BindToRenderStep: (string, number, (dt: number) -> ()) -> (),
-	AddPromise: (any)-> any,
+	AddPromise: (any) -> any,
 	Add: (Object, string?) -> Object,
 	Remove: (Object) -> boolean,
 	Clean: () -> (),
-	AttachToInstance: (Instance) -> Object
+	AttachToInstance: (Instance) -> Object,
 }
 
 local function GetObjectCleanupFunction(object: Object, cleanupMethod: string?): string
@@ -187,7 +187,7 @@ end
 	end)
 	```
 ]=]
-function Trove:Connect(signal: RBXScriptSignal, fn:(...any) -> ()): Object
+function Trove:Connect(signal: RBXScriptSignal, fn: (...any) -> ()): Object
 	if self._cleaning then
 		error("Cannot call trove:Connect() while cleaning", 2)
 	end
@@ -312,7 +312,7 @@ function Trove:Add(object: Object, cleanupMethod: string?): Object
 	local cleanup = GetObjectCleanupFunction(object, cleanupMethod)
 	table.insert(self._objects, {
 		Object = object,
-		CleanupName = cleanup
+		CleanupName = cleanup,
 	})
 	return object
 end
@@ -370,7 +370,7 @@ end
 
 function Trove:_cleanupObject(object: Object, cleanupMethod: string): ()
 	if cleanupMethod == FN_MARKER then
-		(object :: ()->())()
+		(object :: () -> ())()
 	elseif cleanupMethod == THREAD_MARKER then
 		coroutine.close(object :: thread)
 	else
