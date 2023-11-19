@@ -78,11 +78,11 @@ Trove._cleaning = false :: boolean
 	Constructs a Trove object.
 ]=]
 function Trove.new(): Trove
-	local self = setmetatable({}, Trove) :: Trove
+	local self = setmetatable({}, Trove)
 	self._objects = {}
 	self._cleaning = false
 
-	return self
+	return self :: any
 end
 
 --[=[
