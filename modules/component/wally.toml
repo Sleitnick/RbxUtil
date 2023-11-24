@@ -1,5 +1,5 @@
 [package]
-name = "sleitnick/component"
+name = "eai/component"
 description = "Component class"
 version = "2.4.7"
 license = "MIT"

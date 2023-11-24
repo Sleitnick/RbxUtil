@@ -419,12 +419,12 @@ function Component:_setup()
 	end
 
 	local function TryDeconstructComponent(instance)
+		self[KEY_LOCK_CONSTRUCT][instance] = nil
 		local component = self[KEY_INST_TO_COMPONENTS][instance]
 		if not component then
 			return
 		end
 		self[KEY_INST_TO_COMPONENTS][instance] = nil
-		self[KEY_LOCK_CONSTRUCT][instance] = nil
 		local components = self[KEY_COMPONENTS]
 		local index = table.find(components, component)
 		if index then
@@ -434,6 +434,12 @@ function Component:_setup()
 		end
 		if component[KEY_STARTED] then
 			task.spawn(StopComponent, component)
+		else
+			Promise.fromEvent(self.Started, function(c)
+				return component == c
+			end):andThen(function()
+				StopComponent(component)
+			end)
 		end
 	end
 
@@ -545,7 +551,7 @@ end
 ]=]
 function Component:WaitForInstance(instance: Instance, timeout: number?)
 	local componentInstance = self:FromInstance(instance)
-	if componentInstance then
+	if componentInstance and componentInstance[KEY_STARTED] == true then
 		return Promise.resolve(componentInstance)
 	end
 	return Promise.fromEvent(self.Started, function(c)
