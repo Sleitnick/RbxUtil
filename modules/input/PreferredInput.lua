@@ -54,19 +54,21 @@ type PreferredInput = {
 	@within PreferredInput
 	@function Observe
 	@param handler (preferred: InputType) -> ()
-	@return Connection
+	@return () -> ()
 
 	Observes the preferred input. In other words, the handler function will
 	be fired immediately, as well as any time the preferred input changes.
 
+	The returned function can be called to disconnect the observer.
+
 	```lua
-	local connection = PreferredInput.Observe(function(preferred)
+	local disconnect = PreferredInput.Observe(function(preferred)
 		-- Fires immediately & any time the preferred input changes
 		print(preferred)
 	end)
 
-	-- If/when desired, the connection to Observe can be cleaned up:
-	connection:Disconnect()
+	-- If/when desired, observer can be stopped by calling the returned function:
+	disconnect()
 	```
 ]=]
 
@@ -83,7 +85,9 @@ PreferredInput = {
 			error("function already subscribed", 2)
 		end
 		table.insert(subscribers, handler)
+
 		task.spawn(handler, PreferredInput.Current)
+
 		return function()
 			local index = table.find(subscribers, handler)
 			if index then
@@ -99,7 +103,8 @@ local function SetPreferred(preferred: InputType)
 		return
 	end
 	PreferredInput.Current = preferred
-	for _, subscriber in ipairs(subscribers) do
+
+	for _, subscriber in subscribers do
 		task.spawn(subscriber, preferred)
 	end
 end
@@ -107,9 +112,9 @@ end
 local function DeterminePreferred(inputType: Enum.UserInputType)
 	if inputType == touchUserInputType then
 		SetPreferred("Touch")
-	elseif inputType == keyboardUserInputType or inputType.Name:sub(1, 5) == "Mouse" then
+	elseif inputType == keyboardUserInputType or string.sub(inputType.Name, 1, 5) == "Mouse" then
 		SetPreferred("MouseKeyboard")
-	elseif inputType.Name:sub(1, 7) == "Gamepad" then
+	elseif string.sub(inputType.Name, 1, 7) == "Gamepad" then
 		SetPreferred("Gamepad")
 	end
 end

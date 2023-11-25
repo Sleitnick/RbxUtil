@@ -1,8 +1,9 @@
 [package]
 name = "sleitnick/signal"
 description = "Signal class"
-version = "1.5.0"
+version = "2.0.1"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
+exclude = ["node_modules", "package.json", "**/*.ts"]

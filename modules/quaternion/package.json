@@ -1,0 +1,16 @@
+{
+	"name": "@rbxutil/quaternion",
+	"version": "0.2.3",
+	"main": "init.lua",
+	"repository": "github:Sleitnick/RbxUtil",
+	"license": "MIT",
+	"types": "index.d.ts",
+	"files": [
+		"./",
+		"!*.toml",
+		"!*.json"
+	],
+	"publishConfig": {
+		"access": "public"
+	}
+}

@@ -4,6 +4,7 @@
 
 local FN_MARKER = newproxy()
 local THREAD_MARKER = newproxy()
+local GENERIC_OBJECT_CLEANUP_METHODS = { "Destroy", "Disconnect", "destroy", "disconnect" }
 
 local RunService = game:GetService("RunService")
 
@@ -22,10 +23,10 @@ local function GetObjectCleanupFunction(object, cleanupMethod)
 	elseif t == "RBXScriptConnection" then
 		return "Disconnect"
 	elseif t == "table" then
-		if typeof(object.Destroy) == "function" then
-			return "Destroy"
-		elseif typeof(object.Disconnect) == "function" then
-			return "Disconnect"
+		for _, genericCleanupMethod in GENERIC_OBJECT_CLEANUP_METHODS do
+			if typeof(object[genericCleanupMethod]) == "function" then
+				return genericCleanupMethod
+			end
 		end
 	end
 	error("Failed to get cleanup function for object " .. t .. ": " .. tostring(object), 3)
@@ -33,10 +34,10 @@ end
 
 local function AssertPromiseLike(object)
 	if
-		type(object) ~= "table"
-		or type(object.getStatus) ~= "function"
-		or type(object.finally) ~= "function"
-		or type(object.cancel) ~= "function"
+		typeof(object) ~= "table"
+		or typeof(object.getStatus) ~= "function"
+		or typeof(object.finally) ~= "function"
+		or typeof(object.cancel) ~= "function"
 	then
 		error("Did not receive a Promise as an argument", 3)
 	end
@@ -244,8 +245,8 @@ end
 	| `Instance` | `object:Destroy()` |
 	| `RBXScriptConnection` | `object:Disconnect()` |
 	| `function` | `object()` |
-	| `thread` | `coroutine.close(object)` |
-	| `table` | `object:Destroy()` _or_ `object:Disconnect()` |
+	| `thread` | `task.cancel(object)` |
+	| `table` | `object:Destroy()` _or_ `object:Disconnect()` _or_ `object:destroy()` _or_ `object:disconnect()` |
 	| `table` with `cleanupMethod` | `object:<cleanupMethod>()` |
 
 	Returns the object added.
@@ -342,7 +343,7 @@ function Trove:_cleanupObject(object, cleanupMethod)
 	if cleanupMethod == FN_MARKER then
 		object()
 	elseif cleanupMethod == THREAD_MARKER then
-		coroutine.close(object)
+		pcall(task.cancel, object)
 	else
 		object[cleanupMethod](object)
 	end
