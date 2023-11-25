@@ -7,15 +7,6 @@
 -- the signal handlers comes at minimal extra cost over a naive signal        --
 -- implementation that either always or never spawns a thread.                --
 --                                                                            --
--- API:                                                                       --
---   local Signal = require(THIS MODULE)                                      --
---   local sig = Signal.new()                                                 --
---   local connection = sig:Connect(function(arg1, arg2, ...) ... end)        --
---   sig:Fire(arg1, arg2, ...)                                                --
---   connection:Disconnect()                                                  --
---   sig:DisconnectAll()                                                      --
---   local arg1, arg2, ... = sig:Wait()                                       --
---                                                                            --
 -- License:                                                                   --
 --   Licensed under the MIT license.                                          --
 --                                                                            --
@@ -23,6 +14,24 @@
 --   stravant - July 31st, 2021 - Created the file.                           --
 --   sleitnick - August 3rd, 2021 - Modified for Knit.                        --
 -- -----------------------------------------------------------------------------
+
+-- Signal types
+export type Connection = {
+	Disconnect: (self: Connection) -> (),
+	Destroy: (self: Connection) -> (),
+	Connected: boolean,
+}
+
+export type Signal<T...> = {
+	Fire: (self: Signal<T...>, T...) -> (),
+	FireDeferred: (self: Signal<T...>, T...) -> (),
+	Connect: (self: Signal<T...>, fn: (T...) -> ()) -> Connection,
+	Once: (self: Signal<T...>, fn: (T...) -> ()) -> Connection,
+	DisconnectAll: (self: Signal<T...>) -> (),
+	GetConnections: (self: Signal<T...>) -> { Connection },
+	Destroy: (self: Signal<T...>) -> (),
+	Wait: (self: Signal<T...>) -> T...,
+}
 
 -- The currently idle thread to run the next handler on
 local freeRunnerThread = nil
@@ -69,15 +78,6 @@ end
 local Connection = {}
 Connection.__index = Connection
 
-function Connection.new(signal, fn)
-	return setmetatable({
-		Connected = true,
-		_signal = signal,
-		_fn = fn,
-		_next = false,
-	}, Connection)
-end
-
 function Connection:Disconnect()
 	if not self.Connected then
 		return
@@ -123,16 +123,22 @@ setmetatable(Connection, {
 --[=[
 	@class Signal
 
-	Signals allow events to be dispatched and handled.
+	A Signal is a data structure that allows events to be dispatched
+	and observed.
+
+	This implementation is a direct copy of the de facto standard, [GoodSignal](https://devforum.roblox.com/t/lua-signal-class-comparison-optimal-goodsignal-class/1387063),
+	with some added methods and typings.
 
 	For example:
 	```lua
 	local signal = Signal.new()
 
+	-- Subscribe to a signal:
 	signal:Connect(function(msg)
 		print("Got message:", msg)
 	end)
 
+	-- Dispatch an event:
 	signal:Fire("Hello world!")
 	```
 ]=]
@@ -144,11 +150,13 @@ Signal.__index = Signal
 
 	@return Signal
 ]=]
-function Signal.new()
+function Signal.new<T...>(): Signal<T...>
 	local self = setmetatable({
 		_handlerListHead = false,
 		_proxyHandler = nil,
+		_yieldedThreads = nil,
 	}, Signal)
+
 	return self
 end
 
@@ -165,15 +173,17 @@ end
 	Instance.new("Part").Parent = workspace
 	```
 ]=]
-function Signal.Wrap(rbxScriptSignal)
+function Signal.Wrap<T...>(rbxScriptSignal: RBXScriptSignal): Signal<T...>
 	assert(
 		typeof(rbxScriptSignal) == "RBXScriptSignal",
 		"Argument #1 to Signal.Wrap must be a RBXScriptSignal; got " .. typeof(rbxScriptSignal)
 	)
+
 	local signal = Signal.new()
 	signal._proxyHandler = rbxScriptSignal:Connect(function(...)
 		signal:Fire(...)
 	end)
+
 	return signal
 end
 
@@ -183,7 +193,7 @@ end
 	@param obj any -- Object to check
 	@return boolean -- `true` if the object is a Signal.
 ]=]
-function Signal.Is(obj)
+function Signal.Is(obj: any): boolean
 	return type(obj) == "table" and getmetatable(obj) == Signal
 end
 
@@ -201,14 +211,30 @@ end
 	```
 ]=]
 function Signal:Connect(fn)
-	local connection = Connection.new(self, fn)
+	local connection = setmetatable({
+		Connected = true,
+		_signal = self,
+		_fn = fn,
+		_next = false,
+	}, Connection)
+
 	if self._handlerListHead then
 		connection._next = self._handlerListHead
 		self._handlerListHead = connection
 	else
 		self._handlerListHead = connection
 	end
+
 	return connection
+end
+
+--[=[
+	@deprecated v1.3.0 -- Use `Signal:Once` instead.
+	@param fn ConnectionFn
+	@return SignalConnection
+]=]
+function Signal:ConnectOnce(fn)
+	return self:Once(fn)
 end
 
 --[=[
@@ -218,7 +244,7 @@ end
 	Connects a function to the signal, which will be called the next time the signal fires. Once
 	the connection is triggered, it will disconnect itself.
 	```lua
-	signal:ConnectOnce(function(msg, num)
+	signal:Once(function(msg, num)
 		print(msg, num)
 	end)
 
@@ -226,27 +252,32 @@ end
 	signal:Fire("This message will not go through", 10)
 	```
 ]=]
-function Signal:ConnectOnce(fn)
+function Signal:Once(fn)
 	local connection
 	local done = false
+
 	connection = self:Connect(function(...)
 		if done then
 			return
 		end
+
 		done = true
 		connection:Disconnect()
 		fn(...)
 	end)
+
 	return connection
 end
 
 function Signal:GetConnections()
 	local items = {}
+
 	local item = self._handlerListHead
 	while item do
 		table.insert(items, item)
 		item = item._next
 	end
+
 	return items
 end
 
@@ -265,6 +296,17 @@ function Signal:DisconnectAll()
 		item = item._next
 	end
 	self._handlerListHead = false
+
+	local yieldedThreads = rawget(self, "_yieldedThreads")
+	if yieldedThreads then
+		for thread in yieldedThreads do
+			if coroutine.status(thread) == "suspended" then
+				warn(debug.traceback(thread, "signal disconnected; yielded thread cancelled", 2))
+				task.cancel(thread)
+			end
+		end
+		table.clear(self._yieldedThreads)
+	end
 end
 
 -- Signal:Fire(...) implemented by running the handler functions on the
@@ -306,7 +348,12 @@ end
 function Signal:FireDeferred(...)
 	local item = self._handlerListHead
 	while item do
-		task.defer(item._fn, ...)
+		local conn = item
+		task.defer(function(...)
+			if conn.Connected then
+				conn._fn(...)
+			end
+		end, ...)
 		item = item._next
 	end
 end
@@ -317,7 +364,7 @@ end
 
 	Yields the current thread until the signal is fired, and returns the arguments fired from the signal.
 	Yielding the current thread is not always desirable. If the desire is to only capture the next event
-	fired, using `ConnectOnce` might be a better solution.
+	fired, using `Once` might be a better solution.
 	```lua
 	task.spawn(function()
 		local msg, num = signal:Wait()
@@ -327,17 +374,20 @@ end
 	```
 ]=]
 function Signal:Wait()
-	local waitingCoroutine = coroutine.running()
-	local connection
-	local done = false
-	connection = self:Connect(function(...)
-		if done then
-			return
-		end
-		done = true
-		connection:Disconnect()
-		task.spawn(waitingCoroutine, ...)
+	local yieldedThreads = rawget(self, "_yieldedThreads")
+	if not yieldedThreads then
+		yieldedThreads = {}
+		rawset(self, "_yieldedThreads", yieldedThreads)
+	end
+
+	local thread = coroutine.running()
+	yieldedThreads[thread] = true
+
+	self:Once(function(...)
+		yieldedThreads[thread] = nil
+		task.spawn(thread, ...)
 	end)
+
 	return coroutine.yield()
 end
 
@@ -355,6 +405,7 @@ end
 ]=]
 function Signal:Destroy()
 	self:DisconnectAll()
+
 	local proxyHandler = rawget(self, "_proxyHandler")
 	if proxyHandler then
 		proxyHandler:Disconnect()
@@ -371,4 +422,8 @@ setmetatable(Signal, {
 	end,
 })
 
-return Signal
+return table.freeze({
+	new = Signal.new,
+	Wrap = Signal.Wrap,
+	Is = Signal.Is,
+})

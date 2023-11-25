@@ -1,7 +1,7 @@
 [package]
-name = "sleitnick/signal"
-description = "Signal class"
-version = "2.0.1"
+name = "sleitnick/quaternion"
+description = "Quaternion class"
+version = "0.2.3"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"

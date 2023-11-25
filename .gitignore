@@ -1,8 +1,12 @@
 *.zip
 packages/*/Packages
+/node_modules
+/include
+/out
 /build
 /Packages
 /test/Packages
 /test/modules
 *.rbxl
 *.rbxl.lock
+sourcemap.json

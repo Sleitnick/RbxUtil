@@ -1,5 +1,3 @@
---!strict
-
 -- TaskQueue
 -- Stephen Leitnick
 -- November 20, 2021
@@ -32,16 +30,18 @@ local TaskQueue = {}
 TaskQueue.__index = TaskQueue
 
 --[=[
-	@param onFlush ({T}) -> nil
+	@param onFlush ({T}) -> ()
 	@return TaskQueue<T>
 	Constructs a new TaskQueue.
 ]=]
-function TaskQueue.new<T>(onFlush: ({ T }) -> nil)
+function TaskQueue.new<T>(onFlush: ({ T }) -> ())
 	local self = setmetatable({}, TaskQueue)
+
 	self._queue = {}
 	self._flushing = false
-	self._flushingScheduled = false
+	self._scheduled = nil
 	self._onFlush = onFlush
+
 	return self
 end
 
@@ -51,17 +51,14 @@ end
 ]=]
 function TaskQueue:Add<T>(object: T)
 	table.insert(self._queue, object)
-	if not self._flushingScheduled then
-		self._flushingScheduled = true
-		task.defer(function()
-			if not self._flushingScheduled then
-				return
-			end
+
+	if self._scheduled == nil then
+		self._scheduled = task.defer(function()
 			self._flushing = true
 			self._onFlush(self._queue)
 			table.clear(self._queue)
 			self._flushing = false
-			self._flushingScheduled = false
+			self._scheduled = nil
 		end)
 	end
 end
@@ -81,8 +78,13 @@ function TaskQueue:Clear()
 	if self._flushing then
 		return
 	end
+
+	if self._scheduled ~= nil then
+		task.cancel(self._scheduled)
+		self._scheduled = nil
+	end
+
 	table.clear(self._queue)
-	self._flushingScheduled = false
 end
 
 --[=[
