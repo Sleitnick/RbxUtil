@@ -246,7 +246,7 @@ end
 	| `RBXScriptConnection` | `object:Disconnect()` |
 	| `function` | `object()` |
 	| `thread` | `task.cancel(object)` |
-	| `table` | `object:Destroy()` _or_ `object:Disconnect()` |
+	| `table` | `object:Destroy()` _or_ `object:Disconnect()` _or_ `object:destroy()` _or_ `object:disconnect()` |
 	| `table` with `cleanupMethod` | `object:<cleanupMethod>()` |
 
 	Returns the object added.
