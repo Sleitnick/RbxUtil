@@ -123,16 +123,22 @@ setmetatable(Connection, {
 --[=[
 	@class Signal
 
-	Signals allow events to be dispatched and handled.
+	A Signal is a data structure that allows events to be dispatched
+	and observed.
+
+	This implementation is a direct copy of the de facto standard, [GoodSignal](https://devforum.roblox.com/t/lua-signal-class-comparison-optimal-goodsignal-class/1387063),
+	with some added methods and typings.
 
 	For example:
 	```lua
 	local signal = Signal.new()
 
+	-- Subscribe to a signal:
 	signal:Connect(function(msg)
 		print("Got message:", msg)
 	end)
 
+	-- Dispatch an event:
 	signal:Fire("Hello world!")
 	```
 ]=]
