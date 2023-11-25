@@ -148,7 +148,7 @@ function Mouse:IsRightDown(): boolean
 end
 
 --[=[
-	Checks if the right mouse button is down.
+	Checks if the middle mouse button is down.
 ]=]
 function Mouse:IsMiddleDown(): boolean
 	return UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton3)
