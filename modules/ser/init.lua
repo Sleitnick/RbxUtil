@@ -144,6 +144,9 @@ function Ser.Serialize(value: any): any
 		if ser then
 			value = ser.Serialize(value)
 		end
+	elseif type(value) == "userdata" and Ser.Classes[typeof(value)] ~= nil then
+		local ser = Ser.Classes[typeof(value)]
+		value = ser.Serialize(value)
 	end
 	return value
 end
