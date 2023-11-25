@@ -13,7 +13,7 @@
 | [Loader](https://sleitnick.github.io/RbxUtil/api/Loader) | `Loader = "sleitnick/loader@2.0.0"` | Requires all modules within a given instance |
 | [Log](https://sleitnick.github.io/RbxUtil/api/Log) | `Log = "sleitnick/log@0.1.1"` | Log class for logging to PlayFab |
 | [Net](https://sleitnick.github.io/RbxUtil/api/Net) | `Net = "sleitnick/net@0.1.0"` | Static networking module |
-| [Option](https://sleitnick.github.io/RbxUtil/api/Option) | `Option = "sleitnick/option@1.0.4"` | Represent optional values in Lua |
+| [Option](https://sleitnick.github.io/RbxUtil/api/Option) | `Option = "sleitnick/option@1.0.5"` | Represent optional values in Lua |
 | [PID](https://sleitnick.github.io/RbxUtil/api/PID) | `PID = "sleitnick/pid@1.1.0"` | PID Controller class |
 | [Quaternion](https://sleitnick.github.io/RbxUtil/api/Quaternion) | `Quaternion = "sleitnick/quaternion@0.2.3"` | Quaternion class |
 | [Sequent](https://sleitnick.github.io/RbxUtil/api/Sequent) | `Sequent = "sleitnick/sequent@0.1.0"` | Sequent class |
