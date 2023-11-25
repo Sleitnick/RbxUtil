@@ -225,7 +225,7 @@ function Trove:AddPromise(promise)
 				return
 			end
 			self:_findAndRemoveFromObjects(promise, false)
-		end)
+		end):catch(function() end)
 		self:Add(promise, "cancel")
 	end
 	return promise
