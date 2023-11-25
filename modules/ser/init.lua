@@ -75,22 +75,22 @@ Ser.Classes = {
 		end,
 		Deserialize = Option.Deserialize,
 	},
-    Vector3 = {
-        Serialize = function(v3 : Vector3)
-            return { ClassName = "Vector3", Value = {X = v3.X, Y = v3.Y, Z = v3.Z} }
-        end,
-        Deserialize = function(tbl : {ClassName : string, Value : {X : number, Y : number, Z : number}})
-            return Vector3.new(tbl.Value.X, tbl.Value.Y, tbl.Value.Z)
-        end
-    },
-    Color3 = {
-        Serialize = function(c3 : Color3)
-            return { ClassName = "Color3", Value = c3:ToHex() }
-        end,
-        Deserialize = function(tbl : {ClassName : string, Value : string})
-            return Color3.fromHex(tbl.Value)
-        end
-    }
+	Vector3 = {
+		Serialize = function(v3: Vector3)
+			return { ClassName = "Vector3", Value = { X = v3.X, Y = v3.Y, Z = v3.Z } }
+		end,
+		Deserialize = function(tbl: { ClassName: string, Value: { X: number, Y: number, Z: number } })
+			return Vector3.new(tbl.Value.X, tbl.Value.Y, tbl.Value.Z)
+		end,
+	},
+	Color3 = {
+		Serialize = function(c3: Color3)
+			return { ClassName = "Color3", Value = c3:ToHex() }
+		end,
+		Deserialize = function(tbl: { ClassName: string, Value: string })
+			return Color3.fromHex(tbl.Value)
+		end,
+	},
 }
 
 --[=[
