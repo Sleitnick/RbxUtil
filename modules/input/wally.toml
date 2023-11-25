@@ -1,9 +1,9 @@
 [package]
-name = "sleitnick/input"
+name = "jisham318/input"
 description = "Basic input classes"
 version = "2.2.1"
 license = "MIT"
-authors = ["Stephen Leitnick"]
+authors = ["Stephen Leitnick", "Jacob Isham"]
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
