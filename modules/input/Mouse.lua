@@ -44,6 +44,16 @@ Mouse.__index = Mouse
 ]=]
 --[=[
 	@within Mouse
+	@prop MiddleDown Signal
+	@tag Event
+]=]
+--[=[
+	@within Mouse
+	@prop MiddleUp Signal
+	@tag Event
+]=]
+--[=[
+	@within Mouse
 	@prop Moved Signal<Vector2>
 	@tag Event
 	```lua
@@ -77,6 +87,8 @@ function Mouse.new()
 	self.LeftUp = self._trove:Construct(Signal)
 	self.RightDown = self._trove:Construct(Signal)
 	self.RightUp = self._trove:Construct(Signal)
+	self.MiddleDown = self._trove:Construct(Signal)
+	self.MiddleUp = self._trove:Construct(Signal)
 	self.Scrolled = self._trove:Construct(Signal)
 	self.Moved = self._trove:Construct(Signal)
 
@@ -88,6 +100,8 @@ function Mouse.new()
 			self.LeftDown:Fire()
 		elseif input.UserInputType == Enum.UserInputType.MouseButton2 then
 			self.RightDown:Fire()
+		elseif input.UserInputType == Enum.UserInputType.MouseButton3 then
+			self.MiddleDown:Fire()
 		end
 	end)
 
@@ -99,6 +113,8 @@ function Mouse.new()
 			self.LeftUp:Fire()
 		elseif input.UserInputType == Enum.UserInputType.MouseButton2 then
 			self.RightUp:Fire()
+		elseif input.UserInputType == Enum.UserInputType.MouseButton3 then
+			self.MiddleUp:Fire()
 		end
 	end)
 
@@ -129,6 +145,13 @@ end
 ]=]
 function Mouse:IsRightDown(): boolean
 	return UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)
+end
+
+--[=[
+	Checks if the right mouse button is down.
+]=]
+function Mouse:IsMiddleDown(): boolean
+	return UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton3)
 end
 
 --[=[
