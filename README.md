@@ -5,6 +5,7 @@
 
 | Module | Dependency | Description |
 | -- | -- | -- |
+| [BufferUtil](https://sleitnick.github.io/RbxUtil/api/BufferUtil) | `BufferUtil = "sleitnick/buffer-util@0.1.0"` | Buffer utilities |
 | [Comm](https://sleitnick.github.io/RbxUtil/api/Comm) | `Comm = "sleitnick/comm@1.0.1"` | Comm library for remote communication |
 | [Component](https://sleitnick.github.io/RbxUtil/api/Component) | `Component = "sleitnick/component@2.4.8"` | Component class |
 | [Concur](https://sleitnick.github.io/RbxUtil/api/Concur) | `Concur = "sleitnick/concur@0.1.2"` | Concurrent task handler |

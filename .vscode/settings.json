@@ -13,6 +13,7 @@
 		"source.organizeImports": true,
 		"source.fixAll.eslint": true
 	},
+	"luau-lsp.sourcemap.rojoProjectFile": "dev.project.json",
 	"eslint.run": "onType",
 	"eslint.format.enable": true,
 	"files.eol": "\n"
