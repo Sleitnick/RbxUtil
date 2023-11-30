@@ -3,8 +3,8 @@
 -- December 20, 2021
 
 local Comm = require(script.Parent)
-local Util = require(script.Parent.Parent.Util)
 local Types = require(script.Parent.Parent.Types)
+local Util = require(script.Parent.Parent.Util)
 
 --[=[
 	@class ServerComm
@@ -116,12 +116,17 @@ end
 
 --[=[
 	@param name string
+	@param unreliable boolean?
 	@param inboundMiddleware ServerMiddleware?
 	@param outboundMiddleware ServerMiddleware?
 	@return RemoteSignal
 
 	Creates a signal that can be used to fire data to the clients
 	or receive data from the clients.
+
+	By default, signals use RemoteEvents internally. However, if
+	the `unreliable` argument is set to `true`, then an
+	UnreliableRemoteEvent will be used instead.
 
 	```lua
 	local mySignal = serverComm:CreateSignal("MySignal")
@@ -140,10 +145,11 @@ end
 ]=]
 function ServerComm:CreateSignal(
 	name: string,
+	unreliable: boolean?,
 	inboundMiddleware: Types.ServerMiddleware?,
 	outboundMiddleware: Types.ServerMiddleware?
 )
-	return Comm.CreateSignal(self._instancesFolder, name, inboundMiddleware, outboundMiddleware)
+	return Comm.CreateSignal(self._instancesFolder, name, unreliable, inboundMiddleware, outboundMiddleware)
 end
 
 --[=[
