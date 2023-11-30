@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v2.3.1">
 <title data-rh="true">ServerComm | RbxUtil</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Sleitnick.github.io/RbxUtil/api/ServerComm"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docusaurus_tag" content="default"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docsearch:docusaurus_tag" content="default"><meta data-rh="true" property="og:title" content="ServerComm | RbxUtil"><link data-rh="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/ServerComm"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/ServerComm" hreflang="en"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/ServerComm" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.e1adec2f.css">
-<link rel="preload" href="/RbxUtil/assets/js/runtime~main.6123cfd9.js" as="script">
-<link rel="preload" href="/RbxUtil/assets/js/main.c89f52c8.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/runtime~main.a46cc809.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/main.4ba8d439.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -58,10 +58,15 @@ serverComm<span class="token punctuation">:</span><span class="token function">B
 
 serverComm<span class="token punctuation">:</span><span class="token function">WrapMethod</span><span class="token punctuation">(</span>MyObject<span class="token punctuation">,</span> <span class="token string">"GetData"</span><span class="token punctuation">)</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="CreateSignal"><code style="text-decoration:none">CreateSignal</code><a href="#CreateSignal" class="hash-link" aria-label="Direct link to CreateSignal" title="Direct link to CreateSignal">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/comm/Server/ServerComm.lua#L141"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>ServerComm<!-- -->:</code><code class="green_DgR4">CreateSignal</code><code>(</code><div class="inset_uKQm"><div><code>name<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code></div><div><code>inboundMiddleware<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/ServerComm#ServerMiddleware">ServerMiddleware?</a></code><code>,</code></div><div><code>outboundMiddleware<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/ServerComm#ServerMiddleware">ServerMiddleware?</a></code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/RemoteSignal">RemoteSignal</a></code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="CreateSignal"><code style="text-decoration:none">CreateSignal</code><a href="#CreateSignal" class="hash-link" aria-label="Direct link to CreateSignal" title="Direct link to CreateSignal">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/comm/Server/ServerComm.lua#L146"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>ServerComm<!-- -->:</code><code class="green_DgR4">CreateSignal</code><code>(</code><div class="inset_uKQm"><div><code>name<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code></div><div><code>unreliable<!-- -->: </code><code class="blue_P4bS">boolean?</code><code>,</code></div><div><code>inboundMiddleware<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/ServerComm#ServerMiddleware">ServerMiddleware?</a></code><code>,</code></div><div><code>outboundMiddleware<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/ServerComm#ServerMiddleware">ServerMiddleware?</a></code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/RemoteSignal">RemoteSignal</a></code></div><div>
 <p>
   Creates a signal that can be used to fire data to the clients
   or receive data from the clients.
+</p>
+<p>
+  By default, signals use RemoteEvents internally. However, if
+  the <code>unreliable</code> argument is set to <code>true</code>, then an
+  UnreliableRemoteEvent will be used instead.
 </p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> mySignal <span class="token operator">=</span> serverComm<span class="token punctuation">:</span><span class="token function">CreateSignal</span><span class="token punctuation">(</span><span class="token string">"MySignal"</span><span class="token punctuation">)</span>
 
@@ -76,7 +81,7 @@ mySignal<span class="token punctuation">:</span><span class="token function">Con
 	<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Got a message from "</span> <span class="token operator">..</span> player<span class="token punctuation">.</span>Name <span class="token operator">..</span> <span class="token string">":"</span><span class="token punctuation">,</span> message<span class="token punctuation">)</span>
 <span class="token keyword">end</span><span class="token punctuation">)</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="CreateProperty"><code style="text-decoration:none">CreateProperty</code><a href="#CreateProperty" class="hash-link" aria-label="Direct link to CreateProperty" title="Direct link to CreateProperty">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/comm/Server/ServerComm.lua#L189"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>ServerComm<!-- -->:</code><code class="green_DgR4">CreateProperty</code><code>(</code><div class="inset_uKQm"><div><code>name<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code></div><div><code>initialValue<!-- -->: </code><code class="blue_P4bS">any</code><code>,</code></div><div><code>inboundMiddleware<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/ServerComm#ServerMiddleware">ServerMiddleware?</a></code><code>,</code></div><div><code>outboundMiddleware<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/ServerComm#ServerMiddleware">ServerMiddleware?</a></code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/RemoteProperty">RemoteProperty</a></code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="CreateProperty"><code style="text-decoration:none">CreateProperty</code><a href="#CreateProperty" class="hash-link" aria-label="Direct link to CreateProperty" title="Direct link to CreateProperty">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/comm/Server/ServerComm.lua#L195"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>ServerComm<!-- -->:</code><code class="green_DgR4">CreateProperty</code><code>(</code><div class="inset_uKQm"><div><code>name<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code></div><div><code>initialValue<!-- -->: </code><code class="blue_P4bS">any</code><code>,</code></div><div><code>inboundMiddleware<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/ServerComm#ServerMiddleware">ServerMiddleware?</a></code><code>,</code></div><div><code>outboundMiddleware<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/ServerComm#ServerMiddleware">ServerMiddleware?</a></code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/RemoteProperty">RemoteProperty</a></code></div><div>
 <p>
   Create a property object which will replicate its property value to
   the clients. Optionally, specific clients can be targeted with
@@ -109,7 +114,7 @@ mapInfo<span class="token punctuation">:</span><span class="token function">SetF
 	MapDuration <span class="token operator">=</span> <span class="token number">20</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Destroy"><code style="text-decoration:none">Destroy</code><a href="#Destroy" class="hash-link" aria-label="Direct link to Destroy" title="Direct link to Destroy">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/comm/Server/ServerComm.lua#L201"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>ServerComm<!-- -->:</code><code class="green_DgR4">Destroy</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Destroy"><code style="text-decoration:none">Destroy</code><a href="#Destroy" class="hash-link" aria-label="Direct link to Destroy" title="Direct link to Destroy">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/comm/Server/ServerComm.lua#L207"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>ServerComm<!-- -->:</code><code class="green_DgR4">Destroy</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
 <p>Destroy the ServerComm object.</p>
 </div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
     &quot;functions&quot;: [
@@ -216,12 +221,17 @@ mapInfo<span class="token punctuation">:</span><span class="token function">SetF
         },
         {
             &quot;name&quot;: &quot;CreateSignal&quot;,
-            &quot;desc&quot;: &quot;Creates a signal that can be used to fire data to the clients\nor receive data from the clients.\n\n```lua\nlocal mySignal = serverComm:CreateSignal(\&quot;MySignal\&quot;)\n\n-- Examples of firing in different ways (see docs for RemoteSignal for further info):\nmySignal:Fire(somePlayer, \&quot;Hello world\&quot;)\nmySignal:FireAll(\&quot;Hi there\&quot;)\nmySignal:FireExcept(somePlayer, \&quot;Hello everyone except \&quot; .. somePlayer.Name)\nmySignal:FireFilter(function(player) return player.Team == someCoolTeam end, \&quot;Hello cool team\&quot;)\n\n-- Example of listening for clients to send data:\nmySignal:Connect(function(player, message)\n\tprint(\&quot;Got a message from \&quot; .. player.Name .. \&quot;:\&quot;, message)\nend)\n```&quot;,
+            &quot;desc&quot;: &quot;Creates a signal that can be used to fire data to the clients\nor receive data from the clients.\n\nBy default, signals use RemoteEvents internally. However, if\nthe `unreliable` argument is set to `true`, then an\nUnreliableRemoteEvent will be used instead.\n\n```lua\nlocal mySignal = serverComm:CreateSignal(\&quot;MySignal\&quot;)\n\n-- Examples of firing in different ways (see docs for RemoteSignal for further info):\nmySignal:Fire(somePlayer, \&quot;Hello world\&quot;)\nmySignal:FireAll(\&quot;Hi there\&quot;)\nmySignal:FireExcept(somePlayer, \&quot;Hello everyone except \&quot; .. somePlayer.Name)\nmySignal:FireFilter(function(player) return player.Team == someCoolTeam end, \&quot;Hello cool team\&quot;)\n\n-- Example of listening for clients to send data:\nmySignal:Connect(function(player, message)\n\tprint(\&quot;Got a message from \&quot; .. player.Name .. \&quot;:\&quot;, message)\nend)\n```&quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;name&quot;,
                     &quot;desc&quot;: &quot;&quot;,
                     &quot;lua_type&quot;: &quot;string&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;unreliable&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;boolean?&quot;
                 },
                 {
                     &quot;name&quot;: &quot;inboundMiddleware&quot;,
@@ -242,7 +252,7 @@ mapInfo<span class="token punctuation">:</span><span class="token function">SetF
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 141,
+                &quot;line&quot;: 146,
                 &quot;path&quot;: &quot;modules/comm/Server/ServerComm.lua&quot;
             }
         },
@@ -279,7 +289,7 @@ mapInfo<span class="token punctuation">:</span><span class="token function">SetF
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 189,
+                &quot;line&quot;: 195,
                 &quot;path&quot;: &quot;modules/comm/Server/ServerComm.lua&quot;
             }
         },
@@ -290,7 +300,7 @@ mapInfo<span class="token punctuation">:</span><span class="token function">SetF
             &quot;returns&quot;: [],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 201,
+                &quot;line&quot;: 207,
                 &quot;path&quot;: &quot;modules/comm/Server/ServerComm.lua&quot;
             }
         }
@@ -326,7 +336,7 @@ mapInfo<span class="token punctuation">:</span><span class="token function">SetF
         &quot;path&quot;: &quot;modules/comm/Server/ServerComm.lua&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a><ul><li><a href="#ServerMiddleware" class="table-of-contents__link toc-highlight">ServerMiddleware</a></li><li><a href="#ServerMiddlewareFn" class="table-of-contents__link toc-highlight">ServerMiddlewareFn</a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#BindFunction" class="table-of-contents__link toc-highlight">:BindFunction</a></li><li><a href="#CreateProperty" class="table-of-contents__link toc-highlight">:CreateProperty</a></li><li><a href="#CreateSignal" class="table-of-contents__link toc-highlight">:CreateSignal</a></li><li><a href="#Destroy" class="table-of-contents__link toc-highlight">:Destroy</a></li><li><a href="#WrapMethod" class="table-of-contents__link toc-highlight">:WrapMethod</a></li><li><a href="#new" class="table-of-contents__link toc-highlight">.new</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2023 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/RbxUtil/assets/js/runtime~main.6123cfd9.js"></script>
-<script src="/RbxUtil/assets/js/main.c89f52c8.js"></script>
+<script src="/RbxUtil/assets/js/runtime~main.a46cc809.js"></script>
+<script src="/RbxUtil/assets/js/main.4ba8d439.js"></script>
 </body>
 </html>
