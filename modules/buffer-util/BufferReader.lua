@@ -126,6 +126,14 @@ function BufferReader:ReadFloat64(): number
 end
 
 --[=[
+	Read a boolean from the buffer.
+]=]
+function BufferReader:ReadBool(): boolean
+	local n = self:ReadUInt8()
+	return n == 1
+end
+
+--[=[
 	Read a string from the buffer.
 	
 	:::info
@@ -154,6 +162,13 @@ function BufferReader:ReadStringRaw(length: number): string
 	return s
 end
 
+--[=[
+	Read a DataType from the buffer.
+
+	```lua
+	local cframe = reader:ReadDataType(CFrame)
+	```
+]=]
 function BufferReader:ReadDataType<T>(dataType: T): T
 	local name = DataTypeBuffer.DataTypesToString[dataType]
 	if not name then

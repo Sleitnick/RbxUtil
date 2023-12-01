@@ -48,6 +48,9 @@ declare namespace BufferUtil {
 		/** Read a 64-bit double-precision float from the buffer. */
 		ReadFloat64(): number;
 
+		/** Read a bool from the buffer. */
+		ReadBool(): boolean;
+
 		/** Read a string from the buffer. */
 		ReadString(): string;
 
@@ -97,6 +100,9 @@ declare namespace BufferUtil {
 
 		/** Write a 64-bit double-precision float to the buffer. */
 		WriteFloat64(f64: number): void;
+
+		/** Write a boolean to the buffer. */
+		WriteBool(bool: boolean): void;
 
 		/** Write a string to the buffer, with an optional `length` of bytes taken from the string. */
 		WriteString(str: string, length?: number): void;

@@ -21,7 +21,7 @@
 | [Symbol](https://sleitnick.github.io/RbxUtil/api/Symbol) | `Symbol = "sleitnick/symbol@2.0.1"` | Symbol |
 | [Option](https://sleitnick.github.io/RbxUtil/api/Option) | `Option = "sleitnick/option@1.0.5"` | Represent optional values in Lua |
 | [EnumList](https://sleitnick.github.io/RbxUtil/api/EnumList) | `EnumList = "sleitnick/enum-list@2.1.0"` | Enum List class |
-| [BufferUtil](https://sleitnick.github.io/RbxUtil/api/BufferUtil) | `BufferUtil = "sleitnick/buffer-util@0.2.0"` | Buffer utilities |
+| [BufferUtil](https://sleitnick.github.io/RbxUtil/api/BufferUtil) | `BufferUtil = "sleitnick/buffer-util@0.3.0"` | Buffer utilities |
 | [PID](https://sleitnick.github.io/RbxUtil/api/PID) | `PID = "sleitnick/pid@1.1.0"` | PID Controller class |
 | [Loader](https://sleitnick.github.io/RbxUtil/api/Loader) | `Loader = "sleitnick/loader@2.0.0"` | Requires all modules within a given instance |
 | [Concur](https://sleitnick.github.io/RbxUtil/api/Concur) | `Concur = "sleitnick/concur@0.1.2"` | Concurrent task handler |

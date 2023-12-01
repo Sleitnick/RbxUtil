@@ -128,6 +128,13 @@ function BufferWriter:WriteFloat64(f64: number)
 end
 
 --[=[
+	Write a boolean to the buffer.
+]=]
+function BufferWriter:WriteBool(bool: boolean)
+	self:WriteUInt8(if bool then 1 else 0)
+end
+
+--[=[
 	Write a string to the buffer. An optional `length` argument can
 	be provided to limit the number of bytes read from the string.
 
@@ -162,6 +169,13 @@ function BufferWriter:WriteStringRaw(str: string, length: number?)
 	self._cursor += len
 end
 
+--[=[
+	Write a DataType to the buffer.
+
+	```lua
+	writer:WriteDataType(CFrame.new(0, 10, 5))
+	```
+]=]
 function BufferWriter:WriteDataType(value: any)
 	local t = typeof(value)
 	local readWrite = DataTypeBuffer.ReadWrite[t]
