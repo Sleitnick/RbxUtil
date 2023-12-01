@@ -1,4 +1,20 @@
 declare namespace BufferUtil {
+	type DataTypes =
+		| BrickColor
+		| CFrame
+		| Color3
+		| DateTime
+		| Ray
+		| Rect
+		| Region3
+		| Region3int16
+		| UDim
+		| UDim2
+		| Vector2
+		| Vector3
+		| Vector2int16
+		| Vector3int16;
+
 	interface Util {
 		/** Create a BufferReader from the given `buffer` or string. */
 		reader: (buf: buffer | string | BufferWriter) => BufferReader;
@@ -37,6 +53,9 @@ declare namespace BufferUtil {
 
 		/** Read a raw string from the buffer. */
 		ReadStringRaw(length: number): string;
+
+		/** Read a DataType from the buffer. */
+		ReadDataType<T extends DataTypes>(dataType: new (...args: unknown[]) => T): T;
 
 		/** Returns the position of the cursor. */
 		GetCursor(): number;
@@ -84,6 +103,9 @@ declare namespace BufferUtil {
 
 		/** Write a raw string to the buffer, with an optional `length` of bytes taken from the string. */
 		WriteStringRaw(str: string, length?: number): void;
+
+		/** Write a DataType to the buffer. */
+		WriteDataType<T extends DataTypes>(data: T): void;
 
 		/** Shrinks the capacity of the buffer to the current data size. */
 		Shrink(): void;

@@ -1,24 +1,8 @@
 --!native
 
-export type BufferReader = {
-	ReadInt8: (self: BufferReader) -> number,
-	ReadUInt8: (self: BufferReader) -> number,
-	ReadInt16: (self: BufferReader) -> number,
-	ReadUInt16: (self: BufferReader) -> number,
-	ReadInt32: (self: BufferReader) -> number,
-	ReadUInt32: (self: BufferReader) -> number,
-	ReadFloat32: (self: BufferReader) -> number,
-	ReadFloat64: (self: BufferReader) -> number,
-	ReadString: (self: BufferReader) -> string,
-	ReadStringRaw: (self: BufferReader, length: number) -> string,
-	GetSize: (self: BufferReader) -> number,
-	ResetCursor: (self: BufferReader) -> (),
-	SetCursor: (self: BufferReader, cursorPosition: number) -> (),
-	GetCursor: (self: BufferReader) -> number,
-	GetBuffer: (self: BufferReader) -> buffer,
-}
-
 local BufferWriter = require(script.Parent.BufferWriter)
+local DataTypeBuffer = require(script.Parent.DataTypeBuffer)
+local Types = require(script.Parent.Types)
 
 --[=[
 	@class BufferReader
@@ -29,7 +13,7 @@ local BufferWriter = require(script.Parent.BufferWriter)
 local BufferReader = {}
 BufferReader.__index = BufferReader
 
-function BufferReader.new(buf: string | buffer | BufferWriter.BufferWriter): BufferReader
+function BufferReader.new(buf: string | buffer | Types.BufferWriter): Types.BufferReader
 	if typeof(buf) == "string" then
 		return BufferReader.fromString(buf)
 	elseif typeof(buf) == "buffer" then
@@ -168,6 +152,16 @@ function BufferReader:ReadStringRaw(length: number): string
 	local s = buffer.readstring(self._buffer, self._cursor, length)
 	self._cursor += length
 	return s
+end
+
+function BufferReader:ReadDataType<T>(dataType: T): T
+	local name = DataTypeBuffer.DataTypesToString[dataType]
+	if not name then
+		error("unsupported data type", 2)
+	end
+
+	local readWrite = DataTypeBuffer.ReadWrite[name]
+	return readWrite.read(self)
 end
 
 --[=[

@@ -1,27 +1,9 @@
 --!native
 
-export type BufferWriter = {
-	WriteInt8: (self: BufferWriter, int8: number) -> (),
-	WriteUInt8: (self: BufferWriter, uint8: number) -> (),
-	WriteInt16: (self: BufferWriter, int16: number) -> (),
-	WriteUInt16: (self: BufferWriter, uint16: number) -> (),
-	WriteInt32: (self: BufferWriter, int32: number) -> (),
-	WriteUInt32: (self: BufferWriter, uint32: number) -> (),
-	WriteFloat32: (self: BufferWriter, f32: number) -> (),
-	WriteFloat64: (self: BufferWriter, f64: number) -> (),
-	WriteString: (self: BufferWriter, str: string, length: number?) -> (),
-	WriteStringRaw: (self: BufferWriter, str: string, length: number?) -> (),
-	GetSize: (self: BufferWriter) -> number,
-	GetCapacity: (self: BufferWriter) -> number,
-	ResetCursor: (self: BufferWriter) -> (),
-	SetCursor: (self: BufferWriter, cursorPosition: number) -> (),
-	GetCursor: (self: BufferWriter) -> number,
-	Shrink: (self: BufferWriter) -> (),
-	GetBuffer: (self: BufferWriter) -> buffer,
-	ToString: (self: BufferWriter) -> string,
-}
-
 local MAX_SIZE = 1073741824
+
+local DataTypeBuffer = require(script.Parent.DataTypeBuffer)
+local Types = require(script.Parent.Types)
 
 --[=[
 	@class BufferWriter
@@ -35,7 +17,7 @@ local MAX_SIZE = 1073741824
 local BufferWriter = {}
 BufferWriter.__index = BufferWriter
 
-function BufferWriter.new(initialSize: number?)
+function BufferWriter.new(initialSize: number?): Types.BufferWriter
 	local size = if typeof(initialSize) == "number" then math.clamp(initialSize, 0, MAX_SIZE) else 0
 
 	local self = setmetatable({
@@ -178,6 +160,15 @@ function BufferWriter:WriteStringRaw(str: string, length: number?)
 	self:_resizeUpTo(self._cursor + len)
 	buffer.writestring(self._buffer, self._cursor, str, length)
 	self._cursor += len
+end
+
+function BufferWriter:WriteDataType(value: any)
+	local t = typeof(value)
+	local readWrite = DataTypeBuffer.ReadWrite[t]
+	if not readWrite then
+		error(`unsupported data type "{t}"`, 2)
+	end
+	readWrite.write(self, value)
 end
 
 --[=[
