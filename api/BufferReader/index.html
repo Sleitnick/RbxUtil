@@ -6,8 +6,8 @@
 <title data-rh="true">BufferReader | RbxUtil</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Sleitnick.github.io/RbxUtil/api/BufferReader"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docusaurus_tag" content="default"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docsearch:docusaurus_tag" content="default"><meta data-rh="true" property="og:title" content="BufferReader | RbxUtil"><meta data-rh="true" name="description" content="A BufferReader is an abstraction wrapper for `buffer` objects
 that provides a convenient way of reading out data from buffers."><meta data-rh="true" property="og:description" content="A BufferReader is an abstraction wrapper for `buffer` objects
 that provides a convenient way of reading out data from buffers."><link data-rh="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/BufferReader"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/BufferReader" hreflang="en"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/BufferReader" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.e1adec2f.css">
-<link rel="preload" href="/RbxUtil/assets/js/runtime~main.5ac080fb.js" as="script">
-<link rel="preload" href="/RbxUtil/assets/js/main.d7d9314d.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/runtime~main.1b495285.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/main.9219ebc3.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -32,7 +32,9 @@ that provides a convenient way of reading out data from buffers."><link data-rh=
 <p>Read a 32-bit single-precision float from the buffer.</p>
 </div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ReadFloat64"><code style="text-decoration:none">ReadFloat64</code><a href="#ReadFloat64" class="hash-link" aria-label="Direct link to ReadFloat64" title="Direct link to ReadFloat64">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/buffer-util/BufferReader.lua#L121"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>BufferReader<!-- -->:</code><code class="green_DgR4">ReadFloat64</code><code>(</code><code>) → </code><code class="blue_P4bS">number</code></div><div>
 <p>Read a 64-bit double-precision float from the buffer.</p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ReadString"><code style="text-decoration:none">ReadString</code><a href="#ReadString" class="hash-link" aria-label="Direct link to ReadString" title="Direct link to ReadString">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/buffer-util/BufferReader.lua#L135"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>BufferReader<!-- -->:</code><code class="green_DgR4">ReadString</code><code>(</code><code>) → </code><code class="blue_P4bS">string</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ReadBool"><code style="text-decoration:none">ReadBool</code><a href="#ReadBool" class="hash-link" aria-label="Direct link to ReadBool" title="Direct link to ReadBool">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/buffer-util/BufferReader.lua#L131"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>BufferReader<!-- -->:</code><code class="green_DgR4">ReadBool</code><code>(</code><code>) → </code><code class="blue_P4bS">boolean</code></div><div>
+<p>Read a boolean from the buffer.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ReadString"><code style="text-decoration:none">ReadString</code><a href="#ReadString" class="hash-link" aria-label="Direct link to ReadString" title="Direct link to ReadString">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/buffer-util/BufferReader.lua#L143"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>BufferReader<!-- -->:</code><code class="green_DgR4">ReadString</code><code>(</code><code>) → </code><code class="blue_P4bS">string</code></div><div>
 <p>Read a string from the buffer.</p>
 <div class="admonition admonition-info alert alert--info">
   <div class="admonition-heading">
@@ -47,7 +49,7 @@ that provides a convenient way of reading out data from buffers."><link data-rh=
     </p>
   </div>
 </div>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ReadStringRaw"><code style="text-decoration:none">ReadStringRaw</code><a href="#ReadStringRaw" class="hash-link" aria-label="Direct link to ReadStringRaw" title="Direct link to ReadStringRaw">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/buffer-util/BufferReader.lua#L149"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>BufferReader<!-- -->:</code><code class="green_DgR4">ReadStringRaw</code><code>(</code><code>length<!-- -->: </code><code class="blue_P4bS">number</code><code>) → </code><code class="blue_P4bS">string</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ReadStringRaw"><code style="text-decoration:none">ReadStringRaw</code><a href="#ReadStringRaw" class="hash-link" aria-label="Direct link to ReadStringRaw" title="Direct link to ReadStringRaw">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/buffer-util/BufferReader.lua#L157"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>BufferReader<!-- -->:</code><code class="green_DgR4">ReadStringRaw</code><code>(</code><code>length<!-- -->: </code><code class="blue_P4bS">number</code><code>) → </code><code class="blue_P4bS">string</code></div><div>
 <p>Read a string from the buffer.</p>
 <div class="admonition admonition-info alert alert--info">
   <div class="admonition-heading">
@@ -59,15 +61,19 @@ that provides a convenient way of reading out data from buffers."><link data-rh=
     <p>This assumes the string was written using the <code>BufferWriter:WriteStringRaw()</code>.</p>
   </div>
 </div>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="SetCursor"><code style="text-decoration:none">SetCursor</code><a href="#SetCursor" class="hash-link" aria-label="Direct link to SetCursor" title="Direct link to SetCursor">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/buffer-util/BufferReader.lua#L170"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>BufferReader<!-- -->:</code><code class="green_DgR4">SetCursor</code><code>(</code><code>position<!-- -->: </code><code class="blue_P4bS">number</code><code>) → </code><code>(</code><code>)</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ReadDataType"><code style="text-decoration:none">ReadDataType</code><a href="#ReadDataType" class="hash-link" aria-label="Direct link to ReadDataType" title="Direct link to ReadDataType">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/buffer-util/BufferReader.lua#L172"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>BufferReader<!-- -->:</code><code class="green_DgR4">ReadDataType</code><code>(</code><code>dataType<!-- -->: </code><code class="blue_P4bS">T</code><code>) → </code><code class="blue_P4bS">T</code></div><div>
+<p>Read a DataType from the buffer.</p>
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> cframe <span class="token operator">=</span> reader<span class="token punctuation">:</span><span class="token function">ReadDataType</span><span class="token punctuation">(</span>CFrame<span class="token punctuation">)</span>
+</code></pre>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="SetCursor"><code style="text-decoration:none">SetCursor</code><a href="#SetCursor" class="hash-link" aria-label="Direct link to SetCursor" title="Direct link to SetCursor">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/buffer-util/BufferReader.lua#L185"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>BufferReader<!-- -->:</code><code class="green_DgR4">SetCursor</code><code>(</code><code>position<!-- -->: </code><code class="blue_P4bS">number</code><code>) → </code><code>(</code><code>)</code></div><div>
 <p>Sets the position of the cursor.</p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="GetCursor"><code style="text-decoration:none">GetCursor</code><a href="#GetCursor" class="hash-link" aria-label="Direct link to GetCursor" title="Direct link to GetCursor">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/buffer-util/BufferReader.lua#L182"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>BufferReader<!-- -->:</code><code class="green_DgR4">GetCursor</code><code>(</code><code>) → </code><code class="blue_P4bS">number</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="GetCursor"><code style="text-decoration:none">GetCursor</code><a href="#GetCursor" class="hash-link" aria-label="Direct link to GetCursor" title="Direct link to GetCursor">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/buffer-util/BufferReader.lua#L197"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>BufferReader<!-- -->:</code><code class="green_DgR4">GetCursor</code><code>(</code><code>) → </code><code class="blue_P4bS">number</code></div><div>
 <p>Returns the position of the cursor.</p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ResetCursor"><code style="text-decoration:none">ResetCursor</code><a href="#ResetCursor" class="hash-link" aria-label="Direct link to ResetCursor" title="Direct link to ResetCursor">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/buffer-util/BufferReader.lua#L189"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>BufferReader<!-- -->:</code><code class="green_DgR4">ResetCursor</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ResetCursor"><code style="text-decoration:none">ResetCursor</code><a href="#ResetCursor" class="hash-link" aria-label="Direct link to ResetCursor" title="Direct link to ResetCursor">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/buffer-util/BufferReader.lua#L204"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>BufferReader<!-- -->:</code><code class="green_DgR4">ResetCursor</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
 <p>Resets the position of the cursor.</p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="GetSize"><code style="text-decoration:none">GetSize</code><a href="#GetSize" class="hash-link" aria-label="Direct link to GetSize" title="Direct link to GetSize">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/buffer-util/BufferReader.lua#L196"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>BufferReader<!-- -->:</code><code class="green_DgR4">GetSize</code><code>(</code><code>) → </code><code class="blue_P4bS">number</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="GetSize"><code style="text-decoration:none">GetSize</code><a href="#GetSize" class="hash-link" aria-label="Direct link to GetSize" title="Direct link to GetSize">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/buffer-util/BufferReader.lua#L211"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>BufferReader<!-- -->:</code><code class="green_DgR4">GetSize</code><code>(</code><code>) → </code><code class="blue_P4bS">number</code></div><div>
 <p>Returns the size of the buffer.</p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="GetBuffer"><code style="text-decoration:none">GetBuffer</code><a href="#GetBuffer" class="hash-link" aria-label="Direct link to GetBuffer" title="Direct link to GetBuffer">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/buffer-util/BufferReader.lua#L203"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>BufferReader<!-- -->:</code><code class="green_DgR4">GetBuffer</code><code>(</code><code>) → </code><code class="blue_P4bS">buffer</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="GetBuffer"><code style="text-decoration:none">GetBuffer</code><a href="#GetBuffer" class="hash-link" aria-label="Direct link to GetBuffer" title="Direct link to GetBuffer">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/buffer-util/BufferReader.lua#L218"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>BufferReader<!-- -->:</code><code class="green_DgR4">GetBuffer</code><code>(</code><code>) → </code><code class="blue_P4bS">buffer</code></div><div>
 <p>Returns the <code>buffer</code> object.</p>
 </div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
     &quot;functions&quot;: [
@@ -200,6 +206,22 @@ that provides a convenient way of reading out data from buffers."><link data-rh=
             }
         },
         {
+            &quot;name&quot;: &quot;ReadBool&quot;,
+            &quot;desc&quot;: &quot;Read a boolean from the buffer.&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;boolean\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 131,
+                &quot;path&quot;: &quot;modules/buffer-util/BufferReader.lua&quot;
+            }
+        },
+        {
             &quot;name&quot;: &quot;ReadString&quot;,
             &quot;desc&quot;: &quot;Read a string from the buffer.\n\n:::info\nThis assumes the string was written using the `BufferWriter:WriteString()`\nmethod, which stores an extra integer to mark the size of the string.&quot;,
             &quot;params&quot;: [],
@@ -211,7 +233,7 @@ that provides a convenient way of reading out data from buffers."><link data-rh=
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 135,
+                &quot;line&quot;: 143,
                 &quot;path&quot;: &quot;modules/buffer-util/BufferReader.lua&quot;
             }
         },
@@ -233,7 +255,29 @@ that provides a convenient way of reading out data from buffers."><link data-rh=
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 149,
+                &quot;line&quot;: 157,
+                &quot;path&quot;: &quot;modules/buffer-util/BufferReader.lua&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;ReadDataType&quot;,
+            &quot;desc&quot;: &quot;Read a DataType from the buffer.\n\n```lua\nlocal cframe = reader:ReadDataType(CFrame)\n```&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;dataType&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;T&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;T\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 172,
                 &quot;path&quot;: &quot;modules/buffer-util/BufferReader.lua&quot;
             }
         },
@@ -250,7 +294,7 @@ that provides a convenient way of reading out data from buffers."><link data-rh=
             &quot;returns&quot;: [],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 170,
+                &quot;line&quot;: 185,
                 &quot;path&quot;: &quot;modules/buffer-util/BufferReader.lua&quot;
             }
         },
@@ -266,7 +310,7 @@ that provides a convenient way of reading out data from buffers."><link data-rh=
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 182,
+                &quot;line&quot;: 197,
                 &quot;path&quot;: &quot;modules/buffer-util/BufferReader.lua&quot;
             }
         },
@@ -277,7 +321,7 @@ that provides a convenient way of reading out data from buffers."><link data-rh=
             &quot;returns&quot;: [],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 189,
+                &quot;line&quot;: 204,
                 &quot;path&quot;: &quot;modules/buffer-util/BufferReader.lua&quot;
             }
         },
@@ -293,7 +337,7 @@ that provides a convenient way of reading out data from buffers."><link data-rh=
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 196,
+                &quot;line&quot;: 211,
                 &quot;path&quot;: &quot;modules/buffer-util/BufferReader.lua&quot;
             }
         },
@@ -309,7 +353,7 @@ that provides a convenient way of reading out data from buffers."><link data-rh=
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 203,
+                &quot;line&quot;: 218,
                 &quot;path&quot;: &quot;modules/buffer-util/BufferReader.lua&quot;
             }
         }
@@ -322,8 +366,8 @@ that provides a convenient way of reading out data from buffers."><link data-rh=
         &quot;line&quot;: 13,
         &quot;path&quot;: &quot;modules/buffer-util/BufferReader.lua&quot;
     }
-}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#GetBuffer" class="table-of-contents__link toc-highlight">:GetBuffer</a></li><li><a href="#GetCursor" class="table-of-contents__link toc-highlight">:GetCursor</a></li><li><a href="#GetSize" class="table-of-contents__link toc-highlight">:GetSize</a></li><li><a href="#ReadFloat32" class="table-of-contents__link toc-highlight">:ReadFloat32</a></li><li><a href="#ReadFloat64" class="table-of-contents__link toc-highlight">:ReadFloat64</a></li><li><a href="#ReadInt16" class="table-of-contents__link toc-highlight">:ReadInt16</a></li><li><a href="#ReadInt32" class="table-of-contents__link toc-highlight">:ReadInt32</a></li><li><a href="#ReadInt8" class="table-of-contents__link toc-highlight">:ReadInt8</a></li><li><a href="#ReadString" class="table-of-contents__link toc-highlight">:ReadString</a></li><li><a href="#ReadStringRaw" class="table-of-contents__link toc-highlight">:ReadStringRaw</a></li><li><a href="#ReadUInt16" class="table-of-contents__link toc-highlight">:ReadUInt16</a></li><li><a href="#ReadUInt32" class="table-of-contents__link toc-highlight">:ReadUInt32</a></li><li><a href="#ReadUInt8" class="table-of-contents__link toc-highlight">:ReadUInt8</a></li><li><a href="#ResetCursor" class="table-of-contents__link toc-highlight">:ResetCursor</a></li><li><a href="#SetCursor" class="table-of-contents__link toc-highlight">:SetCursor</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2023 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/RbxUtil/assets/js/runtime~main.5ac080fb.js"></script>
-<script src="/RbxUtil/assets/js/main.d7d9314d.js"></script>
+}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#GetBuffer" class="table-of-contents__link toc-highlight">:GetBuffer</a></li><li><a href="#GetCursor" class="table-of-contents__link toc-highlight">:GetCursor</a></li><li><a href="#GetSize" class="table-of-contents__link toc-highlight">:GetSize</a></li><li><a href="#ReadBool" class="table-of-contents__link toc-highlight">:ReadBool</a></li><li><a href="#ReadDataType" class="table-of-contents__link toc-highlight">:ReadDataType</a></li><li><a href="#ReadFloat32" class="table-of-contents__link toc-highlight">:ReadFloat32</a></li><li><a href="#ReadFloat64" class="table-of-contents__link toc-highlight">:ReadFloat64</a></li><li><a href="#ReadInt16" class="table-of-contents__link toc-highlight">:ReadInt16</a></li><li><a href="#ReadInt32" class="table-of-contents__link toc-highlight">:ReadInt32</a></li><li><a href="#ReadInt8" class="table-of-contents__link toc-highlight">:ReadInt8</a></li><li><a href="#ReadString" class="table-of-contents__link toc-highlight">:ReadString</a></li><li><a href="#ReadStringRaw" class="table-of-contents__link toc-highlight">:ReadStringRaw</a></li><li><a href="#ReadUInt16" class="table-of-contents__link toc-highlight">:ReadUInt16</a></li><li><a href="#ReadUInt32" class="table-of-contents__link toc-highlight">:ReadUInt32</a></li><li><a href="#ReadUInt8" class="table-of-contents__link toc-highlight">:ReadUInt8</a></li><li><a href="#ResetCursor" class="table-of-contents__link toc-highlight">:ResetCursor</a></li><li><a href="#SetCursor" class="table-of-contents__link toc-highlight">:SetCursor</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2023 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
+<script src="/RbxUtil/assets/js/runtime~main.1b495285.js"></script>
+<script src="/RbxUtil/assets/js/main.9219ebc3.js"></script>
 </body>
 </html>
