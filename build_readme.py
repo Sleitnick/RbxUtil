@@ -23,7 +23,7 @@ def build():
 	version_pattern = re.compile(r"version\s*=\s*\"(.+)\"$")
 	description_pattern = re.compile(r"description\s*=\s*\"(.+)\"$")
 	display_name_pattern = re.compile(r".+/(.+)")
-	for path in Path("./modules").iterdir():
+	for path in sorted(Path("./modules").iterdir()):
 		with open(Path.joinpath(path, Path("wally.toml")), "r") as f:
 			lines = f.read().splitlines()
 			for line in lines:
