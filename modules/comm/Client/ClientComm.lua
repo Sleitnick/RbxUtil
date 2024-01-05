@@ -3,8 +3,8 @@
 -- December 20, 2021
 
 local Comm = require(script.Parent)
-local Util = require(script.Parent.Parent.Util)
 local Types = require(script.Parent.Parent.Types)
+local Util = require(script.Parent.Parent.Util)
 
 --[=[
 	@class ClientComm
@@ -195,7 +195,7 @@ function ClientComm:BuildObject(inboundMiddleware: Types.ClientMiddleware?, outb
 	local reFolder = self._instancesFolder:FindFirstChild("RE")
 	local rpFolder = self._instancesFolder:FindFirstChild("RP")
 	if rfFolder then
-		for _, rf in ipairs(rfFolder:GetChildren()) do
+		for _, rf in rfFolder:GetChildren() do
 			if not rf:IsA("RemoteFunction") then
 				continue
 			end
@@ -206,15 +206,15 @@ function ClientComm:BuildObject(inboundMiddleware: Types.ClientMiddleware?, outb
 		end
 	end
 	if reFolder then
-		for _, re in ipairs(reFolder:GetChildren()) do
-			if not re:IsA("RemoteEvent") then
+		for _, re in reFolder:GetChildren() do
+			if (not re:IsA("RemoteEvent")) and (not re:IsA("UnreliableRemoteEvent")) then
 				continue
 			end
 			obj[re.Name] = self:GetSignal(re.Name, inboundMiddleware, outboundMiddleware)
 		end
 	end
 	if rpFolder then
-		for _, re in ipairs(rpFolder:GetChildren()) do
+		for _, re in rpFolder:GetChildren() do
 			if not re:IsA("RemoteEvent") then
 				continue
 			end

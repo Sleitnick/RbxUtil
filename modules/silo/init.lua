@@ -78,6 +78,7 @@ Silo.__index = Silo
 function Silo.new<S>(defaultState: State<S>, modifiers: { Modifier<S> }?)
 	local self = setmetatable({}, Silo)
 
+	self._DefaultState = Util.DeepFreeze(Util.DeepCopy(defaultState))
 	self._State = Util.DeepFreeze(Util.DeepCopy(defaultState))
 	self._Modifiers = {}
 	self._Dispatching = false
@@ -274,6 +275,47 @@ function Silo:Watch<S, T>(selector: (State<S>) -> T, onChange: (T) -> ()): () ->
 	onChange(value)
 
 	return unsubscribe
+end
+
+--[=[
+	Reset the state to the default state that was given in the constructor.
+
+	```lua
+	local silo = Silo.new({
+		Points = 0,
+	}, {
+		SetPoints = function(state, points)
+			state.Points = points
+		end
+	})
+
+	silo:Dispatch(silo.Actions.SetPoints(10))
+
+	print(silo:GetState().Points) -- 10
+
+	silo:ResetToDefaultState()
+
+	print(silo:GetState().Points) -- 0
+	```
+]=]
+function Silo:ResetToDefaultState()
+	if self._Dispatching then
+		error("cannot reset state from within a modifier", 2)
+	end
+
+	if self._Parent ~= self then
+		error("can only reset state on top-level silo", 2)
+	end
+
+	local oldState = self._State
+
+	if self._DefaultState ~= oldState then
+		self._State = Util.DeepFreeze(Util.DeepCopy(self._DefaultState))
+
+		for _, subscriber in ipairs(self._Subscribers) do
+			subscriber(self._State, oldState)
+		end
+	end
 end
 
 return Silo

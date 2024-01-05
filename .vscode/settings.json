@@ -9,10 +9,11 @@
 		"editor.formatOnSave": true
 	},
 	"editor.codeActionsOnSave": {
-		"source.addMissingImports": true,
-		"source.organizeImports": true,
-		"source.fixAll.eslint": true
+		"source.addMissingImports": "explicit",
+		"source.organizeImports": "explicit",
+		"source.fixAll.eslint": "explicit"
 	},
+	"luau-lsp.sourcemap.rojoProjectFile": "dev.project.json",
 	"eslint.run": "onType",
 	"eslint.format.enable": true,
 	"files.eol": "\n"

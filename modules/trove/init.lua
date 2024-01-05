@@ -4,6 +4,7 @@
 
 local FN_MARKER = newproxy()
 local THREAD_MARKER = newproxy()
+local GENERIC_OBJECT_CLEANUP_METHODS = { "Destroy", "Disconnect", "destroy", "disconnect" }
 
 local RunService = game:GetService("RunService")
 
@@ -22,10 +23,10 @@ local function GetObjectCleanupFunction(object, cleanupMethod)
 	elseif t == "RBXScriptConnection" then
 		return "Disconnect"
 	elseif t == "table" then
-		if typeof(object.Destroy) == "function" then
-			return "Destroy"
-		elseif typeof(object.Disconnect) == "function" then
-			return "Disconnect"
+		for _, genericCleanupMethod in GENERIC_OBJECT_CLEANUP_METHODS do
+			if typeof(object[genericCleanupMethod]) == "function" then
+				return genericCleanupMethod
+			end
 		end
 	end
 	error("Failed to get cleanup function for object " .. t .. ": " .. tostring(object), 3)
@@ -245,7 +246,7 @@ end
 	| `RBXScriptConnection` | `object:Disconnect()` |
 	| `function` | `object()` |
 	| `thread` | `task.cancel(object)` |
-	| `table` | `object:Destroy()` _or_ `object:Disconnect()` |
+	| `table` | `object:Destroy()` _or_ `object:Disconnect()` _or_ `object:destroy()` _or_ `object:disconnect()` |
 	| `table` with `cleanupMethod` | `object:<cleanupMethod>()` |
 
 	Returns the object added.

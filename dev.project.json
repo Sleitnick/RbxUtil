@@ -1,0 +1,12 @@
+{
+	"name": "rbx-util-dev",
+	"tree": {
+		"$className": "DataModel",
+		"ReplicatedStorage": {
+			"$className": "ReplicatedStorage",
+			"Modules": {
+				"$path": "modules"
+			}
+		}
+	}
+}
