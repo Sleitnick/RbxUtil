@@ -141,7 +141,7 @@ function Silo.combine<S>(silos, initialState: State<S>?)
 		for actionName in pairs(silo.Actions) do
 			-- Update the action creator to include the correct prefixed action name:
 			local fullActionName = name .. "/" .. actionName
-			silo.Actions[actionName] = function(p)
+			combinedSilo.Actions[actionName] = function(p)
 				return {
 					Name = fullActionName,
 					Payload = p,
