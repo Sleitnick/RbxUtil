@@ -32,8 +32,8 @@ type Action<A> = {
 	Payload: A,
 }
 
-local Util = require(script.Util)
 local TableWatcher = require(script.TableWatcher)
+local Util = require(script.Util)
 
 --[=[
 	@class Silo
@@ -83,6 +83,7 @@ function Silo.new<S>(defaultState: State<S>, modifiers: { Modifier<S> }?)
 	self._Modifiers = {}
 	self._Dispatching = false
 	self._Parent = self
+	self._DispatchSubscribers = {}
 	self._Subscribers = {}
 
 	self.Actions = {}
@@ -203,6 +204,44 @@ function Silo:Dispatch<A>(action: Action<A>)
 		for _, subscriber in self._Subscribers do
 			subscriber(newState, oldState)
 		end
+	end
+end
+
+--[=[
+	Subscribe a function to receive all action dispatches. Most useful for
+	replicating state between two identical silos running on client and
+	server without ever directly touching state.
+
+	Returns an unsubscribe function. Call the function to unsubscribe.
+
+	```lua
+	local unsubscribe = silo:OnDispatch(function(action)
+		-- Do something
+	end)
+
+	-- Later on, if desired, disconnect the subscription by calling unsubscribe:
+	unsubscribe()
+	```
+]=]
+function Silo:OnDispatch<A>(subscriber: (action: Action<A>) -> ()): () -> ()
+	if self._Dispatching then
+		error("cannot subscribe from within a modifier", 2)
+	end
+	if self._Parent ~= self then
+		error("can only subscribe on top-level silo", 2)
+	end
+	if table.find(self._DispatchSubscribers, subscriber) then
+		error("cannot subscribe same function more than once", 2)
+	end
+
+	table.insert(self._DispatchSubscribers, subscriber)
+
+	return function()
+		local index = table.find(self._DispatchSubscribers, subscriber)
+		if not index then
+			return
+		end
+		table.remove(self._DispatchSubscribers, index)
 	end
 end
 

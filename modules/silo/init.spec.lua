@@ -108,6 +108,61 @@ return function()
 		end)
 	end)
 
+	describe("OnDispatch", function()
+		it("should subscribe to a silo's dispatches", function()
+			local action
+			local n = 0
+			local unsubscribe = rootSilo:OnDispatch(function(a)
+				n += 1
+				action = a
+			end)
+			expect(n).to.equal(0)
+			rootSilo:Dispatch(silo1.Actions.SetKills(10))
+			expect(n).to.equal(1)
+			expect(action).to.be.a("table")
+			expect(action.Name).to.equal("Stats/SetKills")
+			expect(action.Payload).to.equal(10)
+			rootSilo:Dispatch(silo1.Actions.SetKills(20))
+			expect(n).to.equal(2)
+			expect(action.Name).to.equal("Stats/SetKills")
+			expect(action.Payload).to.equal(20)
+			unsubscribe()
+			rootSilo:Dispatch(silo1.Actions.SetKills(30))
+			expect(n).to.equal(2)
+		end)
+
+		it("should not allow subscribing same function more than once", function()
+			local function sub() end
+			expect(function()
+				rootSilo:OnDispatch(sub)
+			end).never.to.throw()
+			expect(function()
+				rootSilo:OnDispatch(sub)
+			end).to.throw()
+		end)
+
+		it("should not allow subscribing to a sub-silo", function()
+			expect(function()
+				silo1:OnDispatch(function() end)
+			end).to.throw()
+		end)
+
+		it("should not allow subscribing from within a modifier", function()
+			expect(function()
+				local silo
+				silo = Silo.new({
+					Data = 0,
+				}, {
+					SetData = function(state, newData)
+						state.Data = newData
+						silo:OnDispatch(function() end)
+					end,
+				})
+				silo:Dispatch(silo.Actions.SetData(0))
+			end).to.throw()
+		end)
+	end)
+
 	describe("Subscribe", function()
 		it("should subscribe to a silo", function()
 			local new, old
