@@ -6,8 +6,8 @@
 <title data-rh="true">Silo | RbxUtil</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Sleitnick.github.io/RbxUtil/api/Silo"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docusaurus_tag" content="default"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docsearch:docusaurus_tag" content="default"><meta data-rh="true" property="og:title" content="Silo | RbxUtil"><meta data-rh="true" name="description" content="A Silo is a state container, inspired by Redux slices and
 designed for Roblox developers."><meta data-rh="true" property="og:description" content="A Silo is a state container, inspired by Redux slices and
 designed for Roblox developers."><link data-rh="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/Silo"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/Silo" hreflang="en"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/Silo" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.e1adec2f.css">
-<link rel="preload" href="/RbxUtil/assets/js/runtime~main.b651850a.js" as="script">
-<link rel="preload" href="/RbxUtil/assets/js/main.8cb1d605.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/runtime~main.7a5a4d6b.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/main.a6aab3c0.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -16,17 +16,17 @@ designed for Roblox developers."><link data-rh="true" rel="canonical" href="http
   A Silo is a state container, inspired by Redux slices and
   designed for Roblox developers.
 </p>
-</div></header><h2 class="anchor anchorWithStickyNavbar_LWe7" id="types">Types<a href="#types" class="hash-link" aria-label="Direct link to Types" title="Direct link to Types">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="State&lt;S&gt;"><code style="text-decoration:none">State&lt;S&gt;</code><a href="#State&lt;S&gt;" class="hash-link" aria-label="Direct link to State&lt;S&gt;" title="Direct link to State&lt;S&gt;">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/silo/init.lua#L12"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code class="purple_ieR2">type</code> <code>State&lt;S&gt;<!-- --> = </code> <code class="purple_ieR2">{</code><span><code>[</code><code class="blue_P4bS">string</code><code>]</code></span><code>: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">}</code></div><div>
+</div></header><h2 class="anchor anchorWithStickyNavbar_LWe7" id="types">Types<a href="#types" class="hash-link" aria-label="Direct link to Types" title="Direct link to Types">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="State&lt;S&gt;"><code style="text-decoration:none">State&lt;S&gt;</code><a href="#State&lt;S&gt;" class="hash-link" aria-label="Direct link to State&lt;S&gt;" title="Direct link to State&lt;S&gt;">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/silo/init.lua#L10"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code class="purple_ieR2">type</code> <code>State&lt;S&gt;<!-- --> = </code> <code class="purple_ieR2">{</code><span><code>[</code><code class="blue_P4bS">string</code><code>]</code></span><code>: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">}</code></div><div>
 <p>Represents state.</p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Modifier&lt;S&gt;"><code style="text-decoration:none">Modifier&lt;S&gt;</code><a href="#Modifier&lt;S&gt;" class="hash-link" aria-label="Direct link to Modifier&lt;S&gt;" title="Direct link to Modifier&lt;S&gt;">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/silo/init.lua#L19"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code class="purple_ieR2">type</code> <code>Modifier&lt;S&gt;<!-- --> = </code> <code class="purple_ieR2">(</code><div class="inset_uKQm"><code class="blue_P4bS">State</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code class="blue_P4bS">any</code></div><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Modifier&lt;S&gt;"><code style="text-decoration:none">Modifier&lt;S&gt;</code><a href="#Modifier&lt;S&gt;" class="hash-link" aria-label="Direct link to Modifier&lt;S&gt;" title="Direct link to Modifier&lt;S&gt;">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/silo/init.lua#L17"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code class="purple_ieR2">type</code> <code>Modifier&lt;S&gt;<!-- --> = </code> <code class="purple_ieR2">(</code><div class="inset_uKQm"><code class="blue_P4bS">State</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code class="blue_P4bS">any</code></div><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div><div>
 <p>A function that modifies state.</p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Action&lt;A&gt;"><code style="text-decoration:none">Action&lt;A&gt;</code><a href="#Action&lt;A&gt;" class="hash-link" aria-label="Direct link to Action&lt;A&gt;" title="Direct link to Action&lt;A&gt;">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/silo/init.lua#L30"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code class="purple_ieR2">interface</code> <code>Action&lt;A&gt;<!-- --> <!-- -->{</code><div class="inset_uKQm"><div><code>Name<!-- -->: </code><code class="blue_P4bS">string</code></div><div><code>Payload<!-- -->: </code><code class="blue_P4bS">A</code></div></div><code>}</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Action&lt;A&gt;"><code style="text-decoration:none">Action&lt;A&gt;</code><a href="#Action&lt;A&gt;" class="hash-link" aria-label="Direct link to Action&lt;A&gt;" title="Direct link to Action&lt;A&gt;">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/silo/init.lua#L28"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code class="purple_ieR2">interface</code> <code>Action&lt;A&gt;<!-- --> <!-- -->{</code><div class="inset_uKQm"><div><code>Name<!-- -->: </code><code class="blue_P4bS">string</code></div><div><code>Payload<!-- -->: </code><code class="blue_P4bS">A</code></div></div><code>}</code></div><div>
 <p>
   Actions are passed to <code>Dispatch</code>. However, typically actions are
   never constructed by hand. Use a silo's Actions table to generate
   these actions.
 </p>
-</div><h2 class="anchor anchorWithStickyNavbar_LWe7" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="new"><code style="text-decoration:none">new</code><a href="#new" class="hash-link" aria-label="Direct link to new" title="Direct link to new">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/silo/init.lua#L78"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Silo<!-- -->.</code><code class="green_DgR4">new</code><code>(</code><div class="inset_uKQm"><div><code>defaultState<!-- -->: </code><code class="blue_P4bS">State</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code>,</code></div><div><code>modifiers<!-- -->: </code><code class="purple_ieR2">{</code><code class="blue_P4bS">Modifier</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code class="purple_ieR2">}</code><code class="blue_P4bS">?</code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Silo">Silo</a></code></div><div>
+</div><h2 class="anchor anchorWithStickyNavbar_LWe7" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="new"><code style="text-decoration:none">new</code><a href="#new" class="hash-link" aria-label="Direct link to new" title="Direct link to new">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/silo/init.lua#L86"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Silo<!-- -->.</code><code class="green_DgR4">new</code><code>(</code><div class="inset_uKQm"><div><code>defaultState<!-- -->: </code><code class="blue_P4bS">State</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code>,</code></div><div><code>modifiers<!-- -->: </code><code class="purple_ieR2">{</code><span><code>[</code><code class="blue_P4bS">string</code><code>]</code></span><code>: </code><code class="blue_P4bS">Modifier</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code class="purple_ieR2">}</code><code class="blue_P4bS">?</code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Silo">Silo</a></code></div><div>
 <p>Create a Silo.</p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> statsSilo <span class="token operator">=</span> Silo<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
 	<span class="token comment">-- Initial state:</span>
@@ -55,17 +55,17 @@ statsSilo<span class="token punctuation">:</span><span class="token function">Di
   payload (no need to pass state). The <code>SetKills</code> modifier is then used
   as the <code>SetKills</code> action to be dispatched.
 </p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="combine"><code style="text-decoration:none">combine</code><a href="#combine" class="hash-link" aria-label="Direct link to combine" title="Direct link to combine">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/silo/init.lua#L116"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Silo<!-- -->.</code><code class="green_DgR4">combine</code><code>(</code><div class="inset_uKQm"><div><code>silos<!-- -->: </code><code class="purple_ieR2">{</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Silo">Silo</a></code><code class="purple_ieR2">}</code><code>,</code></div><div><code>initialState<!-- -->: </code><code class="blue_P4bS">State</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code class="blue_P4bS">?</code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Silo">Silo</a></code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="combine"><code style="text-decoration:none">combine</code><a href="#combine" class="hash-link" aria-label="Direct link to combine" title="Direct link to combine">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/silo/init.lua#L126"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Silo<!-- -->.</code><code class="green_DgR4">combine</code><code>(</code><div class="inset_uKQm"><div><code>silos<!-- -->: </code><code class="purple_ieR2">{</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Silo">Silo</a></code><code class="purple_ieR2">}</code><code>,</code></div><div><code>initialState<!-- -->: </code><code class="blue_P4bS">State</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code class="blue_P4bS">?</code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Silo">Silo</a></code></div><div>
 <p>Constructs a new silo as a combination of other silos.</p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="GetState"><code style="text-decoration:none">GetState</code><a href="#GetState" class="hash-link" aria-label="Direct link to GetState" title="Direct link to GetState">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/silo/init.lua#L163"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Silo<!-- -->:</code><code class="green_DgR4">GetState</code><code>(</code><code>) → </code><code class="blue_P4bS">State</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="GetState"><code style="text-decoration:none">GetState</code><a href="#GetState" class="hash-link" aria-label="Direct link to GetState" title="Direct link to GetState">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/silo/init.lua#L177"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Silo<!-- -->:</code><code class="green_DgR4">GetState</code><code>(</code><code>) → </code><code class="blue_P4bS">State</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code></div><div>
 <p>Get the current state.</p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> state <span class="token operator">=</span> silo<span class="token punctuation">:</span><span class="token function">GetState</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Dispatch"><code style="text-decoration:none">Dispatch</code><a href="#Dispatch" class="hash-link" aria-label="Direct link to Dispatch" title="Direct link to Dispatch">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/silo/init.lua#L177"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Silo<!-- -->:</code><code class="green_DgR4">Dispatch</code><code>(</code><code>action<!-- -->: </code><code class="blue_P4bS">Action</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">A</code><code class="op_lSLc">&gt;</code><code>) → </code><code>(</code><code>)</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Dispatch"><code style="text-decoration:none">Dispatch</code><a href="#Dispatch" class="hash-link" aria-label="Direct link to Dispatch" title="Direct link to Dispatch">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/silo/init.lua#L191"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Silo<!-- -->:</code><code class="green_DgR4">Dispatch</code><code>(</code><code>action<!-- -->: </code><code class="blue_P4bS">Action</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">A</code><code class="op_lSLc">&gt;</code><code>) → </code><code>(</code><code>)</code></div><div>
 <p>Dispatch an action.</p>
 <pre class="language-lua"><code class="language-lua">silo<span class="token punctuation">:</span><span class="token function">Dispatch</span><span class="token punctuation">(</span>silo<span class="token punctuation">.</span>Actions<span class="token punctuation">.</span><span class="token function">DoSomething</span><span class="token punctuation">(</span><span class="token string">"something"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Subscribe"><code style="text-decoration:none">Subscribe</code><a href="#Subscribe" class="hash-link" aria-label="Direct link to Subscribe" title="Direct link to Subscribe">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/silo/init.lua#L221"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Silo<!-- -->:</code><code class="green_DgR4">Subscribe</code><code>(</code><code>subscriber<!-- -->: </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>newState<!-- -->: </code><code class="blue_P4bS">State</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>oldState<!-- -->: </code><code class="blue_P4bS">State</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code></div><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code><code>) → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Subscribe"><code style="text-decoration:none">Subscribe</code><a href="#Subscribe" class="hash-link" aria-label="Direct link to Subscribe" title="Direct link to Subscribe">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/silo/init.lua#L235"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Silo<!-- -->:</code><code class="green_DgR4">Subscribe</code><code>(</code><code>subscriber<!-- -->: </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>newState<!-- -->: </code><code class="blue_P4bS">State</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>oldState<!-- -->: </code><code class="blue_P4bS">State</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code></div><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code><code>) → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div><div>
 <p>
   Subscribe a function to receive all state updates, including
   initial state (subscriber is called immediately).
@@ -78,7 +78,7 @@ statsSilo<span class="token punctuation">:</span><span class="token function">Di
 <span class="token comment">-- Later on, if desired, disconnect the subscription by calling unsubscribe:</span>
 <span class="token function">unsubscribe</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Watch"><code style="text-decoration:none">Watch</code><a href="#Watch" class="hash-link" aria-label="Direct link to Watch" title="Direct link to Watch">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/silo/init.lua#L262"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Silo<!-- -->:</code><code class="green_DgR4">Watch</code><code>(</code><div class="inset_uKQm"><div><code>selector<!-- -->: </code><code class="purple_ieR2">(</code><code class="blue_P4bS">State</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="blue_P4bS">T</code><code>,</code></div><div><code>onChange<!-- -->: </code><code class="purple_ieR2">(</code><code class="blue_P4bS">T</code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div></div><code>) → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Watch"><code style="text-decoration:none">Watch</code><a href="#Watch" class="hash-link" aria-label="Direct link to Watch" title="Direct link to Watch">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/silo/init.lua#L276"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Silo<!-- -->:</code><code class="green_DgR4">Watch</code><code>(</code><div class="inset_uKQm"><div><code>selector<!-- -->: </code><code class="purple_ieR2">(</code><code class="blue_P4bS">State</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="blue_P4bS">T</code><code>,</code></div><div><code>onChange<!-- -->: </code><code class="purple_ieR2">(</code><code class="blue_P4bS">T</code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div></div><code>) → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div><div>
 <p>
   Watch a specific value within the state, which is selected by the
   <code>selector</code> function. The initial value, and any subsequent changes
@@ -96,7 +96,7 @@ statsSilo<span class="token punctuation">:</span><span class="token function">Di
 	<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Points"</span><span class="token punctuation">,</span> points<span class="token punctuation">)</span>
 <span class="token keyword">end</span><span class="token punctuation">)</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ResetToDefaultState"><code style="text-decoration:none">ResetToDefaultState</code><a href="#ResetToDefaultState" class="hash-link" aria-label="Direct link to ResetToDefaultState" title="Direct link to ResetToDefaultState">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/silo/init.lua#L301"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Silo<!-- -->:</code><code class="green_DgR4">ResetToDefaultState</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ResetToDefaultState"><code style="text-decoration:none">ResetToDefaultState</code><a href="#ResetToDefaultState" class="hash-link" aria-label="Direct link to ResetToDefaultState" title="Direct link to ResetToDefaultState">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/silo/init.lua#L315"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Silo<!-- -->:</code><code class="green_DgR4">ResetToDefaultState</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
 <p>Reset the state to the default state that was given in the constructor.</p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> silo <span class="token operator">=</span> Silo<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
 	Points <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>
@@ -128,7 +128,7 @@ silo<span class="token punctuation">:</span><span class="token function">ResetTo
                 {
                     &quot;name&quot;: &quot;modifiers&quot;,
                     &quot;desc&quot;: &quot;&quot;,
-                    &quot;lua_type&quot;: &quot;{ Modifier&lt;S&gt; }?&quot;
+                    &quot;lua_type&quot;: &quot;{ [string]: Modifier&lt;S&gt; }?&quot;
                 }
             ],
             &quot;returns&quot;: [
@@ -139,7 +139,7 @@ silo<span class="token punctuation">:</span><span class="token function">ResetTo
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 78,
+                &quot;line&quot;: 86,
                 &quot;path&quot;: &quot;modules/silo/init.lua&quot;
             }
         },
@@ -166,7 +166,7 @@ silo<span class="token punctuation">:</span><span class="token function">ResetTo
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 116,
+                &quot;line&quot;: 126,
                 &quot;path&quot;: &quot;modules/silo/init.lua&quot;
             }
         },
@@ -182,7 +182,7 @@ silo<span class="token punctuation">:</span><span class="token function">ResetTo
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 163,
+                &quot;line&quot;: 177,
                 &quot;path&quot;: &quot;modules/silo/init.lua&quot;
             }
         },
@@ -199,7 +199,7 @@ silo<span class="token punctuation">:</span><span class="token function">ResetTo
             &quot;returns&quot;: [],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 177,
+                &quot;line&quot;: 191,
                 &quot;path&quot;: &quot;modules/silo/init.lua&quot;
             }
         },
@@ -221,7 +221,7 @@ silo<span class="token punctuation">:</span><span class="token function">ResetTo
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 221,
+                &quot;line&quot;: 235,
                 &quot;path&quot;: &quot;modules/silo/init.lua&quot;
             }
         },
@@ -248,7 +248,7 @@ silo<span class="token punctuation">:</span><span class="token function">ResetTo
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 262,
+                &quot;line&quot;: 276,
                 &quot;path&quot;: &quot;modules/silo/init.lua&quot;
             }
         },
@@ -259,7 +259,7 @@ silo<span class="token punctuation">:</span><span class="token function">ResetTo
             &quot;returns&quot;: [],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 301,
+                &quot;line&quot;: 315,
                 &quot;path&quot;: &quot;modules/silo/init.lua&quot;
             }
         }
@@ -271,7 +271,7 @@ silo<span class="token punctuation">:</span><span class="token function">ResetTo
             &quot;desc&quot;: &quot;Represents state.&quot;,
             &quot;lua_type&quot;: &quot;{[string]: any}&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 12,
+                &quot;line&quot;: 10,
                 &quot;path&quot;: &quot;modules/silo/init.lua&quot;
             }
         },
@@ -280,7 +280,7 @@ silo<span class="token punctuation">:</span><span class="token function">ResetTo
             &quot;desc&quot;: &quot;A function that modifies state.&quot;,
             &quot;lua_type&quot;: &quot;(State&lt;S&gt;, any) -&gt; ()&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 19,
+                &quot;line&quot;: 17,
                 &quot;path&quot;: &quot;modules/silo/init.lua&quot;
             }
         },
@@ -300,7 +300,7 @@ silo<span class="token punctuation">:</span><span class="token function">ResetTo
                 }
             ],
             &quot;source&quot;: {
-                &quot;line&quot;: 30,
+                &quot;line&quot;: 28,
                 &quot;path&quot;: &quot;modules/silo/init.lua&quot;
             }
         }
@@ -308,11 +308,11 @@ silo<span class="token punctuation">:</span><span class="token function">ResetTo
     &quot;name&quot;: &quot;Silo&quot;,
     &quot;desc&quot;: &quot;A Silo is a state container, inspired by Redux slices and\ndesigned for Roblox developers.&quot;,
     &quot;source&quot;: {
-        &quot;line&quot;: 43,
+        &quot;line&quot;: 51,
         &quot;path&quot;: &quot;modules/silo/init.lua&quot;
     }
-}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a><ul><li><a href="#Action&lt;A&gt;" class="table-of-contents__link toc-highlight">Action<a></a></a></li><li><a href="#Modifier&lt;S&gt;" class="table-of-contents__link toc-highlight">Modifier<s></s></a></li><li><a href="#State&lt;S&gt;" class="table-of-contents__link toc-highlight">State<s></s></a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#Dispatch" class="table-of-contents__link toc-highlight">:Dispatch</a></li><li><a href="#GetState" class="table-of-contents__link toc-highlight">:GetState</a></li><li><a href="#ResetToDefaultState" class="table-of-contents__link toc-highlight">:ResetToDefaultState</a></li><li><a href="#Subscribe" class="table-of-contents__link toc-highlight">:Subscribe</a></li><li><a href="#Watch" class="table-of-contents__link toc-highlight">:Watch</a></li><li><a href="#combine" class="table-of-contents__link toc-highlight">.combine</a></li><li><a href="#new" class="table-of-contents__link toc-highlight">.new</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2023 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/RbxUtil/assets/js/runtime~main.b651850a.js"></script>
-<script src="/RbxUtil/assets/js/main.8cb1d605.js"></script>
+}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a><ul><li><a href="#Action&lt;A&gt;" class="table-of-contents__link toc-highlight">Action<a></a></a></li><li><a href="#Modifier&lt;S&gt;" class="table-of-contents__link toc-highlight">Modifier<s></s></a></li><li><a href="#State&lt;S&gt;" class="table-of-contents__link toc-highlight">State<s></s></a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#Dispatch" class="table-of-contents__link toc-highlight">:Dispatch</a></li><li><a href="#GetState" class="table-of-contents__link toc-highlight">:GetState</a></li><li><a href="#ResetToDefaultState" class="table-of-contents__link toc-highlight">:ResetToDefaultState</a></li><li><a href="#Subscribe" class="table-of-contents__link toc-highlight">:Subscribe</a></li><li><a href="#Watch" class="table-of-contents__link toc-highlight">:Watch</a></li><li><a href="#combine" class="table-of-contents__link toc-highlight">.combine</a></li><li><a href="#new" class="table-of-contents__link toc-highlight">.new</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
+<script src="/RbxUtil/assets/js/runtime~main.7a5a4d6b.js"></script>
+<script src="/RbxUtil/assets/js/main.a6aab3c0.js"></script>
 </body>
 </html>
