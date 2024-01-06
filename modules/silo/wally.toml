@@ -1,7 +1,7 @@
 [package]
 name = "sleitnick/silo"
 description = "State container class"
-version = "0.1.2"
+version = "0.2.0"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"
