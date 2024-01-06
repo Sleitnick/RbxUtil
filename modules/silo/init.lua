@@ -32,8 +32,8 @@ type Action<A> = {
 	Payload: A,
 }
 
-local Util = require(script.Util)
 local TableWatcher = require(script.TableWatcher)
+local Util = require(script.Util)
 
 --[=[
 	@class Silo
@@ -130,7 +130,7 @@ function Silo.combine<S>(silos, initialState: State<S>?)
 		silo._Parent = combinedSilo
 		for actionName, modifier in pairs(silo._Modifiers) do
 			-- Prefix action name to keep it unique:
-			local fullActionName = name .. "/" .. actionName
+			local fullActionName = `{name}/{actionName}`
 			combinedSilo._Modifiers[fullActionName] = function(s, payload)
 				-- Extend the top-level state from the sub-silo state modification:
 				return Util.Extend(s, {
@@ -139,14 +139,18 @@ function Silo.combine<S>(silos, initialState: State<S>?)
 			end
 		end
 		for actionName in pairs(silo.Actions) do
+			if combinedSilo.Actions[actionName] ~= nil then
+				error(`duplicate action name {actionName} found when combining silos`, 2)
+			end
 			-- Update the action creator to include the correct prefixed action name:
-			local fullActionName = name .. "/" .. actionName
+			local fullActionName = `{name}/{actionName}`
 			silo.Actions[actionName] = function(p)
 				return {
 					Name = fullActionName,
 					Payload = p,
 				}
 			end
+			combinedSilo.Actions[actionName] = silo.Actions[actionName]
 		end
 	end
 
