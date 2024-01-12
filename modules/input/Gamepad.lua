@@ -320,9 +320,7 @@ function Gamepad:_setupGamepad(forcedGamepad: Enum.UserInputType?)
 			end
 		end)
 
-		if UserInputService:GetGamepadConnected(forcedGamepad) then
-			self:_setupActiveGamepad(forcedGamepad)
-		end
+		self:_setupActiveGamepad(forcedGamepad)
 	else
 		-- Dynamic gamepad:
 
@@ -521,6 +519,10 @@ end
 	```
 ]=]
 function Gamepad:SetMotor(motor: Enum.VibrationMotor, intensity: number): number
+	if not self.SupportsVibration then
+		return -1
+	end
+
 	self._setMotorIds[motor] += 1
 	local id = self._setMotorIds[motor]
 	HapticService:SetMotor(self._gamepad, motor, intensity)

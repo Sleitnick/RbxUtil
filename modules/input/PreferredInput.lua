@@ -11,7 +11,7 @@
 	The InputType is just a string that is either `"MouseKeyboard"`,
 	`"Touch"`, or `"Gamepad"`.
 ]=]
-export type InputType = "MouseKeyboard" | "Touch" | "Gamepad"
+export type InputType = "MouseKeyboard" | "Touch" | "Gamepad" | "Unknown"
 
 local UserInputService = game:GetService("UserInputService")
 
@@ -20,6 +20,7 @@ local keyboardUserInputType = Enum.UserInputType.Keyboard
 
 type PreferredInput = {
 	Current: InputType,
+	DeterminePreferred: (inputType: Enum.UserInputType) -> InputType,
 	Observe: (handler: (inputType: InputType) -> ()) -> () -> (),
 }
 
@@ -80,6 +81,17 @@ PreferredInput = {
 
 	Current = "MouseKeyboard",
 
+	DeterminePreferred = function(inputType: Enum.UserInputType): InputType
+		if inputType == touchUserInputType then
+			return "Touch"
+		elseif inputType == keyboardUserInputType or inputType.Name:sub(1, 5) == "Mouse" then
+			return "MouseKeyboard"
+		elseif inputType.Name:sub(1, 7) == "Gamepad" then
+			return "Gamepad"
+		end
+		return "Unknown"
+	end,
+
 	Observe = function(handler: (inputType: InputType) -> ()): () -> ()
 		if table.find(subscribers, handler) then
 			error("function already subscribed", 2)
@@ -109,17 +121,14 @@ local function SetPreferred(preferred: InputType)
 	end
 end
 
-local function DeterminePreferred(inputType: Enum.UserInputType)
-	if inputType == touchUserInputType then
-		SetPreferred("Touch")
-	elseif inputType == keyboardUserInputType or string.sub(inputType.Name, 1, 5) == "Mouse" then
-		SetPreferred("MouseKeyboard")
-	elseif string.sub(inputType.Name, 1, 7) == "Gamepad" then
-		SetPreferred("Gamepad")
+local function SetPreferredFromInputType(inputType: Enum.UserInputType)
+	local preferred: InputType = PreferredInput.DeterminePreferred(inputType)
+	if preferred ~= "Unknown" then
+		SetPreferred(preferred)
 	end
 end
 
-DeterminePreferred(UserInputService:GetLastInputType())
-UserInputService.LastInputTypeChanged:Connect(DeterminePreferred)
+PreferredInput.DeterminePreferred(UserInputService:GetLastInputType())
+UserInputService.LastInputTypeChanged:Connect(SetPreferredFromInputType)
 
 return PreferredInput

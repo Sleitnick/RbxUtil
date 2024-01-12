@@ -127,4 +127,4 @@ function Keyboard:Destroy()
 	self._trove:Destroy()
 end
 
-return Keyboard
+return Keyboard.new()

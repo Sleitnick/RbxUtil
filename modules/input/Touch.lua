@@ -117,4 +117,4 @@ function Touch:Destroy()
 	self._trove:Destroy()
 end
 
-return Touch
+return Touch.new()

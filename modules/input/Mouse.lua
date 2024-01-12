@@ -105,10 +105,7 @@ function Mouse.new()
 		end
 	end)
 
-	self._trove:Connect(UserInputService.InputEnded, function(input, processed)
-		if processed then
-			return
-		end
+	self._trove:Connect(UserInputService.InputEnded, function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 then
 			self.LeftUp:Fire()
 		elseif input.UserInputType == Enum.UserInputType.MouseButton2 then
@@ -119,14 +116,13 @@ function Mouse.new()
 	end)
 
 	self._trove:Connect(UserInputService.InputChanged, function(input, processed)
-		if processed then
-			return
-		end
 		if input.UserInputType == Enum.UserInputType.MouseMovement then
 			local position = input.Position
 			self.Moved:Fire(Vector2.new(position.X, position.Y))
 		elseif input.UserInputType == Enum.UserInputType.MouseWheel then
-			self.Scrolled:Fire(input.Position.Z)
+			if not processed then
+				self.Scrolled:Fire(input.Position.Z)
+			end
 		end
 	end)
 
@@ -281,4 +277,4 @@ function Mouse:Destroy()
 	self._trove:Destroy()
 end
 
-return Mouse
+return Mouse.new()
