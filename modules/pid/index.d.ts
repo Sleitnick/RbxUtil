@@ -32,6 +32,7 @@ interface PID {
 	 *
 	 * @param setpoint The goal for the PID.
 	 * @param input The current input.
+	 * @param deltaTime Delta time.
 	 * @returns The updated output.
 	 */
 	Calculate(setpoint: number, input: number, deltaTime: number): number;

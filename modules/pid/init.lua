@@ -87,6 +87,7 @@ end
 --[=[
 	@param setpoint number -- The desired point to reach
 	@param input number -- The current inputted value
+	@param deltaTime number -- Delta time
 	@return output: number
 
 	Calculates the new output based on the setpoint and input. For example,
