@@ -34,7 +34,7 @@ interface PID {
 	 * @param input The current input.
 	 * @returns The updated output.
 	 */
-	Calculate(setpoint: number, input: number): number;
+	Calculate(setpoint: number, input: number, deltaTime: number): number;
 
 	/**
 	 * Resets the PID.
