@@ -145,7 +145,7 @@ function PID:Debug(name: string, parent: Instance?)
 	if not game:GetService("RunService"):IsStudio() then
 		return
 	end
-	
+
 	if self._debug then
 		return
 	end
