@@ -91,7 +91,8 @@ function Silo.new<S, A>(defaultState: State<S>, modifiers: { [string]: Modifier<
 	self._Modifiers = {} :: { [string]: any }
 	self._Dispatching = false
 	self._Parent = self
-	self._Subscribers = {}
+	self._StateSubscribers = {}
+	self._DispatchSubscribers = {}
 
 	self.Actions = {}
 
@@ -167,6 +168,28 @@ function Silo.combine<S, A>(silos: { [string]: Silo<unknown, unknown> }, initial
 	return combinedSilo
 end
 
+function Silo:_subscribeInternal<T>(subscriberTbl: { T }, subscriber: T): () -> ()
+	if self._Dispatching then
+		error("cannot subscribe from within a modifier", 2)
+	end
+	if self._Parent ~= self then
+		error("can only subscribe on top-level silo", 2)
+	end
+	if table.find(subscriberTbl, subscriber) then
+		error("cannot subscribe same function more than once", 2)
+	end
+
+	table.insert(subscriberTbl, subscriber)
+
+	return function()
+		local index = table.find(subscriberTbl, subscriber)
+		if not index then
+			return
+		end
+		table.remove(subscriberTbl, index)
+	end
+end
+
 --[=[
 	Get the current state.
 
@@ -196,6 +219,11 @@ function Silo:Dispatch<A>(action: Action<A>)
 		error("can only dispatch from top-level silo", 2)
 	end
 
+	-- Notify dispatch subscribers of action dispatch:
+	for _, subscriber in self._DispatchSubscribers do
+		subscriber(action)
+	end
+
 	-- Find and invoke the modifier to modify current state:
 	self._Dispatching = true
 	local oldState = self._State
@@ -210,11 +238,31 @@ function Silo:Dispatch<A>(action: Action<A>)
 	if newState ~= oldState then
 		self._State = Util.DeepFreeze(newState)
 
-		-- Notify subscribers of state change:
-		for _, subscriber in self._Subscribers do
+		-- Notify state subscribers of state change:
+		for _, subscriber in self._StateSubscribers do
 			subscriber(newState, oldState)
 		end
 	end
+end
+
+--[=[
+	Subscribe a function to receive all action dispatches. Most useful for
+	replicating state between two identical silos running on client and
+	server without ever directly touching state.
+
+	Returns an unsubscribe function. Call the function to unsubscribe.
+
+	```lua
+	local unsubscribe = silo:OnDispatch(function(action)
+		-- Do something
+	end)
+
+	-- Later on, if desired, disconnect the subscription by calling unsubscribe:
+	unsubscribe()
+	```
+]=]
+function Silo:OnDispatch<A>(subscriber: (action: Action<A>) -> ()): () -> ()
+	return self:_subscribeInternal(self._DispatchSubscribers, subscriber)
 end
 
 --[=[
@@ -233,26 +281,7 @@ end
 	```
 ]=]
 function Silo:Subscribe<S>(subscriber: (newState: State<S>, oldState: State<S>) -> ()): () -> ()
-	if self._Dispatching then
-		error("cannot subscribe from within a modifier", 2)
-	end
-	if self._Parent ~= self then
-		error("can only subscribe on top-level silo", 2)
-	end
-	if table.find(self._Subscribers, subscriber) then
-		error("cannot subscribe same function more than once", 2)
-	end
-
-	table.insert(self._Subscribers, subscriber)
-
-	-- Unsubscribe:
-	return function()
-		local index = table.find(self._Subscribers, subscriber)
-		if not index then
-			return
-		end
-		table.remove(self._Subscribers, index)
-	end
+	return self:_subscribeInternal(self._StateSubscribers, subscriber)
 end
 
 --[=[
@@ -326,7 +355,7 @@ function Silo:ResetToDefaultState()
 	if self._DefaultState ~= oldState then
 		self._State = Util.DeepFreeze(Util.DeepCopy(self._DefaultState))
 
-		for _, subscriber in self._Subscribers do
+		for _, subscriber in self._StateSubscribers do
 			subscriber(self._State, oldState)
 		end
 	end
