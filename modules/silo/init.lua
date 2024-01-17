@@ -1,5 +1,3 @@
---!strict
-
 -- Silo
 -- Stephen Leitnick
 -- April 29, 2022
@@ -30,6 +28,16 @@ export type Modifier<S> = (State<S>, any) -> ()
 type Action<A> = {
 	Name: string,
 	Payload: A,
+}
+
+export type Silo<S, A> = {
+	Actions: { [string]: <A>(value: A) -> () },
+
+	GetState: (self: Silo<S, A>) -> State<S>,
+	Dispatch: (self: Silo<S, A>, action: Action<A>) -> (),
+	ResetToDefaultState: (self: Silo<S, A>) -> (),
+	Subscribe: (self: Silo<S, A>, subscriber: (newState: State<S>, oldState: State<S>) -> ()) -> () -> (),
+	Watch: <T>(self: Silo<S, A>, selector: (State<S>) -> T, onChange: (T) -> ()) -> () -> (),
 }
 
 local TableWatcher = require(script.TableWatcher)
@@ -75,37 +83,35 @@ Silo.__index = Silo
 	payload (no need to pass state). The `SetKills` modifier is then used
 	as the `SetKills` action to be dispatched.
 ]=]
-function Silo.new<S>(defaultState: State<S>, modifiers: { Modifier<S> }?)
+function Silo.new<S, A>(defaultState: State<S>, modifiers: { [string]: Modifier<S> }?): Silo<S, A>
 	local self = setmetatable({}, Silo)
 
 	self._DefaultState = Util.DeepFreeze(Util.DeepCopy(defaultState))
 	self._State = Util.DeepFreeze(Util.DeepCopy(defaultState))
-	self._Modifiers = {}
+	self._Modifiers = {} :: { [string]: any }
 	self._Dispatching = false
 	self._Parent = self
-	self._DispatchSubscribers = {}
 	self._Subscribers = {}
 
 	self.Actions = {}
 
-	modifiers = modifiers or {}
-	assert(modifiers, "") -- Quick cast modifiers so Luau doesn't complain
-
 	-- Create modifiers and action creators:
-	for actionName, modifier in modifiers do
-		self._Modifiers[actionName] = function(state: State<S>, payload: any)
-			-- Create a watcher to virtually watch for state mutations:
-			local watcher = TableWatcher(state)
-			modifier(watcher, payload)
-			-- Apply state mutations into new state table:
-			return watcher()
-		end
+	if modifiers then
+		for actionName, modifier in modifiers do
+			self._Modifiers[actionName] = function(state: State<S>, payload: any)
+				-- Create a watcher to virtually watch for state mutations:
+				local watcher = TableWatcher(state)
+				modifier(watcher :: any, payload)
+				-- Apply state mutations into new state table:
+				return watcher()
+			end
 
-		self.Actions[actionName] = function(payload)
-			return {
-				Name = actionName,
-				Payload = payload,
-			}
+			self.Actions[actionName] = function(payload)
+				return {
+					Name = actionName,
+					Payload = payload,
+				}
+			end
 		end
 	end
 
@@ -117,7 +123,7 @@ end
 	@return Silo
 	Constructs a new silo as a combination of other silos.
 ]=]
-function Silo.combine<S>(silos, initialState: State<S>?)
+function Silo.combine<S, A>(silos: { [string]: Silo<unknown, unknown> }, initialState: State<S>?): Silo<S, A>
 	-- Combine state:
 	local state = {}
 	for name, silo in silos do
@@ -134,7 +140,7 @@ function Silo.combine<S>(silos, initialState: State<S>?)
 		silo._Parent = combinedSilo
 		for actionName, modifier in silo._Modifiers do
 			-- Prefix action name to keep it unique:
-			local fullActionName = name .. "/" .. actionName
+			local fullActionName = `{name}/{actionName}`
 			combinedSilo._Modifiers[fullActionName] = function(s, payload)
 				-- Extend the top-level state from the sub-silo state modification:
 				return Util.Extend(s, {
@@ -143,14 +149,18 @@ function Silo.combine<S>(silos, initialState: State<S>?)
 			end
 		end
 		for actionName in silo.Actions do
+			if combinedSilo.Actions[actionName] ~= nil then
+				error(`duplicate action name {actionName} found when combining silos`, 2)
+			end
 			-- Update the action creator to include the correct prefixed action name:
-			local fullActionName = name .. "/" .. actionName
-			combinedSilo.Actions[actionName] = function(p)
+			local fullActionName = `{name}/{actionName}`
+			silo.Actions[actionName] = function(p)
 				return {
 					Name = fullActionName,
 					Payload = p,
 				}
 			end
+			combinedSilo.Actions[actionName] = silo.Actions[actionName]
 		end
 	end
 
@@ -204,44 +214,6 @@ function Silo:Dispatch<A>(action: Action<A>)
 		for _, subscriber in self._Subscribers do
 			subscriber(newState, oldState)
 		end
-	end
-end
-
---[=[
-	Subscribe a function to receive all action dispatches. Most useful for
-	replicating state between two identical silos running on client and
-	server without ever directly touching state.
-
-	Returns an unsubscribe function. Call the function to unsubscribe.
-
-	```lua
-	local unsubscribe = silo:OnDispatch(function(action)
-		-- Do something
-	end)
-
-	-- Later on, if desired, disconnect the subscription by calling unsubscribe:
-	unsubscribe()
-	```
-]=]
-function Silo:OnDispatch<A>(subscriber: (action: Action<A>) -> ()): () -> ()
-	if self._Dispatching then
-		error("cannot subscribe from within a modifier", 2)
-	end
-	if self._Parent ~= self then
-		error("can only subscribe on top-level silo", 2)
-	end
-	if table.find(self._DispatchSubscribers, subscriber) then
-		error("cannot subscribe same function more than once", 2)
-	end
-
-	table.insert(self._DispatchSubscribers, subscriber)
-
-	return function()
-		local index = table.find(self._DispatchSubscribers, subscriber)
-		if not index then
-			return
-		end
-		table.remove(self._DispatchSubscribers, index)
 	end
 end
 
@@ -360,4 +332,7 @@ function Silo:ResetToDefaultState()
 	end
 end
 
-return Silo
+return {
+	new = Silo.new,
+	combine = Silo.combine,
+}

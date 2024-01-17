@@ -1,10 +1,9 @@
--- PID
--- August 11, 2020
+--!native
 
 export type PID = {
 	POnE: boolean,
 	Reset: (self: PID) -> (),
-	Calculate: (self: PID, setpoint: number, input: number) -> number,
+	Calculate: (self: PID, setpoint: number, input: number, deltaTime: number) -> number,
 	Debug: (self: PID, name: string, parent: Instance?) -> (),
 	Destroy: (self: PID) -> (),
 }
@@ -61,14 +60,19 @@ PID.__index = PID
 ]=]
 function PID.new(min: number, max: number, kp: number, ki: number, kd: number): PID
 	local self = setmetatable({}, PID)
+
 	self._min = min
 	self._max = max
+
 	self._kp = kp
 	self._ki = ki
 	self._kd = kd
+
 	self._lastInput = 0
 	self._outputSum = 0
+
 	self.POnE = true
+
 	return self
 end
 
@@ -83,6 +87,7 @@ end
 --[=[
 	@param setpoint number -- The desired point to reach
 	@param input number -- The current inputted value
+	@param deltaTime number -- Delta time
 	@return output: number
 
 	Calculates the new output based on the setpoint and input. For example,
@@ -99,10 +104,13 @@ end
 	end)
 	```
 ]=]
-function PID:Calculate(setpoint: number, input: number)
-	local err = (setpoint - input)
-	local dInput = (input - self._lastInput)
-	self._outputSum += (self._ki * err)
+function PID:Calculate(setpoint: number, input: number, deltaTime: number)
+	local ki = self._ki * deltaTime
+	local kd = self._kd * deltaTime
+
+	local err = setpoint - input
+	local dInput = input - self._lastInput
+	self._outputSum += ki * err
 
 	if not self.POnE then
 		self._outputSum -= self._kp * dInput
@@ -115,7 +123,7 @@ function PID:Calculate(setpoint: number, input: number)
 		output = self._kp * err
 	end
 
-	output += self._outputSum - self._kd * dInput
+	output += self._outputSum - kd * dInput
 	output = math.clamp(output, self._min, self._max)
 
 	self._lastInput = input
@@ -138,6 +146,7 @@ function PID:Debug(name: string, parent: Instance?)
 	if not game:GetService("RunService"):IsStudio() then
 		return
 	end
+
 	if self._debug then
 		return
 	end
@@ -154,11 +163,26 @@ function PID:Debug(name: string, parent: Instance?)
 		end)
 	end
 
-	Bind("Min", "_min")
-	Bind("Max", "_max")
-	Bind("KP", "_kp")
-	Bind("KI", "_ki")
-	Bind("KD", "_kd")
+	folder:SetAttribute("MinMax", NumberRange.new(self._min, self._max))
+	folder:GetAttributeChangedSignal("MinMax"):Connect(function()
+		local minMax = folder:GetAttribute("MinMax") :: NumberRange
+		self._min = minMax.Min
+		self._max = minMax.Max
+		self:Reset()
+	end)
+
+	Bind("kP", "_kp")
+	Bind("kI", "_ki")
+	Bind("kD", "_kd")
+
+	folder:SetAttribute("Output", self._min)
+
+	local lastOutput = 0
+	self.Calculate = function(...)
+		lastOutput = PID.Calculate(...)
+		folder:SetAttribute("Output", lastOutput)
+		return lastOutput
+	end
 
 	folder.Parent = parent or workspace
 	self._debug = folder
