@@ -27,7 +27,7 @@ export type Modifier<S> = (State<S>, any) -> ()
 ]=]
 type Action<A> = {
 	Name: string,
-	Payload: A,
+	Payload: { A },
 }
 
 export type Silo<S, A> = {
@@ -98,18 +98,18 @@ function Silo.new<S, A>(defaultState: State<S>, modifiers: { [string]: Modifier<
 	-- Create modifiers and action creators:
 	if modifiers then
 		for actionName, modifier in modifiers do
-			self._Modifiers[actionName] = function(state: State<S>, payload: any)
+			self._Modifiers[actionName] = function(state: State<S>, ...: any)
 				-- Create a watcher to virtually watch for state mutations:
 				local watcher = TableWatcher(state)
-				modifier(watcher :: any, payload)
+				modifier(watcher :: any, ...)
 				-- Apply state mutations into new state table:
 				return watcher()
 			end
 
-			self.Actions[actionName] = function(payload)
+			self.Actions[actionName] = function(...: any)
 				return {
 					Name = actionName,
-					Payload = payload,
+					Payload = { ... },
 				}
 			end
 		end
@@ -141,10 +141,10 @@ function Silo.combine<S, A>(silos: { [string]: Silo<unknown, unknown> }, initial
 		for actionName, modifier in silo._Modifiers do
 			-- Prefix action name to keep it unique:
 			local fullActionName = `{name}/{actionName}`
-			combinedSilo._Modifiers[fullActionName] = function(s, payload)
+			combinedSilo._Modifiers[fullActionName] = function(s, ...: any)
 				-- Extend the top-level state from the sub-silo state modification:
 				return Util.Extend(s, {
-					[name] = modifier((s :: { [string]: any })[name], payload),
+					[name] = modifier((s :: { [string]: any })[name], ...),
 				})
 			end
 		end
@@ -154,10 +154,10 @@ function Silo.combine<S, A>(silos: { [string]: Silo<unknown, unknown> }, initial
 			end
 			-- Update the action creator to include the correct prefixed action name:
 			local fullActionName = `{name}/{actionName}`
-			silo.Actions[actionName] = function(p)
+			silo.Actions[actionName] = function(...: any)
 				return {
 					Name = fullActionName,
-					Payload = p,
+					Payload = { ... },
 				}
 			end
 			combinedSilo.Actions[actionName] = silo.Actions[actionName]
@@ -202,7 +202,7 @@ function Silo:Dispatch<A>(action: Action<A>)
 	local newState = oldState
 	local modifier = self._Modifiers[action.Name]
 	if modifier then
-		newState = modifier(newState, action.Payload)
+		newState = modifier(newState, table.unpack(action.Payload))
 	end
 	self._Dispatching = false
 
