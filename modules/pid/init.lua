@@ -84,17 +84,17 @@ end
 ]=]
 function PID:Calculate(setpoint: number, processVariable: number, deltaTime: number)
 	-- Calculate the error e(t) = SP - PV(t)
-	local error = setpoint - processVariable
+	local err = setpoint - processVariable
 
 	-- Proportional term
-	local P_out = self._kp * error
+	local P_out = self._kp * err
 
 	-- Integral term
-	self._integralSum = self._integralSum + error * deltaTime
+	self._integralSum = self._integralSum + err * deltaTime
 	local I_out = self._ki * self._integralSum
 
 	-- Derivative term
-	local derivative = (error - self._lastError) / deltaTime
+	local derivative = (err - self._lastError) / deltaTime
 	local D_out = self._kd * derivative
 
 	-- Σ Combine terms
@@ -104,7 +104,7 @@ function PID:Calculate(setpoint: number, processVariable: number, deltaTime: num
 	output = math.clamp(output, self._min, self._max)
 
 	-- Save the current error for the next derivative calculation
-	self._lastError = error
+	self._lastError = err
 	return output
 end
 
