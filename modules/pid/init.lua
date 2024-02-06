@@ -85,18 +85,18 @@ function PID:Calculate(setpoint: number, processVariable: number, deltaTime: num
 	local err = setpoint - processVariable
 
 	-- Proportional term
-	local P_out = self._kp * err
+	local pOut = self._kp * err
 
 	-- Integral term
 	self._integralSum = self._integralSum + err * deltaTime
-	local I_out = self._ki * self._integralSum
+	local iOut = self._ki * self._integralSum
 
 	-- Derivative term
 	local derivative = (err - self._lastError) / deltaTime
-	local D_out = self._kd * derivative
+	local dOut = self._kd * derivative
 
-	-- Σ Combine terms
-	local output = P_out + I_out + D_out
+	-- Combine terms
+	local output = pOut + iOut + dOut
 
 	-- Clamp output to min/max
 	output = math.clamp(output, self._min, self._max)
