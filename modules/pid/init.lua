@@ -1,7 +1,6 @@
 --!native
 
 export type PID = {
-	POnE: boolean,
 	Reset: (self: PID) -> (),
 	Calculate: (self: PID, setpoint: number, input: number, deltaTime: number) -> number,
 	Debug: (self: PID, name: string, parent: Instance?) -> (),
@@ -10,39 +9,24 @@ export type PID = {
 
 --[=[
 	@class PID
+    Authors: Sleitnick, ΣTΞCH (SigmaTech)
+
 	The PID class simulates a [PID controller](https://en.wikipedia.org/wiki/PID_controller). PID is an acronym
 	for _proportional, integral, derivative_. PIDs are input feedback loops that try to reach a specific
 	goal by measuring the difference between the input and the desired value, and then returning a new
 	desired input.
-	
+
 	A common example is a car's cruise control, which would give a PID the current speed
 	and the desired speed, and the PID controller would return the desired throttle input to reach the
 	desired speed.
 
 	Original code based upon the [Arduino PID Library](https://github.com/br3ttb/Arduino-PID-Library).
+
+    Calculations were rewritten by ΣTΞCH to more closely follow PID conventions.
+    This means the removal of the POnE parameter as well as the calculation of the D controller on the error as opposed to the process variable.
 ]=]
 local PID = {}
 PID.__index = PID
-
---[=[
-	@within PID
-	@prop POnE boolean
-
-	POnE stands for "Proportional on Error".
-
-	Set to `true` by default.
-
-	- `true`: The PID applies the proportional calculation on the _error_.
-	- `false`: The PID applies the proportional calculation on the _measurement_.
-
-	Setting this value to `false` may help the PID move smoother and help
-	eliminate overshoot.
-
-	```lua
-	local pid = PID.new(...)
-	pid.POnE = true|false
-	```
-]=]
 
 --[=[
 	@param min number -- Minimum value the PID can output
@@ -60,19 +44,13 @@ PID.__index = PID
 ]=]
 function PID.new(min: number, max: number, kp: number, ki: number, kd: number): PID
 	local self = setmetatable({}, PID)
-
 	self._min = min
 	self._max = max
-
-	self._kp = kp
-	self._ki = ki
-	self._kd = kd
-
-	self._lastInput = 0
-	self._outputSum = 0
-
-	self.POnE = true
-
+	self._kp = kp       -- Proportional coefficient (P)
+	self._ki = ki       -- Integral coefficient (I)
+	self._kd = kd       -- Derivative coefficient (D)
+	self._lastError = 0     -- Store the last error for derivative calculation
+	self._integralSum = 0   -- Store the sum Σ of errors for integral calculation
 	return self
 end
 
@@ -81,13 +59,13 @@ end
 ]=]
 function PID:Reset()
 	self._lastInput = 0
-	self._outputSum = 0
+	self._integralSum = 0
 end
 
 --[=[
-	@param setpoint number -- The desired point to reach
-	@param input number -- The current inputted value
-	@param deltaTime number -- Delta time
+	@param setpoint number          -- The desired point to reach
+	@param processVariable number   -- The measured value of the system to compare against the setpoint
+	@param deltaTime number         -- Delta time. This is the time between each PID calculation
 	@return output: number
 
 	Calculates the new output based on the setpoint and input. For example,
@@ -98,36 +76,35 @@ end
 	local cruisePID = PID.new(0, 1, ...)
 	local desiredSpeed = 50
 
-	RunService.Heartbeat:Connect(function()
-		local throttle = cruisePID:Calculate(desiredSpeed, car.CurrentSpeed)
+	RunService.Heartbeat:Connect(function(dt)
+		local throttle = cruisePID:Calculate(desiredSpeed, car.CurrentSpeed, dt)
 		car:SetThrottle(throttle)
 	end)
 	```
 ]=]
-function PID:Calculate(setpoint: number, input: number, deltaTime: number)
-	local ki = self._ki * deltaTime
-	local kd = self._kd * deltaTime
+function PID:Calculate(setpoint: number, processVariable: number, deltaTime: number)
+	-- Calculate the error e(t) = SP - PV(t)
+	local error = setpoint - processVariable
 
-	local err = setpoint - input
-	local dInput = input - self._lastInput
-	self._outputSum += ki * err
+	-- Proportional term
+	local P_out = self._kp * error
 
-	if not self.POnE then
-		self._outputSum -= self._kp * dInput
-	end
+	-- Integral term
+	self._integralSum = self._integralSum + error * deltaTime
+	local I_out = self._ki * self._integralSum
 
-	self._outputSum = math.clamp(self._outputSum, self._min, self._max)
+	-- Derivative term
+	local derivative = (error - self._lastError) / deltaTime
+	local D_out = self._kd * derivative
 
-	local output = 0
-	if self.POnE then
-		output = self._kp * err
-	end
+	-- Σ Combine terms
+	local output = P_out + I_out + D_out
 
-	output += self._outputSum - kd * dInput
+	-- Clamp output to min/max
 	output = math.clamp(output, self._min, self._max)
 
-	self._lastInput = input
-
+	-- Save the current error for the next derivative calculation
+	self._lastError = error
 	return output
 end
 
