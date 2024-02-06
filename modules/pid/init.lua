@@ -49,7 +49,7 @@ function PID.new(min: number, max: number, kp: number, ki: number, kd: number): 
 	self._kp = kp
 	self._ki = ki
 	self._kd = kd
-	self._lastError = 0		-- Store the last error for derivative calculation
+	self._lastError = 0	-- Store the last error for derivative calculation
 	self._integralSum = 0	-- Store the sum Σ of errors for integral calculation
 	return self
 end
@@ -63,9 +63,9 @@ function PID:Reset()
 end
 
 --[=[
-	@param setpoint number          -- The desired point to reach
-	@param processVariable number   -- The measured value of the system to compare against the setpoint
-	@param deltaTime number         -- Delta time. This is the time between each PID calculation
+	@param setpoint number	-- The desired point to reach
+	@param processVariable number	-- The measured value of the system to compare against the setpoint
+	@param deltaTime number	-- Delta time. This is the time between each PID calculation
 	@return output: number
 
 	Calculates the new output based on the setpoint and input. For example,
