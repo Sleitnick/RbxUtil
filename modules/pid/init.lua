@@ -31,9 +31,9 @@ PID.__index = PID
 --[=[
 	@param min number -- Minimum value the PID can output
 	@param max number -- Maximum value the PID can output
-	@param kp number -- Proportional coefficient
-	@param ki number -- Integral coefficient
-	@param kd number -- Derivative coefficient
+	@param kp number -- Proportional coefficient (P)
+	@param ki number -- Integral coefficient (I)
+	@param kd number -- Derivative coefficient (D)
 	@return PID
 
 	Constructs a new PID.
@@ -46,11 +46,11 @@ function PID.new(min: number, max: number, kp: number, ki: number, kd: number): 
 	local self = setmetatable({}, PID)
 	self._min = min
 	self._max = max
-	self._kp = kp       -- Proportional coefficient (P)
-	self._ki = ki       -- Integral coefficient (I)
-	self._kd = kd       -- Derivative coefficient (D)
-	self._lastError = 0     -- Store the last error for derivative calculation
-	self._integralSum = 0   -- Store the sum Σ of errors for integral calculation
+	self._kp = kp
+	self._ki = ki
+	self._kd = kd
+	self._lastError = 0		-- Store the last error for derivative calculation
+	self._integralSum = 0	-- Store the sum Σ of errors for integral calculation
 	return self
 end
 
