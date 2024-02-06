@@ -49,8 +49,8 @@ function PID.new(min: number, max: number, kp: number, ki: number, kd: number): 
 	self._kp = kp
 	self._ki = ki
 	self._kd = kd
-	self._lastError = 0	-- Store the last error for derivative calculation
-	self._integralSum = 0	-- Store the sum Σ of errors for integral calculation
+	self._lastError = 0 -- Store the last error for derivative calculation
+	self._integralSum = 0 -- Store the sum Σ of errors for integral calculation
 	return self
 end
 

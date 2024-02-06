@@ -1,6 +1,6 @@
 {
 	"name": "@rbxutil/pid",
-	"version": "1.2.2",
+	"version": "2.0.0",
 	"main": "init.lua",
 	"repository": "github:Sleitnick/RbxUtil",
 	"license": "MIT",
