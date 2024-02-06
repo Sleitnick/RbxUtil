@@ -17,11 +17,6 @@ export type PID = {
 	A common example is a car's cruise control, which would give a PID the current speed
 	and the desired speed, and the PID controller would return the desired throttle input to reach the
 	desired speed.
-
-	Original code based upon the [Arduino PID Library](https://github.com/br3ttb/Arduino-PID-Library).
-
-    Calculations were rewritten by ΣTΞCH to more closely follow PID conventions.
-    This means the removal of the POnE parameter as well as the calculation of the D controller on the error as opposed to the process variable.
 ]=]
 local PID = {}
 PID.__index = PID
