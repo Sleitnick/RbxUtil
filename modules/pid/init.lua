@@ -9,8 +9,6 @@ export type PID = {
 
 --[=[
 	@class PID
-    Authors: Sleitnick, ΣTΞCH (SigmaTech)
-
 	The PID class simulates a [PID controller](https://en.wikipedia.org/wiki/PID_controller). PID is an acronym
 	for _proportional, integral, derivative_. PIDs are input feedback loops that try to reach a specific
 	goal by measuring the difference between the input and the desired value, and then returning a new
