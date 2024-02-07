@@ -5,9 +5,9 @@ declare namespace PID {
 		 *
 		 * @param min Minimum output.
 		 * @param max Maximum output.
-		 * @param kp Proportional coefficient.
-		 * @param ki Integral coefficient.
-		 * @param kd Derivative coefficient.
+		 * @param kp Proportional gain coefficient.
+		 * @param ki Integral gain coefficient.
+		 * @param kd Derivative gain coefficient.
 		 */
 		new (min: number, max: number, kp: number, ki: number, kd: number): PID;
 	}

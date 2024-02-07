@@ -24,9 +24,9 @@ PID.__index = PID
 --[=[
 	@param min number -- Minimum value the PID can output
 	@param max number -- Maximum value the PID can output
-	@param kp number -- Proportional coefficient (P)
-	@param ki number -- Integral coefficient (I)
-	@param kd number -- Derivative coefficient (D)
+	@param kp number -- Proportional gain coefficient (P)
+	@param ki number -- Integral gain coefficient (I)
+	@param kd number -- Derivative gain coefficient (D)
 	@return PID
 
 	Constructs a new PID.
@@ -43,7 +43,7 @@ function PID.new(min: number, max: number, kp: number, ki: number, kd: number): 
 	self._ki = ki
 	self._kd = kd
 	self._lastError = 0 -- Store the last error for derivative calculation
-	self._integralSum = 0 -- Store the sum Σ of errors for integral calculation
+	self._integralSum = 0 -- Store the sum of errors for integral calculation
 	return self
 end
 
@@ -51,7 +51,7 @@ end
 	Resets the PID to a zero start state.
 ]=]
 function PID:Reset()
-	self._lastInput = 0
+	self._lastError = 0
 	self._integralSum = 0
 end
 
@@ -75,7 +75,7 @@ end
 	end)
 	```
 ]=]
-function PID:Calculate(setpoint: number, processVariable: number, deltaTime: number)
+function PID:Calculate(setpoint: number, processVariable: number, deltaTime: number): number
 	-- Calculate the error e(t) = SP - PV(t)
 	local err = setpoint - processVariable
 
@@ -98,6 +98,7 @@ function PID:Calculate(setpoint: number, processVariable: number, deltaTime: num
 
 	-- Save the current error for the next derivative calculation
 	self._lastError = err
+
 	return output
 end
 
