@@ -124,7 +124,7 @@ function PID:Debug(name: string, parent: Instance?)
 
 	local folder = Instance.new("Folder")
 	folder.Name = name
-	folder:AddTag("__pidebug__")
+	folder:AddTag("PIDDebug")
 
 	local function Bind(attrName, propName)
 		folder:SetAttribute(attrName, self[propName])
@@ -149,11 +149,31 @@ function PID:Debug(name: string, parent: Instance?)
 	folder:SetAttribute("Output", self._min)
 
 	local lastOutput = 0
-	self.Calculate = function(...)
-		lastOutput = PID.Calculate(...)
+	self.Calculate = function(s, sp, pv, ...)
+		lastOutput = PID.Calculate(s, sp, pv, ...)
 		folder:SetAttribute("Output", lastOutput)
 		return lastOutput
 	end
+
+	local delayThread: thread? = nil
+	folder:SetAttribute("ShowDebugger", false)
+	folder:GetAttributeChangedSignal("ShowDebugger"):Connect(function()
+		if delayThread then
+			task.cancel(delayThread)
+		end
+
+		local showDebugger = folder:GetAttribute("ShowDebugger")
+
+		if showDebugger then
+			delayThread = task.delay(0.1, function()
+				delayThread = nil
+				if folder:GetAttribute("ShowDebugger") then
+					folder:SetAttribute("ShowDebugger", false)
+					warn("Install the PID Debug plugin: https://create.roblox.com/store/asset/16279661108/PID-Debug")
+				end
+			end)
+		end
+	end)
 
 	folder.Parent = parent or workspace
 	self._debug = folder
