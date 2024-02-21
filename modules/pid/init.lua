@@ -1,7 +1,6 @@
 --!native
 
 export type PID = {
-	POnE: boolean,
 	Reset: (self: PID) -> (),
 	Calculate: (self: PID, setpoint: number, input: number, deltaTime: number) -> number,
 	Debug: (self: PID, name: string, parent: Instance?) -> (),
@@ -14,42 +13,20 @@ export type PID = {
 	for _proportional, integral, derivative_. PIDs are input feedback loops that try to reach a specific
 	goal by measuring the difference between the input and the desired value, and then returning a new
 	desired input.
-	
+
 	A common example is a car's cruise control, which would give a PID the current speed
 	and the desired speed, and the PID controller would return the desired throttle input to reach the
 	desired speed.
-
-	Original code based upon the [Arduino PID Library](https://github.com/br3ttb/Arduino-PID-Library).
 ]=]
 local PID = {}
 PID.__index = PID
 
 --[=[
-	@within PID
-	@prop POnE boolean
-
-	POnE stands for "Proportional on Error".
-
-	Set to `true` by default.
-
-	- `true`: The PID applies the proportional calculation on the _error_.
-	- `false`: The PID applies the proportional calculation on the _measurement_.
-
-	Setting this value to `false` may help the PID move smoother and help
-	eliminate overshoot.
-
-	```lua
-	local pid = PID.new(...)
-	pid.POnE = true|false
-	```
-]=]
-
---[=[
 	@param min number -- Minimum value the PID can output
 	@param max number -- Maximum value the PID can output
-	@param kp number -- Proportional coefficient
-	@param ki number -- Integral coefficient
-	@param kd number -- Derivative coefficient
+	@param kp number -- Proportional gain coefficient (P)
+	@param ki number -- Integral gain coefficient (I)
+	@param kd number -- Derivative gain coefficient (D)
 	@return PID
 
 	Constructs a new PID.
@@ -60,19 +37,13 @@ PID.__index = PID
 ]=]
 function PID.new(min: number, max: number, kp: number, ki: number, kd: number): PID
 	local self = setmetatable({}, PID)
-
 	self._min = min
 	self._max = max
-
 	self._kp = kp
 	self._ki = ki
 	self._kd = kd
-
-	self._lastInput = 0
-	self._outputSum = 0
-
-	self.POnE = true
-
+	self._lastError = 0 -- Store the last error for derivative calculation
+	self._integralSum = 0 -- Store the sum of errors for integral calculation
 	return self
 end
 
@@ -80,14 +51,14 @@ end
 	Resets the PID to a zero start state.
 ]=]
 function PID:Reset()
-	self._lastInput = 0
-	self._outputSum = 0
+	self._lastError = 0
+	self._integralSum = 0
 end
 
 --[=[
-	@param setpoint number -- The desired point to reach
-	@param input number -- The current inputted value
-	@param deltaTime number -- Delta time
+	@param setpoint number	-- The desired point to reach
+	@param processVariable number	-- The measured value of the system to compare against the setpoint
+	@param deltaTime number	-- Delta time. This is the time between each PID calculation
 	@return output: number
 
 	Calculates the new output based on the setpoint and input. For example,
@@ -98,35 +69,35 @@ end
 	local cruisePID = PID.new(0, 1, ...)
 	local desiredSpeed = 50
 
-	RunService.Heartbeat:Connect(function()
-		local throttle = cruisePID:Calculate(desiredSpeed, car.CurrentSpeed)
+	RunService.Heartbeat:Connect(function(dt)
+		local throttle = cruisePID:Calculate(desiredSpeed, car.CurrentSpeed, dt)
 		car:SetThrottle(throttle)
 	end)
 	```
 ]=]
-function PID:Calculate(setpoint: number, input: number, deltaTime: number)
-	local ki = self._ki * deltaTime
-	local kd = self._kd * deltaTime
+function PID:Calculate(setpoint: number, processVariable: number, deltaTime: number): number
+	-- Calculate the error e(t) = SP - PV(t)
+	local err = setpoint - processVariable
 
-	local err = setpoint - input
-	local dInput = input - self._lastInput
-	self._outputSum += ki * err
+	-- Proportional term
+	local pOut = self._kp * err
 
-	if not self.POnE then
-		self._outputSum -= self._kp * dInput
-	end
+	-- Integral term
+	self._integralSum = self._integralSum + err * deltaTime
+	local iOut = self._ki * self._integralSum
 
-	self._outputSum = math.clamp(self._outputSum, self._min, self._max)
+	-- Derivative term
+	local derivative = (err - self._lastError) / deltaTime
+	local dOut = self._kd * derivative
 
-	local output = 0
-	if self.POnE then
-		output = self._kp * err
-	end
+	-- Combine terms
+	local output = pOut + iOut + dOut
 
-	output += self._outputSum - kd * dInput
+	-- Clamp output to min/max
 	output = math.clamp(output, self._min, self._max)
 
-	self._lastInput = input
+	-- Save the current error for the next derivative calculation
+	self._lastError = err
 
 	return output
 end
@@ -153,7 +124,7 @@ function PID:Debug(name: string, parent: Instance?)
 
 	local folder = Instance.new("Folder")
 	folder.Name = name
-	folder:AddTag("__pidebug__")
+	folder:AddTag("PIDDebug")
 
 	local function Bind(attrName, propName)
 		folder:SetAttribute(attrName, self[propName])
@@ -178,11 +149,31 @@ function PID:Debug(name: string, parent: Instance?)
 	folder:SetAttribute("Output", self._min)
 
 	local lastOutput = 0
-	self.Calculate = function(...)
-		lastOutput = PID.Calculate(...)
+	self.Calculate = function(s, sp, pv, ...)
+		lastOutput = PID.Calculate(s, sp, pv, ...)
 		folder:SetAttribute("Output", lastOutput)
 		return lastOutput
 	end
+
+	local delayThread: thread? = nil
+	folder:SetAttribute("ShowDebugger", false)
+	folder:GetAttributeChangedSignal("ShowDebugger"):Connect(function()
+		if delayThread then
+			task.cancel(delayThread)
+		end
+
+		local showDebugger = folder:GetAttribute("ShowDebugger")
+
+		if showDebugger then
+			delayThread = task.delay(0.1, function()
+				delayThread = nil
+				if folder:GetAttribute("ShowDebugger") then
+					folder:SetAttribute("ShowDebugger", false)
+					warn("Install the PID Debug plugin: https://create.roblox.com/store/asset/16279661108/PID-Debug")
+				end
+			end)
+		end
+	end)
 
 	folder.Parent = parent or workspace
 	self._debug = folder
