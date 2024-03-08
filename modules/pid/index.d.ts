@@ -5,9 +5,9 @@ declare namespace PID {
 		 *
 		 * @param min Minimum output.
 		 * @param max Maximum output.
-		 * @param kp Proportional coefficient.
-		 * @param ki Integral coefficient.
-		 * @param kd Derivative coefficient.
+		 * @param kp Proportional gain coefficient.
+		 * @param ki Integral gain coefficient.
+		 * @param kd Derivative gain coefficient.
 		 */
 		new (min: number, max: number, kp: number, ki: number, kd: number): PID;
 	}
@@ -15,26 +15,14 @@ declare namespace PID {
 
 interface PID {
 	/**
-	 * POnE stands for "Proportional on Error".
-	 *
-	 * Set to `true` by default.
-	 *
-	 * - `true`: The PID applies the proportional calculation on the _error_.
-	 * - `false`: The PID applies the proportional calculation on the _measurement_.
-	 *
-	 * Setting this value to `false` may help the PID move smoother and help
-	 * eliminate overshoot.
-	 */
-	POnE: boolean;
-
-	/**
 	 * Calculates the new output based on the setpoint and input.
 	 *
 	 * @param setpoint The goal for the PID.
-	 * @param input The current input.
+	 * @param processVariable The measured value of the system to compare against the setpoint.
+	 * @param deltaTime Delta time.
 	 * @returns The updated output.
 	 */
-	Calculate(setpoint: number, input: number): number;
+	Calculate(setpoint: number, processVariable: number, deltaTime: number): number;
 
 	/**
 	 * Resets the PID.

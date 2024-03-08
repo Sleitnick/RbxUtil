@@ -4,6 +4,10 @@
 		"editor.defaultFormatter": "JohnnyMorganz.stylua",
 		"editor.formatOnSave": true,
 	},
+	"[luau]": {
+		"editor.defaultFormatter": "JohnnyMorganz.stylua",
+		"editor.formatOnSave": true,
+	},
 	"[typescript]": {
 		"editor.defaultFormatter": "dbaeumer.vscode-eslint",
 		"editor.formatOnSave": true

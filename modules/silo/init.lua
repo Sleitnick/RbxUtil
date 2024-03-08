@@ -1,5 +1,3 @@
---!strict
-
 -- Silo
 -- Stephen Leitnick
 -- April 29, 2022
@@ -32,8 +30,18 @@ type Action<A> = {
 	Payload: A,
 }
 
-local Util = require(script.Util)
+export type Silo<S, A> = {
+	Actions: { [string]: <A>(value: A) -> () },
+
+	GetState: (self: Silo<S, A>) -> State<S>,
+	Dispatch: (self: Silo<S, A>, action: Action<A>) -> (),
+	ResetToDefaultState: (self: Silo<S, A>) -> (),
+	Subscribe: (self: Silo<S, A>, subscriber: (newState: State<S>, oldState: State<S>) -> ()) -> () -> (),
+	Watch: <T>(self: Silo<S, A>, selector: (State<S>) -> T, onChange: (T) -> ()) -> () -> (),
+}
+
 local TableWatcher = require(script.TableWatcher)
+local Util = require(script.Util)
 
 --[=[
 	@class Silo
@@ -75,12 +83,12 @@ Silo.__index = Silo
 	payload (no need to pass state). The `SetKills` modifier is then used
 	as the `SetKills` action to be dispatched.
 ]=]
-function Silo.new<S>(defaultState: State<S>, modifiers: { Modifier<S> }?)
+function Silo.new<S, A>(defaultState: State<S>, modifiers: { [string]: Modifier<S> }?): Silo<S, A>
 	local self = setmetatable({}, Silo)
 
 	self._DefaultState = Util.DeepFreeze(Util.DeepCopy(defaultState))
 	self._State = Util.DeepFreeze(Util.DeepCopy(defaultState))
-	self._Modifiers = {}
+	self._Modifiers = {} :: { [string]: any }
 	self._Dispatching = false
 	self._Parent = self
 	self._Subscribers = {}
@@ -88,20 +96,22 @@ function Silo.new<S>(defaultState: State<S>, modifiers: { Modifier<S> }?)
 	self.Actions = {}
 
 	-- Create modifiers and action creators:
-	for actionName, modifier in pairs(modifiers or {}) do
-		self._Modifiers[actionName] = function(state: State<S>, payload: any)
-			-- Create a watcher to virtually watch for state mutations:
-			local watcher = TableWatcher(state)
-			modifier(watcher, payload)
-			-- Apply state mutations into new state table:
-			return watcher()
-		end
+	if modifiers then
+		for actionName, modifier in modifiers do
+			self._Modifiers[actionName] = function(state: State<S>, payload: any)
+				-- Create a watcher to virtually watch for state mutations:
+				local watcher = TableWatcher(state)
+				modifier(watcher :: any, payload)
+				-- Apply state mutations into new state table:
+				return watcher()
+			end
 
-		self.Actions[actionName] = function(payload)
-			return {
-				Name = actionName,
-				Payload = payload,
-			}
+			self.Actions[actionName] = function(payload)
+				return {
+					Name = actionName,
+					Payload = payload,
+				}
+			end
 		end
 	end
 
@@ -113,10 +123,10 @@ end
 	@return Silo
 	Constructs a new silo as a combination of other silos.
 ]=]
-function Silo.combine<S>(silos, initialState: State<S>?)
+function Silo.combine<S, A>(silos: { [string]: Silo<unknown, unknown> }, initialState: State<S>?): Silo<S, A>
 	-- Combine state:
 	local state = {}
-	for name, silo in pairs(silos) do
+	for name, silo in silos do
 		if silo._Dispatching then
 			error("cannot combine silos from a modifier", 2)
 		end
@@ -126,11 +136,11 @@ function Silo.combine<S>(silos, initialState: State<S>?)
 	local combinedSilo = Silo.new(Util.Extend(state, initialState or {}))
 
 	-- Combine modifiers and actions:
-	for name, silo in pairs(silos) do
+	for name, silo in silos do
 		silo._Parent = combinedSilo
-		for actionName, modifier in pairs(silo._Modifiers) do
+		for actionName, modifier in silo._Modifiers do
 			-- Prefix action name to keep it unique:
-			local fullActionName = name .. "/" .. actionName
+			local fullActionName = `{name}/{actionName}`
 			combinedSilo._Modifiers[fullActionName] = function(s, payload)
 				-- Extend the top-level state from the sub-silo state modification:
 				return Util.Extend(s, {
@@ -138,15 +148,19 @@ function Silo.combine<S>(silos, initialState: State<S>?)
 				})
 			end
 		end
-		for actionName in pairs(silo.Actions) do
+		for actionName in silo.Actions do
+			if combinedSilo.Actions[actionName] ~= nil then
+				error(`duplicate action name {actionName} found when combining silos`, 2)
+			end
 			-- Update the action creator to include the correct prefixed action name:
-			local fullActionName = name .. "/" .. actionName
+			local fullActionName = `{name}/{actionName}`
 			silo.Actions[actionName] = function(p)
 				return {
 					Name = fullActionName,
 					Payload = p,
 				}
 			end
+			combinedSilo.Actions[actionName] = silo.Actions[actionName]
 		end
 	end
 
@@ -197,7 +211,7 @@ function Silo:Dispatch<A>(action: Action<A>)
 		self._State = Util.DeepFreeze(newState)
 
 		-- Notify subscribers of state change:
-		for _, subscriber in ipairs(self._Subscribers) do
+		for _, subscriber in self._Subscribers do
 			subscriber(newState, oldState)
 		end
 	end
@@ -312,10 +326,13 @@ function Silo:ResetToDefaultState()
 	if self._DefaultState ~= oldState then
 		self._State = Util.DeepFreeze(Util.DeepCopy(self._DefaultState))
 
-		for _, subscriber in ipairs(self._Subscribers) do
+		for _, subscriber in self._Subscribers do
 			subscriber(self._State, oldState)
 		end
 	end
 end
 
-return Silo
+return {
+	new = Silo.new,
+	combine = Silo.combine,
+}
