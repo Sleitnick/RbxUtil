@@ -83,7 +83,7 @@ end
 	@return {EnumItem}
 	@since v2.0.0
 ]=]
-function EnumList:GetEnumItems()
+function EnumList:GetEnumItems(): Array<EnumItem>
 	return self[LIST_KEY]
 end
 
@@ -92,7 +92,7 @@ end
 	@return string
 	@since v2.0.0
 ]=]
-function EnumList:GetName()
+function EnumList:GetName(): string
 	return self[NAME_KEY]
 end
 
