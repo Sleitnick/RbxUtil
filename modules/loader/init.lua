@@ -122,13 +122,13 @@ end
 	)
 	```
 ]=]
-function Loader.SpawnAll(loadedModules: { [string]: any }, methodName: string)
+function Loader.SpawnAll(loadedModules: { [string]: any }, methodName: string, ...)
 	for name, mod in loadedModules do
 		local method = mod[methodName]
 		if type(method) == "function" then
 			task.spawn(function()
 				debug.setmemorycategory(name)
-				method(mod)
+				method(mod, ...)
 			end)
 		end
 	end
