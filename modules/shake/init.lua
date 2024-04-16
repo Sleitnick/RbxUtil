@@ -1,6 +1,10 @@
+--!native
+
 -- Shake
 -- Stephen Leitnick
 -- December 09, 2021
+
+local RunService = game:GetService("RunService")
 
 --[=[
 	@within Shake
@@ -8,9 +12,27 @@
 ]=]
 type UpdateCallbackFn = () -> (Vector3, Vector3, boolean)
 
-local RunService = game:GetService("RunService")
+export type Shake = {
+	Amplitude: number,
+	Frequency: number,
+	FadeInTime: number,
+	FadeOutTime: number,
+	SustainTime: number,
+	Sustain: boolean,
+	PositionInfluence: Vector3,
+	RotationInfluence: Vector3,
+	TimeFunction: () -> number,
 
-local Trove = require(script.Parent.Trove)
+	Start: (self: Shake) -> (),
+	Stop: (self: Shake) -> (),
+	IsShaking: (self: Shake) -> boolean,
+	StopSustain: (self: Shake) -> (),
+	Update: (self: Shake) -> (Vector3, Vector3, boolean),
+	OnSignal: (signal: RBXScriptSignal, callback: (Vector3, Vector3, boolean) -> ()) -> RBXScriptConnection,
+	BindToRenderStep: (name: string, priority: number, callback: (Vector3, Vector3, boolean) -> ()) -> (),
+	Clone: (self: Shake) -> Shake,
+	Destroy: (self: Shake) -> (),
+}
 
 local rng = Random.new()
 local renderId = 0
@@ -176,8 +198,9 @@ Shake.__index = Shake
 	@return Shake
 	Construct a new Shake instance.
 ]=]
-function Shake.new()
+function Shake.new(): Shake
 	local self = setmetatable({}, Shake)
+
 	self.Amplitude = 1
 	self.Frequency = 1
 	self.FadeInTime = 1
@@ -187,10 +210,13 @@ function Shake.new()
 	self.PositionInfluence = Vector3.one
 	self.RotationInfluence = Vector3.one
 	self.TimeFunction = if RunService:IsRunning() then time else os.clock
+
 	self._timeOffset = rng:NextNumber(-1e9, 1e9)
 	self._startTime = 0
-	self._trove = Trove.new()
 	self._running = false
+	self._signalConnections = {}
+	self._renderBindings = {}
+
 	return self
 end
 
@@ -255,9 +281,6 @@ end
 function Shake:Start()
 	self._startTime = self.TimeFunction()
 	self._running = true
-	self._trove:Add(function()
-		self._running = false
-	end)
 end
 
 --[=[
@@ -268,7 +291,17 @@ end
 	`Destroy` method is called.
 ]=]
 function Shake:Stop()
-	self._trove:Clean()
+	self._running = false
+
+	for _, name in self._renderBindings do
+		RunService:UnbindFromRenderStep(name)
+	end
+	table.clear(self._renderBindings)
+
+	for _, conn in self._signalConnections do
+		conn:Disconnect()
+	end
+	table.clear(self._signalConnections)
 end
 
 --[=[
@@ -371,9 +404,13 @@ end
 	```
 ]=]
 function Shake:OnSignal(signal, callbackFn: UpdateCallbackFn)
-	return self._trove:Connect(signal, function()
+	local conn = signal:Connect(function()
 		callbackFn(self:Update())
 	end)
+
+	table.insert(self._signalConnections, conn)
+
+	return conn
 end
 
 --[=[
@@ -397,9 +434,11 @@ end
 	```
 ]=]
 function Shake:BindToRenderStep(name: string, priority: number, callbackFn: UpdateCallbackFn)
-	self._trove:BindToRenderStep(name, priority, function()
+	RunService:BindToRenderStep(name, priority, function()
 		callbackFn(self:Update())
 	end)
+
+	table.insert(self._renderBindings, name)
 end
 
 --[=[
@@ -457,4 +496,8 @@ function Shake:Destroy()
 	self:Stop()
 end
 
-return Shake
+return {
+	new = Shake.new,
+	InverseSquare = Shake.InverseSquare,
+	NextRenderName = Shake.NextRenderName,
+}

@@ -1,11 +1,9 @@
 [package]
 name = "sleitnick/shake"
 description = "Shake class for making things shake"
-version = "0.1.7"
+version = "1.0.0"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
-
-[dependencies]
-Trove = "sleitnick/trove@^0.4"
+exclude = ["node_modules", "package.json", "**/*.ts"]
