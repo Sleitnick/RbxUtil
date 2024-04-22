@@ -28,8 +28,12 @@ export type Shake = {
 	IsShaking: (self: Shake) -> boolean,
 	StopSustain: (self: Shake) -> (),
 	Update: (self: Shake) -> (Vector3, Vector3, boolean),
-	OnSignal: (signal: RBXScriptSignal, callback: (Vector3, Vector3, boolean) -> ()) -> RBXScriptConnection,
-	BindToRenderStep: (name: string, priority: number, callback: (Vector3, Vector3, boolean) -> ()) -> (),
+	OnSignal: (
+		self: Shake,
+		signal: RBXScriptSignal,
+		callback: (Vector3, Vector3, boolean) -> ()
+	) -> RBXScriptConnection,
+	BindToRenderStep: (self: Shake, name: string, priority: number, callback: (Vector3, Vector3, boolean) -> ()) -> (),
 	Clone: (self: Shake) -> Shake,
 	Destroy: (self: Shake) -> (),
 }
