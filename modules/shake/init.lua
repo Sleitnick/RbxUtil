@@ -103,7 +103,7 @@ local renderId = 0
 
 	-- Multiplies against the shake vector to control the final amplitude of the position.
 	-- Can be seen internally as: position = shakeVector * fadeInOut * positionInfluence
-	shake.PositionInfluence = Vector3.new(1, 1, 1)
+	shake.PositionInfluence = Vector3.one
 
 	-- Multiplies against the shake vector to control the final amplitude of the rotation.
 	-- Can be seen internally as: position = shakeVector * fadeInOut * rotationInfluence
@@ -215,7 +215,7 @@ function Shake.new(): Shake
 	self.RotationInfluence = Vector3.one
 	self.TimeFunction = if RunService:IsRunning() then time else os.clock
 
-	self._timeOffset = rng:NextNumber(-1e9, 1e9)
+	self._timeOffset = rng:NextNumber(-1e6, 1e6)
 	self._startTime = 0
 	self._running = false
 	self._signalConnections = {}
@@ -355,7 +355,7 @@ function Shake:Update(): (Vector3, Vector3, boolean)
 	local now = self.TimeFunction()
 	local dur = now - self._startTime
 
-	local noiseInput = ((now + self._timeOffset) / self.Frequency) % 1000000
+	local noiseInput = ((now + self._timeOffset) / self.Frequency) % 10000
 
 	local multiplierFadeIn = 1
 	local multiplierFadeOut = 1

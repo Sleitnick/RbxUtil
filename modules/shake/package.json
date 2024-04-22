@@ -1,6 +1,6 @@
 {
 	"name": "@rbxutil/shake",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"main": "init.lua",
 	"repository": "github:Sleitnick/RbxUtil",
 	"license": "MIT",
