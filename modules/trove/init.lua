@@ -514,7 +514,10 @@ function Trove._cleanupObject(_self: TroveInternal, object: any, cleanupMethod: 
 	elseif cleanupMethod == THREAD_MARKER then
 		pcall(task.cancel, object)
 	else
-		object[cleanupMethod](object)
+		local objectMethod = object[cleanupMethod]
+		if objectMethod then
+			objectMethod(object)
+		end
 	end
 end
 
