@@ -318,16 +318,16 @@ function Component.new(config: ComponentConfig)
 end
 
 function Component:_instantiate(instance: Instance)
-	self.__newindex = function(_, key, value)
-		if self._propertyChangedSignal then
+	self.__newindex = function(tbl, key, value)
+		if tbl._propertyChangedSignal then
 			if type(key) == "string" then
 				local firstChar = string.sub(key, 1, 1)
 				if firstChar ~= "_" and firstChar == string.upper(firstChar) then
-					self._propertyChangedSignal:Fire(key, value)
+					tbl._propertyChangedSignal:Fire(key, value)
 				end
 			end
 		end
-		rawset(self, key, value)
+		rawset(tbl, key, value)
 	end
 	local component = setmetatable({}, self)
 	component.Instance = instance
