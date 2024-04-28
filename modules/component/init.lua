@@ -318,6 +318,17 @@ function Component.new(config: ComponentConfig)
 end
 
 function Component:_instantiate(instance: Instance)
+	self.__newindex = function(tbl, key, value)
+		if tbl._propertyChangedSignal then
+			if type(key) == "string" then
+				local firstChar = string.sub(key, 1, 1)
+				if firstChar ~= "_" and firstChar == string.upper(firstChar) then
+					tbl._propertyChangedSignal:Fire(key, value)
+				end
+			end
+		end
+		rawset(tbl, key, value)
+	end
 	local component = setmetatable({}, self)
 	component.Instance = instance
 	component[KEY_ACTIVE_EXTENSIONS] = GetActiveExtensions(component, self[KEY_EXTENSIONS])
@@ -339,6 +350,8 @@ function Component:_setup()
 		component[KEY_STARTING] = coroutine.running()
 
 		InvokeExtensionFn(component, "Starting")
+
+		component._propertyChangedSignal = Signal.new()
 
 		component:Start()
 		if component[KEY_STARTING] == nil then
@@ -414,6 +427,8 @@ function Component:_setup()
 		elseif component._renderName then
 			RunService:UnbindFromRenderStep(component._renderName)
 		end
+
+		component._propertyChangedSignal:Destroy()
 
 		InvokeExtensionFn(component, "Stopping")
 		component:Stop()
@@ -751,6 +766,16 @@ end
 	end
 	```
 ]=]
+
+function Component:GetPropertyChangedSignal(propertyName: string)
+	local signal = Signal.new()
+	self._propertyChangedSignal:Connect(function(key, value)
+		if key == propertyName then
+			signal:Fire(value)
+		end
+	end)
+	return signal
+end
 
 function Component:Destroy()
 	self[KEY_TROVE]:Destroy()
