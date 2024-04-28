@@ -1,9 +1,9 @@
 [package]
-name = "sleitnick/component"
+name = "snarlyzoo/component"
 description = "Component class"
-version = "2.4.8"
+version = "2.5.1"
 license = "MIT"
-authors = ["Stephen Leitnick"]
+authors = ["Stephen Leitnick", "Colin Miller"]
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
