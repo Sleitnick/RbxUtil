@@ -488,10 +488,43 @@ function Trove.Clean(self: TroveInternal)
 	self._cleaning = false
 end
 
+--[=[
+	@method WrapClean
+	@within Trove
+	Returns a function that wraps the trove's `Clean()`
+	method. Calling the returned function will clean up
+	the trove.
+
+	This is often useful in contexts where functions
+	are the primary mode for cleaning up an environment,
+	such as in many "observer" patterns.
+
+	```lua
+	local cleanup = trove:WrapClean()
+
+	-- Sometime later...
+	cleanup()
+	```
+
+	```lua
+	-- Common observer pattern example:
+	someObserver(function()
+		local trove = Trove.new()
+		-- Foo
+		return trove:WrapClean()
+	end)
+	```
+]=]
+function Trove.WrapClean(self: TroveInternal)
+	return function()
+		self:Clean()
+	end
+end
+
 function Trove._findAndRemoveFromObjects(self: TroveInternal, object: any, cleanup: boolean): boolean
 	local objects = self._objects
 
-	for i, obj in ipairs(objects) do
+	for i, obj in objects do
 		if obj[1] == object then
 			local n = #objects
 			objects[i] = objects[n]
