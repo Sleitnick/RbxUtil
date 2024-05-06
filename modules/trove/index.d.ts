@@ -34,6 +34,7 @@ interface Trove {
 	Remove<T extends Trackable>(object: T): boolean;
 	AttachToInstance(instance: Instance): RBXScriptConnection;
 	Clean(): void;
+	WrapClean(): () => void;
 	Destroy(): void;
 }
 
