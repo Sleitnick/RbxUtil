@@ -1,6 +1,6 @@
 {
 	"name": "@rbxutil/buffer-util",
-	"version": "0.3.0",
+	"version": "0.3.1",
 	"main": "init.lua",
 	"repository": "github:Sleitnick/RbxUtil",
 	"license": "MIT",
