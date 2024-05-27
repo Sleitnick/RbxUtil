@@ -69,7 +69,7 @@ end
 ]=]
 function BufferWriter:WriteUInt8(uint8: number)
 	self:_resizeUpTo(self._cursor + 1)
-	buffer.writei8(self._buffer, self._cursor, uint8)
+	buffer.writeu8(self._buffer, self._cursor, uint8)
 	self._cursor += 1
 end
 
@@ -87,7 +87,7 @@ end
 ]=]
 function BufferWriter:WriteUInt16(uint16: number)
 	self:_resizeUpTo(self._cursor + 2)
-	buffer.writei16(self._buffer, self._cursor, uint16)
+	buffer.writeu16(self._buffer, self._cursor, uint16)
 	self._cursor += 2
 end
 
@@ -105,7 +105,7 @@ end
 ]=]
 function BufferWriter:WriteUInt32(uint32: number)
 	self:_resizeUpTo(self._cursor + 4)
-	buffer.writei32(self._buffer, self._cursor, uint32)
+	buffer.writeu32(self._buffer, self._cursor, uint32)
 	self._cursor += 4
 end
 
