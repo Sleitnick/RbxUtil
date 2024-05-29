@@ -4,6 +4,7 @@ interface ConnectionLike {
 
 type Trackable =
 	| Instance
+	| RBXScriptConnection
 	| ConnectionLike
 	| Promise<unknown>
 	| thread
