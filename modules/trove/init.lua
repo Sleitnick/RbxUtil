@@ -25,11 +25,12 @@ type TroveInternal = Trove & {
 
 --[=[
 	@within Trove
-	@type Trackable Instance | ConnectionLike | PromiseLike | thread | ((...any) -> ...any) | Destroyable | DestroyableLowercase | Disconnectable | DisconnectableLowercase
+	@type Trackable Instance | RBXScriptConnection | ConnectionLike | PromiseLike | thread | ((...any) -> ...any) | Destroyable | DestroyableLowercase | Disconnectable | DisconnectableLowercase
 	Represents all trackable objects by Trove.
 ]=]
 export type Trackable =
 	Instance
+	| RBXScriptConnection
 	| ConnectionLike
 	| PromiseLike
 	| thread
