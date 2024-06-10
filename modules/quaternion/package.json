@@ -1,7 +1,7 @@
 {
 	"name": "@rbxutil/quaternion",
 	"version": "0.2.3",
-	"main": "init.lua",
+	"main": "init.luau",
 	"repository": "github:Sleitnick/RbxUtil",
 	"license": "MIT",
 	"types": "index.d.ts",
