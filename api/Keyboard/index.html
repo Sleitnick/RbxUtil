@@ -12,8 +12,8 @@ local Keyboard = require(packages.Input).Keyboard
 ```lua
 local Keyboard = require(packages.Input).Keyboard
 ```"><link data-rh="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/Keyboard"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/Keyboard" hreflang="en"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/Keyboard" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.e1adec2f.css">
-<link rel="preload" href="/RbxUtil/assets/js/runtime~main.745a8c38.js" as="script">
-<link rel="preload" href="/RbxUtil/assets/js/main.242eac8c.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/runtime~main.484615c0.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/main.a0f649be.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -21,33 +21,33 @@ local Keyboard = require(packages.Input).Keyboard
 <p>The Keyboard class is part of the Input package.</p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> Keyboard <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span>packages<span class="token punctuation">.</span>Input<span class="token punctuation">)</span><span class="token punctuation">.</span>Keyboard
 </code></pre>
-</div></header><h2 class="anchor anchorWithStickyNavbar_LWe7" id="properties">Properties<a href="#properties" class="hash-link" aria-label="Direct link to Properties" title="Direct link to Properties">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="KeyDown"><code style="text-decoration:none">KeyDown</code><a href="#KeyDown" class="hash-link" aria-label="Direct link to KeyDown" title="Direct link to KeyDown">​</a></h3><span class="docTag__6UZ" style="border-color:#ff5252;color:#ff5252">Event</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/input/Keyboard.lua#L34"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Keyboard<!-- -->.<!-- -->KeyDown<!-- -->:<!-- --> </code> <code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Signal">Signal</a></code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">Enum.KeyCode</code><code class="op_lSLc">&gt;</code></div><div>
+</div></header><h2 class="anchor anchorWithStickyNavbar_LWe7" id="properties">Properties<a href="#properties" class="hash-link" aria-label="Direct link to Properties" title="Direct link to Properties">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="KeyDown"><code style="text-decoration:none">KeyDown</code><a href="#KeyDown" class="hash-link" aria-label="Direct link to KeyDown" title="Direct link to KeyDown">​</a></h3><span class="docTag__6UZ" style="border-color:#ff5252;color:#ff5252">Event</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/input/Keyboard.luau#L34"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Keyboard<!-- -->.<!-- -->KeyDown<!-- -->:<!-- --> </code> <code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Signal">Signal</a></code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">Enum.KeyCode</code><code class="op_lSLc">&gt;</code></div><div>
 <p>Fired when a key is pressed.</p>
 <pre class="language-lua"><code class="language-lua">keyboard<span class="token punctuation">.</span>KeyDown<span class="token punctuation">:</span><span class="token function">Connect</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>key<span class="token punctuation">:</span> KeyCode<span class="token punctuation">)</span>
 	<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Key pressed"</span><span class="token punctuation">,</span> key<span class="token punctuation">)</span>
 <span class="token keyword">end</span><span class="token punctuation">)</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="KeyUp"><code style="text-decoration:none">KeyUp</code><a href="#KeyUp" class="hash-link" aria-label="Direct link to KeyUp" title="Direct link to KeyUp">​</a></h3><span class="docTag__6UZ" style="border-color:#ff5252;color:#ff5252">Event</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/input/Keyboard.lua#L45"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Keyboard<!-- -->.<!-- -->KeyUp<!-- -->:<!-- --> </code> <code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Signal">Signal</a></code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">Enum.KeyCode</code><code class="op_lSLc">&gt;</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="KeyUp"><code style="text-decoration:none">KeyUp</code><a href="#KeyUp" class="hash-link" aria-label="Direct link to KeyUp" title="Direct link to KeyUp">​</a></h3><span class="docTag__6UZ" style="border-color:#ff5252;color:#ff5252">Event</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/input/Keyboard.luau#L45"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Keyboard<!-- -->.<!-- -->KeyUp<!-- -->:<!-- --> </code> <code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Signal">Signal</a></code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">Enum.KeyCode</code><code class="op_lSLc">&gt;</code></div><div>
 <p>Fired when a key is released.</p>
 <pre class="language-lua"><code class="language-lua">keyboard<span class="token punctuation">.</span>KeyUp<span class="token punctuation">:</span><span class="token function">Connect</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>key<span class="token punctuation">:</span> KeyCode<span class="token punctuation">)</span>
 	<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Key released"</span><span class="token punctuation">,</span> key<span class="token punctuation">)</span>
 <span class="token keyword">end</span><span class="token punctuation">)</span>
 </code></pre>
-</div><h2 class="anchor anchorWithStickyNavbar_LWe7" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="new"><code style="text-decoration:none">new</code><a href="#new" class="hash-link" aria-label="Direct link to new" title="Direct link to new">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/input/Keyboard.lua#L55"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Keyboard<!-- -->.</code><code class="green_DgR4">new</code><code>(</code><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Keyboard">Keyboard</a></code></div><div>
+</div><h2 class="anchor anchorWithStickyNavbar_LWe7" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="new"><code style="text-decoration:none">new</code><a href="#new" class="hash-link" aria-label="Direct link to new" title="Direct link to new">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/input/Keyboard.luau#L55"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Keyboard<!-- -->.</code><code class="green_DgR4">new</code><code>(</code><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Keyboard">Keyboard</a></code></div><div>
 <p>Constructs a new keyboard input capturer.</p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> keyboard <span class="token operator">=</span> Keyboard<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="IsKeyDown"><code style="text-decoration:none">IsKeyDown</code><a href="#IsKeyDown" class="hash-link" aria-label="Direct link to IsKeyDown" title="Direct link to IsKeyDown">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/input/Keyboard.lua#L72"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Keyboard<!-- -->:</code><code class="green_DgR4">IsKeyDown</code><code>(</code><code>keyCode<!-- -->: </code><code class="blue_P4bS">Enum.KeyCode</code><code>) → </code><code class="blue_P4bS">boolean</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="IsKeyDown"><code style="text-decoration:none">IsKeyDown</code><a href="#IsKeyDown" class="hash-link" aria-label="Direct link to IsKeyDown" title="Direct link to IsKeyDown">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/input/Keyboard.luau#L72"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Keyboard<!-- -->:</code><code class="green_DgR4">IsKeyDown</code><code>(</code><code>keyCode<!-- -->: </code><code class="blue_P4bS">Enum.KeyCode</code><code>) → </code><code class="blue_P4bS">boolean</code></div><div>
 <p>Check if the given key is down.</p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> w <span class="token operator">=</span> keyboard<span class="token punctuation">:</span><span class="token function">IsKeyDown</span><span class="token punctuation">(</span>Enum<span class="token punctuation">.</span>KeyCode<span class="token punctuation">.</span>W<span class="token punctuation">)</span>
 <span class="token keyword">if</span> w <span class="token keyword">then</span> <span class="token punctuation">...</span> <span class="token keyword">end</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="AreKeysDown"><code style="text-decoration:none">AreKeysDown</code><a href="#AreKeysDown" class="hash-link" aria-label="Direct link to AreKeysDown" title="Direct link to AreKeysDown">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/input/Keyboard.lua#L84"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Keyboard<!-- -->:</code><code class="green_DgR4">AreKeysDown</code><code>(</code><div class="inset_uKQm"><div><code>keyCodeOne<!-- -->: </code><code class="blue_P4bS">Enum.KeyCode</code><code>,</code></div><div><code>keyCodeTwo<!-- -->: </code><code class="blue_P4bS">Enum.KeyCode</code></div></div><code>) → </code><code class="blue_P4bS">boolean</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="AreKeysDown"><code style="text-decoration:none">AreKeysDown</code><a href="#AreKeysDown" class="hash-link" aria-label="Direct link to AreKeysDown" title="Direct link to AreKeysDown">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/input/Keyboard.luau#L84"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Keyboard<!-- -->:</code><code class="green_DgR4">AreKeysDown</code><code>(</code><div class="inset_uKQm"><div><code>keyCodeOne<!-- -->: </code><code class="blue_P4bS">Enum.KeyCode</code><code>,</code></div><div><code>keyCodeTwo<!-- -->: </code><code class="blue_P4bS">Enum.KeyCode</code></div></div><code>) → </code><code class="blue_P4bS">boolean</code></div><div>
 <p>Check if <em>both</em> keys are down. Useful for key combinations.</p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> shiftA <span class="token operator">=</span> keyboard<span class="token punctuation">:</span><span class="token function">AreKeysDown</span><span class="token punctuation">(</span>Enum<span class="token punctuation">.</span>KeyCode<span class="token punctuation">.</span>LeftShift<span class="token punctuation">,</span> Enum<span class="token punctuation">.</span>KeyCode<span class="token punctuation">.</span>A<span class="token punctuation">)</span>
 <span class="token keyword">if</span> shiftA <span class="token keyword">then</span> <span class="token punctuation">...</span> <span class="token keyword">end</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="AreEitherKeysDown"><code style="text-decoration:none">AreEitherKeysDown</code><a href="#AreEitherKeysDown" class="hash-link" aria-label="Direct link to AreEitherKeysDown" title="Direct link to AreEitherKeysDown">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/input/Keyboard.lua#L99"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Keyboard<!-- -->:</code><code class="green_DgR4">AreEitherKeysDown</code><code>(</code><div class="inset_uKQm"><div><code>keyCodeOne<!-- -->: </code><code class="blue_P4bS">Enum.KeyCode</code><code>,</code></div><div><code>keyCodeTwo<!-- -->: </code><code class="blue_P4bS">Enum.KeyCode</code></div></div><code>) → </code><code class="blue_P4bS">boolean</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="AreEitherKeysDown"><code style="text-decoration:none">AreEitherKeysDown</code><a href="#AreEitherKeysDown" class="hash-link" aria-label="Direct link to AreEitherKeysDown" title="Direct link to AreEitherKeysDown">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/input/Keyboard.luau#L99"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Keyboard<!-- -->:</code><code class="green_DgR4">AreEitherKeysDown</code><code>(</code><div class="inset_uKQm"><div><code>keyCodeOne<!-- -->: </code><code class="blue_P4bS">Enum.KeyCode</code><code>,</code></div><div><code>keyCodeTwo<!-- -->: </code><code class="blue_P4bS">Enum.KeyCode</code></div></div><code>) → </code><code class="blue_P4bS">boolean</code></div><div>
 <p>
   Check if <em>either</em> of the keys are down. Useful when two keys might perform
   the same operation.
@@ -57,7 +57,7 @@ local Keyboard = require(packages.Input).Keyboard
 	<span class="token comment">-- Go forward</span>
 <span class="token keyword">end</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Destroy"><code style="text-decoration:none">Destroy</code><a href="#Destroy" class="hash-link" aria-label="Direct link to Destroy" title="Direct link to Destroy">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/input/Keyboard.lua#L126"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Keyboard<!-- -->:</code><code class="green_DgR4">Destroy</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Destroy"><code style="text-decoration:none">Destroy</code><a href="#Destroy" class="hash-link" aria-label="Direct link to Destroy" title="Direct link to Destroy">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/input/Keyboard.luau#L126"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Keyboard<!-- -->:</code><code class="green_DgR4">Destroy</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
 <p>Destroy the keyboard input capturer.</p>
 </div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
     &quot;functions&quot;: [
@@ -74,7 +74,7 @@ local Keyboard = require(packages.Input).Keyboard
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
                 &quot;line&quot;: 55,
-                &quot;path&quot;: &quot;modules/input/Keyboard.lua&quot;
+                &quot;path&quot;: &quot;modules/input/Keyboard.luau&quot;
             }
         },
         {
@@ -96,7 +96,7 @@ local Keyboard = require(packages.Input).Keyboard
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
                 &quot;line&quot;: 72,
-                &quot;path&quot;: &quot;modules/input/Keyboard.lua&quot;
+                &quot;path&quot;: &quot;modules/input/Keyboard.luau&quot;
             }
         },
         {
@@ -123,7 +123,7 @@ local Keyboard = require(packages.Input).Keyboard
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
                 &quot;line&quot;: 84,
-                &quot;path&quot;: &quot;modules/input/Keyboard.lua&quot;
+                &quot;path&quot;: &quot;modules/input/Keyboard.luau&quot;
             }
         },
         {
@@ -150,7 +150,7 @@ local Keyboard = require(packages.Input).Keyboard
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
                 &quot;line&quot;: 99,
-                &quot;path&quot;: &quot;modules/input/Keyboard.lua&quot;
+                &quot;path&quot;: &quot;modules/input/Keyboard.luau&quot;
             }
         },
         {
@@ -161,7 +161,7 @@ local Keyboard = require(packages.Input).Keyboard
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
                 &quot;line&quot;: 126,
-                &quot;path&quot;: &quot;modules/input/Keyboard.lua&quot;
+                &quot;path&quot;: &quot;modules/input/Keyboard.luau&quot;
             }
         }
     ],
@@ -175,7 +175,7 @@ local Keyboard = require(packages.Input).Keyboard
             ],
             &quot;source&quot;: {
                 &quot;line&quot;: 34,
-                &quot;path&quot;: &quot;modules/input/Keyboard.lua&quot;
+                &quot;path&quot;: &quot;modules/input/Keyboard.luau&quot;
             }
         },
         {
@@ -187,7 +187,7 @@ local Keyboard = require(packages.Input).Keyboard
             ],
             &quot;source&quot;: {
                 &quot;line&quot;: 45,
-                &quot;path&quot;: &quot;modules/input/Keyboard.lua&quot;
+                &quot;path&quot;: &quot;modules/input/Keyboard.luau&quot;
             }
         }
     ],
@@ -199,10 +199,10 @@ local Keyboard = require(packages.Input).Keyboard
     ],
     &quot;source&quot;: {
         &quot;line&quot;: 20,
-        &quot;path&quot;: &quot;modules/input/Keyboard.lua&quot;
+        &quot;path&quot;: &quot;modules/input/Keyboard.luau&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#KeyDown" class="table-of-contents__link toc-highlight">KeyDown</a></li><li><a href="#KeyUp" class="table-of-contents__link toc-highlight">KeyUp</a></li></ul></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#AreEitherKeysDown" class="table-of-contents__link toc-highlight">:AreEitherKeysDown</a></li><li><a href="#AreKeysDown" class="table-of-contents__link toc-highlight">:AreKeysDown</a></li><li><a href="#Destroy" class="table-of-contents__link toc-highlight">:Destroy</a></li><li><a href="#IsKeyDown" class="table-of-contents__link toc-highlight">:IsKeyDown</a></li><li><a href="#new" class="table-of-contents__link toc-highlight">.new</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/RbxUtil/assets/js/runtime~main.745a8c38.js"></script>
-<script src="/RbxUtil/assets/js/main.242eac8c.js"></script>
+<script src="/RbxUtil/assets/js/runtime~main.484615c0.js"></script>
+<script src="/RbxUtil/assets/js/main.a0f649be.js"></script>
 </body>
 </html>

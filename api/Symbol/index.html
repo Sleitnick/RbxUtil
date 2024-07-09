@@ -72,8 +72,8 @@ local t = {
 
 print(t[DATA_KEY]) --&gt; {}
 ```"><link data-rh="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/Symbol"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/Symbol" hreflang="en"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/Symbol" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.e1adec2f.css">
-<link rel="preload" href="/RbxUtil/assets/js/runtime~main.745a8c38.js" as="script">
-<link rel="preload" href="/RbxUtil/assets/js/main.242eac8c.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/runtime~main.484615c0.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/main.a0f649be.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -127,10 +127,10 @@ print(t[DATA_KEY]) --&gt; {}
     &quot;desc&quot;: &quot;Represents a unique object.\n\nSymbols are often used as unique keys in tables. This is useful to avoid possible collisions\nwith a key in a table, since the symbol will always be unique and cannot be reconstructed.\n\n\n:::note All Unique\nEvery creation of a symbol is unique, even if the\ngiven names are the same.\n:::\n\n```lua\nlocal Symbol = require(packages.Symbol)\n\n-- Create a symbol:\nlocal symbol = Symbol(\&quot;MySymbol\&quot;)\n\n-- The name is optional:\nlocal anotherSymbol = Symbol()\n\n-- Comparison:\nprint(symbol == symbol) --&gt; true\n\n-- All symbol constructions are unique, regardless of the name:\nprint(Symbol(\&quot;Hello\&quot;) == Symbol(\&quot;Hello\&quot;)) --&gt; false\n\n-- Commonly used as unique keys in a table:\nlocal DATA_KEY = Symbol(\&quot;Data\&quot;)\nlocal t = {\n\t-- Can only be accessed using the DATA_KEY symbol:\n\t[DATA_KEY] = {}\n}\n\nprint(t[DATA_KEY]) --&gt; {}\n```&quot;,
     &quot;source&quot;: {
         &quot;line&quot;: 44,
-        &quot;path&quot;: &quot;modules/symbol/init.lua&quot;
+        &quot;path&quot;: &quot;modules/symbol/init.luau&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/RbxUtil/assets/js/runtime~main.745a8c38.js"></script>
-<script src="/RbxUtil/assets/js/main.242eac8c.js"></script>
+<script src="/RbxUtil/assets/js/runtime~main.484615c0.js"></script>
+<script src="/RbxUtil/assets/js/main.a0f649be.js"></script>
 </body>
 </html>

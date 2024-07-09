@@ -50,8 +50,8 @@ sequent:Connect(
 
 sequent:Fire(&quot;Test&quot;)
 ```"><link data-rh="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/Sequent"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/Sequent" hreflang="en"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/Sequent" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.e1adec2f.css">
-<link rel="preload" href="/RbxUtil/assets/js/runtime~main.745a8c38.js" as="script">
-<link rel="preload" href="/RbxUtil/assets/js/main.242eac8c.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/runtime~main.484615c0.js" as="script">
+<link rel="preload" href="/RbxUtil/assets/js/main.a0f649be.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -80,11 +80,11 @@ sequent<span class="token punctuation">:</span><span class="token function">Conn
 
 sequent<span class="token punctuation">:</span><span class="token function">Fire</span><span class="token punctuation">(</span><span class="token string">"Test"</span><span class="token punctuation">)</span>
 </code></pre>
-</div></header><h2 class="anchor anchorWithStickyNavbar_LWe7" id="types">Types<a href="#types" class="hash-link" aria-label="Direct link to Types" title="Direct link to Types">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="SequentConnection"><code style="text-decoration:none">SequentConnection</code><a href="#SequentConnection" class="hash-link" aria-label="Direct link to SequentConnection" title="Direct link to SequentConnection">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/sequent/init.lua#L20"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code class="purple_ieR2">interface</code> <code>SequentConnection<!-- --> <!-- -->{</code><div class="inset_uKQm"><div><code>Connected<!-- -->: </code><code class="blue_P4bS">boolean</code></div><div><code>Disconnect<!-- -->: </code><code class="purple_ieR2">(</code><code>self<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Sequent#SequentConnection">SequentConnection</a></code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div></div><code>}</code></div><div>
+</div></header><h2 class="anchor anchorWithStickyNavbar_LWe7" id="types">Types<a href="#types" class="hash-link" aria-label="Direct link to Types" title="Direct link to Types">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="SequentConnection"><code style="text-decoration:none">SequentConnection</code><a href="#SequentConnection" class="hash-link" aria-label="Direct link to SequentConnection" title="Direct link to SequentConnection">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/sequent/init.luau#L20"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code class="purple_ieR2">interface</code> <code>SequentConnection<!-- --> <!-- -->{</code><div class="inset_uKQm"><div><code>Connected<!-- -->: </code><code class="blue_P4bS">boolean</code></div><div><code>Disconnect<!-- -->: </code><code class="purple_ieR2">(</code><code>self<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Sequent#SequentConnection">SequentConnection</a></code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div></div><code>}</code></div><div>
 <pre class="language-lua"><code class="language-lua"><span class="token function">print</span><span class="token punctuation">(</span>sequent<span class="token punctuation">.</span>Connected<span class="token punctuation">)</span>
 sequent<span class="token punctuation">:</span><span class="token function">Disconnect</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="SequentEvent&lt;T&gt;"><code style="text-decoration:none">SequentEvent&lt;T&gt;</code><a href="#SequentEvent&lt;T&gt;" class="hash-link" aria-label="Direct link to SequentEvent&lt;T&gt;" title="Direct link to SequentEvent&lt;T&gt;">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/sequent/init.lua#L44"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code class="purple_ieR2">interface</code> <code>SequentEvent&lt;T&gt;<!-- --> <!-- -->{</code><div class="inset_uKQm"><div><code>Value<!-- -->: </code><code class="blue_P4bS">T</code></div><div><code>Cancellable<!-- -->: </code><code class="blue_P4bS">boolean</code></div><div><code>Cancel<!-- -->: </code><code class="purple_ieR2">(</code><code>self<!-- -->: </code><code class="blue_P4bS">SequentEvent</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">T</code><code class="op_lSLc">&gt;</code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div></div><code>}</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="SequentEvent&lt;T&gt;"><code style="text-decoration:none">SequentEvent&lt;T&gt;</code><a href="#SequentEvent&lt;T&gt;" class="hash-link" aria-label="Direct link to SequentEvent&lt;T&gt;" title="Direct link to SequentEvent&lt;T&gt;">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/sequent/init.luau#L44"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code class="purple_ieR2">interface</code> <code>SequentEvent&lt;T&gt;<!-- --> <!-- -->{</code><div class="inset_uKQm"><div><code>Value<!-- -->: </code><code class="blue_P4bS">T</code></div><div><code>Cancellable<!-- -->: </code><code class="blue_P4bS">boolean</code></div><div><code>Cancel<!-- -->: </code><code class="purple_ieR2">(</code><code>self<!-- -->: </code><code class="blue_P4bS">SequentEvent</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">T</code><code class="op_lSLc">&gt;</code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div></div><code>}</code></div><div>
 <p>
   Events are passed to connected callbacks when sequents are fired. Events
   can be cancelled as well, which prevents the event from propagating to
@@ -96,23 +96,23 @@ sequent<span class="token punctuation">:</span><span class="token function">Disc
 	event<span class="token punctuation">:</span><span class="token function">Cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token keyword">end</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Priority"><code style="text-decoration:none">Priority</code><a href="#Priority" class="hash-link" aria-label="Direct link to Priority" title="Direct link to Priority">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/sequent/init.lua#L80"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code class="purple_ieR2">interface</code> <code>Priority<!-- --> <!-- -->{</code><div class="inset_uKQm"><div><code>Highest<!-- -->: </code><code class="blue_P4bS">math.huge</code></div><div><code>High<!-- -->: </code><code class="blue_P4bS">1000</code></div><div><code>Normal<!-- -->: </code><code class="blue_P4bS">0</code></div><div><code>Low<!-- -->: </code><code class="op_lSLc">-</code><code class="blue_P4bS">1000</code></div><div><code>Lowest<!-- -->: </code><code class="op_lSLc">-</code><code class="blue_P4bS">math.huge</code></div></div><code>}</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Priority"><code style="text-decoration:none">Priority</code><a href="#Priority" class="hash-link" aria-label="Direct link to Priority" title="Direct link to Priority">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/sequent/init.luau#L80"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code class="purple_ieR2">interface</code> <code>Priority<!-- --> <!-- -->{</code><div class="inset_uKQm"><div><code>Highest<!-- -->: </code><code class="blue_P4bS">math.huge</code></div><div><code>High<!-- -->: </code><code class="blue_P4bS">1000</code></div><div><code>Normal<!-- -->: </code><code class="blue_P4bS">0</code></div><div><code>Low<!-- -->: </code><code class="op_lSLc">-</code><code class="blue_P4bS">1000</code></div><div><code>Lowest<!-- -->: </code><code class="op_lSLc">-</code><code class="blue_P4bS">math.huge</code></div></div><code>}</code></div><div>
 <pre class="language-lua"><code class="language-lua">sequent<span class="token punctuation">:</span><span class="token function">Connect</span><span class="token punctuation">(</span>fn<span class="token punctuation">,</span> Sequent<span class="token punctuation">.</span>Priority<span class="token punctuation">.</span>Highest<span class="token punctuation">)</span>
 </code></pre>
-</div><h2 class="anchor anchorWithStickyNavbar_LWe7" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="new"><code style="text-decoration:none">new</code><a href="#new" class="hash-link" aria-label="Direct link to new" title="Direct link to new">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/sequent/init.lua#L123"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Sequent<!-- -->.</code><code class="green_DgR4">new</code><code>(</code><code>cancellable<!-- -->: </code><code class="blue_P4bS">boolean?</code><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Sequent">Sequent</a></code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">T</code><code class="op_lSLc">&gt;</code></div><div>
+</div><h2 class="anchor anchorWithStickyNavbar_LWe7" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="new"><code style="text-decoration:none">new</code><a href="#new" class="hash-link" aria-label="Direct link to new" title="Direct link to new">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/sequent/init.luau#L123"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Sequent<!-- -->.</code><code class="green_DgR4">new</code><code>(</code><code>cancellable<!-- -->: </code><code class="blue_P4bS">boolean?</code><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Sequent">Sequent</a></code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">T</code><code class="op_lSLc">&gt;</code></div><div>
 <p>
   Constructs a new Sequent. If <code>cancellable</code> is <code>true</code>, then
   connected handlers can cancel event propagation.
 </p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Fire"><code style="text-decoration:none">Fire</code><a href="#Fire" class="hash-link" aria-label="Direct link to Fire" title="Direct link to Fire">​</a></h3><span class="badge_Ba2I" style="color:#f1c40f"><span class="badgeTooltip_cWXP">This is a yielding function. When called, it will pause the Lua thread that called the function until a result is ready to be returned, without interrupting other scripts.</span><span class="badgeToolTipTail_H9D_"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#f1c40f" role="img" aria-label="This is a yielding function. When called, it will pause the Lua thread that called the function until a result is ready to be returned, without interrupting other scripts."><path d="M96.4 11.9c-1.4-2.5-4-4-6.9-4H10.8c-2.9 0-5.4 1.5-6.9 4-1.4 2.5-1.4 5.5 0 7.9L43.3 88c1.4 2.5 4 4 6.9 4 2.9 0 5.4-1.5 6.9-4l39.3-68.2c1.4-2.4 1.4-5.4 0-7.9zM46.3 54.5c1.1-1.1 2.3-1.6 3.8-1.6s2.8.5 3.8 1.6c1.1 1.1 1.6 2.3 1.6 3.8s-.5 2.8-1.6 3.8c-1.1 1.1-2.3 1.6-3.8 1.6s-2.8-.5-3.8-1.6c-1.1-1.1-1.6-2.3-1.6-3.8.1-1.5.6-2.8 1.6-3.8zm-.5-4.9V21.8h8.8v27.8h-8.8z"></path></svg> <!-- -->Yields</span></span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/sequent/init.lua#L145"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Sequent<!-- -->:</code><code class="green_DgR4">Fire</code><code>(</code><code>value<!-- -->: </code><code class="blue_P4bS">T</code><code>) → </code><code>(</code><code>)</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Fire"><code style="text-decoration:none">Fire</code><a href="#Fire" class="hash-link" aria-label="Direct link to Fire" title="Direct link to Fire">​</a></h3><span class="badge_Ba2I" style="color:#f1c40f"><span class="badgeTooltip_cWXP">This is a yielding function. When called, it will pause the Lua thread that called the function until a result is ready to be returned, without interrupting other scripts.</span><span class="badgeToolTipTail_H9D_"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#f1c40f" role="img" aria-label="This is a yielding function. When called, it will pause the Lua thread that called the function until a result is ready to be returned, without interrupting other scripts."><path d="M96.4 11.9c-1.4-2.5-4-4-6.9-4H10.8c-2.9 0-5.4 1.5-6.9 4-1.4 2.5-1.4 5.5 0 7.9L43.3 88c1.4 2.5 4 4 6.9 4 2.9 0 5.4-1.5 6.9-4l39.3-68.2c1.4-2.4 1.4-5.4 0-7.9zM46.3 54.5c1.1-1.1 2.3-1.6 3.8-1.6s2.8.5 3.8 1.6c1.1 1.1 1.6 2.3 1.6 3.8s-.5 2.8-1.6 3.8c-1.1 1.1-2.3 1.6-3.8 1.6s-2.8-.5-3.8-1.6c-1.1-1.1-1.6-2.3-1.6-3.8.1-1.5.6-2.8 1.6-3.8zm-.5-4.9V21.8h8.8v27.8h-8.8z"></path></svg> <!-- -->Yields</span></span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/sequent/init.luau#L145"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Sequent<!-- -->:</code><code class="green_DgR4">Fire</code><code>(</code><code>value<!-- -->: </code><code class="blue_P4bS">T</code><code>) → </code><code>(</code><code>)</code></div><div>
 <p>Fires the Sequent with the given value.</p>
 <p>
   This method will yield until all connections complete. Errors will
   bubble up if they occur within a connection.
 </p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="IsFiring"><code style="text-decoration:none">IsFiring</code><a href="#IsFiring" class="hash-link" aria-label="Direct link to IsFiring" title="Direct link to IsFiring">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/sequent/init.lua#L222"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Sequent<!-- -->:</code><code class="green_DgR4">IsFiring</code><code>(</code><code>) → </code><code class="blue_P4bS">boolean</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="IsFiring"><code style="text-decoration:none">IsFiring</code><a href="#IsFiring" class="hash-link" aria-label="Direct link to IsFiring" title="Direct link to IsFiring">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/sequent/init.luau#L222"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Sequent<!-- -->:</code><code class="green_DgR4">IsFiring</code><code>(</code><code>) → </code><code class="blue_P4bS">boolean</code></div><div>
 <p>Returns <code>true</code> if the Sequent is currently firing.</p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Connect"><code style="text-decoration:none">Connect</code><a href="#Connect" class="hash-link" aria-label="Direct link to Connect" title="Direct link to Connect">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/sequent/init.lua#L234"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Sequent<!-- -->:</code><code class="green_DgR4">Connect</code><code>(</code><div class="inset_uKQm"><div><code>callback<!-- -->: </code><code class="purple_ieR2">(</code><code class="blue_P4bS">...unknown</code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code><code>,</code></div><div><code>priority<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Sequent#SequentConnection">SequentConnection</a></code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Connect"><code style="text-decoration:none">Connect</code><a href="#Connect" class="hash-link" aria-label="Direct link to Connect" title="Direct link to Connect">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/sequent/init.luau#L234"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Sequent<!-- -->:</code><code class="green_DgR4">Connect</code><code>(</code><div class="inset_uKQm"><div><code>callback<!-- -->: </code><code class="purple_ieR2">(</code><code class="blue_P4bS">...unknown</code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code><code>,</code></div><div><code>priority<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Sequent#SequentConnection">SequentConnection</a></code></div><div>
 <p>
   Connects a callback to the Sequent, which gets called anytime <code>Fire</code>
   is called.
@@ -122,14 +122,14 @@ sequent<span class="token punctuation">:</span><span class="token function">Disc
   priority values will be run first. There are a few defaults available via
   <code>Sequent.Priority</code>.
 </p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Once"><code style="text-decoration:none">Once</code><a href="#Once" class="hash-link" aria-label="Direct link to Once" title="Direct link to Once">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/sequent/init.lua#L262"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Sequent<!-- -->:</code><code class="green_DgR4">Once</code><code>(</code><div class="inset_uKQm"><div><code>callback<!-- -->: </code><code class="purple_ieR2">(</code><code class="blue_P4bS">...unknown</code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code><code>,</code></div><div><code>priority<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Sequent#SequentConnection">SequentConnection</a></code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Once"><code style="text-decoration:none">Once</code><a href="#Once" class="hash-link" aria-label="Direct link to Once" title="Direct link to Once">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/sequent/init.luau#L262"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Sequent<!-- -->:</code><code class="green_DgR4">Once</code><code>(</code><div class="inset_uKQm"><div><code>callback<!-- -->: </code><code class="purple_ieR2">(</code><code class="blue_P4bS">...unknown</code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code><code>,</code></div><div><code>priority<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/RbxUtil/api/Sequent#SequentConnection">SequentConnection</a></code></div><div>
 <p>
   <code>Once()</code> is the same as <code>Connect()</code>, except the connection is automatically
   disconnected after being fired once.
 </p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Cancel"><code style="text-decoration:none">Cancel</code><a href="#Cancel" class="hash-link" aria-label="Direct link to Cancel" title="Direct link to Cancel">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/sequent/init.lua#L279"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Sequent<!-- -->:</code><code class="green_DgR4">Cancel</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Cancel"><code style="text-decoration:none">Cancel</code><a href="#Cancel" class="hash-link" aria-label="Direct link to Cancel" title="Direct link to Cancel">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/sequent/init.luau#L279"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Sequent<!-- -->:</code><code class="green_DgR4">Cancel</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
 <p>Cancels a currently-firing Sequent.</p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Destroy"><code style="text-decoration:none">Destroy</code><a href="#Destroy" class="hash-link" aria-label="Direct link to Destroy" title="Direct link to Destroy">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/sequent/init.lua#L308"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Sequent<!-- -->:</code><code class="green_DgR4">Destroy</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Destroy"><code style="text-decoration:none">Destroy</code><a href="#Destroy" class="hash-link" aria-label="Direct link to Destroy" title="Direct link to Destroy">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/sequent/init.luau#L308"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Sequent<!-- -->:</code><code class="green_DgR4">Destroy</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
 <p>
   Cleans up the Sequent. All connections are disconnected. The Sequent is cancelled
   if it is currently firing.
@@ -155,7 +155,7 @@ sequent<span class="token punctuation">:</span><span class="token function">Disc
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
                 &quot;line&quot;: 123,
-                &quot;path&quot;: &quot;modules/sequent/init.lua&quot;
+                &quot;path&quot;: &quot;modules/sequent/init.luau&quot;
             }
         },
         {
@@ -173,7 +173,7 @@ sequent<span class="token punctuation">:</span><span class="token function">Disc
             &quot;yields&quot;: true,
             &quot;source&quot;: {
                 &quot;line&quot;: 145,
-                &quot;path&quot;: &quot;modules/sequent/init.lua&quot;
+                &quot;path&quot;: &quot;modules/sequent/init.luau&quot;
             }
         },
         {
@@ -189,7 +189,7 @@ sequent<span class="token punctuation">:</span><span class="token function">Disc
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
                 &quot;line&quot;: 222,
-                &quot;path&quot;: &quot;modules/sequent/init.lua&quot;
+                &quot;path&quot;: &quot;modules/sequent/init.luau&quot;
             }
         },
         {
@@ -216,7 +216,7 @@ sequent<span class="token punctuation">:</span><span class="token function">Disc
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
                 &quot;line&quot;: 234,
-                &quot;path&quot;: &quot;modules/sequent/init.lua&quot;
+                &quot;path&quot;: &quot;modules/sequent/init.luau&quot;
             }
         },
         {
@@ -243,7 +243,7 @@ sequent<span class="token punctuation">:</span><span class="token function">Disc
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
                 &quot;line&quot;: 262,
-                &quot;path&quot;: &quot;modules/sequent/init.lua&quot;
+                &quot;path&quot;: &quot;modules/sequent/init.luau&quot;
             }
         },
         {
@@ -254,7 +254,7 @@ sequent<span class="token punctuation">:</span><span class="token function">Disc
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
                 &quot;line&quot;: 279,
-                &quot;path&quot;: &quot;modules/sequent/init.lua&quot;
+                &quot;path&quot;: &quot;modules/sequent/init.luau&quot;
             }
         },
         {
@@ -265,7 +265,7 @@ sequent<span class="token punctuation">:</span><span class="token function">Disc
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
                 &quot;line&quot;: 308,
-                &quot;path&quot;: &quot;modules/sequent/init.lua&quot;
+                &quot;path&quot;: &quot;modules/sequent/init.luau&quot;
             }
         }
     ],
@@ -288,7 +288,7 @@ sequent<span class="token punctuation">:</span><span class="token function">Disc
             ],
             &quot;source&quot;: {
                 &quot;line&quot;: 20,
-                &quot;path&quot;: &quot;modules/sequent/init.lua&quot;
+                &quot;path&quot;: &quot;modules/sequent/init.luau&quot;
             }
         },
         {
@@ -313,7 +313,7 @@ sequent<span class="token punctuation">:</span><span class="token function">Disc
             ],
             &quot;source&quot;: {
                 &quot;line&quot;: 44,
-                &quot;path&quot;: &quot;modules/sequent/init.lua&quot;
+                &quot;path&quot;: &quot;modules/sequent/init.luau&quot;
             }
         },
         {
@@ -348,7 +348,7 @@ sequent<span class="token punctuation">:</span><span class="token function">Disc
             ],
             &quot;source&quot;: {
                 &quot;line&quot;: 80,
-                &quot;path&quot;: &quot;modules/sequent/init.lua&quot;
+                &quot;path&quot;: &quot;modules/sequent/init.luau&quot;
             }
         }
     ],
@@ -356,10 +356,10 @@ sequent<span class="token punctuation">:</span><span class="token function">Disc
     &quot;desc&quot;: &quot;Sequent is a signal-like structure that executes connections in a serial nature. Each\nconnection must fully complete before the next is run. Connections can be prioritized\nand cancelled.\n\n```lua\nlocal sequent = Sequent.new()\n\nsequent:Connect(\n\tfunction(event)\n\t\tprint(\&quot;Got value\&quot;, event.Value)\n\t\tevent:Cancel()\n\tend,\n\tSequent.Priority.Highest,\n)\n\nsequent:Connect(\n\tfunction(event)\n\t\tprint(\&quot;This won&#x27;t print!\&quot;)\n\tend,\n\tSequent.Priority.Lowest,\n)\n\nsequent:Fire(\&quot;Test\&quot;)\n```&quot;,
     &quot;source&quot;: {
         &quot;line&quot;: 116,
-        &quot;path&quot;: &quot;modules/sequent/init.lua&quot;
+        &quot;path&quot;: &quot;modules/sequent/init.luau&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a><ul><li><a href="#Priority" class="table-of-contents__link toc-highlight">Priority</a></li><li><a href="#SequentConnection" class="table-of-contents__link toc-highlight">SequentConnection</a></li><li><a href="#SequentEvent&lt;T&gt;" class="table-of-contents__link toc-highlight">SequentEvent<t></t></a></li></ul></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#Cancel" class="table-of-contents__link toc-highlight">:Cancel</a></li><li><a href="#Connect" class="table-of-contents__link toc-highlight">:Connect</a></li><li><a href="#Destroy" class="table-of-contents__link toc-highlight">:Destroy</a></li><li><a href="#Fire" class="table-of-contents__link toc-highlight">:Fire</a></li><li><a href="#IsFiring" class="table-of-contents__link toc-highlight">:IsFiring</a></li><li><a href="#Once" class="table-of-contents__link toc-highlight">:Once</a></li><li><a href="#new" class="table-of-contents__link toc-highlight">.new</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/RbxUtil/assets/js/runtime~main.745a8c38.js"></script>
-<script src="/RbxUtil/assets/js/main.242eac8c.js"></script>
+<script src="/RbxUtil/assets/js/runtime~main.484615c0.js"></script>
+<script src="/RbxUtil/assets/js/main.a0f649be.js"></script>
 </body>
 </html>
