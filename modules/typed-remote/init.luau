@@ -17,8 +17,8 @@ type PlayerSignal<T...> = {
 --[=[
 	@within TypedRemote
 	@interface Event<T...>
-	.OnClientEvent PlayerSignal<T...>,
-	.OnServerEvent Signal<T...>,
+	.OnClientEvent Signal<T...>,
+	.OnServerEvent PlayerSignal<T...>,
 	.FireClient (self: Event<T...>, player: Player, T...) -> (),
 	.FireAllClients (self: Event<T...>, T...) -> (),
 	.FireServer (self: Event<T...>, T...) -> (),
