@@ -424,7 +424,7 @@ end
 
 	Bind the `Update` method to RenderStep.
 
-	All bond functions are cleaned up when the shake instance is stopped
+	All bound functions are cleaned up when the shake instance is stopped
 	or destroyed.
 
 	```lua
