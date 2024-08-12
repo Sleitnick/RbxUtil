@@ -28,11 +28,17 @@ DataTypeBuffer.DataTypesToString = {
 
 DataTypeBuffer.ReadWrite = {} :: {[string]: ReadWritePair}
 
-local NORMAL_ID_TO_VECTOR3 = {}
-for _, normalId: Enum.NormalId in Enum.NormalId:GetEnumItems() do
-	NORMAL_ID_TO_VECTOR3[normalId.Value] = Vector3.FromNormalId(normalId)
-end
+local NORMAL_ID_TO_VECTOR3 = {
+	[0] = Vector3.new(1, 0, 0), -- Enum.NormalId.Right
+	[1] = Vector3.new(0, 1, 0), -- Enum.NormalId.Top
+	[2] = Vector3.new(0, 0, 1), -- Enum.NormalId.Back
+	[3] = Vector3.new(-1, 0, 0), -- Enum.NormalId.Left
+	[4] = Vector3.new(0, -1, 0), -- Enum.NormalId.Bottom
+	[5] = Vector3.new(0, 0, -1), -- Enum.NormalId.Front
+}
 local VECTOR3_ONE = Vector3.one
+local Cross = VECTOR3_ONE.Cross
+local Dot = VECTOR3_ONE.Dot
 
 local readWriteVector2 = {
 	write = function(writer: Types.BufferWriter, vector2: Vector2)
@@ -91,8 +97,8 @@ DataTypeBuffer.ReadWrite.CFrame = {
 		local upVector = cframe.UpVector
 		local rightVector = cframe.RightVector
 
-		local rightAligned = math.abs(rightVector:Dot(VECTOR3_ONE))
-		local upAligned = math.abs(upVector:Dot(VECTOR3_ONE))
+		local rightAligned = math.abs(Dot(rightVector, VECTOR3_ONE))
+		local upAligned = math.abs(Dot(upVector, VECTOR3_ONE))
 
 		local axisAligned = (math.abs(1 - rightAligned) < 0.00001 or rightAligned == 0)
 			and (math.abs(1 - upAligned) < 0.00001 or upAligned == 0)
@@ -103,10 +109,10 @@ DataTypeBuffer.ReadWrite.CFrame = {
 
 			for index = 0, 5 do
 				local vector = NORMAL_ID_TO_VECTOR3[index]
-				if 1 - vector:Dot(rightVector) < 0.00001 then
+				if 1 - Dot(vector, rightVector) < 0.00001 then
 					rightNormal = index
 				end
-				if 1 - vector:Dot(upVector) < 0.00001 then
+				if 1 - Dot(vector, upVector) < 0.00001 then
 					upNormal = index
 				end
 			end
@@ -134,7 +140,7 @@ DataTypeBuffer.ReadWrite.CFrame = {
 
 		local rightVector = NORMAL_ID_TO_VECTOR3[id // 6]
 		local upVector = NORMAL_ID_TO_VECTOR3[id % 6]
-		local lookVector = rightVector:Cross(upVector)
+		local lookVector = Cross(rightVector, upVector)
 		return CFrame.fromMatrix(position, rightVector, upVector, lookVector)
 	end,
 }
