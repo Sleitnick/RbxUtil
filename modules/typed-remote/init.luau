@@ -1,10 +1,10 @@
 --!strict
 
 type Signal<T...> = {
-	Connect: (self: PlayerSignal<T...>, fn: (T...) -> ()) -> RBXScriptConnection,
-	ConnectParallel: (self: PlayerSignal<T...>, fn: (T...) -> ()) -> RBXScriptConnection,
-	Once: (self: PlayerSignal<T...>, fn: (T...) -> ()) -> RBXScriptConnection,
-	Wait: (self: PlayerSignal<T...>) -> T...,
+	Connect: (self: Signal<T...>, fn: (T...) -> ()) -> RBXScriptConnection,
+	ConnectParallel: (self: Signal<T...>, fn: (T...) -> ()) -> RBXScriptConnection,
+	Once: (self: Signal<T...>, fn: (T...) -> ()) -> RBXScriptConnection,
+	Wait: (self: Signal<T...>) -> T...,
 }
 
 type PlayerSignal<T...> = {
@@ -17,15 +17,15 @@ type PlayerSignal<T...> = {
 --[=[
 	@within TypedRemote
 	@interface Event<T...>
-	.OnClientEvent PlayerSignal<T...>,
-	.OnServerEvent Signal<T...>,
+	.OnClientEvent Signal<T...>,
+	.OnServerEvent PlayerSignal<T...>,
 	.FireClient (self: Event<T...>, player: Player, T...) -> (),
 	.FireAllClients (self: Event<T...>, T...) -> (),
 	.FireServer (self: Event<T...>, T...) -> (),
 ]=]
 export type Event<T...> = Instance & {
-	OnClientEvent: PlayerSignal<T...>,
-	OnServerEvent: Signal<T...>,
+	OnClientEvent: Signal<T...>,
+	OnServerEvent: PlayerSignal<T...>,
 	FireClient: (self: Event<T...>, player: Player, T...) -> (),
 	FireAllClients: (self: Event<T...>, T...) -> (),
 	FireServer: (self: Event<T...>, T...) -> (),
