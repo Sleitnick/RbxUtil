@@ -347,7 +347,7 @@ end
 	@param name string
 	@param priority number
 	@param fn (dt: number) -> ()
-	@return ()->()
+	@return () -> ()
 	Calls `RunService:BindToRenderStep` and registers a function in the
 	trove that will call `RunService:UnbindFromRenderStep` on cleanup. It
 	also returns the registered function for cleanup with `Trove:Remove`.
