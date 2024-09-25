@@ -364,11 +364,9 @@ function Trove.BindToRenderStep(self: TroveInternal, name: string, priority: num
 	end
 
 	RunService:BindToRenderStep(name, priority, fn)
-	
 	local destructor = function()
 		RunService:UnbindFromRenderStep(name)
 	end
-	
 	self:Add(destructor)
 	return destructor
 end
