@@ -7,7 +7,7 @@ export type Trove = {
 	Clone: <T>(self: Trove, instance: T & Instance) -> T,
 	Construct: <T, A...>(self: Trove, class: Constructable<T, A...>, A...) -> T,
 	Connect: (self: Trove, signal: SignalLike | RBXScriptSignal, fn: (...any) -> ...any) -> ConnectionLike,
-	BindToRenderStep: (self: Trove, name: string, priority: number, fn: (dt: number) -> ()) -> (),
+	BindToRenderStep: (self: Trove, name: string, priority: number, fn: (dt: number) -> ()) -> () -> (),
 	AddPromise: <T>(self: Trove, promise: T & PromiseLike) -> T,
 	Add: <T>(self: Trove, object: T & Trackable, cleanupMethod: string?) -> T,
 	Remove: <T>(self: Trove, object: T & Trackable) -> boolean,
@@ -347,8 +347,10 @@ end
 	@param name string
 	@param priority number
 	@param fn (dt: number) -> ()
+	@return ()->()
 	Calls `RunService:BindToRenderStep` and registers a function in the
-	trove that will call `RunService:UnbindFromRenderStep` on cleanup.
+	trove that will call `RunService:UnbindFromRenderStep` on cleanup. It
+	also returns the registered function for cleanup with `Trove:Remove`.
 
 	```lua
 	trove:BindToRenderStep("Test", Enum.RenderPriority.Last.Value, function(dt)
@@ -362,10 +364,13 @@ function Trove.BindToRenderStep(self: TroveInternal, name: string, priority: num
 	end
 
 	RunService:BindToRenderStep(name, priority, fn)
-
-	self:Add(function()
+	
+	local destructor = function()
 		RunService:UnbindFromRenderStep(name)
-	end)
+	end
+	
+	self:Add(destructor)
+	return destructor
 end
 
 --[=[
