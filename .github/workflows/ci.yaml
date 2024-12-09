@@ -48,7 +48,7 @@ jobs:
       uses: ok-nick/setup-aftman@v0.4.2
 
     - name: Build place file
-      run: rojo -o test.rbxl test.project.json
+      run: rojo build -o test.rbxl test.project.json
 
     - name: Upload place file
       shell: bash
