@@ -6,4 +6,4 @@ license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
-exclude = ["node_modules", "package.json", "**/*.ts"]
+exclude = ["node_modules", "package.json", "**/*.ts", "**/*.test.luau"]

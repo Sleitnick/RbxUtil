@@ -7,6 +7,12 @@
 			"Modules": {
 				"$path": "modules"
 			}
+		},
+		"ServerScriptService": {
+			"$className": "ServerScriptService",
+			"TestRunner": {
+				"$path": "ci"
+			}
 		}
 	}
 }
