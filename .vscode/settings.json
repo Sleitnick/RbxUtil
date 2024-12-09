@@ -20,5 +20,6 @@
 	"luau-lsp.sourcemap.rojoProjectFile": "dev.project.json",
 	"eslint.run": "onType",
 	"eslint.format.enable": true,
-	"files.eol": "\n"
+	"files.eol": "\n",
+	"stylua.targetReleaseVersion": "latest"
 }
