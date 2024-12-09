@@ -59,7 +59,15 @@ jobs:
         FILE: test.rbxl
       run: rbxcloud experience publish -a "$API_KEY" -u "$UID" -p "$PID" -t published -f "$FILE"
 
-    # TODO: Use new cloud script runner to run the tests here:    
-    # - name: Run tests
-    #   shell: bash
-
+    - name: Install Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.13"
+    
+    - name: Run tests
+      env:
+        UID: 6900069600
+        PID: 110224315334647
+        API_KEY: ${{ secrets.RBXCLOUD_API_KEY }}
+        FILE: test.rbxl
+      run: python run_tests.py "$UID" "$PID"
