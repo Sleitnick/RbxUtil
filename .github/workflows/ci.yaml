@@ -4,7 +4,6 @@ on:
   push:
     branches:
     - main
-    - feature/new-tests
   pull_request:
     branches:
     - main
