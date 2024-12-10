@@ -1,15 +1,18 @@
-type TestResult = {}
-
-type TestInstance = {
-	Fn: () -> TestResult,
-}
-
 export type TestExpect = {
 	Not: (self: TestExpect) -> TestExpect,
 	ToBe: (self: TestExpect, value: any) -> (),
 	ToBeNaN: (self: TestExpect, value: any) -> (),
 	ToBeNil: (self: TestExpect) -> (),
+	ToBeTruthy: (self: TestExpect) -> (),
+	ToBeFalsy: (self: TestExpect) -> (),
 	ToThrow: (self: TestExpect, err: any?) -> (),
+	ToHaveLength: (self: TestExpect, length: number) -> (),
+	ToHaveProperty: (self: TestExpect, property: string) -> (),
+	ToBeGreaterThan: (self: TestExpect, value: number) -> (),
+	ToBeGreaterThanOrEqual: (self: TestExpect, value: number) -> (),
+	ToBeLessThan: (self: TestExpect, value: number) -> (),
+	ToBeLessThanOrEqual: (self: TestExpect, value: number) -> (),
+	ToContain: (self: TestExpect, value: any) -> (),
 }
 
 local TestExpect = {}
@@ -17,17 +20,35 @@ TestExpect.__index = TestExpect
 
 function TestExpect:ToBe(value: any)
 	local condition = self.Value == value
-	assert(if self.Flip then not condition else condition)
+	if self.Flip then
+		condition = not condition
+	end
+
+	if not condition then
+		error(`{self.Value} {if self.Flip then "!=" else "=="} {value}`, 0)
+	end
 end
 
 function TestExpect:ToBeNil()
 	local condition = self.Value ~= nil
-	assert(if self.Flip then not condition else condition)
+	if self.Flip then
+		condition = not condition
+	end
+
+	if not condition then
+		error(`{self.Value} {if self.Flip then "!=" else "=="} nil`, 0)
+	end
 end
 
 function TestExpect:ToBeNaN()
-	local nan = self.Value ~= self.Value
-	assert(if self.Flip then not nan else nan)
+	local condition = self.Value ~= self.Value
+	if self.Flip then
+		condition = not condition
+	end
+
+	if not condition then
+		error(`{self.Value} {if self.Flip then "!=" else "=="} NaN`, 0)
+	end
 end
 
 function TestExpect:ToThrow(err: any?)
@@ -37,13 +58,160 @@ function TestExpect:ToThrow(err: any?)
 	else
 		condition = not self.Success
 	end
-	assert(if self.Flip then not condition else condition)
+
+	if self.Flip then
+		condition = not condition
+	end
+
+	if not condition then
+		error(`{if self.Flip then "expected to not throw" else "expected to throw"}`, 0)
+	end
+end
+
+function TestExpect:ToBeTruthy()
+	local condition = not not self.Value
+
+	if self.Flip then
+		condition = not condition
+	end
+
+	if not condition then
+		error(`{self.Value} {if self.Flip then "not truthy" else "truthy"}`, 0)
+	end
+end
+
+function TestExpect:ToBeFalsy()
+	local condition = not self.Value
+
+	if self.Flip then
+		condition = not condition
+	end
+
+	if not condition then
+		error(`{self.Value} {if self.Flip then "not falsy" else "falsy"}`, 0)
+	end
+end
+
+function TestExpect:ToHaveLength(length: number)
+	local t = typeof(self.Value)
+	local validType = t == "string" or t == "table"
+	local condition = validType and #self.Value == length
+
+	if self.Flip and validType then
+		condition = not condition
+	end
+
+	if not condition then
+		if validType then
+			error(`{t} length ({#self.Value}) {if self.Flip then "!=" else "=="} {length}`, 0)
+		else
+			error(`invalid type "{t}" (expected table or string)`, 0)
+		end
+	end
+end
+
+function TestExpect:ToHaveProperty(property: string)
+	local t = typeof(self.Value)
+	local validType = t == "table"
+	local condition = validType and self.Value[property] ~= nil
+
+	if self.Flip and validType then
+		condition = not condition
+	end
+
+	if not condition then
+		if validType then
+			error(`table {if self.Flip then "does not contain" else "contains"} property "{property}"`, 0)
+		else
+			error(`invalid type "{t}" (expected table)`, 0)
+		end
+	end
+end
+
+function TestExpect:ToBeGreaterThan(value: number)
+	local condition = self.Value > value
+
+	if self.Flip then
+		condition = not condition
+	end
+
+	if not condition then
+		error(`{self.Value} {if self.Flip then "<=" else ">"} {value}`, 0)
+	end
+end
+
+function TestExpect:ToBeGreaterThanOrEqual(value: number)
+	local condition = self.Value >= value
+
+	if self.Flip then
+		condition = not condition
+	end
+
+	if not condition then
+		error(`{self.Value} {if self.Flip then "<" else ">="} {value}`, 0)
+	end
+end
+
+function TestExpect:ToBeLessThan(value: number)
+	local condition = self.Value < value
+
+	if self.Flip then
+		condition = not condition
+	end
+
+	if not condition then
+		error(`{self.Value} {if self.Flip then ">=" else "<"} {value}`, 0)
+	end
+end
+
+function TestExpect:ToBeLessThanOrEqual(value: number)
+	local condition = self.Value <= value
+
+	if self.Flip then
+		condition = not condition
+	end
+
+	if not condition then
+		error(`{self.Value} {if self.Flip then ">" else "<="} {value}`, 0)
+	end
+end
+
+function TestExpect:ToContain(value: any)
+	local t = typeof(self.Value)
+	local valid = t == "table" or t == "string"
+	if t == "string" then
+		valid = typeof(value) == "string"
+	end
+
+	local condition = false
+
+	if valid then
+		if t == "table" then
+			condition = table.find(self.Value, value) ~= nil
+		else
+			condition = string.find(self.Value, value) ~= nil
+		end
+	end
+
+	if self.Flip and valid then
+		condition = not condition
+	end
+
+	if not condition then
+		if valid then
+			error(`"{value}" {if self.Flip then "not in" else "in"} {t}`, 0)
+		else
+			error(`invalid type "{t}" (expected table or string)`, 0)
+		end
+	end
 end
 
 function TestExpect:Not()
 	self.Flip = not self.Flip
 	return self
 end
+
+------------------------------------------------------------------------------------------------------------
 
 export type TestContext = {
 	Test: (self: TestContext, name: string, fn: () -> ()) -> (),
@@ -56,6 +224,8 @@ TestContext.__index = TestContext
 
 function TestContext.new(root: string): TestContext
 	local testContext = setmetatable({
+		TotalTests = 0,
+		TotalFails = 0,
 		Group = {
 			Name = root,
 			Items = {},
@@ -74,7 +244,9 @@ function TestContext:Test(name: string, fn: () -> ())
 		Success = success,
 		Err = err,
 	}
+	self.TotalTests += 1
 	if not success then
+		self.TotalFails += 1
 		self.Current.AnyFail = true
 	end
 end
@@ -105,10 +277,12 @@ function TestContext:Expect(value: any): TestExpect
 	return setmetatable({ Value = resolvedValue, Success = success, Err = err, Flip = false }, TestExpect) :: any
 end
 
+------------------------------------------------------------------------------------------------------------
+
 local Test = {}
 
 function Test.run(ancestors: { Instance })
-	local tests: { [string]: TestInstance } = {}
+	local tests: { [string]: () -> () } = {}
 
 	for _, ancestor in ancestors do
 		for _, child in ancestor:GetDescendants() do
@@ -123,6 +297,10 @@ function Test.run(ancestors: { Instance })
 	local results: { TestContext } = {}
 	local allPass = true
 
+	local totalTests = 0
+	local totalFails = 0
+	local totalSuccesses = 0
+
 	for name, test in tests do
 		local context = TestContext.new(name)
 		local success, err = pcall(test, context)
@@ -133,14 +311,24 @@ function Test.run(ancestors: { Instance })
 		if context.Group.AnyFail then
 			allPass = false
 		end
+		context.Current = nil
+		totalTests += context.TotalTests
+		totalFails += context.TotalFails
 	end
+	totalSuccesses = totalTests - totalFails
 
-	-- Print results:
-	print(results)
+	-- Build results:
 	local output = { "Test Results" }
 	local function out(str: string)
 		table.insert(output, str)
 	end
+
+	out("---------")
+	out(`{totalTests} Total`)
+	out(`{totalSuccesses} Pass`)
+	out(`{totalFails} Fail{if totalFails == 1 then "" else "s"}`)
+	out("---------")
+
 	local tab = "    "
 	for _, res in results do
 		local function Output(group, lvl)
@@ -151,7 +339,7 @@ function Test.run(ancestors: { Instance })
 				else
 					out(
 						`{string.rep(tab, lvl + 1)}[{if not item.Success then "x" else "✓"}] {name}{if not item.Success
-							then `\n{string.rep(tab, lvl + 2)}[{item.Err}]`
+							then `\n{string.rep(tab, lvl + 2)}failed assertion: {item.Err}`
 							else ""}`
 					)
 				end
@@ -159,6 +347,7 @@ function Test.run(ancestors: { Instance })
 		end
 		Output(res.Group, 0)
 	end
+
 	local outputTxt = table.concat(output, "\n")
 
 	return {
