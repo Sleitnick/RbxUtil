@@ -1,48 +1,56 @@
 <!doctype html>
-<html lang="en" dir="ltr" class="plugin-moonwave plugin-id-moonwave">
+<html lang="en" dir="ltr" class="plugin-moonwave plugin-id-moonwave" data-has-hydrated="false">
 <head>
 <meta charset="UTF-8">
-<meta name="generator" content="Docusaurus v2.3.1">
-<title data-rh="true">TableUtil | RbxUtil</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Sleitnick.github.io/RbxUtil/api/TableUtil"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docusaurus_tag" content="default"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docsearch:docusaurus_tag" content="default"><meta data-rh="true" property="og:title" content="TableUtil | RbxUtil"><meta data-rh="true" name="description" content="A collection of helpful table utility functions. Many of these functions are carried over from JavaScript or
+<meta name="generator" content="Docusaurus v3.6.3">
+<title data-rh="true">TableUtil | RbxUtil</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Sleitnick.github.io/RbxUtil/api/TableUtil"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docusaurus_tag" content="default"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docsearch:docusaurus_tag" content="default"><meta data-rh="true" property="og:title" content="TableUtil | RbxUtil"><meta data-rh="true" name="description" content="A collection of helpful table utility functions. Many of these functions are carried over from JavaScript or
 Python that are not present in Lua.
 
 Tables that only work specifically with arrays or dictionaries are marked as such in the documentation.
 
 :::info Immutability
 All functions (_except_ `SwapRemove`, `SwapRemoveFirstValue`, and `Lock`) treat tables as immutable and will return
-copies of the given table(s) with the operations performed on the copies."><meta data-rh="true" property="og:description" content="A collection of helpful table utility functions. Many of these functions are carried over from JavaScript or
+copies of the given table(s) with the operations performed on the copies.
+:::"><meta data-rh="true" property="og:description" content="A collection of helpful table utility functions. Many of these functions are carried over from JavaScript or
 Python that are not present in Lua.
 
 Tables that only work specifically with arrays or dictionaries are marked as such in the documentation.
 
 :::info Immutability
 All functions (_except_ `SwapRemove`, `SwapRemoveFirstValue`, and `Lock`) treat tables as immutable and will return
-copies of the given table(s) with the operations performed on the copies."><link data-rh="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/TableUtil"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/TableUtil" hreflang="en"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/TableUtil" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.e1adec2f.css">
-<link rel="preload" href="/RbxUtil/assets/js/runtime~main.91b1c50b.js" as="script">
-<link rel="preload" href="/RbxUtil/assets/js/main.082c20cd.js" as="script">
+copies of the given table(s) with the operations performed on the copies.
+:::"><link data-rh="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/TableUtil"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/TableUtil" hreflang="en"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/TableUtil" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.5cbed574.css">
+<script src="/RbxUtil/assets/js/runtime~main.71194469.js" defer="defer"></script>
+<script src="/RbxUtil/assets/js/main.3197640f.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
-<script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
-<div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="navbar navbar--fixed-top"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/RbxUtil/"><b class="navbar__title text--truncate">RbxUtil</b></a><a class="navbar__item navbar__link" href="/RbxUtil/docs/intro">Docs</a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/RbxUtil/api/">API</a></div><div class="navbar__items navbar__items--right"><a href="https://github.com/Sleitnick/RbxUtil" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="Switch between dark and light mode (currently light mode)" aria-label="Switch between dark and light mode (currently light mode)" aria-live="polite"><svg viewBox="0 0 24 24" width="24" height="24" class="lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" class="darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg></button></div><div class="searchBox_ZlJk"><div class="navbar__search"><span aria-label="expand searchbar" role="button" class="search-icon" tabindex="0"></span><input type="search" id="search_input_react" placeholder="Loading..." aria-label="Search" class="navbar__search-input search-bar" disabled=""></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="docusaurus_skipToContent_fallback" class="main-wrapper mainWrapper_z2l0 docPageContainer_wNNk"><div class="docPage_Dpn1"><div class="docSidebarContainer_o_re"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" aria-expanded="false" href="/RbxUtil/api/BufferUtil">BufferUtil</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" aria-expanded="false" href="/RbxUtil/api/Input">Input</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" aria-expanded="false" href="/RbxUtil/api/Comm">Remote Comm</a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Component">​Component</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Concur">​Concur</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/EnumList">​Enum​List</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Loader">​Loader</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Log">​Log</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Net">​Net</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Option">​Option</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/PID">​P​I​D</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Quaternion">​Quaternion</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Sequent">​Sequent</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Ser">​Ser</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Shake">​Shake</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Signal">​Signal</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Silo">​Silo</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Streamable">​Streamable</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/StreamableUtil">​Streamable​Util</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Symbol">​Symbol</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" href="/RbxUtil/api/TableUtil">​Table​Util</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/TaskQueue">​Task​Queue</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Timer">​Timer</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Tree">​Tree</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Trove">​Trove</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/TypedRemote">​Typed​Remote</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/WaitFor">​Wait​For</a></li></ul></nav></div></div><main class="docMainContainer_HJE1"><div class="container padding-vert--lg"><div class="row"><div class="col docItemCol_MU3C"><div class="docItemContainer_Wv98"><article><div class="member_J0w1 markdown"><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_oUs_"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><header><h1 class="docTitle_mZRt" style="text-decoration:none"><span style="display:inline-block">Table</span><span style="display:inline-block">Util</span></h1><div class="luaClassTags_EipM"></div><div>
+<script>!function(){function t(t){document.documentElement.setAttribute("data-theme",t)}var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();null!==e?t(e):window.matchMedia("(prefers-color-scheme: dark)").matches?t("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,t("light"))}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="navbar navbar--fixed-top"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/RbxUtil/"><b class="navbar__title text--truncate">RbxUtil</b></a><a class="navbar__item navbar__link" href="/RbxUtil/docs/intro">Docs</a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/RbxUtil/api/">API</a></div><div class="navbar__items navbar__items--right"><a href="https://github.com/Sleitnick/RbxUtil" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="Switch between dark and light mode (currently light mode)" aria-label="Switch between dark and light mode (currently light mode)" aria-live="polite" aria-pressed="false"><svg viewBox="0 0 24 24" width="24" height="24" class="lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" class="darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search"><span aria-label="expand searchbar" role="button" class="search-icon" tabindex="0"></span><input id="search_input_react" type="search" placeholder="Loading..." aria-label="Search" class="navbar__search-input search-bar" disabled=""></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="main-wrapper mainWrapper_z2l0 docPageContainer_wNNk"><div class="docPage_Dpn1"><div class="docSidebarContainer_o_re"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/RbxUtil/api/BufferUtil">BufferUtil</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/RbxUtil/api/Input">Input</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/RbxUtil/api/Comm">Remote Comm</a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Component">​Component</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Concur">​Concur</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/EnumList">​Enum​List</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Loader">​Loader</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Log">​Log</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Net">​Net</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Option">​Option</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/PID">​P​I​D</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Quaternion">​Quaternion</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Sequent">​Sequent</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Ser">​Ser</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Shake">​Shake</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Signal">​Signal</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Silo">​Silo</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Streamable">​Streamable</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/StreamableUtil">​Streamable​Util</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Symbol">​Symbol</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" href="/RbxUtil/api/TableUtil">​Table​Util</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/TaskQueue">​Task​Queue</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Timer">​Timer</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Tree">​Tree</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Trove">​Trove</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/TypedRemote">​Typed​Remote</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/WaitFor">​Wait​For</a></li></ul></nav></div></div><main class="docMainContainer_HJE1"><div class="container padding-vert--lg"><div class="row"><div class="col docItemCol_MU3C"><div class="docItemContainer_Wv98"><article><div class="member_J0w1 markdown"><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_oUs_"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><header><h1 class="docTitle_mZRt" style="text-decoration:none"><span style="display:inline-block">Table</span><span style="display:inline-block">Util</span></h1><div class="luaClassTags_EipM"></div><div>
 <p>
   A collection of helpful table utility functions. Many of these functions are carried over from JavaScript or
   Python that are not present in Lua.
 </p>
 <p>Tables that only work specifically with arrays or dictionaries are marked as such in the documentation.</p>
-<div class="admonition admonition-info alert alert--info">
-  <div class="admonition-heading">
-    <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16">
-          <path d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path>
-        </svg></span>Immutability</h5>
-  </div>
-  <div class="admonition-content">
-    <p>
-      All functions (<em>except</em> <code>SwapRemove</code>, <code>SwapRemoveFirstValue</code>, and <code>Lock</code>) treat tables as immutable and will return
-      copies of the given table(s) with the operations performed on the copies.
-    </p>
-  </div>
-</div>
-</div></header><h2 class="anchor anchorWithStickyNavbar_LWe7" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Copy"><code style="text-decoration:none">Copy</code><a href="#Copy" class="hash-link" aria-label="Direct link to Copy" title="Direct link to Copy">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L40"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Copy</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+
+  
+    
+    
+      <div class="admonition admonition-info alert alert--info">
+        <div class="admonition-heading">
+          <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16">
+                <path d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path>
+              </svg></span><span class="admonition-title">Immutability</span></h5>
+        </div>
+        <div class="admonition-content">
+          <p>
+            All functions (<em>except</em> <code>SwapRemove</code>, <code>SwapRemoveFirstValue</code>, and <code>Lock</code>) treat tables as immutable and will return
+            copies of the given table(s) with the operations performed on the copies.
+          </p>
+        </div>
+      </div>
+    
+  
+
+</div></header><h2 class="anchor anchorWithStickyNavbar_LWe7" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Copy"><code style="text-decoration:none">Copy</code><a href="#Copy" class="hash-link" aria-label="Direct link to Copy" title="Direct link to Copy">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L42"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Copy</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
 <p>Table to copy</p>
 </span></span></div><div><code>deep<!-- -->: </code><code class="blue_P4bS">boolean?</code><span class="inlineDescription_G7Er">-- <span>
 <p>Whether or not to perform a deep copy</p>
@@ -52,21 +60,28 @@ copies of the given table(s) with the operations performed on the copies."><link
   performed. For deep copies, a second boolean argument must be
   passed to the function.
 </p>
-<div class="admonition admonition-caution alert alert--warning">
-  <div class="admonition-heading">
-    <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-          <path d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path>
-        </svg></span>No cyclical references</h5>
-  </div>
-  <div class="admonition-content">
-    <p>
-      Deep copies are <em>not</em> protected against cyclical references. Passing
-      a table with cyclical references <em>and</em> the <code>deep</code> parameter set to
-      <code>true</code> will result in a stack-overflow.
-    </p>
-  </div>
-</div>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Sync"><code style="text-decoration:none">Sync</code><a href="#Sync" class="hash-link" aria-label="Direct link to Sync" title="Direct link to Sync">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L84"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Sync</code><code>(</code><div class="inset_uKQm"><div><code>srcTbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+
+  
+    
+    
+      <div class="admonition admonition-caution alert alert--warning">
+        <div class="admonition-heading">
+          <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                <path d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path>
+              </svg></span><span class="admonition-title">No cyclical references</span></h5>
+        </div>
+        <div class="admonition-content">
+          <p>
+            Deep copies are <em>not</em> protected against cyclical references. Passing
+            a table with cyclical references <em>and</em> the <code>deep</code> parameter set to
+            <code>true</code> will result in a stack-overflow.
+          </p>
+        </div>
+      </div>
+    
+  
+
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Sync"><code style="text-decoration:none">Sync</code><a href="#Sync" class="hash-link" aria-label="Direct link to Sync" title="Direct link to Sync">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L87"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Sync</code><code>(</code><div class="inset_uKQm"><div><code>srcTbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
 <p>Source table</p>
 </span></span></div><div><code>templateTbl<!-- -->: </code><code class="blue_P4bS">table</code><span class="inlineDescription_G7Er">-- <span>
 <p>Template table</p>
@@ -83,23 +98,30 @@ copies of the given table(s) with the operations performed on the copies."><link
 data <span class="token operator">=</span> TableUtil<span class="token punctuation">.</span><span class="token function">Sync</span><span class="token punctuation">(</span>data<span class="token punctuation">,</span> template<span class="token punctuation">)</span>
 <span class="token function">print</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token comment">--> {kills = 10, deaths = 0, xp = 0}</span>
 </code></pre>
-<div class="admonition admonition-caution alert alert--warning">
-  <div class="admonition-heading">
-    <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-          <path d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path>
-        </svg></span>Data Loss Warning</h5>
-  </div>
-  <div class="admonition-content">
-    <p>
-      This is a two-way sync, so the source table will have data
-      <em>removed</em> that isn't found in the template table. This can
-      be problematic if used for player data, where there might
-      be dynamic data added that isn't in the template.
-    </p>
-    <p>For player data, use <code>TableUtil.Reconcile</code> instead.</p>
-  </div>
-</div>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Reconcile"><code style="text-decoration:none">Reconcile</code><a href="#Reconcile" class="hash-link" aria-label="Direct link to Reconcile" title="Direct link to Reconcile">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L156"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Reconcile</code><code>(</code><div class="inset_uKQm"><div><code>source<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>template<!-- -->: </code><code class="blue_P4bS">table</code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
+
+  
+    
+    
+      <div class="admonition admonition-caution alert alert--warning">
+        <div class="admonition-heading">
+          <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                <path d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path>
+              </svg></span><span class="admonition-title">Data Loss Warning</span></h5>
+        </div>
+        <div class="admonition-content">
+          <p>
+            This is a two-way sync, so the source table will have data
+            <em>removed</em> that isn't found in the template table. This can
+            be problematic if used for player data, where there might
+            be dynamic data added that isn't in the template.
+          </p>
+          <p>For player data, use <code>TableUtil.Reconcile</code> instead.</p>
+        </div>
+      </div>
+    
+  
+
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Reconcile"><code style="text-decoration:none">Reconcile</code><a href="#Reconcile" class="hash-link" aria-label="Direct link to Reconcile" title="Direct link to Reconcile">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L159"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Reconcile</code><code>(</code><div class="inset_uKQm"><div><code>source<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>template<!-- -->: </code><code class="blue_P4bS">table</code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
 <p>
   Performs a one-way sync on the <code>source</code> table against the
   <code>template</code> table. Any keys found in <code>template</code> that are
@@ -119,7 +141,7 @@ data <span class="token operator">=</span> TableUtil<span class="token punctuati
 
 <span class="token function">print</span><span class="token punctuation">(</span>correctedData<span class="token punctuation">)</span> <span class="token comment">--> {kills = 10, deaths = 0, xp = 0, abc = 20}</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="SwapRemove"><code style="text-decoration:none">SwapRemove</code><a href="#SwapRemove" class="hash-link" aria-label="Direct link to SwapRemove" title="Direct link to SwapRemove">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L209"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">SwapRemove</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="SwapRemove"><code style="text-decoration:none">SwapRemove</code><a href="#SwapRemove" class="hash-link" aria-label="Direct link to SwapRemove" title="Direct link to SwapRemove">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L213"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">SwapRemove</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
 <p>Array</p>
 </span></span></div><div><code>i<!-- -->: </code><code class="blue_P4bS">number</code><span class="inlineDescription_G7Er">-- <span>
 <p>Index</p>
@@ -144,17 +166,24 @@ data <span class="token operator">=</span> TableUtil<span class="token punctuati
 TableUtil<span class="token punctuation">.</span><span class="token function">SwapRemove</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token comment">-- Remove "B"</span>
 <span class="token function">print</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span> <span class="token comment">--> {"A", "E", "C", "D"}</span>
 </code></pre>
-<div class="admonition admonition-note alert alert--secondary">
-  <div class="admonition-heading">
-    <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16">
-          <path d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path>
-        </svg></span>Arrays only</h5>
-  </div>
-  <div class="admonition-content">
-    <p>This function works on arrays, but not dictionaries.</p>
-  </div>
-</div>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="SwapRemoveFirstValue"><code style="text-decoration:none">SwapRemoveFirstValue</code><a href="#SwapRemoveFirstValue" class="hash-link" aria-label="Direct link to SwapRemoveFirstValue" title="Direct link to SwapRemoveFirstValue">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L234"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">SwapRemoveFirstValue</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+
+  
+    
+    
+      <div class="admonition admonition-note alert alert--secondary">
+        <div class="admonition-heading">
+          <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16">
+                <path d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path>
+              </svg></span><span class="admonition-title">Arrays only</span></h5>
+        </div>
+        <div class="admonition-content">
+          <p>This function works on arrays, but not dictionaries.</p>
+        </div>
+      </div>
+    
+  
+
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="SwapRemoveFirstValue"><code style="text-decoration:none">SwapRemoveFirstValue</code><a href="#SwapRemoveFirstValue" class="hash-link" aria-label="Direct link to SwapRemoveFirstValue" title="Direct link to SwapRemoveFirstValue">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L239"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">SwapRemoveFirstValue</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
 <p>Array</p>
 </span></span></div><div><code>v<!-- -->: </code><code class="blue_P4bS">any</code><span class="inlineDescription_G7Er">-- <span>
 <p>Value to find</p>
@@ -167,17 +196,24 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Sw
 TableUtil<span class="token punctuation">.</span><span class="token function">SwapRemoveFirstValue</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> <span class="token string">"C"</span><span class="token punctuation">)</span>
 <span class="token function">print</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span> <span class="token comment">--> {"A", "B", "E", "D"}</span>
 </code></pre>
-<div class="admonition admonition-note alert alert--secondary">
-  <div class="admonition-heading">
-    <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16">
-          <path d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path>
-        </svg></span>Arrays only</h5>
-  </div>
-  <div class="admonition-content">
-    <p>This function works on arrays, but not dictionaries.</p>
-  </div>
-</div>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Map"><code style="text-decoration:none">Map</code><a href="#Map" class="hash-link" aria-label="Direct link to Map" title="Direct link to Map">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L262"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Map</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>predicate<!-- -->: </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>value<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>key<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code></div><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code>newValue<!-- -->: </code><code class="blue_P4bS">any</code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
+
+  
+    
+    
+      <div class="admonition admonition-note alert alert--secondary">
+        <div class="admonition-heading">
+          <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16">
+                <path d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path>
+              </svg></span><span class="admonition-title">Arrays only</span></h5>
+        </div>
+        <div class="admonition-content">
+          <p>This function works on arrays, but not dictionaries.</p>
+        </div>
+      </div>
+    
+  
+
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Map"><code style="text-decoration:none">Map</code><a href="#Map" class="hash-link" aria-label="Direct link to Map" title="Direct link to Map">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L267"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Map</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>predicate<!-- -->: </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>value<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>key<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code></div><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code>newValue<!-- -->: </code><code class="blue_P4bS">any</code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
 <p>
   Performs a map operation against the given table, which can be used to
   map new values based on the old values at given keys/indices.
@@ -189,7 +225,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Sw
 <span class="token keyword">end</span><span class="token punctuation">)</span>
 <span class="token function">print</span><span class="token punctuation">(</span>t2<span class="token punctuation">)</span> <span class="token comment">--> {A = 20, B = 40, C = 60}</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Filter"><code style="text-decoration:none">Filter</code><a href="#Filter" class="hash-link" aria-label="Direct link to Filter" title="Direct link to Filter">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L292"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Filter</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>predicate<!-- -->: </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>value<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>key<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code></div><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code>keep<!-- -->: </code><code class="blue_P4bS">boolean</code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Filter"><code style="text-decoration:none">Filter</code><a href="#Filter" class="hash-link" aria-label="Direct link to Filter" title="Direct link to Filter">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L297"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Filter</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>predicate<!-- -->: </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>value<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>key<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code></div><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code>keep<!-- -->: </code><code class="blue_P4bS">boolean</code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
 <p>
   Performs a filter operation against the given table, which can be used to
   filter out unwanted values from the table.
@@ -201,7 +237,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Sw
 <span class="token keyword">end</span><span class="token punctuation">)</span>
 <span class="token function">print</span><span class="token punctuation">(</span>t2<span class="token punctuation">)</span> <span class="token comment">--> {B = 40, C = 60}</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Reduce"><code style="text-decoration:none">Reduce</code><a href="#Reduce" class="hash-link" aria-label="Direct link to Reduce" title="Direct link to Reduce">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L335"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Reduce</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>predicate<!-- -->: </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>accumulator<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>value<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>index<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code></div><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code>result<!-- -->: </code><code class="blue_P4bS">any</code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Reduce"><code style="text-decoration:none">Reduce</code><a href="#Reduce" class="hash-link" aria-label="Direct link to Reduce" title="Direct link to Reduce">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L340"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Reduce</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>predicate<!-- -->: </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>accumulator<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>value<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>index<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code></div><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code>result<!-- -->: </code><code class="blue_P4bS">any</code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
 <p>
   Performs a reduce operation against the given table, which can be used to
   reduce the table into a single value. This could be used to sum up a table
@@ -214,7 +250,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Sw
 <span class="token keyword">end</span><span class="token punctuation">)</span>
 <span class="token function">print</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span> <span class="token comment">--> 100</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Assign"><code style="text-decoration:none">Assign</code><a href="#Assign" class="hash-link" aria-label="Direct link to Assign" title="Direct link to Assign">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L378"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Assign</code><code>(</code><div class="inset_uKQm"><div><code>target<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>...<!-- -->: </code><code class="blue_P4bS">table</code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Assign"><code style="text-decoration:none">Assign</code><a href="#Assign" class="hash-link" aria-label="Direct link to Assign" title="Direct link to Assign">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L383"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Assign</code><code>(</code><div class="inset_uKQm"><div><code>target<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>...<!-- -->: </code><code class="blue_P4bS">table</code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
 <p>Copies all values of the given tables into the <code>target</code> table.</p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> t <span class="token operator">=</span> <span class="token punctuation">{</span>A <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">}</span>
 <span class="token keyword">local</span> t2 <span class="token operator">=</span> <span class="token punctuation">{</span>B <span class="token operator">=</span> <span class="token number">20</span><span class="token punctuation">}</span>
@@ -222,72 +258,100 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Sw
 <span class="token keyword">local</span> newT <span class="token operator">=</span> TableUtil<span class="token punctuation">.</span><span class="token function">Assign</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> t2<span class="token punctuation">,</span> t3<span class="token punctuation">)</span>
 <span class="token function">print</span><span class="token punctuation">(</span>newT<span class="token punctuation">)</span> <span class="token comment">--> {A = 10, B = 20, C = 30, D = 40}</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Extend"><code style="text-decoration:none">Extend</code><a href="#Extend" class="hash-link" aria-label="Direct link to Extend" title="Direct link to Extend">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L407"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Extend</code><code>(</code><div class="inset_uKQm"><div><code>target<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>extension<!-- -->: </code><code class="blue_P4bS">table</code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Extend"><code style="text-decoration:none">Extend</code><a href="#Extend" class="hash-link" aria-label="Direct link to Extend" title="Direct link to Extend">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L413"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Extend</code><code>(</code><div class="inset_uKQm"><div><code>target<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>extension<!-- -->: </code><code class="blue_P4bS">table</code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
 <p>Extends the target array with the extension array.</p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> t <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">,</span> <span class="token number">30</span><span class="token punctuation">}</span>
 <span class="token keyword">local</span> t2 <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">30</span><span class="token punctuation">,</span> <span class="token number">40</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">}</span>
 <span class="token keyword">local</span> tNew <span class="token operator">=</span> TableUtil<span class="token punctuation">.</span><span class="token function">Extend</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> t2<span class="token punctuation">)</span>
 <span class="token function">print</span><span class="token punctuation">(</span>tNew<span class="token punctuation">)</span> <span class="token comment">--> {10, 20, 30, 30, 40, 50}</span>
 </code></pre>
-<div class="admonition admonition-note alert alert--secondary">
-  <div class="admonition-heading">
-    <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16">
-          <path d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path>
-        </svg></span>Arrays only</h5>
-  </div>
-  <div class="admonition-content">
-    <p>This function works on arrays, but not dictionaries.</p>
-  </div>
-</div>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Reverse"><code style="text-decoration:none">Reverse</code><a href="#Reverse" class="hash-link" aria-label="Direct link to Reverse" title="Direct link to Reverse">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L432"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Reverse</code><code>(</code><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>) → </code><code class="blue_P4bS">table</code></div><div>
+
+  
+    
+    
+      <div class="admonition admonition-note alert alert--secondary">
+        <div class="admonition-heading">
+          <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16">
+                <path d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path>
+              </svg></span><span class="admonition-title">Arrays only</span></h5>
+        </div>
+        <div class="admonition-content">
+          <p>This function works on arrays, but not dictionaries.</p>
+        </div>
+      </div>
+    
+  
+
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Reverse"><code style="text-decoration:none">Reverse</code><a href="#Reverse" class="hash-link" aria-label="Direct link to Reverse" title="Direct link to Reverse">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L439"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Reverse</code><code>(</code><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>) → </code><code class="blue_P4bS">table</code></div><div>
 <p>Reverses the array.</p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> t <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">}</span>
 <span class="token keyword">local</span> tReverse <span class="token operator">=</span> TableUtil<span class="token punctuation">.</span><span class="token function">Reverse</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span>
 <span class="token function">print</span><span class="token punctuation">(</span>tReverse<span class="token punctuation">)</span> <span class="token comment">--> {10, 5, 1}</span>
 </code></pre>
-<div class="admonition admonition-note alert alert--secondary">
-  <div class="admonition-heading">
-    <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16">
-          <path d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path>
-        </svg></span>Arrays only</h5>
-  </div>
-  <div class="admonition-content">
-    <p>This function works on arrays, but not dictionaries.</p>
-  </div>
-</div>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Shuffle"><code style="text-decoration:none">Shuffle</code><a href="#Shuffle" class="hash-link" aria-label="Direct link to Shuffle" title="Direct link to Shuffle">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L459"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Shuffle</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>rngOverride<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Random" target="_blank" rel="noopener noreferrer">Random?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
+
+  
+    
+    
+      <div class="admonition admonition-note alert alert--secondary">
+        <div class="admonition-heading">
+          <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16">
+                <path d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path>
+              </svg></span><span class="admonition-title">Arrays only</span></h5>
+        </div>
+        <div class="admonition-content">
+          <p>This function works on arrays, but not dictionaries.</p>
+        </div>
+      </div>
+    
+  
+
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Shuffle"><code style="text-decoration:none">Shuffle</code><a href="#Shuffle" class="hash-link" aria-label="Direct link to Shuffle" title="Direct link to Shuffle">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L467"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Shuffle</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>rngOverride<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Random" target="_blank" rel="noopener noreferrer">Random?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
 <p>Shuffles the table.</p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> t <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">}</span>
 <span class="token keyword">local</span> shuffled <span class="token operator">=</span> TableUtil<span class="token punctuation">.</span><span class="token function">Shuffle</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span>
 <span class="token function">print</span><span class="token punctuation">(</span>shuffled<span class="token punctuation">)</span> <span class="token comment">--> e.g. {9, 4, 6, 7, 3, 1, 5, 8, 2}</span>
 </code></pre>
-<div class="admonition admonition-note alert alert--secondary">
-  <div class="admonition-heading">
-    <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16">
-          <path d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path>
-        </svg></span>Arrays only</h5>
-  </div>
-  <div class="admonition-content">
-    <p>This function works on arrays, but not dictionaries.</p>
-  </div>
-</div>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Sample"><code style="text-decoration:none">Sample</code><a href="#Sample" class="hash-link" aria-label="Direct link to Sample" title="Direct link to Sample">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L489"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Sample</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>sampleSize<!-- -->: </code><code class="blue_P4bS">number</code><code>,</code></div><div><code>rngOverride<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Random" target="_blank" rel="noopener noreferrer">Random?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
+
+  
+    
+    
+      <div class="admonition admonition-note alert alert--secondary">
+        <div class="admonition-heading">
+          <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16">
+                <path d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path>
+              </svg></span><span class="admonition-title">Arrays only</span></h5>
+        </div>
+        <div class="admonition-content">
+          <p>This function works on arrays, but not dictionaries.</p>
+        </div>
+      </div>
+    
+  
+
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Sample"><code style="text-decoration:none">Sample</code><a href="#Sample" class="hash-link" aria-label="Direct link to Sample" title="Direct link to Sample">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L498"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Sample</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>sampleSize<!-- -->: </code><code class="blue_P4bS">number</code><code>,</code></div><div><code>rngOverride<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Random" target="_blank" rel="noopener noreferrer">Random?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
 <p>Returns a random sample of the table.</p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> t <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">}</span>
 <span class="token keyword">local</span> sample <span class="token operator">=</span> TableUtil<span class="token punctuation">.</span><span class="token function">Sample</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span>
 <span class="token function">print</span><span class="token punctuation">(</span>sample<span class="token punctuation">)</span> <span class="token comment">--> e.g. {6, 2, 5}</span>
 </code></pre>
-<div class="admonition admonition-note alert alert--secondary">
-  <div class="admonition-heading">
-    <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16">
-          <path d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path>
-        </svg></span>Arrays only</h5>
-  </div>
-  <div class="admonition-content">
-    <p>This function works on arrays, but not dictionaries.</p>
-  </div>
-</div>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Flat"><code style="text-decoration:none">Flat</code><a href="#Flat" class="hash-link" aria-label="Direct link to Flat" title="Direct link to Flat">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L537"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Flat</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>depth<!-- -->: </code><code class="blue_P4bS">number?</code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
+
+  
+    
+    
+      <div class="admonition admonition-note alert alert--secondary">
+        <div class="admonition-heading">
+          <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16">
+                <path d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path>
+              </svg></span><span class="admonition-title">Arrays only</span></h5>
+        </div>
+        <div class="admonition-content">
+          <p>This function works on arrays, but not dictionaries.</p>
+        </div>
+      </div>
+    
+  
+
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Flat"><code style="text-decoration:none">Flat</code><a href="#Flat" class="hash-link" aria-label="Direct link to Flat" title="Direct link to Flat">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L547"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Flat</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>depth<!-- -->: </code><code class="blue_P4bS">number?</code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
 <p>
   Returns a new table where all sub-arrays have been
   bubbled up to the top. The depth at which the scan
@@ -298,17 +362,24 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Sw
 <span class="token keyword">local</span> flat <span class="token operator">=</span> TableUtil<span class="token punctuation">.</span><span class="token function">Flat</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span>
 <span class="token function">print</span><span class="token punctuation">(</span>flat<span class="token punctuation">)</span> <span class="token comment">--> {10, 20, 90, 100, 30, 15}</span>
 </code></pre>
-<div class="admonition admonition-note alert alert--secondary">
-  <div class="admonition-heading">
-    <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16">
-          <path d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path>
-        </svg></span>Arrays only</h5>
-  </div>
-  <div class="admonition-content">
-    <p>This function works on arrays, but not dictionaries.</p>
-  </div>
-</div>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="FlatMap"><code style="text-decoration:none">FlatMap</code><a href="#FlatMap" class="hash-link" aria-label="Direct link to FlatMap" title="Direct link to FlatMap">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L574"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">FlatMap</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>predicate<!-- -->: </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>key<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>value<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code></div><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code>newValue<!-- -->: </code><code class="blue_P4bS">any</code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
+
+  
+    
+    
+      <div class="admonition admonition-note alert alert--secondary">
+        <div class="admonition-heading">
+          <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16">
+                <path d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path>
+              </svg></span><span class="admonition-title">Arrays only</span></h5>
+        </div>
+        <div class="admonition-content">
+          <p>This function works on arrays, but not dictionaries.</p>
+        </div>
+      </div>
+    
+  
+
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="FlatMap"><code style="text-decoration:none">FlatMap</code><a href="#FlatMap" class="hash-link" aria-label="Direct link to FlatMap" title="Direct link to FlatMap">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L585"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">FlatMap</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>predicate<!-- -->: </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>key<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>value<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code></div><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code>newValue<!-- -->: </code><code class="blue_P4bS">any</code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
 <p>
   Calls <code>TableUtil.Map</code> on the given table and predicate, and then
   calls <code>TableUtil.Flat</code> on the result from the map operation.
@@ -319,61 +390,82 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Sw
 <span class="token keyword">end</span><span class="token punctuation">)</span>
 <span class="token function">print</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span> <span class="token comment">--> {10, 20, 20, 40, 30, 60}</span>
 </code></pre>
-<div class="admonition admonition-note alert alert--secondary">
-  <div class="admonition-heading">
-    <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16">
-          <path d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path>
-        </svg></span>Arrays only</h5>
-  </div>
-  <div class="admonition-content">
-    <p>This function works on arrays, but not dictionaries.</p>
-  </div>
-</div>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Keys"><code style="text-decoration:none">Keys</code><a href="#Keys" class="hash-link" aria-label="Direct link to Keys" title="Direct link to Keys">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L600"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Keys</code><code>(</code><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>) → </code><code class="blue_P4bS">table</code></div><div>
+
+  
+    
+    
+      <div class="admonition admonition-note alert alert--secondary">
+        <div class="admonition-heading">
+          <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16">
+                <path d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path>
+              </svg></span><span class="admonition-title">Arrays only</span></h5>
+        </div>
+        <div class="admonition-content">
+          <p>This function works on arrays, but not dictionaries.</p>
+        </div>
+      </div>
+    
+  
+
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Keys"><code style="text-decoration:none">Keys</code><a href="#Keys" class="hash-link" aria-label="Direct link to Keys" title="Direct link to Keys">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L612"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Keys</code><code>(</code><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>) → </code><code class="blue_P4bS">table</code></div><div>
 <p>Returns an array with all the keys in the table.</p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> t <span class="token operator">=</span> <span class="token punctuation">{</span>A <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">,</span> B <span class="token operator">=</span> <span class="token number">20</span><span class="token punctuation">,</span> C <span class="token operator">=</span> <span class="token number">30</span><span class="token punctuation">}</span>
 <span class="token keyword">local</span> keys <span class="token operator">=</span> TableUtil<span class="token punctuation">.</span><span class="token function">Keys</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span>
 <span class="token function">print</span><span class="token punctuation">(</span>keys<span class="token punctuation">)</span> <span class="token comment">--> {"A", "B", "C"}</span>
 </code></pre>
-<div class="admonition admonition-caution alert alert--warning">
-  <div class="admonition-heading">
-    <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-          <path d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path>
-        </svg></span>Ordering</h5>
-  </div>
-  <div class="admonition-content">
-    <p>
-      The ordering of the keys is never guaranteed. If order is imperative, call
-      <code>table.sort</code> on the resulting <code>keys</code> array.
-    </p>
-    <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> keys <span class="token operator">=</span> TableUtil<span class="token punctuation">.</span><span class="token function">Keys</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span>
+
+  
+    
+    
+      <div class="admonition admonition-caution alert alert--warning">
+        <div class="admonition-heading">
+          <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                <path d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path>
+              </svg></span><span class="admonition-title">Ordering</span></h5>
+        </div>
+        <div class="admonition-content">
+          <p>
+            The ordering of the keys is never guaranteed. If order is imperative, call
+            <code>table.sort</code> on the resulting <code>keys</code> array.
+          </p>
+          <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> keys <span class="token operator">=</span> TableUtil<span class="token punctuation">.</span><span class="token function">Keys</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span>
 table<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span>keys<span class="token punctuation">)</span>
 </code></pre>
-  </div>
-</div>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Values"><code style="text-decoration:none">Values</code><a href="#Values" class="hash-link" aria-label="Direct link to Values" title="Direct link to Values">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L630"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Values</code><code>(</code><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>) → </code><code class="blue_P4bS">table</code></div><div>
+        </div>
+      </div>
+    
+  
+
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Values"><code style="text-decoration:none">Values</code><a href="#Values" class="hash-link" aria-label="Direct link to Values" title="Direct link to Values">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L643"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Values</code><code>(</code><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>) → </code><code class="blue_P4bS">table</code></div><div>
 <p>Returns an array with all the values in the table.</p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> t <span class="token operator">=</span> <span class="token punctuation">{</span>A <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">,</span> B <span class="token operator">=</span> <span class="token number">20</span><span class="token punctuation">,</span> C <span class="token operator">=</span> <span class="token number">30</span><span class="token punctuation">}</span>
 <span class="token keyword">local</span> values <span class="token operator">=</span> TableUtil<span class="token punctuation">.</span><span class="token function">Values</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span>
 <span class="token function">print</span><span class="token punctuation">(</span>values<span class="token punctuation">)</span> <span class="token comment">--> {10, 20, 30}</span>
 </code></pre>
-<div class="admonition admonition-caution alert alert--warning">
-  <div class="admonition-heading">
-    <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-          <path d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path>
-        </svg></span>Ordering</h5>
-  </div>
-  <div class="admonition-content">
-    <p>
-      The ordering of the values is never guaranteed. If order is imperative, call
-      <code>table.sort</code> on the resulting <code>values</code> array.
-    </p>
-    <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> values <span class="token operator">=</span> TableUtil<span class="token punctuation">.</span><span class="token function">Values</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span>
+
+  
+    
+    
+      <div class="admonition admonition-caution alert alert--warning">
+        <div class="admonition-heading">
+          <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                <path d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path>
+              </svg></span><span class="admonition-title">Ordering</span></h5>
+        </div>
+        <div class="admonition-content">
+          <p>
+            The ordering of the values is never guaranteed. If order is imperative, call
+            <code>table.sort</code> on the resulting <code>values</code> array.
+          </p>
+          <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> values <span class="token operator">=</span> TableUtil<span class="token punctuation">.</span><span class="token function">Values</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span>
 table<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span>values<span class="token punctuation">)</span>
 </code></pre>
-  </div>
-</div>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Find"><code style="text-decoration:none">Find</code><a href="#Find" class="hash-link" aria-label="Direct link to Find" title="Direct link to Find">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L669"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Find</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>callback<!-- -->: </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>value<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>index<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code></div><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="blue_P4bS">boolean</code></div></div><code>) → </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>value<!-- -->: </code><code class="blue_P4bS">any?</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>key<!-- -->: </code><code class="blue_P4bS">any?</code></div><code class="purple_ieR2">)</code></div><div>
+        </div>
+      </div>
+    
+  
+
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Find"><code style="text-decoration:none">Find</code><a href="#Find" class="hash-link" aria-label="Direct link to Find" title="Direct link to Find">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L683"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Find</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>callback<!-- -->: </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>value<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>index<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code></div><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="blue_P4bS">boolean</code></div></div><code>) → </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>value<!-- -->: </code><code class="blue_P4bS">any?</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>key<!-- -->: </code><code class="blue_P4bS">any?</code></div><code class="purple_ieR2">)</code></div><div>
 <p>
   Performs a linear scan across the table and calls <code>callback</code> on
   each item in the array. Returns the value and key of the first
@@ -392,21 +484,28 @@ table<span class="token punctuation">.</span><span class="token function">sort</
 
 <span class="token function">print</span><span class="token punctuation">(</span>firstPersonWithJ<span class="token punctuation">)</span> <span class="token comment">--> {Name = "Jill", Age = 30}</span>
 </code></pre>
-<div class="admonition admonition-caution alert alert--warning">
-  <div class="admonition-heading">
-    <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-          <path d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path>
-        </svg></span>Dictionary Ordering</h5>
-  </div>
-  <div class="admonition-content">
-    <p>
-      While <code>Find</code> can also be used with dictionaries, dictionary ordering is never
-      guaranteed, and thus the result could be different if there are more
-      than one possible matches given the data and callback function.
-    </p>
-  </div>
-</div>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Every"><code style="text-decoration:none">Every</code><a href="#Every" class="hash-link" aria-label="Direct link to Every" title="Direct link to Every">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L698"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Every</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>callback<!-- -->: </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>value<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>index<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code></div><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="blue_P4bS">boolean</code></div></div><code>) → </code><code class="blue_P4bS">boolean</code></div><div>
+
+  
+    
+    
+      <div class="admonition admonition-caution alert alert--warning">
+        <div class="admonition-heading">
+          <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                <path d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path>
+              </svg></span><span class="admonition-title">Dictionary Ordering</span></h5>
+        </div>
+        <div class="admonition-content">
+          <p>
+            While <code>Find</code> can also be used with dictionaries, dictionary ordering is never
+            guaranteed, and thus the result could be different if there are more
+            than one possible matches given the data and callback function.
+          </p>
+        </div>
+      </div>
+    
+  
+
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Every"><code style="text-decoration:none">Every</code><a href="#Every" class="hash-link" aria-label="Direct link to Every" title="Direct link to Every">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L712"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Every</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>callback<!-- -->: </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>value<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>index<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code></div><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="blue_P4bS">boolean</code></div></div><code>) → </code><code class="blue_P4bS">boolean</code></div><div>
 <p>
   Returns <code>true</code> if the <code>callback</code> also returns <code>true</code> for <em>every</em>
   item in the table.
@@ -419,7 +518,7 @@ table<span class="token punctuation">.</span><span class="token function">sort</
 
 <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"All above zero:"</span><span class="token punctuation">,</span> allAboveZero<span class="token punctuation">)</span> <span class="token comment">--> All above zero: true</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Some"><code style="text-decoration:none">Some</code><a href="#Some" class="hash-link" aria-label="Direct link to Some" title="Direct link to Some">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L727"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Some</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>callback<!-- -->: </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>value<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>index<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code></div><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="blue_P4bS">boolean</code></div></div><code>) → </code><code class="blue_P4bS">boolean</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Some"><code style="text-decoration:none">Some</code><a href="#Some" class="hash-link" aria-label="Direct link to Some" title="Direct link to Some">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L741"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Some</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>callback<!-- -->: </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>value<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>index<!-- -->: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code></div><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="blue_P4bS">boolean</code></div></div><code>) → </code><code class="blue_P4bS">boolean</code></div><div>
 <p>Returns <code>true</code> if the <code>callback</code> also returns <code>true</code> for <em>at least
 one</em> of the items in the table.</p>
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> t <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">,</span> <span class="token number">40</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">,</span> <span class="token number">60</span><span class="token punctuation">}</span>
@@ -430,7 +529,7 @@ one</em> of the items in the table.</p>
 
 <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Some below twenty:"</span><span class="token punctuation">,</span> someBelowTwenty<span class="token punctuation">)</span> <span class="token comment">--> Some below twenty: true</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Truncate"><code style="text-decoration:none">Truncate</code><a href="#Truncate" class="hash-link" aria-label="Direct link to Truncate" title="Direct link to Truncate">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L753"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Truncate</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>length<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Truncate"><code style="text-decoration:none">Truncate</code><a href="#Truncate" class="hash-link" aria-label="Direct link to Truncate" title="Direct link to Truncate">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L767"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Truncate</code><code>(</code><div class="inset_uKQm"><div><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>,</code></div><div><code>length<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code class="blue_P4bS">table</code></div><div>
 <p>
   Returns a new table truncated to the length of <code>length</code>. Any length
   equal or greater than the current length will simply return a
@@ -440,7 +539,7 @@ one</em> of the items in the table.</p>
 <span class="token keyword">local</span> tTruncated <span class="token operator">=</span> TableUtil<span class="token punctuation">.</span><span class="token function">Truncate</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span>
 <span class="token function">print</span><span class="token punctuation">(</span>tTruncated<span class="token punctuation">)</span> <span class="token comment">--> {10, 20, 30}</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Zip"><code style="text-decoration:none">Zip</code><a href="#Zip" class="hash-link" aria-label="Direct link to Zip" title="Direct link to Zip">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L786"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Zip</code><code>(</code><code>...<!-- -->: </code><code class="blue_P4bS">table</code><code>) → </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>iter<!-- -->: </code><code class="green_DgR4">(</code><div class="inset_uKQm"><code>t<!-- -->: </code><code class="blue_P4bS">table</code><code class="green_DgR4">,</code></div><div class="inset_uKQm"><code>k<!-- -->: </code><code class="blue_P4bS">any</code></div><code class="green_DgR4">)</code><code class="green_DgR4"> → </code><code class="green_DgR4">(</code><div class="inset_uKQm"><code>key<!-- -->: </code><code class="blue_P4bS">any?</code><code class="green_DgR4">,</code></div><div class="inset_uKQm"><code>values<!-- -->: </code><code class="blue_P4bS">table?</code></div><code class="green_DgR4">)</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>startIndex<!-- -->: </code><code class="blue_P4bS">any?</code></div><code class="purple_ieR2">)</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Zip"><code style="text-decoration:none">Zip</code><a href="#Zip" class="hash-link" aria-label="Direct link to Zip" title="Direct link to Zip">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L800"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Zip</code><code>(</code><code>...<!-- -->: </code><code class="blue_P4bS">table</code><code>) → </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>iter<!-- -->: </code><code class="green_DgR4">(</code><div class="inset_uKQm"><code>t<!-- -->: </code><code class="blue_P4bS">table</code><code class="green_DgR4">,</code></div><div class="inset_uKQm"><code>k<!-- -->: </code><code class="blue_P4bS">any</code></div><code class="green_DgR4">)</code><code class="green_DgR4"> → </code><code class="green_DgR4">(</code><div class="inset_uKQm"><code>key<!-- -->: </code><code class="blue_P4bS">any?</code><code class="green_DgR4">,</code></div><div class="inset_uKQm"><code>values<!-- -->: </code><code class="blue_P4bS">table?</code></div><code class="green_DgR4">)</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>startIndex<!-- -->: </code><code class="blue_P4bS">any?</code></div><code class="purple_ieR2">)</code></div><div>
 <p>
   Returns an iterator that can scan through multiple tables at the same time side-by-side, matching
   against shared keys/indices.
@@ -461,7 +560,7 @@ one</em> of the items in the table.</p>
 	5 {50, 100}
 --]]</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Lock"><code style="text-decoration:none">Lock</code><a href="#Lock" class="hash-link" aria-label="Direct link to Lock" title="Direct link to Lock">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L839"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Lock</code><code>(</code><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>) → </code><code class="blue_P4bS">table</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Lock"><code style="text-decoration:none">Lock</code><a href="#Lock" class="hash-link" aria-label="Direct link to Lock" title="Direct link to Lock">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L853"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">Lock</code><code>(</code><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>) → </code><code class="blue_P4bS">table</code></div><div>
 <p>
   Locks the table using <code>table.freeze</code>, as well as any
   nested tables within the given table. This will lock
@@ -473,7 +572,7 @@ tbl<span class="token punctuation">.</span>xyz<span class="token punctuation">.<
 TableUtil<span class="token punctuation">.</span><span class="token function">Lock</span><span class="token punctuation">(</span>tbl<span class="token punctuation">)</span>
 tbl<span class="token punctuation">.</span>xyz<span class="token punctuation">.</span>abc <span class="token operator">=</span> <span class="token number">64</span> <span class="token comment">-- Will throw an error (cannot modify readonly table)</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="IsEmpty"><code style="text-decoration:none">IsEmpty</code><a href="#IsEmpty" class="hash-link" aria-label="Direct link to IsEmpty" title="Direct link to IsEmpty">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L869"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">IsEmpty</code><code>(</code><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>) → </code><code class="blue_P4bS">boolean</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="IsEmpty"><code style="text-decoration:none">IsEmpty</code><a href="#IsEmpty" class="hash-link" aria-label="Direct link to IsEmpty" title="Direct link to IsEmpty">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L883"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">IsEmpty</code><code>(</code><code>tbl<!-- -->: </code><code class="blue_P4bS">table</code><code>) → </code><code class="blue_P4bS">boolean</code></div><div>
 <p>
   Returns <code>true</code> if the given table is empty. This is
   simply performed by checking if <code>next(tbl)</code> is <code>nil</code>
@@ -485,15 +584,15 @@ tbl<span class="token punctuation">.</span>xyz<span class="token punctuation">.<
 TableUtil<span class="token punctuation">.</span><span class="token function">IsEmpty</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">"abc"</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment">-- false</span>
 TableUtil<span class="token punctuation">.</span><span class="token function">IsEmpty</span><span class="token punctuation">(</span><span class="token punctuation">{</span>abc <span class="token operator">=</span> <span class="token number">32</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment">-- false</span>
 </code></pre>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="EncodeJSON"><code style="text-decoration:none">EncodeJSON</code><a href="#EncodeJSON" class="hash-link" aria-label="Direct link to EncodeJSON" title="Direct link to EncodeJSON">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L881"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">EncodeJSON</code><code>(</code><code>value<!-- -->: </code><code class="blue_P4bS">any</code><code>) → </code><code class="blue_P4bS">string</code></div><div>
-<p>Proxy for <a href="https://developer.roblox.com/en-us/api-reference/function/HttpService/JSONEncode" target="_blank"><code>HttpService:JSONEncode</code></a>.</p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="DecodeJSON"><code style="text-decoration:none">DecodeJSON</code><a href="#DecodeJSON" class="hash-link" aria-label="Direct link to DecodeJSON" title="Direct link to DecodeJSON">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L893"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">DecodeJSON</code><code>(</code><code>value<!-- -->: </code><code class="blue_P4bS">any</code><code>) → </code><code class="blue_P4bS">string</code></div><div>
-<p>Proxy for <a href="https://developer.roblox.com/en-us/api-reference/function/HttpService/JSONDecode" target="_blank"><code>HttpService:JSONDecode</code></a>.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="EncodeJSON"><code style="text-decoration:none">EncodeJSON</code><a href="#EncodeJSON" class="hash-link" aria-label="Direct link to EncodeJSON" title="Direct link to EncodeJSON">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L895"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">EncodeJSON</code><code>(</code><code>value<!-- -->: </code><code class="blue_P4bS">any</code><code>) → </code><code class="blue_P4bS">string</code></div><div>
+<p>Proxy for <a href="https://developer.roblox.com/en-us/api-reference/function/HttpService/JSONEncode"><code>HttpService:JSONEncode</code></a>.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="DecodeJSON"><code style="text-decoration:none">DecodeJSON</code><a href="#DecodeJSON" class="hash-link" aria-label="Direct link to DecodeJSON" title="Direct link to DecodeJSON">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/table-util/init.luau#L907"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>TableUtil<!-- -->.</code><code class="green_DgR4">DecodeJSON</code><code>(</code><code>value<!-- -->: </code><code class="blue_P4bS">any</code><code>) → </code><code class="blue_P4bS">string</code></div><div>
+<p>Proxy for <a href="https://developer.roblox.com/en-us/api-reference/function/HttpService/JSONDecode"><code>HttpService:JSONDecode</code></a>.</p>
 </div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
     &quot;functions&quot;: [
         {
             &quot;name&quot;: &quot;Copy&quot;,
-            &quot;desc&quot;: &quot;Creates a copy of the given table. By default, a shallow copy is\nperformed. For deep copies, a second boolean argument must be\npassed to the function.\n\n:::caution No cyclical references\nDeep copies are _not_ protected against cyclical references. Passing\na table with cyclical references _and_ the `deep` parameter set to\n`true` will result in a stack-overflow.&quot;,
+            &quot;desc&quot;: &quot;Creates a copy of the given table. By default, a shallow copy is\nperformed. For deep copies, a second boolean argument must be\npassed to the function.\n\n:::caution No cyclical references\nDeep copies are _not_ protected against cyclical references. Passing\na table with cyclical references _and_ the `deep` parameter set to\n`true` will result in a stack-overflow.\n:::&quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;tbl&quot;,
@@ -514,13 +613,13 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 40,
+                &quot;line&quot;: 42,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
         {
             &quot;name&quot;: &quot;Sync&quot;,
-            &quot;desc&quot;: &quot;Synchronizes the `srcTbl` based on the `templateTbl`. This will make\nsure that `srcTbl` has all of the same keys as `templateTbl`, including\nremoving keys in `srcTbl` that are not present in `templateTbl`. This\nis a _deep_ operation, so any nested tables will be synchronized as\nwell.\n\n```lua\nlocal template = {kills = 0, deaths = 0, xp = 0}\nlocal data = {kills = 10, experience = 12}\ndata = TableUtil.Sync(data, template)\nprint(data) --&gt; {kills = 10, deaths = 0, xp = 0}\n```\n\n:::caution Data Loss Warning\nThis is a two-way sync, so the source table will have data\n_removed_ that isn&#x27;t found in the template table. This can\nbe problematic if used for player data, where there might\nbe dynamic data added that isn&#x27;t in the template.\n\nFor player data, use `TableUtil.Reconcile` instead.&quot;,
+            &quot;desc&quot;: &quot;Synchronizes the `srcTbl` based on the `templateTbl`. This will make\nsure that `srcTbl` has all of the same keys as `templateTbl`, including\nremoving keys in `srcTbl` that are not present in `templateTbl`. This\nis a _deep_ operation, so any nested tables will be synchronized as\nwell.\n\n```lua\nlocal template = {kills = 0, deaths = 0, xp = 0}\nlocal data = {kills = 10, experience = 12}\ndata = TableUtil.Sync(data, template)\nprint(data) --&gt; {kills = 10, deaths = 0, xp = 0}\n```\n\n:::caution Data Loss Warning\nThis is a two-way sync, so the source table will have data\n_removed_ that isn&#x27;t found in the template table. This can\nbe problematic if used for player data, where there might\nbe dynamic data added that isn&#x27;t in the template.\n\nFor player data, use `TableUtil.Reconcile` instead.\n:::&quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;srcTbl&quot;,
@@ -541,7 +640,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 84,
+                &quot;line&quot;: 87,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
@@ -568,13 +667,13 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 156,
+                &quot;line&quot;: 159,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
         {
             &quot;name&quot;: &quot;SwapRemove&quot;,
-            &quot;desc&quot;: &quot;Removes index `i` in the table by swapping the value at `i` with\nthe last value in the array, and then trimming off the last\nvalue from the array.\n\nThis allows removal of the value at `i` in `O(1)` time, but does\nnot preserve array ordering. If a value needs to be removed from\nan array, but ordering of the array does not matter, using\n`SwapRemove` is always preferred over `table.remove`.\n\nIn the following example, we remove \&quot;B\&quot; at index 2. SwapRemove does\nthis by moving the last value \&quot;E\&quot; over top of \&quot;B\&quot;, and then trimming\noff \&quot;E\&quot; at the end of the array:\n```lua\nlocal t = {\&quot;A\&quot;, \&quot;B\&quot;, \&quot;C\&quot;, \&quot;D\&quot;, \&quot;E\&quot;}\nTableUtil.SwapRemove(t, 2) -- Remove \&quot;B\&quot;\nprint(t) --&gt; {\&quot;A\&quot;, \&quot;E\&quot;, \&quot;C\&quot;, \&quot;D\&quot;}\n```\n\n:::note Arrays only\nThis function works on arrays, but not dictionaries.&quot;,
+            &quot;desc&quot;: &quot;Removes index `i` in the table by swapping the value at `i` with\nthe last value in the array, and then trimming off the last\nvalue from the array.\n\nThis allows removal of the value at `i` in `O(1)` time, but does\nnot preserve array ordering. If a value needs to be removed from\nan array, but ordering of the array does not matter, using\n`SwapRemove` is always preferred over `table.remove`.\n\nIn the following example, we remove \&quot;B\&quot; at index 2. SwapRemove does\nthis by moving the last value \&quot;E\&quot; over top of \&quot;B\&quot;, and then trimming\noff \&quot;E\&quot; at the end of the array:\n```lua\nlocal t = {\&quot;A\&quot;, \&quot;B\&quot;, \&quot;C\&quot;, \&quot;D\&quot;, \&quot;E\&quot;}\nTableUtil.SwapRemove(t, 2) -- Remove \&quot;B\&quot;\nprint(t) --&gt; {\&quot;A\&quot;, \&quot;E\&quot;, \&quot;C\&quot;, \&quot;D\&quot;}\n```\n\n:::note Arrays only\nThis function works on arrays, but not dictionaries.\n:::&quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;tbl&quot;,
@@ -590,13 +689,13 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             &quot;returns&quot;: [],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 209,
+                &quot;line&quot;: 213,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
         {
             &quot;name&quot;: &quot;SwapRemoveFirstValue&quot;,
-            &quot;desc&quot;: &quot;Performs `table.find(tbl, v)` to find the index of the given\nvalue, and then performs `TableUtil.SwapRemove` on that index.\n\n```lua\nlocal t = {\&quot;A\&quot;, \&quot;B\&quot;, \&quot;C\&quot;, \&quot;D\&quot;, \&quot;E\&quot;}\nTableUtil.SwapRemoveFirstValue(t, \&quot;C\&quot;)\nprint(t) --&gt; {\&quot;A\&quot;, \&quot;B\&quot;, \&quot;E\&quot;, \&quot;D\&quot;}\n```\n\n:::note Arrays only\nThis function works on arrays, but not dictionaries.&quot;,
+            &quot;desc&quot;: &quot;Performs `table.find(tbl, v)` to find the index of the given\nvalue, and then performs `TableUtil.SwapRemove` on that index.\n\n```lua\nlocal t = {\&quot;A\&quot;, \&quot;B\&quot;, \&quot;C\&quot;, \&quot;D\&quot;, \&quot;E\&quot;}\nTableUtil.SwapRemoveFirstValue(t, \&quot;C\&quot;)\nprint(t) --&gt; {\&quot;A\&quot;, \&quot;B\&quot;, \&quot;E\&quot;, \&quot;D\&quot;}\n```\n\n:::note Arrays only\nThis function works on arrays, but not dictionaries.\n:::&quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;tbl&quot;,
@@ -617,7 +716,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 234,
+                &quot;line&quot;: 239,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
@@ -644,7 +743,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 262,
+                &quot;line&quot;: 267,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
@@ -671,7 +770,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 292,
+                &quot;line&quot;: 297,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
@@ -698,7 +797,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 335,
+                &quot;line&quot;: 340,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
@@ -725,13 +824,13 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 378,
+                &quot;line&quot;: 383,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
         {
             &quot;name&quot;: &quot;Extend&quot;,
-            &quot;desc&quot;: &quot;Extends the target array with the extension array.\n\n```lua\nlocal t = {10, 20, 30}\nlocal t2 = {30, 40, 50}\nlocal tNew = TableUtil.Extend(t, t2)\nprint(tNew) --&gt; {10, 20, 30, 30, 40, 50}\n```\n\n:::note Arrays only\nThis function works on arrays, but not dictionaries.&quot;,
+            &quot;desc&quot;: &quot;Extends the target array with the extension array.\n\n```lua\nlocal t = {10, 20, 30}\nlocal t2 = {30, 40, 50}\nlocal tNew = TableUtil.Extend(t, t2)\nprint(tNew) --&gt; {10, 20, 30, 30, 40, 50}\n```\n\n:::note Arrays only\nThis function works on arrays, but not dictionaries.\n:::&quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;target&quot;,
@@ -752,13 +851,13 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 407,
+                &quot;line&quot;: 413,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
         {
             &quot;name&quot;: &quot;Reverse&quot;,
-            &quot;desc&quot;: &quot;Reverses the array.\n\n```lua\nlocal t = {1, 5, 10}\nlocal tReverse = TableUtil.Reverse(t)\nprint(tReverse) --&gt; {10, 5, 1}\n```\n\n:::note Arrays only\nThis function works on arrays, but not dictionaries.&quot;,
+            &quot;desc&quot;: &quot;Reverses the array.\n\n```lua\nlocal t = {1, 5, 10}\nlocal tReverse = TableUtil.Reverse(t)\nprint(tReverse) --&gt; {10, 5, 1}\n```\n\n:::note Arrays only\nThis function works on arrays, but not dictionaries.\n:::&quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;tbl&quot;,
@@ -774,13 +873,13 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 432,
+                &quot;line&quot;: 439,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
         {
             &quot;name&quot;: &quot;Shuffle&quot;,
-            &quot;desc&quot;: &quot;Shuffles the table.\n\n```lua\nlocal t = {1, 2, 3, 4, 5, 6, 7, 8, 9}\nlocal shuffled = TableUtil.Shuffle(t)\nprint(shuffled) --&gt; e.g. {9, 4, 6, 7, 3, 1, 5, 8, 2}\n```\n\n:::note Arrays only\nThis function works on arrays, but not dictionaries.&quot;,
+            &quot;desc&quot;: &quot;Shuffles the table.\n\n```lua\nlocal t = {1, 2, 3, 4, 5, 6, 7, 8, 9}\nlocal shuffled = TableUtil.Shuffle(t)\nprint(shuffled) --&gt; e.g. {9, 4, 6, 7, 3, 1, 5, 8, 2}\n```\n\n:::note Arrays only\nThis function works on arrays, but not dictionaries.\n:::&quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;tbl&quot;,
@@ -801,13 +900,13 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 459,
+                &quot;line&quot;: 467,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
         {
             &quot;name&quot;: &quot;Sample&quot;,
-            &quot;desc&quot;: &quot;Returns a random sample of the table.\n\n```lua\nlocal t = {1, 2, 3, 4, 5, 6, 7, 8, 9}\nlocal sample = TableUtil.Sample(t, 3)\nprint(sample) --&gt; e.g. {6, 2, 5}\n```\n\n:::note Arrays only\nThis function works on arrays, but not dictionaries.&quot;,
+            &quot;desc&quot;: &quot;Returns a random sample of the table.\n\n```lua\nlocal t = {1, 2, 3, 4, 5, 6, 7, 8, 9}\nlocal sample = TableUtil.Sample(t, 3)\nprint(sample) --&gt; e.g. {6, 2, 5}\n```\n\n:::note Arrays only\nThis function works on arrays, but not dictionaries.\n:::&quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;tbl&quot;,
@@ -833,13 +932,13 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 489,
+                &quot;line&quot;: 498,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
         {
             &quot;name&quot;: &quot;Flat&quot;,
-            &quot;desc&quot;: &quot;Returns a new table where all sub-arrays have been\nbubbled up to the top. The depth at which the scan\nis performed is dictated by the `depth` parameter,\nwhich is set to `1` by default.\n\n```lua\nlocal t = {{10, 20}, {90, 100}, {30, 15}}\nlocal flat = TableUtil.Flat(t)\nprint(flat) --&gt; {10, 20, 90, 100, 30, 15}\n```\n\n:::note Arrays only\nThis function works on arrays, but not dictionaries.&quot;,
+            &quot;desc&quot;: &quot;Returns a new table where all sub-arrays have been\nbubbled up to the top. The depth at which the scan\nis performed is dictated by the `depth` parameter,\nwhich is set to `1` by default.\n\n```lua\nlocal t = {{10, 20}, {90, 100}, {30, 15}}\nlocal flat = TableUtil.Flat(t)\nprint(flat) --&gt; {10, 20, 90, 100, 30, 15}\n```\n\n:::note Arrays only\nThis function works on arrays, but not dictionaries.\n:::&quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;tbl&quot;,
@@ -860,13 +959,13 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 537,
+                &quot;line&quot;: 547,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
         {
             &quot;name&quot;: &quot;FlatMap&quot;,
-            &quot;desc&quot;: &quot;Calls `TableUtil.Map` on the given table and predicate, and then\ncalls `TableUtil.Flat` on the result from the map operation.\n\n```lua\nlocal t = {10, 20, 30}\nlocal result = TableUtil.FlatMap(t, function(value)\n\treturn {value, value * 2}\nend)\nprint(result) --&gt; {10, 20, 20, 40, 30, 60}\n```\n\n:::note Arrays only\nThis function works on arrays, but not dictionaries.&quot;,
+            &quot;desc&quot;: &quot;Calls `TableUtil.Map` on the given table and predicate, and then\ncalls `TableUtil.Flat` on the result from the map operation.\n\n```lua\nlocal t = {10, 20, 30}\nlocal result = TableUtil.FlatMap(t, function(value)\n\treturn {value, value * 2}\nend)\nprint(result) --&gt; {10, 20, 20, 40, 30, 60}\n```\n\n:::note Arrays only\nThis function works on arrays, but not dictionaries.\n:::&quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;tbl&quot;,
@@ -887,13 +986,13 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 574,
+                &quot;line&quot;: 585,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
         {
             &quot;name&quot;: &quot;Keys&quot;,
-            &quot;desc&quot;: &quot;Returns an array with all the keys in the table.\n\n```lua\nlocal t = {A = 10, B = 20, C = 30}\nlocal keys = TableUtil.Keys(t)\nprint(keys) --&gt; {\&quot;A\&quot;, \&quot;B\&quot;, \&quot;C\&quot;}\n```\n\n:::caution Ordering\nThe ordering of the keys is never guaranteed. If order is imperative, call\n`table.sort` on the resulting `keys` array.\n```lua\nlocal keys = TableUtil.Keys(t)\ntable.sort(keys)\n```&quot;,
+            &quot;desc&quot;: &quot;Returns an array with all the keys in the table.\n\n```lua\nlocal t = {A = 10, B = 20, C = 30}\nlocal keys = TableUtil.Keys(t)\nprint(keys) --&gt; {\&quot;A\&quot;, \&quot;B\&quot;, \&quot;C\&quot;}\n```\n\n:::caution Ordering\nThe ordering of the keys is never guaranteed. If order is imperative, call\n`table.sort` on the resulting `keys` array.\n```lua\nlocal keys = TableUtil.Keys(t)\ntable.sort(keys)\n```\n:::&quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;tbl&quot;,
@@ -909,13 +1008,13 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 600,
+                &quot;line&quot;: 612,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
         {
             &quot;name&quot;: &quot;Values&quot;,
-            &quot;desc&quot;: &quot;Returns an array with all the values in the table.\n\n```lua\nlocal t = {A = 10, B = 20, C = 30}\nlocal values = TableUtil.Values(t)\nprint(values) --&gt; {10, 20, 30}\n```\n\n:::caution Ordering\nThe ordering of the values is never guaranteed. If order is imperative, call\n`table.sort` on the resulting `values` array.\n```lua\nlocal values = TableUtil.Values(t)\ntable.sort(values)\n```&quot;,
+            &quot;desc&quot;: &quot;Returns an array with all the values in the table.\n\n```lua\nlocal t = {A = 10, B = 20, C = 30}\nlocal values = TableUtil.Values(t)\nprint(values) --&gt; {10, 20, 30}\n```\n\n:::caution Ordering\nThe ordering of the values is never guaranteed. If order is imperative, call\n`table.sort` on the resulting `values` array.\n```lua\nlocal values = TableUtil.Values(t)\ntable.sort(values)\n```\n:::&quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;tbl&quot;,
@@ -931,13 +1030,13 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 630,
+                &quot;line&quot;: 643,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
         {
             &quot;name&quot;: &quot;Find&quot;,
-            &quot;desc&quot;: &quot;Performs a linear scan across the table and calls `callback` on\neach item in the array. Returns the value and key of the first\npair in which the callback returns `true`.\n\n```lua\nlocal t = {\n\t{Name = \&quot;Bob\&quot;, Age = 20};\n\t{Name = \&quot;Jill\&quot;, Age = 30};\n\t{Name = \&quot;Ann\&quot;, Age = 25};\n}\n\n-- Find first person who has a name starting with J:\nlocal firstPersonWithJ = TableUtil.Find(t, function(person)\n\treturn person.Name:sub(1, 1):lower() == \&quot;j\&quot;\nend)\n\nprint(firstPersonWithJ) --&gt; {Name = \&quot;Jill\&quot;, Age = 30}\n```\n\n:::caution Dictionary Ordering\nWhile `Find` can also be used with dictionaries, dictionary ordering is never\nguaranteed, and thus the result could be different if there are more\nthan one possible matches given the data and callback function.&quot;,
+            &quot;desc&quot;: &quot;Performs a linear scan across the table and calls `callback` on\neach item in the array. Returns the value and key of the first\npair in which the callback returns `true`.\n\n```lua\nlocal t = {\n\t{Name = \&quot;Bob\&quot;, Age = 20};\n\t{Name = \&quot;Jill\&quot;, Age = 30};\n\t{Name = \&quot;Ann\&quot;, Age = 25};\n}\n\n-- Find first person who has a name starting with J:\nlocal firstPersonWithJ = TableUtil.Find(t, function(person)\n\treturn person.Name:sub(1, 1):lower() == \&quot;j\&quot;\nend)\n\nprint(firstPersonWithJ) --&gt; {Name = \&quot;Jill\&quot;, Age = 30}\n```\n\n:::caution Dictionary Ordering\nWhile `Find` can also be used with dictionaries, dictionary ordering is never\nguaranteed, and thus the result could be different if there are more\nthan one possible matches given the data and callback function.\n:::&quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;tbl&quot;,
@@ -958,7 +1057,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 669,
+                &quot;line&quot;: 683,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
@@ -985,7 +1084,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 698,
+                &quot;line&quot;: 712,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
@@ -1012,7 +1111,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 727,
+                &quot;line&quot;: 741,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
@@ -1039,7 +1138,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 753,
+                &quot;line&quot;: 767,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
@@ -1061,7 +1160,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 786,
+                &quot;line&quot;: 800,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
@@ -1083,7 +1182,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 839,
+                &quot;line&quot;: 853,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
@@ -1105,7 +1204,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 869,
+                &quot;line&quot;: 883,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
@@ -1127,7 +1226,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 881,
+                &quot;line&quot;: 895,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         },
@@ -1149,7 +1248,7 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 893,
+                &quot;line&quot;: 907,
                 &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
             }
         }
@@ -1157,13 +1256,11 @@ TableUtil<span class="token punctuation">.</span><span class="token function">Is
     &quot;properties&quot;: [],
     &quot;types&quot;: [],
     &quot;name&quot;: &quot;TableUtil&quot;,
-    &quot;desc&quot;: &quot;A collection of helpful table utility functions. Many of these functions are carried over from JavaScript or\nPython that are not present in Lua.\n\nTables that only work specifically with arrays or dictionaries are marked as such in the documentation.\n\n:::info Immutability\nAll functions (_except_ `SwapRemove`, `SwapRemoveFirstValue`, and `Lock`) treat tables as immutable and will return\ncopies of the given table(s) with the operations performed on the copies.&quot;,
+    &quot;desc&quot;: &quot;A collection of helpful table utility functions. Many of these functions are carried over from JavaScript or\nPython that are not present in Lua.\n\nTables that only work specifically with arrays or dictionaries are marked as such in the documentation.\n\n:::info Immutability\nAll functions (_except_ `SwapRemove`, `SwapRemoveFirstValue`, and `Lock`) treat tables as immutable and will return\ncopies of the given table(s) with the operations performed on the copies.\n:::&quot;,
     &quot;source&quot;: {
-        &quot;line&quot;: 19,
+        &quot;line&quot;: 20,
         &quot;path&quot;: &quot;modules/table-util/init.luau&quot;
     }
-}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#Assign" class="table-of-contents__link toc-highlight">.Assign</a></li><li><a href="#Copy" class="table-of-contents__link toc-highlight">.Copy</a></li><li><a href="#DecodeJSON" class="table-of-contents__link toc-highlight">.DecodeJSON</a></li><li><a href="#EncodeJSON" class="table-of-contents__link toc-highlight">.EncodeJSON</a></li><li><a href="#Every" class="table-of-contents__link toc-highlight">.Every</a></li><li><a href="#Extend" class="table-of-contents__link toc-highlight">.Extend</a></li><li><a href="#Filter" class="table-of-contents__link toc-highlight">.Filter</a></li><li><a href="#Find" class="table-of-contents__link toc-highlight">.Find</a></li><li><a href="#Flat" class="table-of-contents__link toc-highlight">.Flat</a></li><li><a href="#FlatMap" class="table-of-contents__link toc-highlight">.FlatMap</a></li><li><a href="#IsEmpty" class="table-of-contents__link toc-highlight">.IsEmpty</a></li><li><a href="#Keys" class="table-of-contents__link toc-highlight">.Keys</a></li><li><a href="#Lock" class="table-of-contents__link toc-highlight">.Lock</a></li><li><a href="#Map" class="table-of-contents__link toc-highlight">.Map</a></li><li><a href="#Reconcile" class="table-of-contents__link toc-highlight">.Reconcile</a></li><li><a href="#Reduce" class="table-of-contents__link toc-highlight">.Reduce</a></li><li><a href="#Reverse" class="table-of-contents__link toc-highlight">.Reverse</a></li><li><a href="#Sample" class="table-of-contents__link toc-highlight">.Sample</a></li><li><a href="#Shuffle" class="table-of-contents__link toc-highlight">.Shuffle</a></li><li><a href="#Some" class="table-of-contents__link toc-highlight">.Some</a></li><li><a href="#SwapRemove" class="table-of-contents__link toc-highlight">.SwapRemove</a></li><li><a href="#SwapRemoveFirstValue" class="table-of-contents__link toc-highlight">.SwapRemoveFirstValue</a></li><li><a href="#Sync" class="table-of-contents__link toc-highlight">.Sync</a></li><li><a href="#Truncate" class="table-of-contents__link toc-highlight">.Truncate</a></li><li><a href="#Values" class="table-of-contents__link toc-highlight">.Values</a></li><li><a href="#Zip" class="table-of-contents__link toc-highlight">.Zip</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/RbxUtil/assets/js/runtime~main.91b1c50b.js"></script>
-<script src="/RbxUtil/assets/js/main.082c20cd.js"></script>
+}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#Assign" class="table-of-contents__link toc-highlight">.Assign</a></li><li><a href="#Copy" class="table-of-contents__link toc-highlight">.Copy</a></li><li><a href="#DecodeJSON" class="table-of-contents__link toc-highlight">.DecodeJSON</a></li><li><a href="#EncodeJSON" class="table-of-contents__link toc-highlight">.EncodeJSON</a></li><li><a href="#Every" class="table-of-contents__link toc-highlight">.Every</a></li><li><a href="#Extend" class="table-of-contents__link toc-highlight">.Extend</a></li><li><a href="#Filter" class="table-of-contents__link toc-highlight">.Filter</a></li><li><a href="#Find" class="table-of-contents__link toc-highlight">.Find</a></li><li><a href="#Flat" class="table-of-contents__link toc-highlight">.Flat</a></li><li><a href="#FlatMap" class="table-of-contents__link toc-highlight">.FlatMap</a></li><li><a href="#IsEmpty" class="table-of-contents__link toc-highlight">.IsEmpty</a></li><li><a href="#Keys" class="table-of-contents__link toc-highlight">.Keys</a></li><li><a href="#Lock" class="table-of-contents__link toc-highlight">.Lock</a></li><li><a href="#Map" class="table-of-contents__link toc-highlight">.Map</a></li><li><a href="#Reconcile" class="table-of-contents__link toc-highlight">.Reconcile</a></li><li><a href="#Reduce" class="table-of-contents__link toc-highlight">.Reduce</a></li><li><a href="#Reverse" class="table-of-contents__link toc-highlight">.Reverse</a></li><li><a href="#Sample" class="table-of-contents__link toc-highlight">.Sample</a></li><li><a href="#Shuffle" class="table-of-contents__link toc-highlight">.Shuffle</a></li><li><a href="#Some" class="table-of-contents__link toc-highlight">.Some</a></li><li><a href="#SwapRemove" class="table-of-contents__link toc-highlight">.SwapRemove</a></li><li><a href="#SwapRemoveFirstValue" class="table-of-contents__link toc-highlight">.SwapRemoveFirstValue</a></li><li><a href="#Sync" class="table-of-contents__link toc-highlight">.Sync</a></li><li><a href="#Truncate" class="table-of-contents__link toc-highlight">.Truncate</a></li><li><a href="#Values" class="table-of-contents__link toc-highlight">.Values</a></li><li><a href="#Zip" class="table-of-contents__link toc-highlight">.Zip</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
 </body>
 </html>
