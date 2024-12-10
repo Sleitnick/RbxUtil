@@ -24,7 +24,7 @@ def run_tests():
 
 	headers = {
 		"Content-Type": "application/json",
-		"x-api-key": os.getenv("RBXCLOUD_API_KEY"),
+		"x-api-key": os.getenv("API_KEY"),
 	}
 
 	res = requests.post(endpoint, data=data, headers=headers)
