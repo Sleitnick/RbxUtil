@@ -39,7 +39,7 @@ def run_tests():
 		res_json = res.json()
 		state = res_json["state"]
 		if state != last_state:
-			print(f"State Changed: {state}")
+			print(f"State changed: {state}")
 			last_state = state
 		if state == "CANCELLED":
 			exit(1)

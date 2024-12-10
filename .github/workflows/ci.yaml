@@ -67,6 +67,9 @@ jobs:
     - name: Install Python dependencies
       run: pip install -r requirements.txt
     
+    - name: Run test builder
+      run: python build_tests.py
+    
     - name: Run tests
       env:
         UID: 6900069600
