@@ -45,6 +45,13 @@ def run_tests():
 			exit(1)
 		elif state == "COMPLETE":
 			print(res_json)
+			
+			# TODO: Format 'res_json' in a pretty way to show what failed and what succeeded
+
+			all_pass = res_json["output"]["results"][0]["AllPass"]
+			if not all_pass:
+				exit(1)
+			
 			break
 		elif state == "FAILED":
 			print(res_json["error"])
