@@ -255,9 +255,31 @@ export type TestContext = {
 	Test: (self: TestContext, name: string, fn: () -> ()) -> (),
 	Describe: (self: TestContext, name: string, fn: () -> ()) -> (),
 	Expect: (self: TestContext, value: any) -> TestExpect,
+	BeforeAll: (self: TestContext, fn: () -> ()) -> (),
+	AfterAll: (self: TestContext, fn: () -> ()) -> (),
 	BeforeEach: (self: TestContext, fn: () -> ()) -> (),
 	AfterEach: (self: TestContext, fn: () -> ()) -> (),
 }
+
+type TestContextGroup = {
+	Name: string,
+	Items: { any },
+	AnyFail: boolean,
+	AfterAllFns: { () -> () },
+	BeforeEachFns: { () -> () },
+	AfterEachFns: { () -> () },
+}
+
+local function CreateGroup(name: string): TestContextGroup
+	return {
+		Name = name,
+		Items = {},
+		AnyFail = false,
+		AfterAllFns = {},
+		BeforeEachFns = {},
+		AfterEachFns = {},
+	}
+end
 
 local TestContext = {}
 TestContext.__index = TestContext
@@ -266,13 +288,7 @@ function TestContext.new(root: string): TestContext
 	local testContext = setmetatable({
 		TotalTests = 0,
 		TotalFails = 0,
-		Group = {
-			Name = root,
-			Items = {},
-			AnyFail = false,
-			BeforeEachFns = {},
-			AfterEachFns = {},
-		},
+		Group = CreateGroup(root),
 	}, TestContext) :: any
 
 	testContext.Current = testContext.Group
@@ -301,13 +317,7 @@ end
 
 function TestContext:Describe(name: string, fn: () -> ())
 	local parentGroup = self.Current
-	local group = {
-		Name = name,
-		Items = {},
-		AnyFail = false,
-		BeforeEachFns = {},
-		AfterEachFns = {},
-	}
+	local group = CreateGroup(name)
 	self.Current = group
 	parentGroup.Items[name] = group
 	for _, fn in parentGroup.BeforeEachFns do
@@ -317,6 +327,9 @@ function TestContext:Describe(name: string, fn: () -> ())
 	self.Current = parentGroup
 	if group.AnyFail then
 		parentGroup.AnyFail = true
+	end
+	for _, fn in group.AfterAllFns do
+		fn()
 	end
 	for _, fn in parentGroup.AfterEachFns do
 		fn()
@@ -331,6 +344,14 @@ function TestContext:Expect(value: any): TestExpect
 		resolvedValue = if success then err else nil
 	end
 	return setmetatable({ Value = resolvedValue, Success = success, Err = err, Flip = false }, TestExpect) :: any
+end
+
+function TestContext:BeforeAll(fn: () -> ())
+	fn()
+end
+
+function TestContext:AfterAll(fn: () -> ())
+	table.insert(self.Current.AfterAllFns, fn)
 end
 
 function TestContext:BeforeEach(fn: () -> ())

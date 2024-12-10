@@ -1,8 +1,11 @@
-return function()
-	local Component = require(script.Parent)
+local CollectionService = game:GetService("CollectionService")
+local RunService = game:GetService("RunService")
+local ServerScriptService = game:GetService("ServerScriptService")
 
-	local CollectionService = game:GetService("CollectionService")
-	local RunService = game:GetService("RunService")
+local Test = require(ServerScriptService.TestRunner.Test)
+
+return function(ctx: Test.TestContext)
+	local Component = require(script.Parent)
 
 	local TAG = "__KnitTestComponent__"
 
@@ -79,24 +82,24 @@ return function()
 		self.DidRenderStepped = true
 	end
 
-	beforeAll(function()
+	ctx:BeforeAll(function()
 		taggedInstanceFolder = Instance.new("Folder")
 		taggedInstanceFolder.Name = "KnitComponentTest"
 		taggedInstanceFolder.Archivable = false
 		taggedInstanceFolder.Parent = workspace
 	end)
 
-	afterEach(function()
+	ctx:AfterEach(function()
 		taggedInstanceFolder:ClearAllChildren()
 	end)
 
-	afterAll(function()
+	ctx:AfterAll(function()
 		taggedInstanceFolder:Destroy()
 		TestComponentMain:Destroy()
 	end)
 
-	describe("Component", function()
-		it("should capture start and stop events", function()
+	ctx:Describe("Component", function()
+		ctx:Test("should capture start and stop events", function()
 			local didStart = 0
 			local didStop = 0
 			local started = TestComponentMain.Started:Connect(function()
@@ -111,18 +114,18 @@ return function()
 			task.wait()
 			started:Disconnect()
 			stopped:Disconnect()
-			expect(didStart).to.equal(1)
-			expect(didStop).to.equal(1)
+			ctx:Expect(didStart):ToBe(1)
+			ctx:Expect(didStop):ToBe(1)
 		end)
 
-		it("should be able to get component from the instance", function()
+		ctx:Test("should be able to get component from the instance", function()
 			local instance = CreateTaggedInstance()
 			task.wait()
 			local component = TestComponentMain:FromInstance(instance)
-			expect(component).to.be.ok()
+			ctx:Expect(component):ToBeOk()
 		end)
 
-		it("should be able to get all component instances existing", function()
+		ctx:Test("should be able to get all component instances existing", function()
 			local numComponents = 3
 			local instances = table.create(numComponents)
 			for i = 1, numComponents do
@@ -131,37 +134,37 @@ return function()
 			end
 			task.wait()
 			local components = TestComponentMain:GetAll()
-			expect(components).to.be.a("table")
-			expect(#components).to.equal(numComponents)
+			ctx:Expect(components):ToBeA("table")
+			ctx:Expect(#components):ToBe(numComponents)
 			for _, c in ipairs(components) do
-				expect(table.find(instances, c.Instance)).to.be.ok()
+				ctx:Expect(table.find(instances, c.Instance)):ToBeOk()
 			end
 		end)
 
-		it("should call lifecycle methods and extension functions", function()
+		ctx:Test("should call lifecycle methods and extension functions", function()
 			local instance = CreateTaggedInstance()
 			task.wait(0.2)
 			local component = TestComponentMain:FromInstance(instance)
-			expect(component).to.be.ok()
-			expect(component.Data).to.equal("abcdef")
-			expect(component.DidHeartbeat).to.equal(true)
-			expect(component.DidStepped).to.equal(RunService:IsRunning())
-			expect(component.DidRenderStepped).to.never.equal(true)
+			ctx:Expect(component):ToBeOk()
+			ctx:Expect(component.Data):ToBe("abcdef")
+			ctx:Expect(component.DidHeartbeat):ToBe(true)
+			ctx:Expect(component.DidStepped):ToBe(RunService:IsRunning())
+			ctx:Expect(component.DidRenderStepped):Not():ToBe(true)
 			instance:Destroy()
 			task.wait()
-			expect(component.Data).to.equal("abcdefghi")
+			ctx:Expect(component.Data):ToBe("abcdefghi")
 		end)
 
-		it("should get another component linked to the same instance", function()
+		ctx:Test("should get another component linked to the same instance", function()
 			local instance = CreateTaggedInstance()
 			task.wait()
 			local component = TestComponentMain:FromInstance(instance)
-			expect(component).to.be.ok()
-			expect(component.Another).to.be.ok()
-			expect(component.Another:GetData()).to.equal(true)
+			ctx:Expect(component):ToBeOk()
+			ctx:Expect(component.Another):ToBeOk()
+			ctx:Expect(component.Another:GetData()):ToBe(true)
 		end)
 
-		it("should use extension to decide whether or not to construct", function()
+		ctx:Test("should use extension to decide whether or not to construct", function()
 			local e1 = { c = true }
 			function e1.ShouldConstruct(_component)
 				return e1.c
@@ -190,9 +193,9 @@ return function()
 			local function Check(inst, comp, shouldExist)
 				local c = comp:FromInstance(inst)
 				if shouldExist then
-					expect(c).to.be.ok()
+					ctx:Expect(c):ToBeOk()
 				else
-					expect(c).to.never.be.ok()
+					ctx:Expect(c):ToBeNil()
 				end
 			end
 
@@ -221,7 +224,7 @@ return function()
 			CreateAndCheckAll(false, false, false)
 		end)
 
-		it("should decide whether or not to use extend", function()
+		ctx:Test("should decide whether or not to use extend", function()
 			local e1 = { extend = true }
 			function e1.ShouldExtend(_component)
 				return e1.extend
@@ -246,16 +249,16 @@ return function()
 				local instance = CreateTaggedInstance()
 				task.wait()
 				local component = TestComponent:FromInstance(instance)
-				expect(component).to.be.ok()
+				ctx:Expect(component):ToBeOk()
 				if ex1 then
-					expect(component.E1).to.equal(true)
+					ctx:Expect(component.E1):ToBe(true)
 				else
-					expect(component.E1).to.never.be.ok()
+					ctx:Expect(component.E1):ToBeNil()
 				end
 				if ex2 then
-					expect(component.E2).to.equal(true)
+					ctx:Expect(component.E2):ToBe(true)
 				else
-					expect(component.E2).to.never.be.ok()
+					ctx:Expect(component.E2):ToBeNil()
 				end
 			end
 
@@ -265,7 +268,7 @@ return function()
 			SetAndCheck(false, true)
 		end)
 
-		it("should allow yielding within construct", function()
+		ctx:Test("should allow yielding within construct", function()
 			local CUSTOM_TAG = "CustomTag"
 
 			local TestComponent = Component.new({ Tag = CUSTOM_TAG })
@@ -286,12 +289,12 @@ return function()
 
 			task.wait(0.6)
 
-			expect(numConstruct).to.equal(1)
+			ctx:Expect(numConstruct):ToBe(1)
 			p:Destroy()
 			newP:Destroy()
 		end)
 
-		it("should wait for instance", function()
+		ctx:Test("should wait for instance", function()
 			local p = Instance.new("Part")
 			p.Anchored = true
 			p.Parent = workspace
@@ -299,9 +302,9 @@ return function()
 				CollectionService:AddTag(p, TAG)
 			end)
 			local success, c = TestComponentMain:WaitForInstance(p):timeout(1):await()
-			expect(success).to.equal(true)
-			expect(c).to.be.a("table")
-			expect(c.Instance).to.equal(p)
+			ctx:Expect(success):ToBe(true)
+			ctx:Expect(c):ToBeA("table")
+			ctx:Expect(c.Instance):ToBe(p)
 			p:Destroy()
 		end)
 	end)
