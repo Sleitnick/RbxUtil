@@ -18,7 +18,7 @@ return function(ctx: Test.TestContext)
 				ctx:Expect(true):ToBe(true)
 				ctx:Expect(function()
 					return 32
-				end):ToBe(3)
+				end):ToBe(32)
 			end)
 		end)
 	end)
