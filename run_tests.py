@@ -2,6 +2,7 @@ import argparse
 import requests
 import json
 import os
+import time
 
 
 def run_tests():
@@ -13,7 +14,7 @@ def run_tests():
 	uid = args.uid
 	pid = args.pid
 
-	endpoint = f"https://apis.roblox.com/cloud/v2/universes/{uid}/places/{pid}/luau-execution-session-tasks"
+	post_endpoint = f"https://apis.roblox.com/cloud/v2/universes/{uid}/places/{pid}/luau-execution-session-tasks"
 
 	with open("ci/RunTests.luau", "r") as script:
 		script_source = script.read()
@@ -27,10 +28,30 @@ def run_tests():
 		"x-api-key": os.getenv("API_KEY"),
 	}
 
-	res = requests.post(endpoint, data=json.dumps(data), headers=headers)
+	res = requests.post(post_endpoint, data=json.dumps(data), headers=headers)
 	res_json = res.json()
 
-	print(res_json)
+	get_endpoint = f"https://apis.roblox.com/cloud/v2/{res_json['path']}?view=BASIC" # view can be BASIC or FULL
+
+	last_state = ""
+	while True:
+		res = requests.get(get_endpoint, headers={"x-api-key": os.getenv("API_KEY")})
+		res_json = res.json()
+		state = res_json["state"]
+		if state != last_state:
+			print(f"State Changed: {state}")
+			last_state = state
+		if state == "CANCELLED":
+			exit(1)
+		elif state == "COMPLETE":
+			break
+		elif state == "FAILED":
+			print(res_json["error"])
+			exit(1)
+		else:
+			time.sleep(2)
+
+	print("Completed")
 
 
 if __name__ == "__main__":
