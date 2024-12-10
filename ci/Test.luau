@@ -413,8 +413,8 @@ function Test.run(ancestors: { Instance })
 
 	out("---------")
 	out(`{totalTests} Total`)
-	out(`{totalSuccesses} Pass`)
-	out(`{totalFails} Fail{if totalFails == 1 then "" else "s"}`)
+	out(`{totalSuccesses} Passed`)
+	out(`{totalFails} Failed`)
 	out("---------")
 
 	local tab = "    "

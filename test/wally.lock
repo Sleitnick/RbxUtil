@@ -3,11 +3,6 @@
 registry = "test"
 
 [[package]]
-name = "roblox/testez"
-version = "0.4.1"
-dependencies = []
-
-[[package]]
 name = "sleit/rbxutil"
 version = "0.1.0"
-dependencies = [["TestEZ", "roblox/testez@0.4.1"]]
+dependencies = []

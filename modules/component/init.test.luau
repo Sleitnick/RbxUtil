@@ -89,16 +89,16 @@ return function(ctx: Test.TestContext)
 		taggedInstanceFolder.Parent = workspace
 	end)
 
-	ctx:AfterEach(function()
-		taggedInstanceFolder:ClearAllChildren()
-	end)
-
 	ctx:AfterAll(function()
 		taggedInstanceFolder:Destroy()
 		TestComponentMain:Destroy()
 	end)
 
 	ctx:Describe("Component", function()
+		ctx:AfterEach(function()
+			taggedInstanceFolder:ClearAllChildren()
+		end)
+
 		ctx:Test("should capture start and stop events", function()
 			local didStart = 0
 			local didStop = 0
@@ -135,8 +135,8 @@ return function(ctx: Test.TestContext)
 			task.wait()
 			local components = TestComponentMain:GetAll()
 			ctx:Expect(components):ToBeA("table")
-			ctx:Expect(#components):ToBe(numComponents)
-			for _, c in ipairs(components) do
+			ctx:Expect(components):ToHaveLength(numComponents)
+			for _, c in components do
 				ctx:Expect(table.find(instances, c.Instance)):ToBeOk()
 			end
 		end)

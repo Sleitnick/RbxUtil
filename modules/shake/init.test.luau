@@ -77,11 +77,11 @@ return function(ctx: Test.TestContext)
 				"Sustain",
 				"PositionInfluence",
 				"RotationInfluence",
-				"TimeFunction",
 			}
 			for _, field in clonedFields do
 				ctx:Expect(shake1[field]):ToBe(shake2[field])
 			end
+			ctx:Expect(shake1.TimeFunction == shake2.TimeFunction):ToBe(true)
 		end)
 
 		ctx:Test("should clone a shake instance but ignore running state", function()
