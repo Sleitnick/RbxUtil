@@ -1,6 +1,10 @@
-return function()
-	local WaitFor = require(script.Parent)
+local ServerScriptService = game:GetService("ServerScriptService")
+
+local Test = require(ServerScriptService.TestRunner.Test)
+
+return function(ctx: Test.TestContext)
 	local Promise = require(script.Parent.Parent.Promise)
+	local WaitFor = require(script.Parent)
 
 	local instances = {}
 
@@ -12,30 +16,30 @@ return function()
 		return instance
 	end
 
-	afterEach(function()
-		for _, inst in ipairs(instances) do
-			task.delay(0, function()
-				inst:Destroy()
-			end)
-		end
-		table.clear(instances)
-	end)
+	ctx:Describe("WaitFor", function()
+		ctx:AfterEach(function()
+			for _, inst in ipairs(instances) do
+				task.delay(0, function()
+					inst:Destroy()
+				end)
+			end
+			table.clear(instances)
+		end)
 
-	describe("WaitFor", function()
-		it("should wait for child", function()
+		ctx:Test("should wait for child", function()
 			local parent = workspace
 			local childName = "TestChild"
 
 			task.delay(0.1, Create, childName, parent)
 
 			local success, instance = WaitFor.Child(parent, childName):await()
-			expect(success).to.equal(true)
-			expect(typeof(instance)).to.equal("Instance")
-			expect(instance.Name).to.equal(childName)
-			expect(instance.Parent).to.equal(parent)
+			ctx:Expect(success):ToBe(true)
+			ctx:Expect(typeof(instance)):ToBe("Instance")
+			ctx:Expect(instance.Name):ToBe(childName)
+			ctx:Expect(instance.Parent):ToBe(parent)
 		end)
 
-		it("should stop waiting for child if parent is unparented", function()
+		ctx:Test("should stop waiting for child if parent is unparented", function()
 			local parent = Create("SomeParent", workspace)
 			local childName = "TestChild"
 
@@ -44,17 +48,17 @@ return function()
 			end)
 
 			local success, err = WaitFor.Child(parent, childName):await()
-			expect(success).to.equal(false)
-			expect(err).to.equal(WaitFor.Error.Unparented)
+			ctx:Expect(success):ToBe(false)
+			ctx:Expect(err):ToBe(WaitFor.Error.Unparented)
 		end)
 
-		it("should stop waiting for child if timeout is reached", function()
+		ctx:Test("should stop waiting for child if timeout is reached", function()
 			local success, err = WaitFor.Child(workspace, "InstanceThatDoesNotExist", 0.1):await()
-			expect(success).to.equal(false)
-			expect(Promise.Error.isKind(err, Promise.Error.Kind.TimedOut)).to.equal(true)
+			ctx:Expect(success):ToBe(false)
+			ctx:Expect(Promise.Error.isKind(err, Promise.Error.Kind.TimedOut)):ToBe(true)
 		end)
 
-		it("should wait for children", function()
+		ctx:Test("should wait for children", function()
 			local parent = workspace
 			local childrenNames = { "TestChild01", "TestChild02", "TestChild03" }
 
@@ -63,15 +67,15 @@ return function()
 			task.delay(0.05, Create, childrenNames[3], parent)
 
 			local success, children = WaitFor.Children(parent, childrenNames):await()
-			expect(success).to.equal(true)
+			ctx:Expect(success):ToBe(true)
 			for i, child in ipairs(children) do
-				expect(typeof(child)).to.equal("Instance")
-				expect(child.Name).to.equal(childrenNames[i])
-				expect(child.Parent).to.equal(parent)
+				ctx:Expect(typeof(child)):ToBe("Instance")
+				ctx:Expect(child.Name):ToBe(childrenNames[i])
+				ctx:Expect(child.Parent):ToBe(parent)
 			end
 		end)
 
-		it("should fail if any children are no longer parented in parent", function()
+		ctx:Test("should fail if any children are no longer parented in parent", function()
 			local parent = workspace
 			local childrenNames = { "TestChild04", "TestChild05", "TestChild06" }
 
@@ -87,24 +91,24 @@ return function()
 			end)
 
 			local success, err = WaitFor.Children(parent, childrenNames):await()
-			expect(success).to.equal(false)
-			expect(err).to.equal(WaitFor.Error.ParentChanged)
+			ctx:Expect(success):ToBe(false)
+			ctx:Expect(err):ToBe(WaitFor.Error.ParentChanged)
 		end)
 
-		it("should wait for descendant", function()
+		ctx:Test("should wait for descendant", function()
 			local parent = workspace
 			local descendantName = "TestDescendant"
 
 			task.delay(0.1, Create, descendantName, Create("TestFolder", parent))
 
 			local success, descendant = WaitFor.Descendant(parent, descendantName):await()
-			expect(success).to.equal(true)
-			expect(typeof(descendant)).to.equal("Instance")
-			expect(descendant.Name).to.equal(descendantName)
-			expect(descendant:IsDescendantOf(parent)).to.equal(true)
+			ctx:Expect(success):ToBe(true)
+			ctx:Expect(typeof(descendant)):ToBe("Instance")
+			ctx:Expect(descendant.Name):ToBe(descendantName)
+			ctx:Expect(descendant:IsDescendantOf(parent)):ToBe(true)
 		end)
 
-		it("should wait for many descendants", function()
+		ctx:Test("should wait for many descendants", function()
 			local parent = workspace
 			local descendantNames = { "TestDescendant01", "TestDescendant02", "TestDescendant03" }
 
@@ -113,15 +117,15 @@ return function()
 			task.delay(0.2, Create, descendantNames[3], Create("TestFolder4", Create("TestFolder3", parent)))
 
 			local success, descendants = WaitFor.Descendants(parent, descendantNames):await()
-			expect(success).to.equal(true)
+			ctx:Expect(success):ToBe(true)
 			for i, descendant in ipairs(descendants) do
-				expect(typeof(descendant)).to.equal("Instance")
-				expect(descendant.Name == descendantNames[i]).to.equal(true)
-				expect(descendant:IsDescendantOf(parent)).to.equal(true)
+				ctx:Expect(typeof(descendant)):ToBe("Instance")
+				ctx:Expect(descendant.Name == descendantNames[i]):ToBe(true)
+				ctx:Expect(descendant:IsDescendantOf(parent)):ToBe(true)
 			end
 		end)
 
-		it("should wait for primarypart", function()
+		ctx:Test("should wait for primarypart", function()
 			local model = Instance.new("Model")
 			local part = Instance.new("Part")
 			part.Anchored = true
@@ -134,15 +138,15 @@ return function()
 			end)
 
 			local success, primary = WaitFor.PrimaryPart(model):await()
-			expect(success).to.equal(true)
-			expect(typeof(primary)).to.equal("Instance")
-			expect(primary).to.equal(part)
-			expect(model.PrimaryPart).to.equal(primary)
+			ctx:Expect(success):ToBe(true)
+			ctx:Expect(typeof(primary)):ToBe("Instance")
+			ctx:Expect(primary):ToBe(part)
+			ctx:Expect(model.PrimaryPart):ToBe(primary)
 
 			model:Destroy()
 		end)
 
-		it("should wait for objectvalue", function()
+		ctx:Test("should wait for objectvalue", function()
 			local objValue = Instance.new("ObjectValue")
 			objValue.Parent = workspace
 
@@ -153,15 +157,15 @@ return function()
 			end)
 
 			local success, value = WaitFor.ObjectValue(objValue):await()
-			expect(success).to.equal(true)
-			expect(typeof(value)).to.equal("Instance")
-			expect(value).to.equal(instance)
-			expect(objValue.Value == value)
+			ctx:Expect(success):ToBe(true)
+			ctx:Expect(typeof(value)):ToBe("Instance")
+			ctx:Expect(value):ToBe(instance)
+			ctx:Expect(objValue.Value == value)
 
 			objValue:Destroy()
 		end)
 
-		it("should wait for custom predicate", function()
+		ctx:Test("should wait for custom predicate", function()
 			local instance
 			task.delay(0.1, function()
 				instance = Create("CustomInstance", workspace)
@@ -170,9 +174,9 @@ return function()
 			local success, inst = WaitFor.Custom(function()
 				return instance
 			end):await()
-			expect(success).to.equal(true)
-			expect(typeof(inst)).to.equal("Instance")
-			expect(inst).to.equal(instance)
+			ctx:Expect(success):ToBe(true)
+			ctx:Expect(typeof(inst)):ToBe("Instance")
+			ctx:Expect(inst):ToBe(instance)
 		end)
 	end)
 end
