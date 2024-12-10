@@ -3,6 +3,7 @@ export type TestExpect = {
 	ToBe: (self: TestExpect, value: any) -> (),
 	ToBeNaN: (self: TestExpect, value: any) -> (),
 	ToBeNil: (self: TestExpect) -> (),
+	ToBeOk: (self: TestExpect) -> (),
 	ToBeTruthy: (self: TestExpect) -> (),
 	ToBeFalsy: (self: TestExpect) -> (),
 	ToThrow: (self: TestExpect, err: any?) -> (),
@@ -39,6 +40,17 @@ function TestExpect:ToBeNil()
 
 	if not condition then
 		error(`{self.Value} {if self.Flip then "!=" else "=="} nil`, 0)
+	end
+end
+
+function TestExpect:ToBeOk()
+	local condition = self.Value ~= nil
+	if self.Flip then
+		condition = not condition
+	end
+
+	if not condition then
+		error(`{self.Value} {if self.Flip then "is not" else "is"} ok`, 0)
 	end
 end
 
