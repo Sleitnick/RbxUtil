@@ -139,6 +139,7 @@ end
 	:::info
 	This assumes the string was written using the `BufferWriter:WriteString()`
 	method, which stores an extra integer to mark the size of the string.
+	:::
 ]=]
 function BufferReader:ReadString(): string
 	local strLen = self:ReadUInt32()
@@ -153,6 +154,7 @@ end
 	
 	:::info
 	This assumes the string was written using the `BufferWriter:WriteStringRaw()`.
+	:::
 ]=]
 function BufferReader:ReadStringRaw(length: number): string
 	length = math.max(0, math.floor(length))

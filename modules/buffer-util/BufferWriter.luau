@@ -142,6 +142,7 @@ end
 	An extra 32-bit integer is stored before the string to mark the
 	length of the string. If the length of the string is always
 	known, it is more memory-efficient to use `WriteStringRaw`.
+	:::
 ]=]
 function BufferWriter:WriteString(str: string, length: number?)
 	local len = if length then math.min(#str, length) else #str
@@ -161,6 +162,7 @@ end
 	read this string from the buffer, as the length of the string is
 	not stored in the buffer. For strings of dynamic/unknown length,
 	use `WriteString` instead.
+	:::
 ]=]
 function BufferWriter:WriteStringRaw(str: string, length: number?)
 	local len = if length then math.min(#str, length) else #str
