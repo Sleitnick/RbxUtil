@@ -1,4 +1,7 @@
 local RunService = game:GetService("RunService")
+local ServerScriptService = game:GetService("ServerScriptService")
+
+local Test = require(ServerScriptService.TestRunner.Test)
 
 local function AwaitStop(shake): number
 	local start = os.clock()
@@ -10,43 +13,45 @@ local function AwaitStop(shake): number
 	return os.clock() - start
 end
 
-return function()
+return function(ctx: Test.TestContext)
 	local Shake = require(script.Parent)
 
-	describe("Construct", function()
-		it("should construct a new shake instance", function()
-			expect(function()
+	ctx:Describe("Construct", function()
+		ctx:Test("should construct a new shake instance", function()
+			ctx:Expect(function()
 				local _shake = Shake.new()
-			end).to.never.throw()
+			end)
+				:Not()
+				:ToThrow()
 		end)
 	end)
 
-	describe("Static Functions", function()
-		it("should get next render name", function()
+	ctx:Describe("Static Functions", function()
+		ctx:Test("should get next render name", function()
 			local r1 = Shake.NextRenderName()
 			local r2 = Shake.NextRenderName()
 			local r3 = Shake.NextRenderName()
-			expect(r1).to.be.a("string")
-			expect(r2).to.be.a("string")
-			expect(r3).to.be.a("string")
-			expect(r1).to.never.equal(r2)
-			expect(r2).to.never.equal(r3)
-			expect(r3).to.never.equal(r1)
+			ctx:Expect(r1):ToBeA("string")
+			ctx:Expect(r2):ToBeA("string")
+			ctx:Expect(r3):ToBeA("string")
+			ctx:Expect(r1):Not():ToBe(r2)
+			ctx:Expect(r2):Not():ToBe(r3)
+			ctx:Expect(r3):Not():ToBe(r1)
 		end)
 
-		it("should perform inverse square", function()
+		ctx:Test("should perform inverse square", function()
 			local vector = Vector3.new(10, 10, 10)
 			local distance = 10
 			local expectedIntensity = 1 / (distance * distance)
 			local expectedVector = vector * expectedIntensity
 			local vectorInverseSq = Shake.InverseSquare(vector, distance)
-			expect(typeof(vectorInverseSq)).to.equal("Vector3")
-			expect(vectorInverseSq).to.equal(expectedVector)
+			ctx:Expect(typeof(vectorInverseSq)):ToBe("Vector3")
+			ctx:Expect(vectorInverseSq):ToBe(expectedVector)
 		end)
 	end)
 
-	describe("Cloning", function()
-		it("should clone a shake instance", function()
+	ctx:Describe("Cloning", function()
+		ctx:Test("should clone a shake instance", function()
 			local shake1 = Shake.new()
 			shake1.Amplitude = 5
 			shake1.Frequency = 2
@@ -60,9 +65,9 @@ return function()
 				return os.clock()
 			end
 			local shake2 = shake1:Clone()
-			expect(shake2).to.be.a("table")
-			expect(getmetatable(shake2)).to.equal(Shake)
-			expect(shake2).to.never.equal(shake1)
+			ctx:Expect(shake2):ToBeA("table")
+			ctx:Expect(getmetatable(shake2)):ToBe(Shake)
+			ctx:Expect(shake2):Not():ToBe(shake1)
 			local clonedFields = {
 				"Amplitude",
 				"Frequency",
@@ -75,116 +80,116 @@ return function()
 				"TimeFunction",
 			}
 			for _, field in ipairs(clonedFields) do
-				expect(shake1[field]).to.equal(shake2[field])
+				ctx:Expect(shake1[field]):ToBe(shake2[field])
 			end
 		end)
 
-		it("should clone a shake instance but ignore running state", function()
+		ctx:Test("should clone a shake instance but ignore running state", function()
 			local shake1 = Shake.new()
 			shake1:Start()
 			local shake2 = shake1:Clone()
-			expect(shake1:IsShaking()).to.equal(true)
-			expect(shake2:IsShaking()).to.equal(false)
+			ctx:Expect(shake1:IsShaking()):ToBe(true)
+			ctx:Expect(shake2:IsShaking()):ToBe(false)
 		end)
 	end)
 
-	describe("Shaking", function()
-		it("should start", function()
+	ctx:Describe("Shaking", function()
+		ctx:Test("should start", function()
 			local shake = Shake.new()
-			expect(shake:IsShaking()).to.equal(false)
+			ctx:Expect(shake:IsShaking()):ToBe(false)
 			shake:Start()
-			expect(shake:IsShaking()).to.equal(true)
+			ctx:Expect(shake:IsShaking()):ToBe(true)
 		end)
 
-		it("should stop", function()
+		ctx:Test("should stop", function()
 			local shake = Shake.new()
 			shake:Start()
-			expect(shake:IsShaking()).to.equal(true)
+			ctx:Expect(shake:IsShaking()):ToBe(true)
 			shake:Stop()
-			expect(shake:IsShaking()).to.equal(false)
+			ctx:Expect(shake:IsShaking()):ToBe(false)
 		end)
 
-		it("should shake for nearly no time", function()
+		ctx:Test("should shake for nearly no time", function()
 			local shake = Shake.new()
 			shake.FadeInTime = 0
 			shake.FadeOutTime = 0
 			shake.SustainTime = 0
 			shake:Start()
 			local duration = AwaitStop(shake)
-			expect(duration).to.be.near(0, 0.05)
+			ctx:Expect(duration):ToBeNear(0, 0.05)
 		end)
 
-		it("should shake for fade in time", function()
+		ctx:Test("should shake for fade in time", function()
 			local shake = Shake.new()
 			shake.FadeInTime = 0.1
 			shake.FadeOutTime = 0
 			shake.SustainTime = 0
 			shake:Start()
 			local duration = AwaitStop(shake)
-			expect(duration).to.be.near(0.1, 0.05)
+			ctx:Expect(duration):ToBeNear(0.1, 0.05)
 		end)
 
-		it("should shake for fade out time", function()
+		ctx:Test("should shake for fade out time", function()
 			local shake = Shake.new()
 			shake.FadeInTime = 0
 			shake.FadeOutTime = 0.1
 			shake.SustainTime = 0
 			shake:Start()
 			local duration = AwaitStop(shake)
-			expect(duration).to.be.near(0.1, 0.05)
+			ctx:Expect(duration):ToBeNear(0.1, 0.05)
 		end)
 
-		it("should shake for sustain time", function()
+		ctx:Test("should shake for sustain time", function()
 			local shake = Shake.new()
 			shake.FadeInTime = 0
 			shake.FadeOutTime = 0
 			shake.SustainTime = 0.1
 			shake:Start()
 			local duration = AwaitStop(shake)
-			expect(duration).to.be.near(0.1, 0.05)
+			ctx:Expect(duration):ToBeNear(0.1, 0.05)
 		end)
 
-		it("should shake for fade in and sustain time", function()
+		ctx:Test("should shake for fade in and sustain time", function()
 			local shake = Shake.new()
 			shake.FadeInTime = 0.1
 			shake.FadeOutTime = 0
 			shake.SustainTime = 0.1
 			shake:Start()
 			local duration = AwaitStop(shake)
-			expect(duration).to.be.near(0.2, 0.05)
+			ctx:Expect(duration):ToBeNear(0.2, 0.05)
 		end)
 
-		it("should shake for fade out and sustain time", function()
+		ctx:Test("should shake for fade out and sustain time", function()
 			local shake = Shake.new()
 			shake.FadeInTime = 0
 			shake.FadeOutTime = 0.1
 			shake.SustainTime = 0.1
 			shake:Start()
 			local duration = AwaitStop(shake)
-			expect(duration).to.be.near(0.2, 0.05)
+			ctx:Expect(duration):ToBeNear(0.2, 0.05)
 		end)
 
-		it("should shake for fade in and fade out time", function()
+		ctx:Test("should shake for fade in and fade out time", function()
 			local shake = Shake.new()
 			shake.FadeInTime = 0.1
 			shake.FadeOutTime = 0.1
 			shake.SustainTime = 0
 			shake:Start()
 			local duration = AwaitStop(shake)
-			expect(duration).to.be.near(0.2, 0.05)
+			ctx:Expect(duration):ToBeNear(0.2, 0.05)
 		end)
 
-		it("should shake for fading and sustain time", function()
+		ctx:Test("should shake for fading and sustain time", function()
 			local shake = Shake.new()
 			shake.FadeInTime = 0.1
 			shake.FadeOutTime = 0.1
 			shake.SustainTime = 0.1
 			shake:Start()
 			local duration = AwaitStop(shake)
-			expect(duration).to.be.near(0.3, 0.05)
+			ctx:Expect(duration):ToBeNear(0.3, 0.05)
 		end)
 
-		it("should shake indefinitely", function()
+		ctx:Test("should shake indefinitely", function()
 			local shake = Shake.new()
 			shake.FadeInTime = 0
 			shake.FadeOutTime = 0
@@ -196,10 +201,10 @@ return function()
 				shake:StopSustain()
 			end)
 			local duration = AwaitStop(shake)
-			expect(duration).to.be.near(shakeTime, 0.05)
+			ctx:Expect(duration):ToBeNear(shakeTime, 0.05)
 		end)
 
-		it("should shake indefinitely and fade out", function()
+		ctx:Test("should shake indefinitely and fade out", function()
 			local shake = Shake.new()
 			shake.FadeInTime = 0
 			shake.FadeOutTime = 0.1
@@ -211,10 +216,10 @@ return function()
 				shake:StopSustain()
 			end)
 			local duration = AwaitStop(shake)
-			expect(duration).to.be.near(0.2, 0.05)
+			ctx:Expect(duration):ToBeNear(0.2, 0.05)
 		end)
 
-		it("should shake indefinitely and fade out with fade in time", function()
+		ctx:Test("should shake indefinitely and fade out with fade in time", function()
 			local shake = Shake.new()
 			shake.FadeInTime = 0.1
 			shake.FadeOutTime = 0.1
@@ -226,10 +231,10 @@ return function()
 				shake:StopSustain()
 			end)
 			local duration = AwaitStop(shake)
-			expect(duration).to.be.near(0.4, 0.05)
+			ctx:Expect(duration):ToBeNear(0.4, 0.05)
 		end)
 
-		it("should connect to signal", function()
+		ctx:Test("should connect to signal", function()
 			local shake = Shake.new()
 			shake.SustainTime = 0.1
 			shake:Start()
@@ -237,14 +242,14 @@ return function()
 			local connection = shake:OnSignal(RunService.Heartbeat, function()
 				signaled = true
 			end)
-			expect(typeof(connection)).to.equal("RBXScriptConnection")
-			expect(connection.Connected).to.equal(true)
+			ctx:Expect(typeof(connection)):ToBe("RBXScriptConnection")
+			ctx:Expect(connection.Connected):ToBe(true)
 			AwaitStop(shake)
-			expect(signaled).to.equal(true)
-			expect(connection.Connected).to.equal(false)
+			ctx:Expect(signaled):ToBe(true)
+			ctx:Expect(connection.Connected):ToBe(false)
 		end)
 
-		it("should bind to render step", function()
+		ctx:Test("should bind to render step", function()
 			local shake = Shake.new()
 			shake.SustainTime = 0.1
 			shake:Start()
@@ -253,7 +258,7 @@ return function()
 				bound = true
 			end)
 			AwaitStop(shake)
-			expect(bound).to.equal(true)
+			ctx:Expect(bound):ToBe(true)
 		end)
 	end)
 end
