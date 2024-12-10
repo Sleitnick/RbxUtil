@@ -66,7 +66,7 @@ return function(ctx: Test.TestContext)
 			end
 			local shake2 = shake1:Clone()
 			ctx:Expect(shake2):ToBeA("table")
-			ctx:Expect(getmetatable(shake2)):ToBe(Shake)
+			ctx:Expect(getmetatable(shake2)):ToBe(getmetatable(shake1))
 			ctx:Expect(shake2):Not():ToBe(shake1)
 			local clonedFields = {
 				"Amplitude",
@@ -79,7 +79,7 @@ return function(ctx: Test.TestContext)
 				"RotationInfluence",
 				"TimeFunction",
 			}
-			for _, field in ipairs(clonedFields) do
+			for _, field in clonedFields do
 				ctx:Expect(shake1[field]):ToBe(shake2[field])
 			end
 		end)
@@ -249,16 +249,19 @@ return function(ctx: Test.TestContext)
 			ctx:Expect(connection.Connected):ToBe(false)
 		end)
 
-		ctx:Test("should bind to render step", function()
-			local shake = Shake.new()
-			shake.SustainTime = 0.1
-			shake:Start()
-			local bound = false
-			shake:BindToRenderStep("ShakeTest", Enum.RenderPriority.Last.Value, function()
-				bound = true
+		-- RenderStepped only works on the client:
+		if RunService:IsClient() and RunService:IsRunning() then
+			ctx:Test("should bind to render step", function()
+				local shake = Shake.new()
+				shake.SustainTime = 0.1
+				shake:Start()
+				local bound = false
+				shake:BindToRenderStep("ShakeTest", Enum.RenderPriority.Last.Value, function()
+					bound = true
+				end)
+				AwaitStop(shake)
+				ctx:Expect(bound):ToBe(true)
 			end)
-			AwaitStop(shake)
-			ctx:Expect(bound):ToBe(true)
-		end)
+		end
 	end)
 end
