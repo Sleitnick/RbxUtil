@@ -81,7 +81,7 @@ def run_tests():
 
 	data = await_script_completion(get_status_url, api_key, 60)
 
-	match data["status"]:
+	match data["state"]:
 		case "COMPLETE":
 			result = data["output"]["results"][0]
 			all_pass = result["AllPass"]
