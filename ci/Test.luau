@@ -13,6 +13,8 @@ export type TestExpect = {
 	ToBeLessThan: (self: TestExpect, value: number) -> (),
 	ToBeLessThanOrEqual: (self: TestExpect, value: number) -> (),
 	ToContain: (self: TestExpect, value: any) -> (),
+	ToBeNear: (self: TestExpect, value: number, epsilon: number) -> (),
+	ToBeA: (self: TestExpect, typeOf: string) -> (),
 }
 
 local TestExpect = {}
@@ -203,6 +205,30 @@ function TestExpect:ToContain(value: any)
 		else
 			error(`invalid type "{t}" (expected table or string)`, 0)
 		end
+	end
+end
+
+function TestExpect:ToBeA(t: string)
+	local condition = typeof(self.Value) == t
+
+	if self.Flip then
+		condition = not condition
+	end
+
+	if not condition then
+		error(`"{typeof(self.Value)}" {if self.Flip then "!=" else "=="} "{t}"`, 0)
+	end
+end
+
+function TestExpect:ToBeNear(value: number, epsilon: number)
+	local condition = math.abs(self.Value - value) < epsilon
+
+	if self.Flip then
+		condition = not condition
+	end
+
+	if not condition then
+		error(`{self.Value} {if self.Flip then "is not near" else "is near"} {value}`, 0)
 	end
 end
 
