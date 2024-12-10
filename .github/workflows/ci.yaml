@@ -47,6 +47,17 @@ jobs:
     - name: Install Aftman
       uses: ok-nick/setup-aftman@v0.4.2
 
+    - name: Install Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.13"
+
+    - name: Install Python dependencies
+      run: pip install -r requirements.txt
+    
+    - name: Run test builder
+      run: python build_tests.py
+
     - name: Build place file
       run: rojo build -o test.rbxl test.project.json
 
@@ -58,17 +69,6 @@ jobs:
         API_KEY: ${{ secrets.RBXCLOUD_API_KEY }}
         FILE: test.rbxl
       run: rbxcloud experience publish -a "$API_KEY" -u "$UID" -p "$PID" -t published -f "$FILE"
-
-    - name: Install Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.13"
-
-    - name: Install Python dependencies
-      run: pip install -r requirements.txt
-    
-    - name: Run test builder
-      run: python build_tests.py
     
     - name: Run tests
       env:
