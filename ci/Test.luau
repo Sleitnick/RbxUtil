@@ -310,10 +310,16 @@ function TestContext:Describe(name: string, fn: () -> ())
 	}
 	self.Current = group
 	parentGroup.Items[name] = group
+	for _, fn in parentGroup.BeforeEachFns do
+		fn()
+	end
 	fn()
 	self.Current = parentGroup
 	if group.AnyFail then
 		parentGroup.AnyFail = true
+	end
+	for _, fn in parentGroup.AfterEachFns do
+		fn()
 	end
 end
 
