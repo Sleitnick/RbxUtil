@@ -30,7 +30,7 @@ function TestExpect:ToBe(value: any)
 end
 
 function TestExpect:ToBeNil()
-	local condition = self.Value ~= nil
+	local condition = self.Value == nil
 	if self.Flip then
 		condition = not condition
 	end

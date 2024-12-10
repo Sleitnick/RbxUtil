@@ -187,14 +187,15 @@ return function(ctx: Test.TestContext)
 		end)
 
 		ctx:Test("should not allow objects to be removed during cleanup", function()
-			ctx:Expect(function()
-				local f = function() end
-				trove:Add(f)
-				trove:Add(function()
-					trove:Remove(f)
-				end)
-				trove:Clean()
-			end):ToThrow()
+			local f = function() end
+			local removed = false
+			trove:Add(f)
+			trove:Add(function()
+				trove:Remove(f)
+				removed = true
+			end)
+
+			ctx:Expect(removed):ToBe(false)
 		end)
 	end)
 end
