@@ -15,6 +15,7 @@
 	:::info Immutability
 	All functions (_except_ `SwapRemove`, `SwapRemoveFirstValue`, and `Lock`) treat tables as immutable and will return
 	copies of the given table(s) with the operations performed on the copies.
+	:::
 ]=]
 local TableUtil = {}
 
@@ -36,6 +37,7 @@ local rng = Random.new()
 	Deep copies are _not_ protected against cyclical references. Passing
 	a table with cyclical references _and_ the `deep` parameter set to
 	`true` will result in a stack-overflow.
+	:::
 ]=]
 local function Copy<T>(t: T, deep: boolean?): T
 	if not deep then
@@ -80,6 +82,7 @@ end
 	be dynamic data added that isn't in the template.
 
 	For player data, use `TableUtil.Reconcile` instead.
+	:::
 ]=]
 local function Sync<S, T>(srcTbl: S, templateTbl: T): T
 	assert(type(srcTbl) == "table", "First argument must be a table")
@@ -205,6 +208,7 @@ end
 
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
+	:::
 ]=]
 local function SwapRemove<T>(t: { T }, i: number)
 	local n = #t
@@ -230,6 +234,7 @@ end
 
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
+	:::
 ]=]
 local function SwapRemoveFirstValue<T>(t: { T }, v: T): number?
 	local index: number? = table.find(t, v)
@@ -403,6 +408,7 @@ end
 
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
+	:::
 ]=]
 local function Extend<T, E>(target: { T }, extension: { E }): { T } & { E }
 	local tbl = table.clone(target) :: { any }
@@ -428,6 +434,7 @@ end
 
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
+	:::
 ]=]
 local function Reverse<T>(tbl: { T }): { T }
 	local n = #tbl
@@ -455,6 +462,7 @@ end
 
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
+	:::
 ]=]
 local function Shuffle<T>(tbl: { T }, rngOverride: Random?): { T }
 	assert(type(tbl) == "table", "First argument must be a table")
@@ -485,6 +493,7 @@ end
 
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
+	:::
 ]=]
 local function Sample<T>(tbl: { T }, size: number, rngOverride: Random?): { T }
 	assert(type(tbl) == "table", "First argument must be a table")
@@ -533,6 +542,7 @@ end
 
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
+	:::
 ]=]
 local function Flat<T>(tbl: { T }, depth: number?): { T }
 	local maxDepth: number = if type(depth) == "number" then depth else 1
@@ -570,6 +580,7 @@ end
 
 	:::note Arrays only
 	This function works on arrays, but not dictionaries.
+	:::
 ]=]
 local function FlatMap<T, M>(tbl: { T }, callback: (T, number, { T }) -> M): { M }
 	return Flat(Map(tbl, callback))
@@ -596,6 +607,7 @@ end
 	local keys = TableUtil.Keys(t)
 	table.sort(keys)
 	```
+	:::
 ]=]
 local function Keys<K, V>(tbl: { [K]: V }): { K }
 	local keys = table.create(#tbl)
@@ -626,6 +638,7 @@ end
 	local values = TableUtil.Values(t)
 	table.sort(values)
 	```
+	:::
 ]=]
 local function Values<K, V>(tbl: { [K]: V }): { V }
 	local values = table.create(#tbl)
@@ -665,6 +678,7 @@ end
 	While `Find` can also be used with dictionaries, dictionary ordering is never
 	guaranteed, and thus the result could be different if there are more
 	than one possible matches given the data and callback function.
+	:::
 ]=]
 local function Find<K, V>(tbl: { [K]: V }, callback: (V, K, { [K]: V }) -> boolean): (V?, K?)
 	for k, v in tbl do

@@ -56,6 +56,7 @@ Quaternion.__index = Quaternion
 	:::caution
 	The `new` constructor assumes the given arguments represent a proper Quaternion. This
 	constructor should only be used if you really know what you're doing.
+	:::
 ]=]
 function Quaternion.new(x: number, y: number, z: number, w: number): Quaternion
 	local self = setmetatable({
