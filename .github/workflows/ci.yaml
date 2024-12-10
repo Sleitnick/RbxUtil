@@ -76,4 +76,4 @@ jobs:
         PID: 110224315334647
         API_KEY: ${{ secrets.RBXCLOUD_API_KEY }}
         FILE: test.rbxl
-      run: python run_tests.py "$UID" "$PID"
+      run: python -u run_tests.py "$UID" "$PID"
