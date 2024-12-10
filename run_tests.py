@@ -13,7 +13,7 @@ def run_tests():
 	uid = args.uid
 	pid = args.pid
 
-	endpoint = f"apis.roblox.com/cloud/v2/universes/{uid}/places/{pid}/luau-execution-session-tasks"
+	endpoint = f"https://apis.roblox.com/cloud/v2/universes/{uid}/places/{pid}/luau-execution-session-tasks"
 
 	with open("ci/RunTests.luau", "r") as script:
 		script_source = script.read()
