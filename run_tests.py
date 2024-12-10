@@ -27,7 +27,7 @@ def run_tests():
 		"x-api-key": os.getenv("API_KEY"),
 	}
 
-	res = requests.post(endpoint, data=data, headers=headers)
+	res = requests.post(endpoint, data=json.dumps(data), headers=headers)
 	res_json = res.json()
 
 	print(res_json)
