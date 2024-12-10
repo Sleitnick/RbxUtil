@@ -12,6 +12,7 @@ export type Trove = {
 	Add: <T>(self: Trove, object: T & Trackable, cleanupMethod: string?) -> T,
 	Remove: <T>(self: Trove, object: T & Trackable) -> boolean,
 	Clean: (self: Trove) -> (),
+	WrapClean: (self: Trove) -> () -> (),
 	AttachToInstance: (self: Trove, instance: Instance) -> RBXScriptConnection,
 	Destroy: (self: Trove) -> (),
 }

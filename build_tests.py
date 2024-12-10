@@ -24,7 +24,7 @@ def update_test_file(test_path, original_src_path):
 
 class WatchHandler(PatternMatchingEventHandler):
 	def __init__(self):
-		PatternMatchingEventHandler.__init__(self, patterns=["*.lua"], ignore_directories=True, case_sensitive=False)
+		PatternMatchingEventHandler.__init__(self, patterns=["*.luau"], ignore_directories=True, case_sensitive=False)
 	def on_modified(self, event):
 		original_src_path = event.src_path
 		if original_src_path in files_locked:
