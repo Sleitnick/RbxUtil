@@ -153,7 +153,7 @@ return function(ctx: Test.TestContext)
 				called = true
 			end)
 			ctx:Expect(typeof(subTrove)):ToBe("table")
-			ctx:Expect(getmetatable(subTrove)):ToBe(Trove)
+			ctx:Expect(getmetatable(subTrove)):ToBe(getmetatable(trove))
 			trove:Clean()
 			ctx:Expect(called):ToBe(true)
 		end)
@@ -178,12 +178,14 @@ return function(ctx: Test.TestContext)
 		end)
 
 		ctx:Test("should not allow objects added during cleanup", function()
-			ctx:Expect(function()
-				trove:Add(function()
-					trove:Add(function() end)
-				end)
-				trove:Clean()
-			end):ToThrow()
+			local added = false
+			trove:Add(function()
+				trove:Add(function() end)
+				added = true
+			end)
+			trove:Clean()
+
+			ctx:Expect(added):ToBe(false)
 		end)
 
 		ctx:Test("should not allow objects to be removed during cleanup", function()
