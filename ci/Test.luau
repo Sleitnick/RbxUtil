@@ -334,6 +334,9 @@ function Test.run(ancestors: { Instance })
 		for _, child in ancestor:GetDescendants() do
 			if child:IsA("ModuleScript") and string.match(child.Name, "%.test$") ~= nil then
 				local name = (string.match(child.Name, "(.+)%.test$")) or child.Name
+				if name == "init" then
+					name = child.Parent.Name
+				end
 				local fn = require(child)
 				tests[name] = fn
 			end
