@@ -217,6 +217,8 @@ export type TestContext = {
 	Test: (self: TestContext, name: string, fn: () -> ()) -> (),
 	Describe: (self: TestContext, name: string, fn: () -> ()) -> (),
 	Expect: (self: TestContext, value: any) -> TestExpect,
+	BeforeEach: (self: TestContext, fn: () -> ()) -> (),
+	AfterEach: (self: TestContext, fn: () -> ()) -> (),
 }
 
 local TestContext = {}
@@ -230,6 +232,8 @@ function TestContext.new(root: string): TestContext
 			Name = root,
 			Items = {},
 			AnyFail = false,
+			BeforeEachFns = {},
+			AfterEachFns = {},
 		},
 	}, TestContext) :: any
 
@@ -239,6 +243,9 @@ function TestContext.new(root: string): TestContext
 end
 
 function TestContext:Test(name: string, fn: () -> ())
+	for _, fn in self.Current.BeforeEachFns do
+		fn()
+	end
 	local success, err = pcall(fn)
 	self.Current.Items[name] = {
 		Success = success,
@@ -249,6 +256,9 @@ function TestContext:Test(name: string, fn: () -> ())
 		self.TotalFails += 1
 		self.Current.AnyFail = true
 	end
+	for _, fn in self.Current.AfterEachFns do
+		fn()
+	end
 end
 
 function TestContext:Describe(name: string, fn: () -> ())
@@ -257,6 +267,8 @@ function TestContext:Describe(name: string, fn: () -> ())
 		Name = name,
 		Items = {},
 		AnyFail = false,
+		BeforeEachFns = {},
+		AfterEachFns = {},
 	}
 	self.Current = group
 	parentGroup.Items[name] = group
@@ -275,6 +287,14 @@ function TestContext:Expect(value: any): TestExpect
 		resolvedValue = if success then err else nil
 	end
 	return setmetatable({ Value = resolvedValue, Success = success, Err = err, Flip = false }, TestExpect) :: any
+end
+
+function TestContext:BeforeEach(fn: () -> ())
+	table.insert(self.Current.BeforeEachFns, fn)
+end
+
+function TestContext:AfterEach(fn: () -> ())
+	table.insert(self.Current.AfterEachFns, fn)
 end
 
 ------------------------------------------------------------------------------------------------------------
@@ -351,7 +371,6 @@ function Test.run(ancestors: { Instance })
 	local outputTxt = table.concat(output, "\n")
 
 	return {
-		Results = results,
 		AllPass = allPass,
 		Output = outputTxt,
 	}
