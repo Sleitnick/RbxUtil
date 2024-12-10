@@ -6,7 +6,7 @@ import time
 
 
 # Seconds between status polling
-POLL_STATUS_INTERVAL = 3
+POLL_STATUS_INTERVAL = 2
 
 ROOT_API = "https://apis.roblox.com/cloud/v2"
 RUNNER_SCRIPT = "ci/RunTests.luau"
@@ -55,6 +55,8 @@ def await_script_completion(get_status_url: str, api_key: str, timeout: float):
 		if state != last_state:
 			print(f"State changed: {state}")
 			last_state = state
+		else:
+			print(f"{state}...")
 		
 		if state == "COMPLETE" or state == "FAILED" or state == "CANCELLED":
 			break
