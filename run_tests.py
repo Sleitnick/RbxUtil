@@ -44,6 +44,7 @@ def run_tests():
 		if state == "CANCELLED":
 			exit(1)
 		elif state == "COMPLETE":
+			print(res_json)
 			break
 		elif state == "FAILED":
 			print(res_json["error"])
