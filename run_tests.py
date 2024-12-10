@@ -44,11 +44,11 @@ def run_tests():
 		if state == "CANCELLED":
 			exit(1)
 		elif state == "COMPLETE":
-			print(res_json)
-			
-			# TODO: Format 'res_json' in a pretty way to show what failed and what succeeded
+			result = res_json["output"]["results"][0]
+			all_pass = result["AllPass"]
 
-			all_pass = res_json["output"]["results"][0]["AllPass"]
+			print(result["Output"])
+
 			if not all_pass:
 				exit(1)
 			

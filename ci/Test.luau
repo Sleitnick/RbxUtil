@@ -159,11 +159,12 @@ function Test.run(ancestors: { Instance })
 		end
 		Output(res.Group, 0)
 	end
-	print(table.concat(output, "\n"))
+	local outputTxt = table.concat(output, "\n")
 
 	return {
 		Results = results,
 		AllPass = allPass,
+		Output = outputTxt,
 	}
 end
 
