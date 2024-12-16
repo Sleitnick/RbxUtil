@@ -1,9 +1,5 @@
 --!native
 
--- Shake
--- Stephen Leitnick
--- December 09, 2021
-
 local RunService = game:GetService("RunService")
 
 --[=[
@@ -77,6 +73,35 @@ local renderId = 0
 
 	Shakes will automatically stop once the shake has been completed. Shakes can
 	also be used continuously if the `Sustain` property is set to `true`.
+
+	## Fixing drift
+
+	If you are not controlling the initial CFrame of the camera (i.e. using Roblox's camera scripts),
+	then you might run into odd behavior with the above example. This is because Roblox's camera
+	scripts are influenced by the current CFrame value of the camera. Thus, the shake effect causes
+	odd side-effects, especially noticeable at higher FPS.
+
+	The solution is to simply store the camera's CFrame before applying the shake CFrame, and then
+	reapplying this stored CFrame value after rendering is complete (e.g. on Heartbeat).
+
+	```lua
+	local camCf: CFrame
+
+	shake:BindToRenderStep(Shake.NextRenderName(), priority, function(pos, rot, isDone)
+		-- Store the CFrame value that was set from Roblox's camera scripts:
+		camCf = camera.CFrame
+
+		camera.CFrame *= CFrame.new(pos) * CFrame.Angles(rot.X, rot.Y, rot.Z)
+	end)
+
+	RunService.Heartbeat:Connect(function()
+		-- Reapply the camera script CFrame before they run again.
+		-- Heartbeat runs AFTER Roblox has rendered, so it will not affect the camera this frame.
+		camera.CFrame = camCf
+	end)
+	```
+
+	## Configuration
 
 	Here are some more helpful configuration examples:
 
