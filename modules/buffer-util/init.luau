@@ -2,6 +2,7 @@
 
 local BufferReader = require(script.BufferReader)
 local BufferWriter = require(script.BufferWriter)
+local Types = require(script.Types)
 
 --[=[
 	@class BufferUtil
@@ -34,6 +35,9 @@ local BufferWriter = require(script.BufferWriter)
 	local writer = BufferUtil.writer()
 	```
 ]=]
+
+export type BufferReader = Types.BufferReader
+export type BufferWriter = Types.BufferWriter
 
 return {
 	reader = BufferReader.new,
