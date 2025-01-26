@@ -1,14 +1,15 @@
 {
 	"name": "@rbxutil/signal",
-	"version": "2.0.1",
+	"version": "2.0.3",
 	"main": "init.luau",
 	"repository": "github:Sleitnick/RbxUtil",
 	"license": "MIT",
 	"types": "index.d.ts",
 	"files": [
-		"./",
+		"./*",
 		"!*.toml",
-		"!*.json"
+		"!*.json",
+		"!*.test.luau"
 	],
 	"publishConfig": {
 		"access": "public"

@@ -1,7 +1,7 @@
 [package]
 name = "sleitnick/signal"
 description = "Signal class"
-version = "2.0.1"
+version = "2.0.3"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"
