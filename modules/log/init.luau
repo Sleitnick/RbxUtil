@@ -695,7 +695,7 @@ do
 						canUse = true
 						fallthrough = true
 					end
-					if not fallthrough then
+					if canUse and not fallthrough then
 						assert(
 							not set,
 							("More than one LogConfig mapping matched (%s and %s)"):format(setK or "", k or "")
