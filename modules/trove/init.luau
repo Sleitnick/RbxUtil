@@ -6,9 +6,13 @@ export type Trove = {
 	Extend: (self: Trove) -> Trove,
 	Clone: <T>(self: Trove, instance: T & Instance) -> T,
 	Construct: <T, A...>(self: Trove, class: Constructable<T, A...>, A...) -> T,
-	Connect: (self: Trove, signal: SignalLike | RBXScriptSignal, fn: (...any) -> ...any) -> ConnectionLike,
+	Connect: (
+		self: Trove,
+		signal: SignalLike | SignalLikeMetatable | RBXScriptSignal,
+		fn: (...any) -> ...any
+	) -> ConnectionLike | ConnectionLikeMetatable,
 	BindToRenderStep: (self: Trove, name: string, priority: number, fn: (dt: number) -> ()) -> (),
-	AddPromise: <T>(self: Trove, promise: T & PromiseLike) -> T,
+	AddPromise: <T>(self: Trove, promise: (T & PromiseLike) | (T & PromiseLikeMetatable)) -> T,
 	Add: <T>(self: Trove, object: T & Trackable, cleanupMethod: string?) -> T,
 	Remove: <T>(self: Trove, object: T & Trackable) -> boolean,
 	Clean: (self: Trove) -> (),
@@ -26,20 +30,28 @@ type TroveInternal = Trove & {
 
 --[=[
 	@within Trove
-	@type Trackable Instance | RBXScriptConnection | ConnectionLike | PromiseLike | thread | ((...any) -> ...any) | Destroyable | DestroyableLowercase | Disconnectable | DisconnectableLowercase
+	@type Trackable Instance | RBXScriptConnection | ConnectionLike | ConnectLikeMetatable | PromiseLike | PromiseLikeMetatable | thread | ((...any) -> ...any) | Destroyable | DestroyableMetatable | DestroyableLowercase | DestroyableLowercaseMetatable | Disconnectable | DisconnectableMetatable | DisconnectableLowercase | DisconnectableLowercaseMetatable | SignalLike | SignalLikeMetatable
 	Represents all trackable objects by Trove.
 ]=]
 export type Trackable =
 	Instance
 	| RBXScriptConnection
 	| ConnectionLike
+	| ConnectionLikeMetatable
 	| PromiseLike
+	| PromiseLikeMetatable
 	| thread
 	| ((...any) -> ...any)
 	| Destroyable
+	| DestroyableMetatable
 	| DestroyableLowercase
+	| DestroyableLowercaseMetatable
 	| Disconnectable
+	| DisconectableMetatable
 	| DisconnectableLowercase
+	| DisconnectableLowercaseMetatable
+	| SignalLike
+	| SignalLikeMetatable
 
 --[=[
 	@within Trove
@@ -54,14 +66,41 @@ type ConnectionLike = {
 
 --[=[
 	@within Trove
+	@interface ConnectionLikeMetatable
+	.Connected boolean
+	.Disconnect (self) -> ()
+	@tag Metatable
+]=]
+type ConnectionLikeMetatable = typeof(setmetatable(
+	{},
+	{} :: { Connected: boolean, Disconnect: (self: ConnectionLikeMetatable) -> () }
+))
+
+--[=[
+	@within Trove
 	@interface SignalLike
 	.Connect (self, callback: (...any) -> ...any) -> ConnectionLike
 	.Once (self, callback: (...any) -> ...any) -> ConnectionLike
 ]=]
 type SignalLike = {
-	Connect: (self: SignalLike, callback: (...any) -> ...any) -> ConnectionLike,
-	Once: (self: SignalLike, callback: (...any) -> ...any) -> ConnectionLike,
+	Connect: (self: SignalLike, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable,
+	Once: (self: SignalLike, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable,
 }
+
+--[=[
+	@within Trove
+	@interface SignalLikeMetatable
+	.Connect (self, callback: (...any) -> ...any) -> ConnectionLike
+	.Once (self, callback: (...any) -> ...any) -> ConnectionLike
+	@tag Metatable
+]=]
+type SignalLikeMetatable = typeof(setmetatable(
+	{},
+	{} :: {
+		Connect: (self: SignalLikeMetatable, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable,
+		Once: (self: SignalLikeMetatable, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable,
+	}
+))
 
 --[=[
 	@within Trove
@@ -72,9 +111,26 @@ type SignalLike = {
 ]=]
 type PromiseLike = {
 	getStatus: (self: PromiseLike) -> string,
-	finally: (self: PromiseLike, callback: (...any) -> ...any) -> PromiseLike,
+	finally: (self: PromiseLike, callback: (...any) -> ...any) -> PromiseLike | PromiseLikeMetatable,
 	cancel: (self: PromiseLike) -> (),
 }
+
+--[=[
+	@within Trove
+	@interface PromiseLikeMetatable
+	.getStatus (self) -> string
+	.finally (self, callback: (...any) -> ...any) -> PromiseLike
+	.cancel (self) -> ()
+	@tag Metatable
+]=]
+type PromiseLikeMetatable = typeof(setmetatable(
+	{},
+	{} :: {
+		getStatus: (self: any) -> string,
+		finally: (self: PromiseLikeMetatable, callback: (...any) -> ...any) -> PromiseLike | PromiseLikeMetatable,
+		cancel: (self: PromiseLikeMetatable) -> (),
+	}
+))
 
 --[=[
 	@within Trove
@@ -85,7 +141,7 @@ type Constructable<T, A...> = { new: (A...) -> T } | (A...) -> T
 --[=[
 	@within Trove
 	@interface Destroyable
-	.disconnect (self) -> ()
+	.Destroy (self) -> ()
 ]=]
 type Destroyable = {
 	Destroy: (self: Destroyable) -> (),
@@ -93,8 +149,16 @@ type Destroyable = {
 
 --[=[
 	@within Trove
+	@interface DestroyableMetatable
+	.Destroy (self) -> ()
+	@tag Metatable
+]=]
+type DestroyableMetatable = typeof(setmetatable({}, {} :: { Destroy: (self: DestroyableMetatable) -> () }))
+
+--[=[
+	@within Trove
 	@interface DestroyableLowercase
-	.disconnect (self) -> ()
+	.destroy (self) -> ()
 ]=]
 type DestroyableLowercase = {
 	destroy: (self: DestroyableLowercase) -> (),
@@ -102,12 +166,31 @@ type DestroyableLowercase = {
 
 --[=[
 	@within Trove
+	@interface DestroyableLowercaseMetatable
+	.destroy (self) -> ()
+	@tag Metatable
+]=]
+type DestroyableLowercaseMetatable = typeof(setmetatable(
+	{},
+	{} :: { destroy: (self: DestroyableLowercaseMetatable) -> () }
+))
+
+--[=[
+	@within Trove
 	@interface Disconnectable
-	.disconnect (self) -> ()
+	.Disconnect (self) -> ()
 ]=]
 type Disconnectable = {
 	Disconnect: (self: Disconnectable) -> (),
 }
+
+--[=[
+	@within Trove
+	@interface DisconectableMetatable
+	.Disconnect (self) -> ()
+	@tag Metatable
+]=]
+type DisconectableMetatable = typeof(setmetatable({}, {} :: { Disconnect: (self: DisconectableMetatable) -> () }))
 
 --[=[
 	@within Trove
@@ -117,6 +200,17 @@ type Disconnectable = {
 type DisconnectableLowercase = {
 	disconnect: (self: DisconnectableLowercase) -> (),
 }
+
+--[=[
+	@within Trove
+	@interface DisconnectableLowercaseMetatable
+	.disconnect (self) -> ()
+	@tag Metatable
+]=]
+type DisconnectableLowercaseMetatable = typeof(setmetatable(
+	{},
+	{} :: { disconnect: (self: DisconnectableLowercaseMetatable) -> () }
+))
 
 local FN_MARKER = newproxy()
 local THREAD_MARKER = newproxy()
@@ -158,6 +252,12 @@ local function AssertPromiseLike(object: any)
 		or typeof(object.cancel) ~= "function"
 	then
 		error("did not receive a promise as an argument", 3)
+	end
+end
+
+local function AssertSignalLike(object: any)
+	if typeof(object) ~= "table" or typeof(object.Connect) ~= "function" or typeof(object.Once) ~= "function" then
+		error("did not receive a signal as an argument", 3)
 	end
 end
 
@@ -281,7 +381,7 @@ end
 
 	If a function is given, the function will
 	be called with the given arguments.
-	
+
 	The result from either of the two options
 	will be added to the trove.
 
@@ -334,12 +434,19 @@ end
 	end)
 	```
 ]=]
-function Trove.Connect(self: TroveInternal, signal: SignalLike, fn: (...any) -> ...any)
+function Trove.Connect(
+	self: TroveInternal,
+	signal: SignalLike | SignalLikeMetatable | RBXScriptSignal,
+	fn: (...any) -> ...any
+)
 	if self._cleaning then
 		error("Cannot call trove:Connect() while cleaning", 2)
 	end
+	AssertSignalLike(signal)
 
-	return self:Add(signal:Connect(fn))
+	local confirmedSignal = signal :: SignalLike
+
+	return self:Add(confirmedSignal:Connect(fn))
 end
 
 --[=[
@@ -394,24 +501,25 @@ end
 	This is only compatible with the [roblox-lua-promise](https://eryn.io/roblox-lua-promise/) library, version 4.
 	:::
 ]=]
-function Trove.AddPromise(self: TroveInternal, promise: PromiseLike)
+function Trove.AddPromise(self: TroveInternal, promise: PromiseLike | PromiseLikeMetatable)
 	if self._cleaning then
 		error("cannot call trove:AddPromise() while cleaning", 2)
 	end
 	AssertPromiseLike(promise)
+	local confirmedPromise = promise :: PromiseLike
 
-	if promise:getStatus() == "Started" then
-		promise:finally(function()
+	if confirmedPromise:getStatus() == "Started" then
+		confirmedPromise:finally(function()
 			if self._cleaning then
 				return
 			end
-			self:_findAndRemoveFromObjects(promise, false)
+			self:_findAndRemoveFromObjects(confirmedPromise, false)
 		end)
 
-		self:Add(promise, "cancel")
+		self:Add(confirmedPromise, "cancel")
 	end
 
-	return promise
+	return confirmedPromise
 end
 
 --[=[
