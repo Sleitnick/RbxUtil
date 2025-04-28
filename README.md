@@ -22,6 +22,7 @@
 | [Shake](https://sleitnick.github.io/RbxUtil/api/Shake) | `Shake = "sleitnick/shake@1.1.0"` | Shake class for making things shake |
 | [Signal](https://sleitnick.github.io/RbxUtil/api/Signal) | `Signal = "sleitnick/signal@2.0.3"` | Signal class |
 | [Silo](https://sleitnick.github.io/RbxUtil/api/Silo) | `Silo = "sleitnick/silo@0.2.0"` | State container class |
+| [Spring](https://sleitnick.github.io/RbxUtil/api/Spring) | `Spring = "sleitnick/spring@1.0.0"` | Critically damped spring |
 | [Streamable](https://sleitnick.github.io/RbxUtil/api/Streamable) | `Streamable = "sleitnick/streamable@1.2.4"` | Streamable class and StreamableUtil |
 | [Symbol](https://sleitnick.github.io/RbxUtil/api/Symbol) | `Symbol = "sleitnick/symbol@2.0.1"` | Symbol |
 | [TableUtil](https://sleitnick.github.io/RbxUtil/api/TableUtil) | `TableUtil = "sleitnick/table-util@1.2.1"` | Table utility functions |
