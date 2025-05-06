@@ -1,0 +1,8 @@
+[package]
+name = "sleitnick/find"
+description = "Utility function for finding an in the data model hierarchy"
+version = "1.0.0"
+license = "MIT"
+authors = ["Stephen Leitnick"]
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
