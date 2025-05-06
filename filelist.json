@@ -2,6 +2,7 @@
   "modules": [
     {
       "name": "BufferUtil",
+      "description": "Buffer utilities",
       "path": "modules/buffer-util",
       "files": [
         "BufferReader.luau",
@@ -13,6 +14,7 @@
     },
     {
       "name": "Comm",
+      "description": "Comm library for remote communication",
       "path": "modules/comm",
       "files": [
         "Types.luau",
@@ -22,6 +24,7 @@
     },
     {
       "name": "Component",
+      "description": "Component class",
       "path": "modules/component",
       "files": [
         "init.luau"
@@ -29,6 +32,7 @@
     },
     {
       "name": "Concur",
+      "description": "Concurrent task handler",
       "path": "modules/concur",
       "files": [
         "init.luau"
@@ -36,6 +40,7 @@
     },
     {
       "name": "EnumList",
+      "description": "Enum List class",
       "path": "modules/enum-list",
       "files": [
         "init.luau"
@@ -43,6 +48,7 @@
     },
     {
       "name": "Find",
+      "description": "Utility function for finding an in the data model hierarchy",
       "path": "modules/find",
       "files": [
         "init.luau"
@@ -50,6 +56,7 @@
     },
     {
       "name": "Input",
+      "description": "Basic input classes",
       "path": "modules/input",
       "files": [
         "Gamepad.luau",
@@ -62,6 +69,7 @@
     },
     {
       "name": "Loader",
+      "description": "Requires all modules within a given instance",
       "path": "modules/loader",
       "files": [
         "init.luau"
@@ -69,6 +77,7 @@
     },
     {
       "name": "Log",
+      "description": "Log class for logging to PlayFab",
       "path": "modules/log",
       "files": [
         "init.luau"
@@ -76,6 +85,7 @@
     },
     {
       "name": "Net",
+      "description": "Static networking module",
       "path": "modules/net",
       "files": [
         "init.luau"
@@ -83,6 +93,7 @@
     },
     {
       "name": "Option",
+      "description": "Represent optional values in Lua",
       "path": "modules/option",
       "files": [
         "init.luau"
@@ -90,6 +101,7 @@
     },
     {
       "name": "PID",
+      "description": "PID Controller class",
       "path": "modules/pid",
       "files": [
         "init.luau"
@@ -97,6 +109,7 @@
     },
     {
       "name": "Quaternion",
+      "description": "Quaternion class",
       "path": "modules/quaternion",
       "files": [
         "init.luau"
@@ -104,6 +117,7 @@
     },
     {
       "name": "Sequent",
+      "description": "Sequent class",
       "path": "modules/sequent",
       "files": [
         "init.luau"
@@ -111,6 +125,7 @@
     },
     {
       "name": "Ser",
+      "description": "Ser class for serialization and deserialization",
       "path": "modules/ser",
       "files": [
         "init.luau"
@@ -118,6 +133,7 @@
     },
     {
       "name": "Shake",
+      "description": "Shake class for making things shake",
       "path": "modules/shake",
       "files": [
         "init.luau"
@@ -125,6 +141,7 @@
     },
     {
       "name": "Signal",
+      "description": "Signal class",
       "path": "modules/signal",
       "files": [
         "init.luau"
@@ -132,6 +149,7 @@
     },
     {
       "name": "Silo",
+      "description": "State container class",
       "path": "modules/silo",
       "files": [
         "TableWatcher.luau",
@@ -141,6 +159,7 @@
     },
     {
       "name": "Spring",
+      "description": "Critically damped spring",
       "path": "modules/spring",
       "files": [
         "init.luau"
@@ -148,6 +167,7 @@
     },
     {
       "name": "Streamable",
+      "description": "Streamable class and StreamableUtil",
       "path": "modules/streamable",
       "files": [
         "Streamable.luau",
@@ -157,6 +177,7 @@
     },
     {
       "name": "Symbol",
+      "description": "Symbol",
       "path": "modules/symbol",
       "files": [
         "init.luau"
@@ -164,6 +185,7 @@
     },
     {
       "name": "TableUtil",
+      "description": "Table utility functions",
       "path": "modules/table-util",
       "files": [
         "init.luau"
@@ -171,6 +193,7 @@
     },
     {
       "name": "TaskQueue",
+      "description": "Batches tasks that occur on the same execution step",
       "path": "modules/task-queue",
       "files": [
         "init.luau"
@@ -178,6 +201,7 @@
     },
     {
       "name": "Timer",
+      "description": "Timer class",
       "path": "modules/timer",
       "files": [
         "init.luau"
@@ -185,6 +209,7 @@
     },
     {
       "name": "Tree",
+      "description": "Utility functions for accessing instances in the game hierarchy",
       "path": "modules/tree",
       "files": [
         "init.luau"
@@ -192,6 +217,7 @@
     },
     {
       "name": "Trove",
+      "description": "Trove class for tracking and cleaning up objects",
       "path": "modules/trove",
       "files": [
         "init.luau"
@@ -199,6 +225,7 @@
     },
     {
       "name": "TypedRemote",
+      "description": "Simple networking package for typed RemoteEvents and RemoteFunctions",
       "path": "modules/typed-remote",
       "files": [
         "init.luau"
@@ -206,6 +233,7 @@
     },
     {
       "name": "WaitFor",
+      "description": "WaitFor class for awaiting instances",
       "path": "modules/wait-for",
       "files": [
         "init.luau"
