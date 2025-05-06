@@ -1,4 +1,4 @@
-name: Files
+name: Generated Files
 
 on:
   push:
@@ -10,7 +10,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 jobs:
   create-files:
@@ -26,14 +25,21 @@ jobs:
           python-version: "3.13"
       - run: python build_readme.py
       - run: python build_list.py
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          title: Generated Files
-          body: Automated generation of files.
-          labels: documentation
-          assignees: Sleitnick
-          delete-branch: true
-          add-paths: |
-            README.md
-            filelist.json
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add filelist.json
+          git add README.md
+          git commit -m "Generated"
+          git push
+      # - name: Create Pull Request
+      #   uses: peter-evans/create-pull-request@v7
+      #   with:
+      #     title: Generated Files
+      #     body: Automated generation of files.
+      #     labels: documentation
+      #     assignees: Sleitnick
+      #     delete-branch: true
+      #     add-paths: |
+      #       README.md
+      #       filelist.json
