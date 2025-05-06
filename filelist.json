@@ -7,17 +7,17 @@
         "BufferReader.luau",
         "BufferWriter.luau",
         "DataTypeBuffer.luau",
-        "init.luau",
-        "Types.luau"
+        "Types.luau",
+        "init.luau"
       ]
     },
     {
       "name": "Comm",
       "path": "modules/comm",
       "files": [
-        "init.luau",
         "Types.luau",
-        "Util.luau"
+        "Util.luau",
+        "init.luau"
       ]
     },
     {
@@ -53,11 +53,11 @@
       "path": "modules/input",
       "files": [
         "Gamepad.luau",
-        "init.luau",
         "Keyboard.luau",
         "Mouse.luau",
         "PreferredInput.luau",
-        "Touch.luau"
+        "Touch.luau",
+        "init.luau"
       ]
     },
     {
@@ -134,9 +134,9 @@
       "name": "Silo",
       "path": "modules/silo",
       "files": [
-        "init.luau",
         "TableWatcher.luau",
-        "Util.luau"
+        "Util.luau",
+        "init.luau"
       ]
     },
     {
@@ -150,9 +150,9 @@
       "name": "Streamable",
       "path": "modules/streamable",
       "files": [
-        "init.luau",
         "Streamable.luau",
-        "StreamableUtil.luau"
+        "StreamableUtil.luau",
+        "init.luau"
       ]
     },
     {
