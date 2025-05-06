@@ -1,0 +1,215 @@
+{
+  "modules": [
+    {
+      "name": "BufferUtil",
+      "path": "modules/buffer-util",
+      "files": [
+        "BufferReader.luau",
+        "BufferWriter.luau",
+        "DataTypeBuffer.luau",
+        "init.luau",
+        "Types.luau"
+      ]
+    },
+    {
+      "name": "Comm",
+      "path": "modules/comm",
+      "files": [
+        "init.luau",
+        "Types.luau",
+        "Util.luau"
+      ]
+    },
+    {
+      "name": "Component",
+      "path": "modules/component",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Concur",
+      "path": "modules/concur",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "EnumList",
+      "path": "modules/enum-list",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Find",
+      "path": "modules/find",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Input",
+      "path": "modules/input",
+      "files": [
+        "Gamepad.luau",
+        "init.luau",
+        "Keyboard.luau",
+        "Mouse.luau",
+        "PreferredInput.luau",
+        "Touch.luau"
+      ]
+    },
+    {
+      "name": "Loader",
+      "path": "modules/loader",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Log",
+      "path": "modules/log",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Net",
+      "path": "modules/net",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Option",
+      "path": "modules/option",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "PID",
+      "path": "modules/pid",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Quaternion",
+      "path": "modules/quaternion",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Sequent",
+      "path": "modules/sequent",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Ser",
+      "path": "modules/ser",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Shake",
+      "path": "modules/shake",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Signal",
+      "path": "modules/signal",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Silo",
+      "path": "modules/silo",
+      "files": [
+        "init.luau",
+        "TableWatcher.luau",
+        "Util.luau"
+      ]
+    },
+    {
+      "name": "Spring",
+      "path": "modules/spring",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Streamable",
+      "path": "modules/streamable",
+      "files": [
+        "init.luau",
+        "Streamable.luau",
+        "StreamableUtil.luau"
+      ]
+    },
+    {
+      "name": "Symbol",
+      "path": "modules/symbol",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "TableUtil",
+      "path": "modules/table-util",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "TaskQueue",
+      "path": "modules/task-queue",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Timer",
+      "path": "modules/timer",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Tree",
+      "path": "modules/tree",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Trove",
+      "path": "modules/trove",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "TypedRemote",
+      "path": "modules/typed-remote",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "WaitFor",
+      "path": "modules/wait-for",
+      "files": [
+        "init.luau"
+      ]
+    }
+  ]
+}

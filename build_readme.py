@@ -1,9 +1,11 @@
 from pathlib import Path
 import re
 
+
 force_name = {
 	"pid": "PID"
 }
+
 
 def pretty_display_name(str: str):
 	if str in force_name:
@@ -12,6 +14,7 @@ def pretty_display_name(str: str):
 	split = list(map(lambda s: s[0:1].upper() + s[1:], split))
 	return "".join(split)
 
+
 def build():
 	readme = [
 		"[![CI](https://github.com/Sleitnick/RbxUtil/actions/workflows/ci.yaml/badge.svg)](https://github.com/Sleitnick/RbxUtil/actions/workflows/ci.yaml)",
@@ -19,10 +22,12 @@ def build():
 		"# RbxUtil\n",
 		"| Module | Dependency | Description |", "| -- | -- | -- |"
 	]
+	
 	name_pattern = re.compile(r"name\s*=\s*\"(.+)\"$")
 	version_pattern = re.compile(r"version\s*=\s*\"(.+)\"$")
 	description_pattern = re.compile(r"description\s*=\s*\"(.+)\"$")
 	display_name_pattern = re.compile(r".+/(.+)")
+
 	for path in sorted(Path("./modules").iterdir()):
 		with open(Path.joinpath(path, Path("wally.toml")), "r") as f:
 			lines = f.read().splitlines()
@@ -36,6 +41,7 @@ def build():
 					version = match_version.group(1)
 				elif match_description:
 					description = match_description.group(1)
+			
 			match_display_name = display_name_pattern.match(name)
 			display_name = pretty_display_name(match_display_name.group(1))
 			dependency = f"{display_name} = \"{name}@{version}\""
@@ -43,6 +49,7 @@ def build():
 
 	with open("README.md", "w", newline='\n') as readme_file:
 		readme_file.write("\n".join(readme) + "\n")
+
 
 if __name__ == "__main__":
 	build()
