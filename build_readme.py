@@ -41,7 +41,7 @@ def build():
 			dependency = f"{display_name} = \"{name}@{version}\""
 			readme.append(f"| [{display_name}](https://sleitnick.github.io/RbxUtil/api/{display_name}) | `{dependency}` | {description} |")
 
-	with open("README.md", "w") as readme_file:
+	with open("README.md", "w", newline='\n') as readme_file:
 		readme_file.write("\n".join(readme) + "\n")
 
 if __name__ == "__main__":
