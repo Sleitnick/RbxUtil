@@ -1,10 +1,13 @@
 from pathlib import Path
 import json
+import re
 
 
 force_name = {
 	"pid": "PID"
 }
+
+description_pattern = re.compile(r"description\s*=\s*\"(.+)\"$")
 
 
 def pretty_display_name(str: str):
@@ -15,13 +18,26 @@ def pretty_display_name(str: str):
 	return "".join(split)
 
 
+def get_wally_description(path: Path) -> str:
+	with open(Path.joinpath(path, Path("wally.toml")), "r") as f:
+		lines = f.read().splitlines()
+		for line in lines:
+			match_description = description_pattern.match(line)
+			if match_description:
+				return match_description.group(1)
+	
+	return ""
+
+
 def build():
 	filelist = {
 		"modules": [],
 	}
+
 	for path in sorted(Path("./modules").iterdir()):
 		module = {
 			"name": pretty_display_name(path.name),
+			"description": get_wally_description(path),
 			"path": "/".join(path.parts),
 			"files": [],
 		}
