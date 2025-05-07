@@ -8,10 +8,12 @@ force_name = {
 }
 
 description_pattern = re.compile(r"description\s*=\s*\"(.+)\"$")
+version_pattern = re.compile(r"version\s*=\s*\"(.+)\"$")
 
 
 class WallyInfo:
 	description: str = ""
+	version: str = ""
 	has_dependencies: bool = False
 
 
@@ -29,8 +31,11 @@ def get_wally_info(path: Path) -> WallyInfo:
 		lines = f.read().splitlines()
 		for line in lines:
 			match_description = description_pattern.match(line)
+			match_version = version_pattern.match(line)
 			if match_description:
 				info.description = match_description.group(1)
+			elif match_version:
+				info.version = match_version.group(1)
 			elif line == "[dependencies]":
 				info.has_dependencies = True
 	
@@ -48,6 +53,7 @@ def build():
 			"name": pretty_display_name(path.name),
 			"description": wally_info.description,
 			"has_dependencies": wally_info.has_dependencies,
+			"version": wally_info.version,
 			"path": "/".join(path.parts),
 			"files": [],
 		}
