@@ -10,6 +10,11 @@ force_name = {
 description_pattern = re.compile(r"description\s*=\s*\"(.+)\"$")
 
 
+class WallyInfo:
+	description: str = ""
+	has_dependencies: bool = False
+
+
 def pretty_display_name(str: str):
 	if str in force_name:
 		return force_name[str]
@@ -18,15 +23,18 @@ def pretty_display_name(str: str):
 	return "".join(split)
 
 
-def get_wally_description(path: Path) -> str:
+def get_wally_info(path: Path) -> WallyInfo:
+	info = WallyInfo()
 	with open(Path.joinpath(path, Path("wally.toml")), "r") as f:
 		lines = f.read().splitlines()
 		for line in lines:
 			match_description = description_pattern.match(line)
 			if match_description:
-				return match_description.group(1)
+				info.description = match_description.group(1)
+			elif line == "[dependencies]":
+				info.has_dependencies = True
 	
-	return ""
+	return info
 
 
 def build():
@@ -35,13 +43,15 @@ def build():
 	}
 
 	for path in sorted(Path("./modules").iterdir()):
+		wally_info = get_wally_info(path)
 		module = {
 			"name": pretty_display_name(path.name),
-			"description": get_wally_description(path),
+			"description": wally_info.description,
+			"has_dependencies": wally_info.has_dependencies,
 			"path": "/".join(path.parts),
 			"files": [],
 		}
-		for subpath in sorted(path.iterdir()):
+		for subpath in sorted(path.iterdir(), key=lambda p: p.name.lower()):
 			if subpath.is_file() and subpath.name.endswith(".luau") and not subpath.name.endswith(".test.luau"):
 				module["files"].append(subpath.name)
 		filelist["modules"].append(module)
