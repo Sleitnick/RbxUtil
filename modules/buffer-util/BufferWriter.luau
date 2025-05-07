@@ -17,11 +17,15 @@ local Types = require(script.Parent.Types)
 local BufferWriter = {}
 BufferWriter.__index = BufferWriter
 
+-- no fast call yet
+local buffer_create = buffer.create
+local buffer_tostring = buffer.tostring
+
 function BufferWriter.new(initialSize: number?): Types.BufferWriter
-	local size = if typeof(initialSize) == "number" then math.clamp(initialSize, 0, MAX_SIZE) else 0
+	local size = if type(initialSize) == "number" then math.clamp(initialSize, 0, MAX_SIZE) else 0
 
 	local self = setmetatable({
-		_buffer = buffer.create(size),
+		_buffer = buffer_create(size),
 		_cursor = 0,
 		_size = 0,
 	}, BufferWriter)
@@ -29,26 +33,26 @@ function BufferWriter.new(initialSize: number?): Types.BufferWriter
 	return self
 end
 
-function BufferWriter:_resizeUpTo(desiredSize: number)
+local function resizeUpTo(self, desiredSize: number)
 	if desiredSize > MAX_SIZE then
 		error(`cannot resize buffer to {desiredSize} bytes (max size: {MAX_SIZE} bytes)`, 3)
 	end
 
 	self._size = math.max(self._size, desiredSize)
-
-	if desiredSize < buffer.len(self._buffer) then
+	local oldBuffer = self._buffer
+	if desiredSize < buffer.len(oldBuffer) then
 		return
 	end
 
 	local newSize = desiredSize
 
 	local powerOfTwo = math.log(desiredSize, 2)
-	if math.floor(powerOfTwo) ~= powerOfTwo then
-		newSize = 2 ^ (math.floor(powerOfTwo) + 1)
+	local floored = math.floor(powerOfTwo)
+	if floored ~= powerOfTwo then
+		newSize = 2 ^ (floored + 1)
 	end
 
-	local oldBuffer = self._buffer
-	local newBuffer = buffer.create(newSize)
+	local newBuffer = buffer_create(newSize)
 
 	buffer.copy(newBuffer, 0, oldBuffer, 0)
 
@@ -59,79 +63,88 @@ end
 	Write a signed 8-bit integer to the buffer.
 ]=]
 function BufferWriter:WriteInt8(int8: number)
-	self:_resizeUpTo(self._cursor + 1)
-	buffer.writei8(self._buffer, self._cursor, int8)
-	self._cursor += 1
+	local cursor = self._cursor
+	resizeUpTo(self, cursor + 1)
+	buffer.writei8(self._buffer, cursor, int8)
+	self._cursor = cursor + 1
 end
 
 --[=[
 	Write an unsigned 8-bit integer to the buffer.
 ]=]
 function BufferWriter:WriteUInt8(uint8: number)
-	self:_resizeUpTo(self._cursor + 1)
-	buffer.writeu8(self._buffer, self._cursor, uint8)
-	self._cursor += 1
+	local cursor = self._cursor
+	resizeUpTo(self, cursor + 1)
+	buffer.writeu8(self._buffer, cursor, uint8)
+	self._cursor = cursor + 1
 end
+local writeUInt8 = BufferWriter.WriteUInt8
 
 --[=[
 	Write a signed 16-bit integer to the buffer.
 ]=]
 function BufferWriter:WriteInt16(int16: number)
-	self:_resizeUpTo(self._cursor + 2)
-	buffer.writei16(self._buffer, self._cursor, int16)
-	self._cursor += 2
+	local cursor = self._cursor
+	resizeUpTo(self, cursor + 2)
+	buffer.writei16(self._buffer, cursor, int16)
+	self._cursor = cursor + 2
 end
 
 --[=[
 	Write an unsigned 16-bit integer to the buffer.
 ]=]
 function BufferWriter:WriteUInt16(uint16: number)
-	self:_resizeUpTo(self._cursor + 2)
-	buffer.writeu16(self._buffer, self._cursor, uint16)
-	self._cursor += 2
+	local cursor = self._cursor
+	resizeUpTo(self, cursor + 2)
+	buffer.writeu16(self._buffer, cursor, uint16)
+	self._cursor = cursor + 2
 end
 
 --[=[
 	Write a signed 32-bit integer to the buffer.
 ]=]
 function BufferWriter:WriteInt32(int32: number)
-	self:_resizeUpTo(self._cursor + 4)
-	buffer.writei32(self._buffer, self._cursor, int32)
-	self._cursor += 4
+	local cursor = self._cursor
+	resizeUpTo(self, cursor + 4)
+	buffer.writei32(self._buffer, cursor, int32)
+	self._cursor = cursor + 4
 end
 
 --[=[
 	Write an unsigned 32-bit integer to the buffer.
 ]=]
 function BufferWriter:WriteUInt32(uint32: number)
-	self:_resizeUpTo(self._cursor + 4)
-	buffer.writeu32(self._buffer, self._cursor, uint32)
-	self._cursor += 4
+	local cursor = self._cursor
+	resizeUpTo(self, cursor + 4)
+	buffer.writeu32(self._buffer, cursor, uint32)
+	self._cursor = cursor + 4
 end
 
 --[=[
 	Write a 32-bit single-precision float to the buffer.
 ]=]
 function BufferWriter:WriteFloat32(f32: number)
-	self:_resizeUpTo(self._cursor + 4)
-	buffer.writef32(self._buffer, self._cursor, f32)
-	self._cursor += 4
+	local cursor = self._cursor
+	resizeUpTo(self, cursor + 4)
+	buffer.writef32(self._buffer, cursor, f32)
+	self._cursor = cursor + 4
 end
 
 --[=[
 	Write a 64-bit double-precision float to the buffer.
 ]=]
 function BufferWriter:WriteFloat64(f64: number)
-	self:_resizeUpTo(self._cursor + 8)
-	buffer.writef64(self._buffer, self._cursor, f64)
-	self._cursor += 8
+	local cursor = self._cursor
+	resizeUpTo(self, cursor + 8)
+	buffer.writef64(self._buffer, cursor, f64)
+	self._cursor = cursor + 8
 end
 
 --[=[
 	Write a boolean to the buffer.
 ]=]
 function BufferWriter:WriteBool(bool: boolean)
-	self:WriteUInt8(if bool then 1 else 0)
+	writeUInt8(self, if bool then 1 else 0)
 end
 
 --[=[
@@ -147,7 +160,7 @@ end
 function BufferWriter:WriteString(str: string, length: number?)
 	local len = if length then math.min(#str, length) else #str
 	local size = len + 4
-	self:_resizeUpTo(self._cursor + size)
+	resizeUpTo(self, self._cursor + size)
 	buffer.writeu32(self._buffer, self._cursor, len)
 	buffer.writestring(self._buffer, self._cursor + 4, str, length)
 	self._cursor += size
@@ -166,9 +179,10 @@ end
 ]=]
 function BufferWriter:WriteStringRaw(str: string, length: number?)
 	local len = if length then math.min(#str, length) else #str
-	self:_resizeUpTo(self._cursor + len)
-	buffer.writestring(self._buffer, self._cursor, str, length)
-	self._cursor += len
+	local cursor = self._cursor
+	resizeUpTo(self, cursor + len)
+	buffer.writestring(self._buffer, cursor, str, length)
+	self._cursor = cursor + len
 end
 
 --[=[
@@ -191,15 +205,14 @@ end
 	Shrinks the capacity of the buffer to the current data size.
 ]=]
 function BufferWriter:Shrink()
-	if self._size == buffer.len(self._buffer) then
+	local oldBuffer = self._buffer
+	local size = self._size
+	if size == buffer.len(oldBuffer) then
 		return
 	end
 
-	local oldBuffer = self._buffer
-	local newBuffer = buffer.create(self._size)
-
-	buffer.copy(newBuffer, 0, oldBuffer, 0, self._size)
-
+	local newBuffer = buffer_create(size)
+	buffer.copy(newBuffer, 0, oldBuffer, 0, size)
 	self._buffer = newBuffer
 end
 
@@ -259,7 +272,7 @@ end
 	Returns the string version of the internal buffer.
 ]=]
 function BufferWriter:ToString(): string
-	return buffer.tostring(self._buffer)
+	return buffer_tostring(self._buffer)
 end
 
 function BufferWriter:__tostring()
