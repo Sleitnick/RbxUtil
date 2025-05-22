@@ -346,16 +346,7 @@ end
 	```
 ]=]
 function Signal:FireDeferred(...)
-	task.defer(function(...)
-		local item = self._handlerListHead
-		while item do
-			local conn = item
-			if conn.Connected then
-				conn._fn(...)
-			end
-			item = item._next
-		end
-	end, ...)
+	task.defer(self.Fire, self, ...)
 end
 
 --[=[
