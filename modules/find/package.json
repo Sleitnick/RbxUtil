@@ -1,0 +1,17 @@
+{
+	"name": "@rbxutil/find",
+	"version": "1.0.0",
+	"main": "init.luau",
+	"repository": "github:Sleitnick/RbxUtil",
+	"license": "MIT",
+	"types": "index.d.ts",
+	"files": [
+		"./*",
+		"!*.toml",
+		"!*.json",
+		"!*.test.luau"
+	],
+	"publishConfig": {
+		"access": "public"
+	}
+}
