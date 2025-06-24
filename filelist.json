@@ -269,7 +269,7 @@
       "name": "Trove",
       "description": "Trove class for tracking and cleaning up objects",
       "has_dependencies": false,
-      "version": "1.5.0",
+      "version": "1.5.1",
       "path": "modules/trove",
       "files": [
         "init.luau"
