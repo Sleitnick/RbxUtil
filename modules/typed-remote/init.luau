@@ -53,6 +53,8 @@ export type Function<T..., R...> = Instance & {
 	OnServerInvoke: (player: Player, T...) -> R...,
 }
 
+type CreatorFn<T> = (name: string) -> T
+
 local IS_SERVER = game:GetService("RunService"):IsServer()
 
 --[=[
@@ -120,9 +122,9 @@ local TypedRemote = {}
 	local remoteFunc = RF("RemoteFunc")
 	```
 ]=]
-function TypedRemote.parent(parent: Instance?): ((name: string) -> RemoteFunction, (name: string) -> RemoteEvent, (
-	name: string
-) -> UnreliableRemoteEvent)
+function TypedRemote.parent(
+	parent: Instance?
+): (CreatorFn<RemoteFunction>, CreatorFn<RemoteEvent>, CreatorFn<UnreliableRemoteEvent>)
 	return function(name: string)
 		return TypedRemote.func(name, parent)
 	end, function(name: string)
