@@ -120,7 +120,7 @@ local TypedRemote = {}
 	local remoteFunc = RF("RemoteFunc")
 	```
 ]=]
-function TypedRemote.parent(parent: Instance?)
+function TypedRemote.parent(parent: Instance?): ((name: string) -> RemoteFunction, (name: string) -> RemoteEvent, (name: string) -> UnreliableRemoteEvent)
 	return function(name: string)
 		return TypedRemote.func(name, parent)
 	end, function(name: string)
@@ -174,7 +174,7 @@ end
 	If the `parent` argument is not included or is `nil`, then it defaults to the parent of
 	this TypedRemote ModuleScript.
 ]=]
-function TypedRemote.unreliableEvent(name: string, parent: Instance?): UnreliableRemoteEvent 
+function TypedRemote.unreliableEvent(name: string, parent: Instance?): UnreliableRemoteEvent
 	local ure: UnreliableRemoteEvent
 	if IS_SERVER then
 		ure = Instance.new("UnreliableRemoteEvent")
