@@ -119,7 +119,7 @@ end
 	If the `parent` argument is not included or is `nil`, then it defaults to the parent of
 	this TypedRemote ModuleScript.
 ]=]
-function TypedRemote.func(name: string, parent: Instance): RemoteFunction
+function TypedRemote.func(name: string, parent: Instance?): RemoteFunction
 	local rf: RemoteFunction
 	if IS_SERVER then
 		rf = Instance.new("RemoteFunction")
