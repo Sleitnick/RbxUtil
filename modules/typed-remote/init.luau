@@ -120,7 +120,9 @@ local TypedRemote = {}
 	local remoteFunc = RF("RemoteFunc")
 	```
 ]=]
-function TypedRemote.parent(parent: Instance?): ((name: string) -> RemoteFunction, (name: string) -> RemoteEvent, (name: string) -> UnreliableRemoteEvent)
+function TypedRemote.parent(parent: Instance?): ((name: string) -> RemoteFunction, (name: string) -> RemoteEvent, (
+	name: string
+) -> UnreliableRemoteEvent)
 	return function(name: string)
 		return TypedRemote.func(name, parent)
 	end, function(name: string)
