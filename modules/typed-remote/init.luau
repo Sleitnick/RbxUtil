@@ -173,7 +173,7 @@ function TypedRemote.event(name: string, parent: Instance?): RemoteEvent
 end
 
 --[=[
-	Creates a UnreliableRemoteEvent with `name` and parents it inside of `parent`.
+	Creates an UnreliableRemoteEvent with `name` and parents it inside of `parent`.
 	
 	If the `parent` argument is not included or is `nil`, then it defaults to the parent of
 	this TypedRemote ModuleScript.
