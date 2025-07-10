@@ -7,6 +7,7 @@ export type Trove = {
 	Clone: <T>(self: Trove, instance: T & Instance) -> T,
 	Construct: <T, A...>(self: Trove, class: Constructable<T, A...>, A...) -> T,
 	Connect: (self: Trove, signal: SignalLike | RBXScriptSignal, fn: (...any) -> ...any) -> ConnectionLike,
+	Once: (self: Trove, signal: SignalLike | RBXScriptSignal, fn: (...any) -> ...any) -> ConnectionLike,
 	BindToRenderStep: (self: Trove, name: string, priority: number, fn: (dt: number) -> ()) -> (),
 	AddPromise: <T>(self: Trove, promise: T & PromiseLike) -> T,
 	Add: <T>(self: Trove, object: T & Trackable, cleanupMethod: string?) -> T,
@@ -340,6 +341,35 @@ function Trove.Connect(self: TroveInternal, signal: SignalLike, fn: (...any) -> 
 	end
 
 	return self:Add(signal:Connect(fn))
+end
+
+--[=[
+	@method Once
+	@within Trove
+	@param signal RBXScriptSignal
+	@param fn (...: any) -> ()
+	@return RBXScriptConnection
+	Connects the function to the signal, adds the connection
+	to the trove, and then returns the connection.
+	Removes itself from trove once fired.
+
+	```lua
+	trove:Once(workspace.ChildAdded, function(instance)
+		print(instance.Name .. " added to workspace")
+	end)
+	```
+]=]
+function Trove.Once(self: TroveInternal, signal: SignalLike, fn: (...any) -> ...any)
+	if self._cleaning then
+		error("Cannot call trove:Connect() while cleaning", 2)
+	end
+	
+	local _signal = self:Add(signal:Once(fn))
+	self:Add(signal:Once(function()
+		self:Remove(_signal)
+	end))
+
+	return _signal
 end
 
 --[=[
