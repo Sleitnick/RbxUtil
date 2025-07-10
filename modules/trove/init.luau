@@ -4,6 +4,7 @@ local RunService = game:GetService("RunService")
 
 export type Trove = {
 	Extend: (self: Trove) -> Trove,
+	TempExtend: (self: Trove) -> Trove,
 	Clone: <T>(self: Trove, instance: T & Instance) -> T,
 	Construct: <T, A...>(self: Trove, class: Constructable<T, A...>, A...) -> T,
 	Connect: (self: Trove, signal: SignalLike | RBXScriptSignal, fn: (...any) -> ...any) -> ConnectionLike,
@@ -461,6 +462,55 @@ function Trove.Extend(self: TroveInternal)
 	end
 
 	return self:Construct(Trove)
+end
+
+--[=[
+	@method TempExtend
+	@within Trove
+	@return Trove
+	This is just shorthand for `Trove:Extend()` with a self cleanup from
+	the ascendant trove. the trove object is present, but the class itself isn't.
+	
+	:::note
+	This does _not_ clone the trove. In other words, the objects in the
+	trove are not given to the new constructed trove. This is simply to
+	construct a new Trove and add it as an object to track.
+	
+	Calling `Trove:Clean()` on sub trove will clean it from the ascending trove
+	:::
+
+	```lua
+	local trove = Trove.new()
+	
+	trove:Connect(UserInputService.InputBegan, function(Input, Process)
+		if Input.UserInputState ~= Enum.UserInputState.Begin then return end
+		if Input.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
+		
+		print("Holding!")
+		
+		local tempTrove = trove:TempExtend()
+		tempTrove:Connect(UserInputService.InputEnded, function(Input, Process)
+			if Input.UserInputState ~= Enum.UserInputState.End then return end
+			if Input.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
+			
+			print("Release!")
+			
+			tempTrove:Clean()
+		end)
+	end)
+	```
+]=]
+function Trove.TempExtend(self: TroveInternal)
+	if self._cleaning then
+		error("cannot call trove:TempExtend() while cleaning", 2)
+	end
+
+	local _Trove = self:Extend()
+	_Trove:Add(function()
+		self:Remove(_Trove)
+	end)
+
+	return _Trove
 end
 
 --[=[
