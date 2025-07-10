@@ -246,8 +246,12 @@ function Trove.Add(self: TroveInternal, object: Trackable, cleanupMethod: string
 		error("cannot call trove:Add() while cleaning", 2)
 	end
 
-	local cleanup = GetObjectCleanupFunction(object, cleanupMethod)
-	table.insert(self._objects, { object, cleanup })
+	if typeof(object) == "Instance" then
+		table.insert(self._instances, object)
+	else
+		local cleanup = GetObjectCleanupFunction(object, cleanupMethod)
+		table.insert(self._objects, { object, cleanup })
+	end
 
 	return object
 end
