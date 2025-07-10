@@ -19,6 +19,7 @@ export type Trove = {
 
 type TroveInternal = Trove & {
 	_objects: { any },
+	_instances: { Instance },
 	_cleaning: boolean,
 	_findAndRemoveFromObjects: (self: TroveInternal, object: any, cleanup: boolean) -> boolean,
 	_cleanupObject: (self: TroveInternal, object: any, cleanupMethod: string?) -> (),
@@ -181,6 +182,10 @@ function Trove.new(): Trove
 	local self = setmetatable({}, Trove)
 
 	self._objects = {}
+	self._instances = setmetatable({}, {
+		__mode = "v"
+	}) -- weak value table for instances
+
 	self._cleaning = false
 
 	return (self :: any) :: Trove
@@ -485,8 +490,13 @@ function Trove.Clean(self: TroveInternal)
 	for _, obj in self._objects do
 		self:_cleanupObject(obj[1], obj[2])
 	end
+	for _, obj in self._instances do
+		obj:Destroy()
+	end
 
 	table.clear(self._objects)
+	table.clear(self._instances)
+
 	self._cleaning = false
 end
 
