@@ -18,8 +18,8 @@ export type Trove = {
 }
 
 type TroveInternal = Trove & {
-	_objects: { any },
-	_instances: { Instance },
+	_objects: { Trackable },
+	_instances: { [Instance]: boolean },
 	_cleaning: boolean,
 	_findAndRemoveFromObjects: (self: TroveInternal, object: any, cleanup: boolean) -> boolean,
 	_cleanupObject: (self: TroveInternal, object: any, cleanupMethod: string?) -> (),
@@ -183,8 +183,8 @@ function Trove.new(): Trove
 
 	self._objects = {}
 	self._instances = setmetatable({}, {
-		__mode = "v"
-	}) -- weak value table for instances
+		__mode = "k"
+	})
 
 	self._cleaning = false
 
@@ -247,7 +247,7 @@ function Trove.Add(self: TroveInternal, object: Trackable, cleanupMethod: string
 	end
 
 	if typeof(object) == "Instance" then
-		table.insert(self._instances, object)
+		self._instances[object :: Instance] = true
 	else
 		local cleanup = GetObjectCleanupFunction(object, cleanupMethod)
 		table.insert(self._objects, { object, cleanup })
@@ -494,7 +494,7 @@ function Trove.Clean(self: TroveInternal)
 	for _, obj in self._objects do
 		self:_cleanupObject(obj[1], obj[2])
 	end
-	for _, obj in self._instances do
+	for obj, _ in self._instances do
 		obj:Destroy()
 	end
 
@@ -538,8 +538,16 @@ function Trove.WrapClean(self: TroveInternal)
 end
 
 function Trove._findAndRemoveFromObjects(self: TroveInternal, object: any, cleanup: boolean): boolean
-	local objects = self._objects
+	if self._instances[object] then
+		self._instances[object] = nil
+		if cleanup then
+			object:Destroy()
+		end
 
+		return true
+	end
+
+	local objects = self._objects
 	for i, obj in objects do
 		if obj[1] == object then
 			local n = #objects
