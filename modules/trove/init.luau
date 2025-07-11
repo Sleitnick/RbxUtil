@@ -364,11 +364,12 @@ function Trove.Once(self: TroveInternal, signal: SignalLike, fn: (...any) -> ...
 		error("Cannot call trove:Connect() while cleaning", 2)
 	end
 	
-	local _signal = self:Add(signal:Once(fn))
-	self:Add(signal:Once(function()
-		self:Remove(_signal)
+	local _signal
+	_signal = self:Add(signal:Once(function(...)
+		fn(...)
+		self:_findAndRemoveFromObjects(_signal, true)
 	end))
-
+	
 	return _signal
 end
 
