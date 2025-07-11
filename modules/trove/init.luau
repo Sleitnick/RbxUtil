@@ -507,7 +507,7 @@ function Trove.TempExtend(self: TroveInternal)
 
 	local _Trove = self:Extend()
 	_Trove:Add(function()
-		self:Remove(_Trove)
+		self:_findAndRemoveFromObjects(_Trove, true)
 	end)
 
 	return _Trove
