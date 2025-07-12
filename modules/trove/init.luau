@@ -349,9 +349,9 @@ end
 	@param signal RBXScriptSignal
 	@param fn (...: any) -> ()
 	@return RBXScriptConnection
-	Connects the function to the signal, adds the connection
+	Connects the function to the signal once, adds the connection
 	to the trove, and then returns the connection.
-	Removes itself from trove once fired.
+	Removes itself from once fired.
 
 	```lua
 	trove:Once(workspace.ChildAdded, function(instance)
@@ -361,7 +361,7 @@ end
 ]=]
 function Trove.Once(self: TroveInternal, signal: SignalLike, fn: (...any) -> ...any)
 	if self._cleaning then
-		error("Cannot call trove:Connect() while cleaning", 2)
+		error("Cannot call trove:Once() while cleaning", 2)
 	end
 	
 	local _signal
