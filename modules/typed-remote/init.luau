@@ -49,9 +49,9 @@ export type UnreliableEvent<T...> = Event<T...>
 	.OnServerInvoke (player: Player, T...) -> R...,
 ]=]
 export type Function<T..., R...> = Instance & {
-    InvokeClient: (self: Function<T..., R...>, player: Player, T...) -> R...,
-   	InvokeServer: (self: Function<T..., R...>, T...) -> R...,
-    OnClientInvoke: (T...) -> R...,
+	InvokeClient: (self: Function<T..., R...>, player: Player, T...) -> R...,
+	InvokeServer: (self: Function<T..., R...>, T...) -> R...,
+	OnClientInvoke: (T...) -> R...,
 	OnServerInvoke: (player: Player, T...) -> R...,
 }
 
