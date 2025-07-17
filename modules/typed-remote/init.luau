@@ -49,7 +49,9 @@ export type UnreliableEvent<T...> = Event<T...>
 	.OnServerInvoke (player: Player, T...) -> R...,
 ]=]
 export type Function<T..., R...> = Instance & {
-	InvokeServer: (self: Function<T..., R...>, T...) -> R...,
+    InvokeClient: (self: Function<T..., R...>, player: Player, T...) -> R...,
+   	InvokeServer: (self: Function<T..., R...>, T...) -> R...,
+    OnClientInvoke: (T...) -> R...,
 	OnServerInvoke: (player: Player, T...) -> R...,
 }
 
@@ -136,7 +138,7 @@ end
 
 --[=[
 	Creates a RemoteFunction with `name` and parents it inside of `parent`.
-	
+
 	If the `parent` argument is not included or is `nil`, then it defaults to the parent of
 	this TypedRemote ModuleScript.
 ]=]
@@ -155,7 +157,7 @@ end
 
 --[=[
 	Creates a RemoteEvent with `name` and parents it inside of `parent`.
-	
+
 	If the `parent` argument is not included or is `nil`, then it defaults to the parent of
 	this TypedRemote ModuleScript.
 ]=]
@@ -174,7 +176,7 @@ end
 
 --[=[
 	Creates an UnreliableRemoteEvent with `name` and parents it inside of `parent`.
-	
+
 	If the `parent` argument is not included or is `nil`, then it defaults to the parent of
 	this TypedRemote ModuleScript.
 ]=]
