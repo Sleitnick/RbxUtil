@@ -36,7 +36,7 @@ function BufferWriter:_resizeUpTo(desiredSize: number)
 
 	self._size = math.max(self._size, desiredSize)
 
-	if desiredSize < buffer.len(self._buffer) then
+	if desiredSize <= buffer.len(self._buffer) then
 		return
 	end
 
