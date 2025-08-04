@@ -11,6 +11,7 @@ export type Trove = {
 	AddPromise: <T>(self: Trove, promise: T & PromiseLike) -> T,
 	Add: <T>(self: Trove, object: T & Trackable, cleanupMethod: string?) -> T,
 	Remove: <T>(self: Trove, object: T & Trackable) -> boolean,
+	Forget: <T>(self: Trove, object: T & Trackable) -> boolean,
 	Clean: (self: Trove) -> (),
 	WrapClean: (self: Trove) -> () -> (),
 	AttachToInstance: (self: Trove, instance: Instance) -> RBXScriptConnection,
@@ -281,7 +282,7 @@ end
 
 	If a function is given, the function will
 	be called with the given arguments.
-	
+
 	The result from either of the two options
 	will be added to the trove.
 
@@ -432,6 +433,26 @@ function Trove.Remove(self: TroveInternal, object: Trackable): boolean
 	end
 
 	return self:_findAndRemoveFromObjects(object, true)
+end
+
+--[=[
+	@method Forget
+	@within Trove
+	@param object any
+	Removes the object from the Trove but does _not_ clean it up.
+
+	```lua
+	local part = Instance.new("Part")
+	trove:Add(part)
+	trove:Forget(part) -- the part is unaffected and the trove will not destroy it when cleaned
+	```
+]=]
+function Trove.Forget(self: TroveInternal, object: Trackable): boolean
+	if self._cleaning then
+		error("cannot call trove:Forget() while cleaning", 2)
+	end
+
+	return self:_findAndRemoveFromObjects(object, false)
 end
 
 --[=[
