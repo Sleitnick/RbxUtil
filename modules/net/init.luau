@@ -15,7 +15,12 @@ local function getEventContainer(): Instance
 	end
 
 	if RunService:IsServer() then
-		local eventContainer = Instance.new("Folder")
+		local eventContainer = ReplicatedStorage:FindFirstChild(FOLDER_NAME)
+		if eventContainer then
+			return eventContainer
+		end
+
+		eventContainer = Instance.new("Folder")
 		eventContainer.Name = FOLDER_NAME
 		eventContainer.Parent = ReplicatedStorage
 		return eventContainer
