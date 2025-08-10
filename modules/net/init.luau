@@ -1,4 +1,5 @@
 local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 --[=[
 	@class Net
@@ -7,6 +8,14 @@ local RunService = game:GetService("RunService")
 ]=]
 local Net = {}
 local eventContainer: Instance = nil
+
+if script:IsDescendantOf(ReplicatedStorage) then
+	eventContainer = script
+else
+	eventContainer = Instance.new("Folder")
+	eventContainer.Name = "NetEvents"
+	eventContainer.Parent = ReplicatedStorage
+end
 
 --[=[
 	Gets a RemoteEvent with the given name.
