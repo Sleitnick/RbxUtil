@@ -8,20 +8,24 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 ]=]
 local Net = {}
 
-local eventContainer: Instance = nil
-if script:IsDescendantOf(ReplicatedStorage) then
-	eventContainer = script
-else
+function getEventContainer(): Instance
+	if script:IsDescendantOf(ReplicatedStorage) then
+		return script
+	end
+
 	if RunService:IsServer() then
-		eventContainer = Instance.new("Folder")
+		local eventContainer = Instance.new("Folder")
 		eventContainer.Name = "NetEvents"
 		eventContainer.Parent = ReplicatedStorage
-	else
-		eventContainer = ReplicatedStorage:WaitForChild("NetEvents", 10)
-		if not eventContainer then
-			error("Failed to find NetEvents folder in ReplicatedStorage, was Net required on the server?", 2)
-		end
+		return eventContainer
 	end
+
+	local eventContainer = ReplicatedStorage:WaitForChild("NetEvents", 10)
+	if not eventContainer then
+		error("Failed to find NetEvents folder in ReplicatedStorage, was Net required on the server?", 2)
+	end
+
+	return eventContainer
 end
 
 --[=[
@@ -40,6 +44,8 @@ end
 	```
 ]=]
 function Net:RemoteEvent(name: string): RemoteEvent
+	local eventContainer = getEventContainer()
+
 	name = "RE/" .. name
 	if RunService:IsServer() then
 		local r = eventContainer:FindFirstChild(name)
@@ -74,6 +80,8 @@ end
 	```
 ]=]
 function Net:UnreliableRemoteEvent(name: string): UnreliableRemoteEvent
+	local eventContainer = getEventContainer()
+
 	name = "URE/" .. name
 	if RunService:IsServer() then
 		local r = eventContainer:FindFirstChild(name)
@@ -150,6 +158,8 @@ end
 	```
 ]=]
 function Net:RemoteFunction(name: string): RemoteFunction
+	local eventContainer = getEventContainer()
+
 	name = "RF/" .. name
 	if RunService:IsServer() then
 		local r = eventContainer:FindFirstChild(name)
@@ -201,7 +211,7 @@ end
 	and not during runtime.
 ]=]
 function Net:Clean()
-	eventContainer:ClearAllChildren()
+	getEventContainer():ClearAllChildren()
 end
 
 return Net
