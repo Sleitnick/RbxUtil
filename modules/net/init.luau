@@ -12,9 +12,16 @@ local eventContainer: Instance = nil
 if script:IsDescendantOf(ReplicatedStorage) then
 	eventContainer = script
 else
-	eventContainer = Instance.new("Folder")
-	eventContainer.Name = "NetEvents"
-	eventContainer.Parent = ReplicatedStorage
+	if RunService:IsServer() then
+		eventContainer = Instance.new("Folder")
+		eventContainer.Name = "NetEvents"
+		eventContainer.Parent = ReplicatedStorage
+	else
+		eventContainer = ReplicatedStorage:WaitForChild("NetEvents", 10)
+		if not eventContainer then
+			error("Failed to find NetEvents folder in ReplicatedStorage, was Net required on the server?", 2)
+		end
+	end
 end
 
 --[=[
