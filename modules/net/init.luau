@@ -8,7 +8,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 ]=]
 local Net = {}
 
-function getEventContainer(): Instance
+local function getEventContainer(): Instance
 	if script:IsDescendantOf(ReplicatedStorage) then
 		return script
 	end
