@@ -22,7 +22,7 @@ local function getEventContainer(): Instance
 
 	local eventContainer = ReplicatedStorage:WaitForChild("NetEvents", 10)
 	if not eventContainer then
-		error("Failed to find NetEvents folder in ReplicatedStorage, was Net required on the server?", 2)
+		error("Failed to find NetEvents folder in ReplicatedStorage, has the server made any events yet?", 2)
 	end
 
 	return eventContainer
