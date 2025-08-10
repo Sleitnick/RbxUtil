@@ -6,6 +6,7 @@ local RunService = game:GetService("RunService")
 	RemoteEvents and RemoteFunctions.
 ]=]
 local Net = {}
+local eventContainer: Instance = nil
 
 --[=[
 	Gets a RemoteEvent with the given name.
@@ -25,15 +26,15 @@ local Net = {}
 function Net:RemoteEvent(name: string): RemoteEvent
 	name = "RE/" .. name
 	if RunService:IsServer() then
-		local r = script:FindFirstChild(name)
+		local r = eventContainer:FindFirstChild(name)
 		if not r then
 			r = Instance.new("RemoteEvent")
 			r.Name = name
-			r.Parent = script
+			r.Parent = eventContainer
 		end
 		return r
 	else
-		local r = script:WaitForChild(name, 10)
+		local r = eventContainer:WaitForChild(name, 10)
 		if not r then
 			error("Failed to find RemoteEvent: " .. name, 2)
 		end
@@ -59,15 +60,15 @@ end
 function Net:UnreliableRemoteEvent(name: string): UnreliableRemoteEvent
 	name = "URE/" .. name
 	if RunService:IsServer() then
-		local r = script:FindFirstChild(name)
+		local r = eventContainer:FindFirstChild(name)
 		if not r then
 			r = Instance.new("UnreliableRemoteEvent")
 			r.Name = name
-			r.Parent = script
+			r.Parent = eventContainer
 		end
 		return r
 	else
-		local r = script:WaitForChild(name, 10)
+		local r = eventContainer:WaitForChild(name, 10)
 		if not r then
 			error("Failed to find UnreliableRemoteEvent: " .. name, 2)
 		end
@@ -135,15 +136,15 @@ end
 function Net:RemoteFunction(name: string): RemoteFunction
 	name = "RF/" .. name
 	if RunService:IsServer() then
-		local r = script:FindFirstChild(name)
+		local r = eventContainer:FindFirstChild(name)
 		if not r then
 			r = Instance.new("RemoteFunction")
 			r.Name = name
-			r.Parent = script
+			r.Parent = eventContainer
 		end
 		return r
 	else
-		local r = script:WaitForChild(name, 10)
+		local r = eventContainer:WaitForChild(name, 10)
 		if not r then
 			error("Failed to find RemoteFunction: " .. name, 2)
 		end
@@ -184,7 +185,7 @@ end
 	and not during runtime.
 ]=]
 function Net:Clean()
-	script:ClearAllChildren()
+	eventContainer:ClearAllChildren()
 end
 
 return Net
