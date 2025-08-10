@@ -1,4 +1,5 @@
 local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 --[=[
 	@class Net
@@ -6,6 +7,32 @@ local RunService = game:GetService("RunService")
 	RemoteEvents and RemoteFunctions.
 ]=]
 local Net = {}
+
+local FOLDER_NAME = "NetEvents"
+local function getEventContainer(): Instance
+	if script:IsDescendantOf(ReplicatedStorage) then
+		return script
+	end
+
+	if RunService:IsServer() then
+		local eventContainer = ReplicatedStorage:FindFirstChild(FOLDER_NAME)
+		if eventContainer then
+			return eventContainer
+		end
+
+		eventContainer = Instance.new("Folder")
+		eventContainer.Name = FOLDER_NAME
+		eventContainer.Parent = ReplicatedStorage
+		return eventContainer
+	end
+
+	local eventContainer = ReplicatedStorage:WaitForChild(FOLDER_NAME, 10)
+	if not eventContainer then
+		error(`Failed to find {FOLDER_NAME} folder in ReplicatedStorage, has the server made any events yet?`, 2)
+	end
+
+	return eventContainer
+end
 
 --[=[
 	Gets a RemoteEvent with the given name.
@@ -23,17 +50,19 @@ local Net = {}
 	```
 ]=]
 function Net:RemoteEvent(name: string): RemoteEvent
+	local eventContainer = getEventContainer()
+
 	name = "RE/" .. name
 	if RunService:IsServer() then
-		local r = script:FindFirstChild(name)
+		local r = eventContainer:FindFirstChild(name)
 		if not r then
 			r = Instance.new("RemoteEvent")
 			r.Name = name
-			r.Parent = script
+			r.Parent = eventContainer
 		end
 		return r
 	else
-		local r = script:WaitForChild(name, 10)
+		local r = eventContainer:WaitForChild(name, 10)
 		if not r then
 			error("Failed to find RemoteEvent: " .. name, 2)
 		end
@@ -57,17 +86,19 @@ end
 	```
 ]=]
 function Net:UnreliableRemoteEvent(name: string): UnreliableRemoteEvent
+	local eventContainer = getEventContainer()
+
 	name = "URE/" .. name
 	if RunService:IsServer() then
-		local r = script:FindFirstChild(name)
+		local r = eventContainer:FindFirstChild(name)
 		if not r then
 			r = Instance.new("UnreliableRemoteEvent")
 			r.Name = name
-			r.Parent = script
+			r.Parent = eventContainer
 		end
 		return r
 	else
-		local r = script:WaitForChild(name, 10)
+		local r = eventContainer:WaitForChild(name, 10)
 		if not r then
 			error("Failed to find UnreliableRemoteEvent: " .. name, 2)
 		end
@@ -133,17 +164,19 @@ end
 	```
 ]=]
 function Net:RemoteFunction(name: string): RemoteFunction
+	local eventContainer = getEventContainer()
+
 	name = "RF/" .. name
 	if RunService:IsServer() then
-		local r = script:FindFirstChild(name)
+		local r = eventContainer:FindFirstChild(name)
 		if not r then
 			r = Instance.new("RemoteFunction")
 			r.Name = name
-			r.Parent = script
+			r.Parent = eventContainer
 		end
 		return r
 	else
-		local r = script:WaitForChild(name, 10)
+		local r = eventContainer:WaitForChild(name, 10)
 		if not r then
 			error("Failed to find RemoteFunction: " .. name, 2)
 		end
@@ -184,7 +217,7 @@ end
 	and not during runtime.
 ]=]
 function Net:Clean()
-	script:ClearAllChildren()
+	getEventContainer():ClearAllChildren()
 end
 
 return Net
