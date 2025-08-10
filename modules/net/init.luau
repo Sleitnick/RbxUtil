@@ -8,6 +8,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 ]=]
 local Net = {}
 
+local FOLDER_NAME = "NetEvents"
 local function getEventContainer(): Instance
 	if script:IsDescendantOf(ReplicatedStorage) then
 		return script
@@ -15,14 +16,14 @@ local function getEventContainer(): Instance
 
 	if RunService:IsServer() then
 		local eventContainer = Instance.new("Folder")
-		eventContainer.Name = "NetEvents"
+		eventContainer.Name = FOLDER_NAME
 		eventContainer.Parent = ReplicatedStorage
 		return eventContainer
 	end
 
-	local eventContainer = ReplicatedStorage:WaitForChild("NetEvents", 10)
+	local eventContainer = ReplicatedStorage:WaitForChild(FOLDER_NAME, 10)
 	if not eventContainer then
-		error("Failed to find NetEvents folder in ReplicatedStorage, has the server made any events yet?", 2)
+		error(`Failed to find {FOLDER_NAME} folder in ReplicatedStorage, has the server made any events yet?`, 2)
 	end
 
 	return eventContainer
