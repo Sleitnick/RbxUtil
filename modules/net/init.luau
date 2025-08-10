@@ -7,8 +7,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 	RemoteEvents and RemoteFunctions.
 ]=]
 local Net = {}
-local eventContainer: Instance = nil
 
+local eventContainer: Instance = nil
 if script:IsDescendantOf(ReplicatedStorage) then
 	eventContainer = script
 else
