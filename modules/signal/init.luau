@@ -59,6 +59,24 @@ local function runEventHandlerInFreeThread(...)
 	end
 end
 
+local function disconnectSignalConnectionsStartingFromItem(self: any, item: any)
+	while item do
+		item.Connected = false
+		item = item._next
+	end
+
+	local yieldedThreads = rawget(self, "_yieldedThreads")
+	if yieldedThreads then
+		for thread in yieldedThreads do
+			if coroutine.status(thread) == "suspended" then
+				warn(debug.traceback(thread, "signal disconnected; yielded thread cancelled", 2))
+				task.cancel(thread)
+			end
+		end
+		table.clear(self._yieldedThreads)
+	end
+end
+
 --[=[
 	@within Signal
 	@interface SignalConnection
@@ -284,29 +302,16 @@ end
 -- Disconnect all handlers. Since we use a linked list it suffices to clear the
 -- reference to the head handler.
 --[=[
-	Disconnects all connections from the signal.
+	Immediately disconnects all connections from the signal.
 	```lua
 	signal:DisconnectAll()
 	```
 ]=]
 function Signal:DisconnectAll()
 	local item = self._handlerListHead
-	while item do
-		item.Connected = false
-		item = item._next
-	end
 	self._handlerListHead = false
 
-	local yieldedThreads = rawget(self, "_yieldedThreads")
-	if yieldedThreads then
-		for thread in yieldedThreads do
-			if coroutine.status(thread) == "suspended" then
-				warn(debug.traceback(thread, "signal disconnected; yielded thread cancelled", 2))
-				task.cancel(thread)
-			end
-		end
-		table.clear(self._yieldedThreads)
-	end
+	disconnectSignalConnectionsStartingFromItem(self, item)
 end
 
 -- Signal:Fire(...) implemented by running the handler functions on the
@@ -401,18 +406,24 @@ end
 	`Signal.Wrap`. Connections should be properly GC'd once the signal
 	is no longer referenced anywhere. However, it is still good practice
 	to include ways to strictly clean up resources. Calling `Destroy`
-	on a signal will also disconnect all connections immediately.
+	on a signal will disconnect all connections upon the next resumption
+	cycle.
 	```lua
 	signal:Destroy()
 	```
 ]=]
 function Signal:Destroy()
-	self:DisconnectAll()
+	local item = self._handlerListHead
+	self._handlerListHead = false
 
-	local proxyHandler = rawget(self, "_proxyHandler")
-	if proxyHandler then
-		proxyHandler:Disconnect()
-	end
+	task.defer(function()
+		disconnectSignalConnectionsStartingFromItem(self, item)
+
+		local proxyHandler = rawget(self, "_proxyHandler")
+		if proxyHandler then
+			proxyHandler:Disconnect()
+		end
+	end)
 end
 
 -- Make signal strict
