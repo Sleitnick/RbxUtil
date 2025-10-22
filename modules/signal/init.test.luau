@@ -16,7 +16,7 @@ local function AwaitCondition(predicate: () -> boolean, timeout: number?)
 	end
 end
 
-local function DeferCondition(predicate: () -> boolean)
+local function DeferCondition(predicate: () -> any)
 	local thread = coroutine.running()
 	task.defer(function()
 		local result = predicate()
@@ -78,7 +78,7 @@ return function(ctx: Test.TestContext)
 			signal:FireDeferred(send)
 			ctx:Expect(DeferCondition(function()
 				return (send == value)
-			end, 1)):ToBe(true)
+			end)):ToBe(true)
 		end)
 
 		ctx:Test("should be able to fire a reference based argument", function()
@@ -90,7 +90,7 @@ return function(ctx: Test.TestContext)
 			signal:FireDeferred(send)
 			ctx:Expect(DeferCondition(function()
 				return (send == value)
-			end, 1)):ToBe(true)
+			end)):ToBe(true)
 		end)
 	end)
 
@@ -211,7 +211,6 @@ return function(ctx: Test.TestContext)
 
 		ctx:Test("should not fire deferred to connections disconnected during the same resumption cycle", function()
 			local a = 0
-			local c
 			local c = signal:Connect(function()
 				a += 1
 			end)
