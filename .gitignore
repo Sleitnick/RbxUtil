@@ -10,3 +10,4 @@ packages/*/Packages
 *.rbxl
 *.rbxl.lock
 sourcemap.json
+*.code-workspace

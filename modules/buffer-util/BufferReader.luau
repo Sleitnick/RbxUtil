@@ -13,35 +13,38 @@ local Types = require(script.Parent.Types)
 local BufferReader = {}
 BufferReader.__index = BufferReader
 
+-- these don't have fast call yet
+local buffer_fromstring = buffer.fromstring
+
+local function fromBuffer(buf: buffer): Types.BufferReader
+	return setmetatable({
+		_buffer = buf,
+		_size = buffer.len(buf),
+		_cursor = 0,
+	}, BufferReader) :: never
+end
+local function fromString(str: string)
+	return fromBuffer(buffer_fromstring(str))
+end
+
 function BufferReader.new(buf: string | buffer | Types.BufferWriter): Types.BufferReader
-	if typeof(buf) == "string" then
-		return BufferReader.fromString(buf)
-	elseif typeof(buf) == "buffer" then
-		return BufferReader.fromBuffer(buf)
-	elseif typeof(buf) == "table" and getmetatable(buf :: any) == BufferWriter then
-		return BufferReader.fromBuffer(buf:GetBuffer())
+	if type(buf) == "string" then
+		return fromString(buf)
+	elseif type(buf) == "buffer" then
+		return fromBuffer(buf)
+	elseif type(buf) == "table" and getmetatable(buf :: any) == BufferWriter then
+		return fromBuffer((buf :: never)._buffer)
 	end
 
 	error(`expected string or buffer; got {typeof(buf)}`)
 end
 
-function BufferReader.fromBuffer(buf: buffer)
-	local self = setmetatable({
-		_buffer = buf,
-		_size = buffer.len(buf),
-		_cursor = 0,
-	}, BufferReader)
+BufferReader.fromBuffer = fromBuffer
+BufferReader.fromString = fromString
 
-	return self
-end
-
-function BufferReader.fromString(str: string)
-	return BufferReader.fromBuffer(buffer.fromstring(str))
-end
-
-function BufferReader:_assertSize(desiredSize: number)
+local function assertSize(self, desiredSize: number)
 	if desiredSize > self._size then
-		error(`cursor out of bounds`, 3)
+		error("cursor out of bounds", 3)
 	end
 end
 
@@ -49,9 +52,10 @@ end
 	Read a signed 8-bit integer from the buffer.
 ]=]
 function BufferReader:ReadInt8(): number
-	self:_assertSize(self._cursor + 1)
-	local n = buffer.readi8(self._buffer, self._cursor)
-	self._cursor += 1
+	local cursor = self._cursor
+	assertSize(self, cursor + 1)
+	local n = buffer.readi8(self._buffer, cursor)
+	self._cursor = cursor + 1
 	return n
 end
 
@@ -59,19 +63,22 @@ end
 	Read an unsigned 8-bit integer from the buffer.
 ]=]
 function BufferReader:ReadUInt8(): number
-	self:_assertSize(self._cursor + 1)
-	local n = buffer.readu8(self._buffer, self._cursor)
-	self._cursor += 1
+	local cursor = self._cursor
+	assertSize(self, cursor + 1)
+	local n = buffer.readu8(self._buffer, cursor)
+	self._cursor = cursor + 1
 	return n
 end
+local readUInt8 = BufferReader.ReadUInt8
 
 --[=[
 	Read a signed 16-bit integer from the buffer.
 ]=]
 function BufferReader:ReadInt16(): number
-	self:_assertSize(self._cursor + 2)
-	local n = buffer.readi16(self._buffer, self._cursor)
-	self._cursor += 2
+	local cursor = self._cursor
+	assertSize(self, cursor + 2)
+	local n = buffer.readi16(self._buffer, cursor)
+	self._cursor = cursor + 2
 	return n
 end
 
@@ -79,9 +86,10 @@ end
 	Read an unsigned 16-bit integer from the buffer.
 ]=]
 function BufferReader:ReadUInt16(): number
-	self:_assertSize(self._cursor + 2)
-	local n = buffer.readu16(self._buffer, self._cursor)
-	self._cursor += 2
+	local cursor = self._cursor
+	assertSize(self, cursor + 2)
+	local n = buffer.readu16(self._buffer, cursor)
+	self._cursor = cursor + 2
 	return n
 end
 
@@ -89,9 +97,10 @@ end
 	Read a signed 32-bit integer from the buffer.
 ]=]
 function BufferReader:ReadInt32(): number
-	self:_assertSize(self._cursor + 4)
-	local n = buffer.readi32(self._buffer, self._cursor)
-	self._cursor += 4
+	local cursor = self._cursor
+	assertSize(self, cursor + 4)
+	local n = buffer.readi32(self._buffer, cursor)
+	self._cursor = cursor + 4
 	return n
 end
 
@@ -99,19 +108,22 @@ end
 	Read an unsigned 32-bit integer from the buffer.
 ]=]
 function BufferReader:ReadUInt32(): number
-	self:_assertSize(self._cursor + 4)
-	local n = buffer.readu32(self._buffer, self._cursor)
-	self._cursor += 4
+	local cursor = self._cursor
+	assertSize(self, cursor + 4)
+	local n = buffer.readu32(self._buffer, cursor)
+	self._cursor = cursor + 4
 	return n
 end
+local readUInt32 = BufferReader.ReadUInt32
 
 --[=[
 	Read a 32-bit single-precision float from the buffer.
 ]=]
 function BufferReader:ReadFloat32(): number
-	self:_assertSize(self._cursor + 4)
-	local n = buffer.readf32(self._buffer, self._cursor)
-	self._cursor += 4
+	local cursor = self._cursor
+	assertSize(self, cursor + 4)
+	local n = buffer.readf32(self._buffer, cursor)
+	self._cursor = cursor + 4
 	return n
 end
 
@@ -119,9 +131,10 @@ end
 	Read a 64-bit double-precision float from the buffer.
 ]=]
 function BufferReader:ReadFloat64(): number
-	self:_assertSize(self._cursor + 8)
-	local n = buffer.readf64(self._buffer, self._cursor)
-	self._cursor += 8
+	local cursor = self._cursor
+	assertSize(self, cursor + 8)
+	local n = buffer.readf64(self._buffer, cursor)
+	self._cursor = cursor + 8
 	return n
 end
 
@@ -129,7 +142,7 @@ end
 	Read a boolean from the buffer.
 ]=]
 function BufferReader:ReadBool(): boolean
-	local n = self:ReadUInt8()
+	local n = readUInt8(self)
 	return n == 1
 end
 
@@ -142,10 +155,11 @@ end
 	:::
 ]=]
 function BufferReader:ReadString(): string
-	local strLen = self:ReadUInt32()
-	self:_assertSize(self._cursor + strLen)
-	local s = buffer.readstring(self._buffer, self._cursor, strLen)
-	self._cursor += strLen
+	local strLen = readUInt32(self)
+	local cursor = self._cursor
+	assertSize(self, cursor + strLen)
+	local s = buffer.readstring(self._buffer, cursor, strLen)
+	self._cursor = cursor + strLen
 	return s
 end
 
@@ -158,9 +172,10 @@ end
 ]=]
 function BufferReader:ReadStringRaw(length: number): string
 	length = math.max(0, math.floor(length))
-	self:_assertSize(self._cursor + length)
-	local s = buffer.readstring(self._buffer, self._cursor, length)
-	self._cursor += length
+	local cursor = self._cursor
+	assertSize(self, cursor + length)
+	local s = buffer.readstring(self._buffer, cursor, length)
+	self._cursor = cursor + length
 	return s
 end
 
