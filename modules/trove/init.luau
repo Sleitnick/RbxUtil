@@ -34,7 +34,7 @@ type TroveInternal = Trove & {
 	Represents all trackable objects by Trove.
 ]=]
 export type Trackable =
-	Instance
+	| Instance
 	| RBXScriptConnection
 	| ConnectionLike
 	| ConnectionLikeMetatable
