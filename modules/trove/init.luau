@@ -256,7 +256,10 @@ local function AssertPromiseLike(object: any)
 end
 
 local function AssertSignalLike(object: any)
-	if typeof(object) ~= "table" or typeof(object.Connect) ~= "function" or typeof(object.Once) ~= "function" then
+	if
+		typeof(object) ~= "RBXScriptSignal"
+		and (typeof(object) ~= "table" or typeof(object.Connect) ~= "function" or typeof(object.Once) ~= "function")
+	then
 		error("did not receive a signal as an argument", 3)
 	end
 end
