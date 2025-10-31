@@ -65,12 +65,32 @@ Timer.__index = Timer
 	The event which is fired every time the timer hits its interval.
 ]=]
 
+-- Timer type
+export type Timer = {
+	Tick: RBXScriptSignal | Signal.Signal<any>,
+	Connect: (self: Timer, callback: CallbackFn) -> RBXScriptConnection | Signal.Connection,
+	Start: (self: Timer) -> (),
+	StartNow: (self: Timer) -> (),
+	Stop: (self: Timer) -> (),
+	IsRunning: (self: Timer) -> boolean,
+	Destroy: (self: Timer) -> (),
+	new: (interval: number) -> Timer,
+	Simple: (
+		interval: number,
+		callback: CallbackFn,
+		startNow: boolean?,
+		updateSignal: RBXScriptSignal? | Signal.Signal<any>?,
+		timeFn: TimeFn?
+	) -> RBXScriptConnection | Signal.Connection,
+	Is: (obj: any) -> boolean,
+}
+
 --[=[
 	@return Timer
 	
 	Creates a new timer.
 ]=]
-function Timer.new(interval: number)
+function Timer.new(interval: number): Timer
 	assert(type(interval) == "number", "Argument #1 to Timer.new must be a number; got " .. type(interval))
 	assert(interval >= 0, "Argument #1 to Timer.new must be greater or equal to 0; got " .. tostring(interval))
 	local self = setmetatable({}, Timer)

@@ -1,0 +1,299 @@
+{
+  "modules": [
+    {
+      "name": "BufferUtil",
+      "description": "Buffer utilities",
+      "has_dependencies": false,
+      "version": "0.3.1",
+      "path": "modules/buffer-util",
+      "files": [
+        "BufferReader.luau",
+        "BufferWriter.luau",
+        "DataTypeBuffer.luau",
+        "init.luau",
+        "Types.luau"
+      ]
+    },
+    {
+      "name": "Comm",
+      "description": "Comm library for remote communication",
+      "has_dependencies": true,
+      "version": "1.0.1",
+      "path": "modules/comm",
+      "files": [
+        "init.luau",
+        "Types.luau",
+        "Util.luau"
+      ]
+    },
+    {
+      "name": "Component",
+      "description": "Component class",
+      "has_dependencies": true,
+      "version": "2.4.8",
+      "path": "modules/component",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Concur",
+      "description": "Concurrent task handler",
+      "has_dependencies": false,
+      "version": "0.1.2",
+      "path": "modules/concur",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "EnumList",
+      "description": "Enum List class",
+      "has_dependencies": false,
+      "version": "2.1.0",
+      "path": "modules/enum-list",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Find",
+      "description": "Utility function for finding an in the data model hierarchy",
+      "has_dependencies": false,
+      "version": "1.0.0",
+      "path": "modules/find",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Input",
+      "description": "Basic input classes",
+      "has_dependencies": true,
+      "version": "2.3.0",
+      "path": "modules/input",
+      "files": [
+        "Gamepad.luau",
+        "init.luau",
+        "Keyboard.luau",
+        "Mouse.luau",
+        "PreferredInput.luau",
+        "Touch.luau"
+      ]
+    },
+    {
+      "name": "Loader",
+      "description": "Requires all modules within a given instance",
+      "has_dependencies": false,
+      "version": "2.0.0",
+      "path": "modules/loader",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Log",
+      "description": "Log class for logging to PlayFab",
+      "has_dependencies": false,
+      "version": "0.1.1",
+      "path": "modules/log",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Net",
+      "description": "Static networking module",
+      "has_dependencies": false,
+      "version": "0.2.0",
+      "path": "modules/net",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Option",
+      "description": "Represent optional values in Lua",
+      "has_dependencies": false,
+      "version": "1.0.5",
+      "path": "modules/option",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "PID",
+      "description": "PID Controller class",
+      "has_dependencies": false,
+      "version": "2.1.0",
+      "path": "modules/pid",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Quaternion",
+      "description": "Quaternion class",
+      "has_dependencies": false,
+      "version": "0.2.3",
+      "path": "modules/quaternion",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Sequent",
+      "description": "Sequent class",
+      "has_dependencies": false,
+      "version": "0.1.0",
+      "path": "modules/sequent",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Ser",
+      "description": "Ser class for serialization and deserialization",
+      "has_dependencies": true,
+      "version": "1.0.5",
+      "path": "modules/ser",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Shake",
+      "description": "Shake class for making things shake",
+      "has_dependencies": false,
+      "version": "1.1.0",
+      "path": "modules/shake",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Signal",
+      "description": "Signal class",
+      "has_dependencies": false,
+      "version": "2.0.3",
+      "path": "modules/signal",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Silo",
+      "description": "State container class",
+      "has_dependencies": false,
+      "version": "0.2.0",
+      "path": "modules/silo",
+      "files": [
+        "init.luau",
+        "TableWatcher.luau",
+        "Util.luau"
+      ]
+    },
+    {
+      "name": "Spring",
+      "description": "Critically damped spring",
+      "has_dependencies": false,
+      "version": "1.0.0",
+      "path": "modules/spring",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Streamable",
+      "description": "Streamable class and StreamableUtil",
+      "has_dependencies": true,
+      "version": "1.2.4",
+      "path": "modules/streamable",
+      "files": [
+        "init.luau",
+        "Streamable.luau",
+        "StreamableUtil.luau"
+      ]
+    },
+    {
+      "name": "Symbol",
+      "description": "Symbol",
+      "has_dependencies": false,
+      "version": "2.0.1",
+      "path": "modules/symbol",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "TableUtil",
+      "description": "Table utility functions",
+      "has_dependencies": false,
+      "version": "1.2.1",
+      "path": "modules/table-util",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "TaskQueue",
+      "description": "Batches tasks that occur on the same execution step",
+      "has_dependencies": false,
+      "version": "1.0.0",
+      "path": "modules/task-queue",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Timer",
+      "description": "Timer class",
+      "has_dependencies": true,
+      "version": "1.1.2",
+      "path": "modules/timer",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Tree",
+      "description": "Utility functions for accessing instances in the game hierarchy",
+      "has_dependencies": false,
+      "version": "1.1.0",
+      "path": "modules/tree",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Trove",
+      "description": "Trove class for tracking and cleaning up objects",
+      "has_dependencies": false,
+      "version": "1.5.1",
+      "path": "modules/trove",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "TypedRemote",
+      "description": "Simple networking package for typed RemoteEvents and RemoteFunctions",
+      "has_dependencies": false,
+      "version": "0.2.0",
+      "path": "modules/typed-remote",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "WaitFor",
+      "description": "WaitFor class for awaiting instances",
+      "has_dependencies": true,
+      "version": "1.0.0",
+      "path": "modules/wait-for",
+      "files": [
+        "init.luau"
+      ]
+    }
+  ]
+}
