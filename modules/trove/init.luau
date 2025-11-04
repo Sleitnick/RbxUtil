@@ -529,12 +529,13 @@ end
 	@method Remove
 	@within Trove
 	@param object any
-	Removes the object from the Trove and cleans it up.
+	Removes the object from the Trove and cleans it up. To remove without
+	cleaning, use the `Pop` method instead.
 
 	```lua
 	local part = Instance.new("Part")
 	trove:Add(part)
-	trove:Remove(part)
+	trove:Remove(part) -- Part is destroyed
 	```
 ]=]
 function Trove.Remove(self: TroveInternal, object: Trackable): boolean
@@ -543,6 +544,28 @@ function Trove.Remove(self: TroveInternal, object: Trackable): boolean
 	end
 
 	return self:_findAndRemoveFromObjects(object, true)
+end
+
+--[=[
+	@method Pop
+	@within Trove
+	@param object any
+	Removes the object from the Trove, but does _not_ clean it up. To
+	clean up the object on removal, use the `Remove` method instead.
+
+	```lua
+	local part = Instance.new("Part")
+	trove:Add(part)
+	trove:Pop(part)
+	trove:Clean() -- Part is NOT destroyed
+	```
+]=]
+function Trove.Pop(self: TroveInternal, object: Trackable): boolean
+	if self._cleaning then
+		error("cannot call trove:Pop() while cleaning", 2)
+	end
+
+	return self:_findAndRemoveFromObjects(object, false)
 end
 
 --[=[

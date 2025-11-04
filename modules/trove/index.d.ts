@@ -33,6 +33,7 @@ interface Trove {
 	AddPromise<T>(promise: Promise<T>): Promise<T>;
 	Add<T extends Trackable>(object: T, cleanupMethod?: string): T;
 	Remove<T extends Trackable>(object: T): boolean;
+	Pop<T extends Trackable>(object: T): boolean;
 	AttachToInstance(instance: Instance): RBXScriptConnection;
 	Clean(): void;
 	WrapClean(): () => void;
