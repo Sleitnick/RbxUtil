@@ -58,7 +58,7 @@
 
 		return {
 			Studio = "Debug";
-			Other = "Warn"; -- "Other" can be anything other than Studio (e.g. could be named "Default")
+			Other = "Warning"; -- "Other" can be anything other than Studio (e.g. could be named "Default")
 		}
 
 	Fine-tune between server and client:
@@ -68,7 +68,7 @@
 				Server = "Info";
 				Client = "Debug";
 			};
-			Other = "Warn";
+			Other = "Warning";
 		}
 
 	Fine-tune based on PlaceIds:
@@ -81,7 +81,7 @@
 			Other = {
 				PlaceIds = {123456, 234567}
 				Server = "Severe";
-				Client = "Warn";
+				Client = "Warning";
 			};
 		}
 
@@ -95,7 +95,7 @@
 			Other = {
 				GameIds = {123456, 234567}
 				Server = "Severe";
-				Client = "Warn";
+				Client = "Warning";
 			};
 		}
 
@@ -114,7 +114,7 @@
 			Prod = {
 				PlaceIds = {2345678};
 				Server = "Severe";
-				Client = "Warn";
+				Client = "Warning";
 			};
 			Default = "Info";
 		}
@@ -124,10 +124,10 @@
 local IS_STUDIO = game:GetService("RunService"):IsStudio()
 local IS_SERVER = game:GetService("RunService"):IsServer()
 
-local HttpService = game:GetService("HttpService")
 local AnalyticsService = game:GetService("AnalyticsService")
-local AnalyticsLogLevel = Enum.AnalyticsLogLevel
+local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
+local AnalyticsLogLevel = Enum.AnalyticsLogLevel
 
 local player = (not IS_SERVER and Players.LocalPlayer or nil)
 
@@ -379,7 +379,7 @@ end
 	-- To set a configuration that is different while in Studio:
 	return {
 		Studio = "Debug";
-		Other = "Warn"; -- "Other" can be anything other than Studio (e.g. could be named "Default")
+		Other = "Warning"; -- "Other" can be anything other than Studio (e.g. could be named "Default")
 	}
 	```
 
@@ -390,7 +390,7 @@ end
 			Server = "Info";
 			Client = "Debug";
 		};
-		Other = "Warn";
+		Other = "Warning";
 	}
 	```
 
@@ -404,7 +404,7 @@ end
 		Other = {
 			PlaceIds = {123456, 234567}
 			Server = "Severe";
-			Client = "Warn";
+			Client = "Warning";
 		};
 	}
 	```
@@ -419,7 +419,7 @@ end
 		Other = {
 			GameIds = {123456, 234567}
 			Server = "Severe";
-			Client = "Warn";
+			Client = "Warning";
 		};
 	}
 	```
@@ -439,7 +439,7 @@ end
 		Prod = {
 			PlaceIds = {2345678};
 			Server = "Severe";
-			Client = "Warn";
+			Client = "Warning";
 		};
 		Default = "Info";
 	}

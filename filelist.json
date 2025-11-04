@@ -95,7 +95,7 @@
       "name": "Log",
       "description": "Log class for logging to PlayFab",
       "has_dependencies": false,
-      "version": "0.1.1",
+      "version": "0.1.2",
       "path": "modules/log",
       "files": [
         "init.luau"
