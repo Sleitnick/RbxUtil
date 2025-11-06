@@ -15,6 +15,7 @@ export type Trove = {
 	AddPromise: <T>(self: Trove, promise: (T & PromiseLike) | (T & PromiseLikeMetatable)) -> T,
 	Add: <T>(self: Trove, object: T & Trackable, cleanupMethod: string?) -> T,
 	Remove: <T>(self: Trove, object: T & Trackable) -> boolean,
+	Pop: <T>(self: Trove, object: T & Trackable) -> boolean,
 	Clean: (self: Trove) -> (),
 	WrapClean: (self: Trove) -> () -> (),
 	AttachToInstance: (self: Trove, instance: Instance) -> RBXScriptConnection,
@@ -450,6 +451,45 @@ function Trove.Connect(
 	local confirmedSignal = signal :: SignalLike
 
 	return self:Add(confirmedSignal:Connect(fn))
+end
+
+--[=[
+	@method Once
+	@within Trove
+	@param signal RBXScriptSignal
+	@param fn (...: any) -> ()
+	@return RBXScriptConnection
+	Connects the function to the signal using the `Once`
+	method, adds the connection to the trove, and then
+	returns the connection.
+
+	This is shorthand for `trove:Add(signal:Once(fn))`.
+
+	```lua
+	trove:Connect(workspace.ChildAdded, function(instance)
+		print(instance.Name .. " added to workspace")
+	end)
+	```
+]=]
+function Trove.Once(
+	self: TroveInternal,
+	signal: SignalLike | SignalLikeMetatable | RBXScriptSignal,
+	fn: (...any) -> ...any
+)
+	if self._cleaning then
+		error("Cannot call trove:Connect() while cleaning", 2)
+	end
+	AssertSignalLike(signal)
+
+	local confirmedSignal = signal :: SignalLike
+
+	local conn
+	conn = confirmedSignal:Once(function(...)
+		fn(...)
+		self:Pop(conn)
+	end)
+
+	return self:Add(conn)
 end
 
 --[=[
