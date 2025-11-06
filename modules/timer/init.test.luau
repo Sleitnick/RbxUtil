@@ -21,7 +21,7 @@ return function(ctx: Test.TestContext)
 		end)
 
 		ctx:Test("should create a new timer", function()
-			ctx:Expect(Timer.Is(timer)):ToBe(true)
+			ctx:Expect(Timer.is(timer)):ToBe(true)
 		end)
 
 		ctx:Test("should tick appropriately", function()
