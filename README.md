@@ -28,7 +28,7 @@
 | [Symbol](https://sleitnick.github.io/RbxUtil/api/Symbol) | `Symbol = "sleitnick/symbol@2.0.1"` | Symbol |
 | [TableUtil](https://sleitnick.github.io/RbxUtil/api/TableUtil) | `TableUtil = "sleitnick/table-util@1.2.1"` | Table utility functions |
 | [TaskQueue](https://sleitnick.github.io/RbxUtil/api/TaskQueue) | `TaskQueue = "sleitnick/task-queue@1.0.0"` | Batches tasks that occur on the same execution step |
-| [Timer](https://sleitnick.github.io/RbxUtil/api/Timer) | `Timer = "sleitnick/timer@1.1.2"` | Timer class |
+| [Timer](https://sleitnick.github.io/RbxUtil/api/Timer) | `Timer = "sleitnick/timer@2.0.0"` | Timer class |
 | [Tree](https://sleitnick.github.io/RbxUtil/api/Tree) | `Tree = "sleitnick/tree@1.1.0"` | Utility functions for accessing instances in the game hierarchy |
 | [Trove](https://sleitnick.github.io/RbxUtil/api/Trove) | `Trove = "sleitnick/trove@1.8.0"` | Trove class for tracking and cleaning up objects |
 | [TypedRemote](https://sleitnick.github.io/RbxUtil/api/TypedRemote) | `TypedRemote = "sleitnick/typed-remote@0.3.0"` | Simple networking package for typed RemoteEvents and RemoteFunctions |
