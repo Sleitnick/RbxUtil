@@ -11,7 +11,7 @@
 | [Concur](https://sleitnick.github.io/RbxUtil/api/Concur) | `Concur = "sleitnick/concur@0.1.2"` | Concurrent task handler |
 | [EnumList](https://sleitnick.github.io/RbxUtil/api/EnumList) | `EnumList = "sleitnick/enum-list@2.1.0"` | Enum List class |
 | [Find](https://sleitnick.github.io/RbxUtil/api/Find) | `Find = "sleitnick/find@1.0.0"` | Utility function for finding an in the data model hierarchy |
-| [Input](https://sleitnick.github.io/RbxUtil/api/Input) | `Input = "sleitnick/input@2.3.0"` | Basic input classes |
+| [Input](https://sleitnick.github.io/RbxUtil/api/Input) | `Input = "sleitnick/input@3.0.0"` | Basic input classes |
 | [Loader](https://sleitnick.github.io/RbxUtil/api/Loader) | `Loader = "sleitnick/loader@2.0.0"` | Requires all modules within a given instance |
 | [Log](https://sleitnick.github.io/RbxUtil/api/Log) | `Log = "sleitnick/log@0.1.2"` | Log class for logging to PlayFab |
 | [Net](https://sleitnick.github.io/RbxUtil/api/Net) | `Net = "sleitnick/net@0.2.0"` | Static networking module |
