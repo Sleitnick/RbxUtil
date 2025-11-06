@@ -15,6 +15,7 @@ export type Trove = {
 	AddPromise: <T>(self: Trove, promise: (T & PromiseLike) | (T & PromiseLikeMetatable)) -> T,
 	Add: <T>(self: Trove, object: T & Trackable, cleanupMethod: string?) -> T,
 	Remove: <T>(self: Trove, object: T & Trackable) -> boolean,
+	Pop: <T>(self: Trove, object: T & Trackable) -> boolean,
 	Clean: (self: Trove) -> (),
 	WrapClean: (self: Trove) -> () -> (),
 	AttachToInstance: (self: Trove, instance: Instance) -> RBXScriptConnection,
@@ -216,7 +217,7 @@ local FN_MARKER = newproxy()
 local THREAD_MARKER = newproxy()
 local GENERIC_OBJECT_CLEANUP_METHODS = table.freeze({ "Destroy", "Disconnect", "destroy", "disconnect" })
 
-local function GetObjectCleanupFunction(object: any, cleanupMethod: string?)
+local function getObjectCleanupFunction(object: any, cleanupMethod: string?)
 	local t = typeof(object)
 
 	if t == "function" then
@@ -244,7 +245,7 @@ local function GetObjectCleanupFunction(object: any, cleanupMethod: string?)
 	error(`failed to get cleanup function for object {t}: {object}`, 3)
 end
 
-local function AssertPromiseLike(object: any)
+local function assertPromiseLike(object: any)
 	if
 		typeof(object) ~= "table"
 		or typeof(object.getStatus) ~= "function"
@@ -255,7 +256,7 @@ local function AssertPromiseLike(object: any)
 	end
 end
 
-local function AssertSignalLike(object: any)
+local function assertSignalLike(object: any)
 	if
 		typeof(object) ~= "RBXScriptSignal"
 		and (typeof(object) ~= "table" or typeof(object.Connect) ~= "function" or typeof(object.Once) ~= "function")
@@ -344,7 +345,7 @@ function Trove.Add(self: TroveInternal, object: Trackable, cleanupMethod: string
 		error("cannot call trove:Add() while cleaning", 2)
 	end
 
-	local cleanup = GetObjectCleanupFunction(object, cleanupMethod)
+	local cleanup = getObjectCleanupFunction(object, cleanupMethod)
 	table.insert(self._objects, { object, cleanup })
 
 	return object
@@ -445,11 +446,50 @@ function Trove.Connect(
 	if self._cleaning then
 		error("Cannot call trove:Connect() while cleaning", 2)
 	end
-	AssertSignalLike(signal)
+	assertSignalLike(signal)
 
 	local confirmedSignal = signal :: SignalLike
 
 	return self:Add(confirmedSignal:Connect(fn))
+end
+
+--[=[
+	@method Once
+	@within Trove
+	@param signal RBXScriptSignal
+	@param fn (...: any) -> ()
+	@return RBXScriptConnection
+	Connects the function to the signal using the `Once`
+	method, adds the connection to the trove, and then
+	returns the connection.
+
+	This is shorthand for `trove:Add(signal:Once(fn))`.
+
+	```lua
+	trove:Connect(workspace.ChildAdded, function(instance)
+		print(instance.Name .. " added to workspace")
+	end)
+	```
+]=]
+function Trove.Once(
+	self: TroveInternal,
+	signal: SignalLike | SignalLikeMetatable | RBXScriptSignal,
+	fn: (...any) -> ...any
+)
+	if self._cleaning then
+		error("Cannot call trove:Connect() while cleaning", 2)
+	end
+	assertSignalLike(signal)
+
+	local confirmedSignal = signal :: SignalLike
+
+	local conn
+	conn = confirmedSignal:Once(function(...)
+		fn(...)
+		self:Pop(conn)
+	end)
+
+	return self:Add(conn)
 end
 
 --[=[
@@ -508,7 +548,7 @@ function Trove.AddPromise(self: TroveInternal, promise: PromiseLike | PromiseLik
 	if self._cleaning then
 		error("cannot call trove:AddPromise() while cleaning", 2)
 	end
-	AssertPromiseLike(promise)
+	assertPromiseLike(promise)
 	local confirmedPromise = promise :: PromiseLike
 
 	if confirmedPromise:getStatus() == "Started" then
