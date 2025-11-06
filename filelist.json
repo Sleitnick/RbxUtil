@@ -70,7 +70,7 @@
       "name": "Input",
       "description": "Basic input classes",
       "has_dependencies": true,
-      "version": "2.3.0",
+      "version": "3.0.0",
       "path": "modules/input",
       "files": [
         "Gamepad.luau",

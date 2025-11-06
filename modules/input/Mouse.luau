@@ -24,48 +24,48 @@ Mouse.__index = Mouse
 
 --[=[
 	@within Mouse
-	@prop LeftDown Signal
+	@prop LeftDown Signal<boolean>
 	@tag Event
 ]=]
 --[=[
 	@within Mouse
-	@prop LeftUp Signal
+	@prop LeftUp Signal<boolean>
 	@tag Event
 ]=]
 --[=[
 	@within Mouse
-	@prop RightDown Signal
+	@prop RightDown Signal<boolean>
 	@tag Event
 ]=]
 --[=[
 	@within Mouse
-	@prop RightUp Signal
+	@prop RightUp Signal<boolean>
 	@tag Event
 ]=]
 --[=[
 	@within Mouse
-	@prop MiddleDown Signal
+	@prop MiddleDown Signal<boolean>
 	@tag Event
 ]=]
 --[=[
 	@within Mouse
-	@prop MiddleUp Signal
+	@prop MiddleUp Signal<boolean>
 	@tag Event
 ]=]
 --[=[
 	@within Mouse
-	@prop Moved Signal<Vector2>
+	@prop Moved Signal<Vector2, boolean>
 	@tag Event
 	```lua
-	mouse.Moved:Connect(function(position) ... end)
+	mouse.Moved:Connect(function(position, processed) ... end)
 	```
 ]=]
 --[=[
 	@within Mouse
-	@prop Scrolled Signal<number>
+	@prop Scrolled Signal<number, boolean>
 	@tag Event
 	```lua
-	mouse.Scrolled:Connect(function(scrollAmount) ... end)
+	mouse.Scrolled:Connect(function(scrollAmount, processed) ... end)
 	```
 ]=]
 
@@ -93,40 +93,31 @@ function Mouse.new()
 	self.Moved = self._trove:Construct(Signal)
 
 	self._trove:Connect(UserInputService.InputBegan, function(input, processed)
-		if processed then
-			return
-		end
 		if input.UserInputType == Enum.UserInputType.MouseButton1 then
-			self.LeftDown:Fire()
+			self.LeftDown:Fire(processed)
 		elseif input.UserInputType == Enum.UserInputType.MouseButton2 then
-			self.RightDown:Fire()
+			self.RightDown:Fire(processed)
 		elseif input.UserInputType == Enum.UserInputType.MouseButton3 then
-			self.MiddleDown:Fire()
+			self.MiddleDown:Fire(processed)
 		end
 	end)
 
 	self._trove:Connect(UserInputService.InputEnded, function(input, processed)
-		if processed then
-			return
-		end
 		if input.UserInputType == Enum.UserInputType.MouseButton1 then
-			self.LeftUp:Fire()
+			self.LeftUp:Fire(processed)
 		elseif input.UserInputType == Enum.UserInputType.MouseButton2 then
-			self.RightUp:Fire()
+			self.RightUp:Fire(processed)
 		elseif input.UserInputType == Enum.UserInputType.MouseButton3 then
-			self.MiddleUp:Fire()
+			self.MiddleUp:Fire(processed)
 		end
 	end)
 
 	self._trove:Connect(UserInputService.InputChanged, function(input, processed)
-		if processed then
-			return
-		end
 		if input.UserInputType == Enum.UserInputType.MouseMovement then
 			local position = input.Position
-			self.Moved:Fire(Vector2.new(position.X, position.Y))
+			self.Moved:Fire(Vector2.new(position.X, position.Y), processed)
 		elseif input.UserInputType == Enum.UserInputType.MouseWheel then
-			self.Scrolled:Fire(input.Position.Z)
+			self.Scrolled:Fire(input.Position.Z, processed)
 		end
 	end)
 

@@ -2,8 +2,8 @@
 -- Stephen Leitnick
 -- October 10, 2021
 
-local Trove = require(script.Parent.Parent.Trove)
 local Signal = require(script.Parent.Parent.Signal)
+local Trove = require(script.Parent.Parent.Trove)
 
 local UserInputService = game:GetService("UserInputService")
 
@@ -22,7 +22,7 @@ Keyboard.__index = Keyboard
 
 --[=[
 	@within Keyboard
-	@prop KeyDown Signal<Enum.KeyCode>
+	@prop KeyDown Signal<Enum.KeyCode, boolean>
 	@tag Event
 	Fired when a key is pressed.
 	```lua
@@ -33,7 +33,7 @@ Keyboard.__index = Keyboard
 ]=]
 --[=[
 	@within Keyboard
-	@prop KeyUp Signal<Enum.KeyCode>
+	@prop KeyUp Signal<Enum.KeyCode, boolean>
 	@tag Event
 	Fired when a key is released.
 	```lua
@@ -102,20 +102,14 @@ end
 
 function Keyboard:_setup()
 	self._trove:Connect(UserInputService.InputBegan, function(input, processed)
-		if processed then
-			return
-		end
 		if input.UserInputType == Enum.UserInputType.Keyboard then
-			self.KeyDown:Fire(input.KeyCode)
+			self.KeyDown:Fire(input.KeyCode, processed)
 		end
 	end)
 
 	self._trove:Connect(UserInputService.InputEnded, function(input, processed)
-		if processed then
-			return
-		end
 		if input.UserInputType == Enum.UserInputType.Keyboard then
-			self.KeyUp:Fire(input.KeyCode)
+			self.KeyUp:Fire(input.KeyCode, processed)
 		end
 	end)
 end

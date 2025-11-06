@@ -1,28 +1,5 @@
 --!strict
 
--- PreferredInput
--- Stephen Leitnick
--- April 05, 2021
-
---[=[
-	@within PreferredInput
-	@type InputType "MouseKeyboard" | "Touch" | "Gamepad"
-
-	The InputType is just a string that is either `"MouseKeyboard"`,
-	`"Touch"`, or `"Gamepad"`.
-]=]
-export type InputType = "MouseKeyboard" | "Touch" | "Gamepad"
-
-local UserInputService = game:GetService("UserInputService")
-
-local touchUserInputType = Enum.UserInputType.Touch
-local keyboardUserInputType = Enum.UserInputType.Keyboard
-
-type PreferredInput = {
-	Current: InputType,
-	Observe: (handler: (inputType: InputType) -> ()) -> () -> (),
-}
-
 --[=[
 	@class PreferredInput
 	@client
@@ -33,7 +10,7 @@ type PreferredInput = {
 	a mouse to a gamepad mid-game, and it is important for the
 	game to respond to this change.
 
-	The Preferred class is part of the Input package.
+	The PreferredInput library is part of the Input package.
 
 	```lua
 	local PreferredInput = require(packages.Input).PreferredInput
@@ -41,19 +18,8 @@ type PreferredInput = {
 ]=]
 --[=[
 	@within PreferredInput
-	@prop Current InputType
-	@readonly
-
-	The current preferred InputType.
-
-	```lua
-	print(PreferredInput.Current)
-	```
-]=]
---[=[
-	@within PreferredInput
-	@function Observe
-	@param handler (preferred: InputType) -> ()
+	@function observe
+	@param handler (preferred: Enum.PreferredInput) -> (() -> ())?
 	@return () -> ()
 
 	Observes the preferred input. In other words, the handler function will
@@ -62,64 +28,64 @@ type PreferredInput = {
 	The returned function can be called to disconnect the observer.
 
 	```lua
-	local disconnect = PreferredInput.Observe(function(preferred)
+	local disconnect = PreferredInput.observe(function(preferred)
 		-- Fires immediately & any time the preferred input changes
 		print(preferred)
+
+		return function()
+			-- Preferred input has changed
+		end
 	end)
 
 	-- If/when desired, observer can be stopped by calling the returned function:
 	disconnect()
 	```
 ]=]
+--[=[
+	@within PreferredInput
+	@function get
+	@return Enum.PreferredInput
 
-local PreferredInput: PreferredInput
+	Gets the preferred input. This is equivalent to
+	[`UserInputService.PreferredInput`](https://create.roblox.com/docs/reference/engine/classes/UserInputService#PreferredInput).
+]=]
 
-local subscribers = {}
+local UserInputService = game:GetService("UserInputService")
 
-PreferredInput = {
+local PreferredInput = {}
 
-	Current = "MouseKeyboard",
+function PreferredInput.observe(callback: (preferred: Enum.PreferredInput) -> (() -> ())?)
+	local cleanup: (() -> ())? = nil
+	local id = 0
 
-	Observe = function(handler: (inputType: InputType) -> ()): () -> ()
-		if table.find(subscribers, handler) then
-			error("function already subscribed", 2)
-		end
-		table.insert(subscribers, handler)
+	local function onPreferredInputChanged()
+		id += 1
+		local observeId = id
 
-		task.spawn(handler, PreferredInput.Current)
-
-		return function()
-			local index = table.find(subscribers, handler)
-			if index then
-				local n = #subscribers
-				subscribers[index], subscribers[n] = subscribers[n], nil
+		local cleanupFn = callback(UserInputService.PreferredInput)
+		if typeof(cleanupFn) == "function" then
+			if id == observeId then
+				cleanup = cleanupFn
+			else
+				task.spawn(cleanupFn)
 			end
 		end
-	end,
-}
-
-local function SetPreferred(preferred: InputType)
-	if preferred == PreferredInput.Current then
-		return
 	end
-	PreferredInput.Current = preferred
 
-	for _, subscriber in subscribers do
-		task.spawn(subscriber, preferred)
-	end
-end
+	task.spawn(onPreferredInputChanged)
+	local conn = UserInputService:GetPropertyChangedSignal("PreferredInput"):Connect(onPreferredInputChanged)
 
-local function DeterminePreferred(inputType: Enum.UserInputType)
-	if inputType == touchUserInputType then
-		SetPreferred("Touch")
-	elseif inputType == keyboardUserInputType or string.sub(inputType.Name, 1, 5) == "Mouse" then
-		SetPreferred("MouseKeyboard")
-	elseif string.sub(inputType.Name, 1, 7) == "Gamepad" then
-		SetPreferred("Gamepad")
+	return function()
+		conn:Disconnect()
+		if typeof(cleanup) == "function" then
+			task.spawn(cleanup)
+			cleanup = nil
+		end
 	end
 end
 
-DeterminePreferred(UserInputService:GetLastInputType())
-UserInputService.LastInputTypeChanged:Connect(DeterminePreferred)
+function PreferredInput.get()
+	return UserInputService.PreferredInput
+end
 
 return PreferredInput
