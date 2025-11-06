@@ -1,5 +1,5 @@
 export type DataTypes =
-	BrickColor
+	| BrickColor
 	| CFrame
 	| Color3
 	| DateTime
