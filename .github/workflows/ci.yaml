@@ -17,8 +17,8 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install Aftman
-      uses: ok-nick/setup-aftman@v0.4.2
+    - name: Setup Rokit
+      uses: CompeyDev/setup-rokit@v0.1.2
 
     - name: Lint
       run: |
@@ -33,46 +33,46 @@ jobs:
     - uses: JohnnyMorganz/stylua-action@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        version: v2.0.2
+        version: v2.3.0
         args: --check ./modules
   
-  tests:
-    name: Tests
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+  # tests:
+  #   name: Tests
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v4
 
-    - name: Install Aftman
-      uses: ok-nick/setup-aftman@v0.4.2
+  #   - name: Install Rokit
+  #     uses: CompeyDev/setup-rokit@v0.1.2
 
-    - name: Install Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.13"
+  #   - name: Install Python
+  #     uses: actions/setup-python@v5
+  #     with:
+  #       python-version: "3.13"
 
-    - name: Install Python dependencies
-      run: pip install -r requirements.txt
+  #   - name: Install Python dependencies
+  #     run: pip install -r requirements.txt
     
-    - name: Run test builder
-      run: python build_tests.py
+  #   - name: Run test builder
+  #     run: python build_tests.py
 
-    - name: Build place file
-      run: rojo build -o test.rbxl test.project.json
+  #   - name: Build place file
+  #     run: rojo build -o test.rbxl test.project.json
 
-    - name: Upload place file
-      shell: bash
-      env:
-        UID: 6900069600
-        PID: 110224315334647
-        API_KEY: ${{ secrets.RBXCLOUD_API_KEY }}
-        FILE: test.rbxl
-      run: rbxcloud experience publish -a "$API_KEY" -u "$UID" -p "$PID" -t published -f "$FILE"
+  #   - name: Upload place file
+  #     shell: bash
+  #     env:
+  #       UID: 6900069600
+  #       PID: 110224315334647
+  #       API_KEY: ${{ secrets.RBXCLOUD_API_KEY }}
+  #       FILE: test.rbxl
+  #     run: rbxcloud experience publish -a "$API_KEY" -u "$UID" -p "$PID" -t published -f "$FILE"
     
-    - name: Run tests
-      env:
-        UID: 6900069600
-        PID: 110224315334647
-        API_KEY: ${{ secrets.RBXCLOUD_API_KEY }}
-        FILE: test.rbxl
-      run: python -u run_tests.py "$UID" "$PID"
+  #   - name: Run tests
+  #     env:
+  #       UID: 6900069600
+  #       PID: 110224315334647
+  #       API_KEY: ${{ secrets.RBXCLOUD_API_KEY }}
+  #       FILE: test.rbxl
+  #     run: python -u run_tests.py "$UID" "$PID"

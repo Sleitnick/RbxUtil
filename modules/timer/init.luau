@@ -1,6 +1,8 @@
--- Timer
--- Stephen Leitnick
--- July 28, 2021
+--!strict
+
+local RunService = game:GetService("RunService")
+
+local Signal = require(script.Parent.Signal)
 
 --[=[
 	@within Timer
@@ -15,10 +17,6 @@ type CallbackFn = () -> nil
 	Time function.
 ]=]
 type TimeFn = () -> number
-
-local Signal = require(script.Parent.Signal)
-
-local RunService = game:GetService("RunService")
 
 --[=[
 	@class Timer
@@ -35,6 +33,19 @@ local RunService = game:GetService("RunService")
 ]=]
 local Timer = {}
 Timer.__index = Timer
+
+export type Timer = typeof(setmetatable(
+	{} :: {
+		Interval: number,
+		UpdateSignal: RBXScriptSignal,
+		TimeFunction: () -> number,
+		AllowDrift: boolean,
+		Tick: Signal.Signal<>,
+
+		_runHandle: RBXScriptConnection?,
+	},
+	Timer
+))
 
 --[=[
 	@within Timer
@@ -70,16 +81,19 @@ Timer.__index = Timer
 	
 	Creates a new timer.
 ]=]
-function Timer.new(interval: number)
-	assert(type(interval) == "number", "Argument #1 to Timer.new must be a number; got " .. type(interval))
-	assert(interval >= 0, "Argument #1 to Timer.new must be greater or equal to 0; got " .. tostring(interval))
+function Timer.new(interval: number): Timer
+	assert(type(interval) == "number", "argument #1 to Timer.new must be a number; got " .. type(interval))
+	assert(interval >= 0, "argument #1 to Timer.new must be greater or equal to 0; got " .. tostring(interval))
+
 	local self = setmetatable({}, Timer)
+
 	self._runHandle = nil
 	self.Interval = interval
 	self.UpdateSignal = RunService.Heartbeat
 	self.TimeFunction = time
 	self.AllowDrift = true
 	self.Tick = Signal.new()
+
 	return self
 end
 
@@ -90,17 +104,17 @@ end
 
 	```lua
 	-- Basic:
-	Timer.Simple(1, function()
+	Timer.simple(1, function()
 		print("Tick")
 	end)
 
 	-- Using other arguments:
-	Timer.Simple(1, function()
+	Timer.simple(1, function()
 		print("Tick")
 	end, true, RunService.Heartbeat, os.clock)
 	```
 ]=]
-function Timer.Simple(
+function Timer.simple(
 	interval: number,
 	callback: CallbackFn,
 	startNow: boolean?,
@@ -110,9 +124,11 @@ function Timer.Simple(
 	local update = updateSignal or RunService.Heartbeat
 	local t = timeFn or time
 	local nextTick = t() + interval
+
 	if startNow then
 		task.defer(callback)
 	end
+
 	return update:Connect(function()
 		local now = t()
 		if now >= nextTick then
@@ -125,13 +141,14 @@ end
 --[=[
 	Returns `true` if the given object is a Timer.
 ]=]
-function Timer.Is(obj: any): boolean
+function Timer.is(obj: any): boolean
 	return type(obj) == "table" and getmetatable(obj) == Timer
 end
 
-function Timer:_startTimer()
+function Timer._startTimer(self: Timer)
 	local t = self.TimeFunction
 	local nextTick = t() + self.Interval
+
 	self._runHandle = self.UpdateSignal:Connect(function()
 		local now = t()
 		if now >= nextTick then
@@ -141,8 +158,9 @@ function Timer:_startTimer()
 	end)
 end
 
-function Timer:_startTimerNoDrift()
-	assert(self.Interval > 0, "Interval must be greater than 0 when AllowDrift is set to false")
+function Timer._startTimerNoDrift(self: Timer)
+	assert(self.Interval > 0, "interval must be greater than 0 when AllowDrift is set to false")
+
 	local t = self.TimeFunction
 	local n = 1
 	local start = t()
@@ -164,7 +182,7 @@ end
 	timer:Start()
 	```
 ]=]
-function Timer:Start()
+function Timer.Start(self: Timer)
 	if self._runHandle then
 		return
 	end
@@ -183,7 +201,7 @@ end
 	timer:StartNow()
 	```
 ]=]
-function Timer:StartNow()
+function Timer.StartNow(self: Timer)
 	if self._runHandle then
 		return
 	end
@@ -198,10 +216,11 @@ end
 	timer:Stop()
 	```
 ]=]
-function Timer:Stop()
+function Timer.Stop(self: Timer)
 	if not self._runHandle then
 		return
 	end
+
 	self._runHandle:Disconnect()
 	self._runHandle = nil
 end
@@ -215,14 +234,14 @@ end
 	end
 	```
 ]=]
-function Timer:IsRunning(): boolean
+function Timer.IsRunning(self: Timer): boolean
 	return self._runHandle ~= nil
 end
 
 --[=[
 	Destroys the timer. This will also stop the timer.
 ]=]
-function Timer:Destroy()
+function Timer.Destroy(self: Timer)
 	self.Tick:Destroy()
 	self:Stop()
 end

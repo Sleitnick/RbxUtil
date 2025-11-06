@@ -6,11 +6,16 @@ export type Trove = {
 	Extend: (self: Trove) -> Trove,
 	Clone: <T>(self: Trove, instance: T & Instance) -> T,
 	Construct: <T, A...>(self: Trove, class: Constructable<T, A...>, A...) -> T,
-	Connect: (self: Trove, signal: SignalLike | RBXScriptSignal, fn: (...any) -> ...any) -> ConnectionLike,
+	Connect: (
+		self: Trove,
+		signal: SignalLike | SignalLikeMetatable | RBXScriptSignal,
+		fn: (...any) -> ...any
+	) -> ConnectionLike | ConnectionLikeMetatable,
 	BindToRenderStep: (self: Trove, name: string, priority: number, fn: (dt: number) -> ()) -> (),
-	AddPromise: <T>(self: Trove, promise: T & PromiseLike) -> T,
+	AddPromise: <T>(self: Trove, promise: (T & PromiseLike) | (T & PromiseLikeMetatable)) -> T,
 	Add: <T>(self: Trove, object: T & Trackable, cleanupMethod: string?) -> T,
 	Remove: <T>(self: Trove, object: T & Trackable) -> boolean,
+	Pop: <T>(self: Trove, object: T & Trackable) -> boolean,
 	Clean: (self: Trove) -> (),
 	WrapClean: (self: Trove) -> () -> (),
 	AttachToInstance: (self: Trove, instance: Instance) -> RBXScriptConnection,
@@ -26,20 +31,28 @@ type TroveInternal = Trove & {
 
 --[=[
 	@within Trove
-	@type Trackable Instance | RBXScriptConnection | ConnectionLike | PromiseLike | thread | ((...any) -> ...any) | Destroyable | DestroyableLowercase | Disconnectable | DisconnectableLowercase
+	@type Trackable Instance | RBXScriptConnection | ConnectionLike | ConnectLikeMetatable | PromiseLike | PromiseLikeMetatable | thread | ((...any) -> ...any) | Destroyable | DestroyableMetatable | DestroyableLowercase | DestroyableLowercaseMetatable | Disconnectable | DisconnectableMetatable | DisconnectableLowercase | DisconnectableLowercaseMetatable | SignalLike | SignalLikeMetatable
 	Represents all trackable objects by Trove.
 ]=]
 export type Trackable =
-	Instance
+	| Instance
 	| RBXScriptConnection
 	| ConnectionLike
+	| ConnectionLikeMetatable
 	| PromiseLike
+	| PromiseLikeMetatable
 	| thread
 	| ((...any) -> ...any)
 	| Destroyable
+	| DestroyableMetatable
 	| DestroyableLowercase
+	| DestroyableLowercaseMetatable
 	| Disconnectable
+	| DisconectableMetatable
 	| DisconnectableLowercase
+	| DisconnectableLowercaseMetatable
+	| SignalLike
+	| SignalLikeMetatable
 
 --[=[
 	@within Trove
@@ -54,14 +67,41 @@ type ConnectionLike = {
 
 --[=[
 	@within Trove
+	@interface ConnectionLikeMetatable
+	.Connected boolean
+	.Disconnect (self) -> ()
+	@tag Metatable
+]=]
+type ConnectionLikeMetatable = typeof(setmetatable(
+	{},
+	{} :: { Connected: boolean, Disconnect: (self: ConnectionLikeMetatable) -> () }
+))
+
+--[=[
+	@within Trove
 	@interface SignalLike
 	.Connect (self, callback: (...any) -> ...any) -> ConnectionLike
 	.Once (self, callback: (...any) -> ...any) -> ConnectionLike
 ]=]
 type SignalLike = {
-	Connect: (self: SignalLike, callback: (...any) -> ...any) -> ConnectionLike,
-	Once: (self: SignalLike, callback: (...any) -> ...any) -> ConnectionLike,
+	Connect: (self: SignalLike, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable,
+	Once: (self: SignalLike, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable,
 }
+
+--[=[
+	@within Trove
+	@interface SignalLikeMetatable
+	.Connect (self, callback: (...any) -> ...any) -> ConnectionLike
+	.Once (self, callback: (...any) -> ...any) -> ConnectionLike
+	@tag Metatable
+]=]
+type SignalLikeMetatable = typeof(setmetatable(
+	{},
+	{} :: {
+		Connect: (self: SignalLikeMetatable, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable,
+		Once: (self: SignalLikeMetatable, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable,
+	}
+))
 
 --[=[
 	@within Trove
@@ -72,9 +112,26 @@ type SignalLike = {
 ]=]
 type PromiseLike = {
 	getStatus: (self: PromiseLike) -> string,
-	finally: (self: PromiseLike, callback: (...any) -> ...any) -> PromiseLike,
+	finally: (self: PromiseLike, callback: (...any) -> ...any) -> PromiseLike | PromiseLikeMetatable,
 	cancel: (self: PromiseLike) -> (),
 }
+
+--[=[
+	@within Trove
+	@interface PromiseLikeMetatable
+	.getStatus (self) -> string
+	.finally (self, callback: (...any) -> ...any) -> PromiseLike
+	.cancel (self) -> ()
+	@tag Metatable
+]=]
+type PromiseLikeMetatable = typeof(setmetatable(
+	{},
+	{} :: {
+		getStatus: (self: any) -> string,
+		finally: (self: PromiseLikeMetatable, callback: (...any) -> ...any) -> PromiseLike | PromiseLikeMetatable,
+		cancel: (self: PromiseLikeMetatable) -> (),
+	}
+))
 
 --[=[
 	@within Trove
@@ -85,7 +142,7 @@ type Constructable<T, A...> = { new: (A...) -> T } | (A...) -> T
 --[=[
 	@within Trove
 	@interface Destroyable
-	.disconnect (self) -> ()
+	.Destroy (self) -> ()
 ]=]
 type Destroyable = {
 	Destroy: (self: Destroyable) -> (),
@@ -93,8 +150,16 @@ type Destroyable = {
 
 --[=[
 	@within Trove
+	@interface DestroyableMetatable
+	.Destroy (self) -> ()
+	@tag Metatable
+]=]
+type DestroyableMetatable = typeof(setmetatable({}, {} :: { Destroy: (self: DestroyableMetatable) -> () }))
+
+--[=[
+	@within Trove
 	@interface DestroyableLowercase
-	.disconnect (self) -> ()
+	.destroy (self) -> ()
 ]=]
 type DestroyableLowercase = {
 	destroy: (self: DestroyableLowercase) -> (),
@@ -102,12 +167,31 @@ type DestroyableLowercase = {
 
 --[=[
 	@within Trove
+	@interface DestroyableLowercaseMetatable
+	.destroy (self) -> ()
+	@tag Metatable
+]=]
+type DestroyableLowercaseMetatable = typeof(setmetatable(
+	{},
+	{} :: { destroy: (self: DestroyableLowercaseMetatable) -> () }
+))
+
+--[=[
+	@within Trove
 	@interface Disconnectable
-	.disconnect (self) -> ()
+	.Disconnect (self) -> ()
 ]=]
 type Disconnectable = {
 	Disconnect: (self: Disconnectable) -> (),
 }
+
+--[=[
+	@within Trove
+	@interface DisconectableMetatable
+	.Disconnect (self) -> ()
+	@tag Metatable
+]=]
+type DisconectableMetatable = typeof(setmetatable({}, {} :: { Disconnect: (self: DisconectableMetatable) -> () }))
 
 --[=[
 	@within Trove
@@ -118,11 +202,22 @@ type DisconnectableLowercase = {
 	disconnect: (self: DisconnectableLowercase) -> (),
 }
 
+--[=[
+	@within Trove
+	@interface DisconnectableLowercaseMetatable
+	.disconnect (self) -> ()
+	@tag Metatable
+]=]
+type DisconnectableLowercaseMetatable = typeof(setmetatable(
+	{},
+	{} :: { disconnect: (self: DisconnectableLowercaseMetatable) -> () }
+))
+
 local FN_MARKER = newproxy()
 local THREAD_MARKER = newproxy()
 local GENERIC_OBJECT_CLEANUP_METHODS = table.freeze({ "Destroy", "Disconnect", "destroy", "disconnect" })
 
-local function GetObjectCleanupFunction(object: any, cleanupMethod: string?)
+local function getObjectCleanupFunction(object: any, cleanupMethod: string?)
 	local t = typeof(object)
 
 	if t == "function" then
@@ -150,7 +245,7 @@ local function GetObjectCleanupFunction(object: any, cleanupMethod: string?)
 	error(`failed to get cleanup function for object {t}: {object}`, 3)
 end
 
-local function AssertPromiseLike(object: any)
+local function assertPromiseLike(object: any)
 	if
 		typeof(object) ~= "table"
 		or typeof(object.getStatus) ~= "function"
@@ -158,6 +253,15 @@ local function AssertPromiseLike(object: any)
 		or typeof(object.cancel) ~= "function"
 	then
 		error("did not receive a promise as an argument", 3)
+	end
+end
+
+local function assertSignalLike(object: any)
+	if
+		typeof(object) ~= "RBXScriptSignal"
+		and (typeof(object) ~= "table" or typeof(object.Connect) ~= "function" or typeof(object.Once) ~= "function")
+	then
+		error("did not receive a signal as an argument", 3)
 	end
 end
 
@@ -241,7 +345,7 @@ function Trove.Add(self: TroveInternal, object: Trackable, cleanupMethod: string
 		error("cannot call trove:Add() while cleaning", 2)
 	end
 
-	local cleanup = GetObjectCleanupFunction(object, cleanupMethod)
+	local cleanup = getObjectCleanupFunction(object, cleanupMethod)
 	table.insert(self._objects, { object, cleanup })
 
 	return object
@@ -281,7 +385,7 @@ end
 
 	If a function is given, the function will
 	be called with the given arguments.
-	
+
 	The result from either of the two options
 	will be added to the trove.
 
@@ -334,12 +438,58 @@ end
 	end)
 	```
 ]=]
-function Trove.Connect(self: TroveInternal, signal: SignalLike, fn: (...any) -> ...any)
+function Trove.Connect(
+	self: TroveInternal,
+	signal: SignalLike | SignalLikeMetatable | RBXScriptSignal,
+	fn: (...any) -> ...any
+)
 	if self._cleaning then
 		error("Cannot call trove:Connect() while cleaning", 2)
 	end
+	assertSignalLike(signal)
 
-	return self:Add(signal:Connect(fn))
+	local confirmedSignal = signal :: SignalLike
+
+	return self:Add(confirmedSignal:Connect(fn))
+end
+
+--[=[
+	@method Once
+	@within Trove
+	@param signal RBXScriptSignal
+	@param fn (...: any) -> ()
+	@return RBXScriptConnection
+	Connects the function to the signal using the `Once`
+	method, adds the connection to the trove, and then
+	returns the connection.
+
+	This is shorthand for `trove:Add(signal:Once(fn))`.
+
+	```lua
+	trove:Connect(workspace.ChildAdded, function(instance)
+		print(instance.Name .. " added to workspace")
+	end)
+	```
+]=]
+function Trove.Once(
+	self: TroveInternal,
+	signal: SignalLike | SignalLikeMetatable | RBXScriptSignal,
+	fn: (...any) -> ...any
+)
+	if self._cleaning then
+		error("Cannot call trove:Connect() while cleaning", 2)
+	end
+	assertSignalLike(signal)
+
+	local confirmedSignal = signal :: SignalLike
+
+	local conn
+	conn = confirmedSignal:Once(function(...)
+		fn(...)
+		self:Pop(conn)
+	end)
+
+	return self:Add(conn)
 end
 
 --[=[
@@ -394,36 +544,38 @@ end
 	This is only compatible with the [roblox-lua-promise](https://eryn.io/roblox-lua-promise/) library, version 4.
 	:::
 ]=]
-function Trove.AddPromise(self: TroveInternal, promise: PromiseLike)
+function Trove.AddPromise(self: TroveInternal, promise: PromiseLike | PromiseLikeMetatable)
 	if self._cleaning then
 		error("cannot call trove:AddPromise() while cleaning", 2)
 	end
-	AssertPromiseLike(promise)
+	assertPromiseLike(promise)
+	local confirmedPromise = promise :: PromiseLike
 
-	if promise:getStatus() == "Started" then
-		promise:finally(function()
+	if confirmedPromise:getStatus() == "Started" then
+		confirmedPromise:finally(function()
 			if self._cleaning then
 				return
 			end
-			self:_findAndRemoveFromObjects(promise, false)
+			self:_findAndRemoveFromObjects(confirmedPromise, false)
 		end)
 
-		self:Add(promise, "cancel")
+		self:Add(confirmedPromise, "cancel")
 	end
 
-	return promise
+	return confirmedPromise
 end
 
 --[=[
 	@method Remove
 	@within Trove
 	@param object any
-	Removes the object from the Trove and cleans it up.
+	Removes the object from the Trove and cleans it up. To remove without
+	cleaning, use the `Pop` method instead.
 
 	```lua
 	local part = Instance.new("Part")
 	trove:Add(part)
-	trove:Remove(part)
+	trove:Remove(part) -- Part is destroyed
 	```
 ]=]
 function Trove.Remove(self: TroveInternal, object: Trackable): boolean
@@ -432,6 +584,28 @@ function Trove.Remove(self: TroveInternal, object: Trackable): boolean
 	end
 
 	return self:_findAndRemoveFromObjects(object, true)
+end
+
+--[=[
+	@method Pop
+	@within Trove
+	@param object any
+	Removes the object from the Trove, but does _not_ clean it up. To
+	clean up the object on removal, use the `Remove` method instead.
+
+	```lua
+	local part = Instance.new("Part")
+	trove:Add(part)
+	trove:Pop(part)
+	trove:Clean() -- Part is NOT destroyed
+	```
+]=]
+function Trove.Pop(self: TroveInternal, object: Trackable): boolean
+	if self._cleaning then
+		error("cannot call trove:Pop() while cleaning", 2)
+	end
+
+	return self:_findAndRemoveFromObjects(object, false)
 end
 
 --[=[

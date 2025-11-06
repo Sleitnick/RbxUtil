@@ -29,10 +29,12 @@ interface Trove {
 		...args: ConstructorParameters<T>
 	): InstanceType<T>;
 	Connect<T extends Callback = Callback>(signal: RBXScriptSignal<T>, fn: T): RBXScriptConnection;
+	Once<T extends Callback = Callback>(signal: RBXScriptSignal<T>, fn: T): RBXScriptConnection;
 	BindToRenderStep(name: string, priority: number, fn: (dt: number) => void): void;
 	AddPromise<T>(promise: Promise<T>): Promise<T>;
 	Add<T extends Trackable>(object: T, cleanupMethod?: string): T;
 	Remove<T extends Trackable>(object: T): boolean;
+	Pop<T extends Trackable>(object: T): boolean;
 	AttachToInstance(instance: Instance): RBXScriptConnection;
 	Clean(): void;
 	WrapClean(): () => void;
