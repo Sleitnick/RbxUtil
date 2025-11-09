@@ -481,7 +481,7 @@ Option.None = Option._new()
 
 return (Option :: any) :: {
 	Some: <T>(value: T) -> Option<T>,
-	Wrap: <T>(value: T) -> Option<T>,
+	Wrap: <T>(value: T?) -> Option<T>,
 
 	Is: (obj: any) -> boolean,
 

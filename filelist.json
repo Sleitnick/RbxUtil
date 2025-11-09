@@ -4,7 +4,7 @@
       "name": "BufferUtil",
       "description": "Buffer utilities",
       "has_dependencies": false,
-      "version": "0.3.1",
+      "version": "0.3.2",
       "path": "modules/buffer-util",
       "files": [
         "BufferReader.luau",
@@ -70,7 +70,7 @@
       "name": "Input",
       "description": "Basic input classes",
       "has_dependencies": true,
-      "version": "2.3.0",
+      "version": "3.0.0",
       "path": "modules/input",
       "files": [
         "Gamepad.luau",
@@ -95,7 +95,7 @@
       "name": "Log",
       "description": "Log class for logging to PlayFab",
       "has_dependencies": false,
-      "version": "0.1.1",
+      "version": "0.1.2",
       "path": "modules/log",
       "files": [
         "init.luau"
@@ -137,6 +137,16 @@
       "has_dependencies": false,
       "version": "0.2.3",
       "path": "modules/quaternion",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
+      "name": "Query",
+      "description": "Query instances",
+      "has_dependencies": false,
+      "version": "0.2.0",
+      "path": "modules/query",
       "files": [
         "init.luau"
       ]
@@ -249,7 +259,7 @@
       "name": "Timer",
       "description": "Timer class",
       "has_dependencies": true,
-      "version": "1.1.2",
+      "version": "2.0.0",
       "path": "modules/timer",
       "files": [
         "init.luau"
@@ -269,7 +279,7 @@
       "name": "Trove",
       "description": "Trove class for tracking and cleaning up objects",
       "has_dependencies": false,
-      "version": "1.5.1",
+      "version": "1.8.0",
       "path": "modules/trove",
       "files": [
         "init.luau"
@@ -279,7 +289,7 @@
       "name": "TypedRemote",
       "description": "Simple networking package for typed RemoteEvents and RemoteFunctions",
       "has_dependencies": false,
-      "version": "0.2.0",
+      "version": "0.3.0",
       "path": "modules/typed-remote",
       "files": [
         "init.luau"

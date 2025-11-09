@@ -1,8 +1,9 @@
 [package]
-name = "sleitnick/log"
-description = "Log class for logging to PlayFab"
-version = "0.1.2"
+name = "sleitnick/query"
+description = "Query instances"
+version = "0.2.0"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
+exclude = ["node_modules", "package.json", "**/*.ts"]
