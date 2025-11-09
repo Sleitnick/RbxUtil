@@ -94,8 +94,14 @@ type ConnectionLikeMetatable = typeof(setmetatable(
 	.Once (self, callback: (...any) -> ...any) -> ConnectionLike
 ]=]
 type SignalLike = {
-	Connect: (self: SignalLike, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable | RBXScriptConnection,
-	Once: (self: SignalLike, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable | RBXScriptConnection,
+	Connect: (
+		self: SignalLike,
+		callback: (...any) -> ...any
+	) -> ConnectionLike | ConnectionLikeMetatable | RBXScriptConnection,
+	Once: (
+		self: SignalLike,
+		callback: (...any) -> ...any
+	) -> ConnectionLike | ConnectionLikeMetatable | RBXScriptConnection,
 	[any]: any,
 }
 
@@ -109,8 +115,14 @@ type SignalLike = {
 type SignalLikeMetatable = typeof(setmetatable(
 	{} :: { [any]: any },
 	{} :: {
-		Connect: (self: SignalLikeMetatable, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable | RBXScriptConnection,
-		Once: (self: SignalLikeMetatable, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable | RBXScriptConnection,
+		Connect: (
+			self: SignalLikeMetatable,
+			callback: (...any) -> ...any
+		) -> ConnectionLike | ConnectionLikeMetatable | RBXScriptConnection,
+		Once: (
+			self: SignalLikeMetatable,
+			callback: (...any) -> ...any
+		) -> ConnectionLike | ConnectionLikeMetatable | RBXScriptConnection,
 		[any]: any,
 	}
 ))
@@ -172,15 +184,13 @@ type Destroyable = {
 	.Destroy (self) -> ()
 	@tag Metatable
 ]=]
-type DestroyableMetatable = typeof(
-	setmetatable(
-		{} :: { [any]: any },
-		{} :: {
-			Destroy: (self: DestroyableMetatable) -> (),
-			[any]: any,
-		}
-	)
-)
+type DestroyableMetatable = typeof(setmetatable(
+	{} :: { [any]: any },
+	{} :: {
+		Destroy: (self: DestroyableMetatable) -> (),
+		[any]: any,
+	}
+))
 
 --[=[
 	@within Trove
@@ -222,15 +232,13 @@ type Disconnectable = {
 	.Disconnect (self) -> ()
 	@tag Metatable
 ]=]
-type DisconectableMetatable = typeof(
-	setmetatable(
-		{} :: { [any]: any },
-		{} :: {
-			Disconnect: (self: DisconectableMetatable) -> (),
-			[any]: any,
-		}
-	)
-)
+type DisconectableMetatable = typeof(setmetatable(
+	{} :: { [any]: any },
+	{} :: {
+		Disconnect: (self: DisconectableMetatable) -> (),
+		[any]: any,
+	}
+))
 
 --[=[
 	@within Trove
