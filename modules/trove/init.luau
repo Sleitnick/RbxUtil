@@ -68,7 +68,7 @@ export type Trackable =
 type ConnectionLike = {
 	Connected: boolean,
 	Disconnect: (self: ConnectionLike) -> (),
-	[any]: any
+	[any]: any,
 }
 
 --[=[
@@ -83,7 +83,7 @@ type ConnectionLikeMetatable = typeof(setmetatable(
 	{} :: {
 		Connected: boolean,
 		Disconnect: (self: ConnectionLikeMetatable) -> (),
-		[any]: any
+		[any]: any,
 	}
 ))
 
@@ -96,7 +96,7 @@ type ConnectionLikeMetatable = typeof(setmetatable(
 type SignalLike = {
 	Connect: (self: SignalLike, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable | RBXScriptConnection,
 	Once: (self: SignalLike, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable | RBXScriptConnection,
-	[any]: any
+	[any]: any,
 }
 
 --[=[
@@ -111,7 +111,7 @@ type SignalLikeMetatable = typeof(setmetatable(
 	{} :: {
 		Connect: (self: SignalLikeMetatable, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable | RBXScriptConnection,
 		Once: (self: SignalLikeMetatable, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable | RBXScriptConnection,
-		[any]: any
+		[any]: any,
 	}
 ))
 
@@ -126,7 +126,7 @@ type PromiseLike = {
 	getStatus: (self: PromiseLike) -> string,
 	finally: (self: PromiseLike, callback: (...any) -> ...any) -> PromiseLike | PromiseLikeMetatable,
 	cancel: (self: PromiseLike) -> (),
-	[any]: any
+	[any]: any,
 }
 
 --[=[
@@ -143,7 +143,7 @@ type PromiseLikeMetatable = typeof(setmetatable(
 		getStatus: (self: any) -> string,
 		finally: (self: PromiseLikeMetatable, callback: (...any) -> ...any) -> PromiseLike | PromiseLikeMetatable,
 		cancel: (self: PromiseLikeMetatable) -> (),
-		[any]: any
+		[any]: any,
 	}
 ))
 
@@ -151,7 +151,10 @@ type PromiseLikeMetatable = typeof(setmetatable(
 	@within Trove
 	@type Constructable { new: (A...) -> T, [any]: any } | (A...) -> T
 ]=]
-type Constructable<T, A...> = { new: (A...) -> T, [any]: any } | (A...) -> T
+type Constructable<T, A...> = {
+	new: (A...) -> T,
+	[any]: any,
+} | (A...) -> T
 
 --[=[
 	@within Trove
@@ -160,7 +163,7 @@ type Constructable<T, A...> = { new: (A...) -> T, [any]: any } | (A...) -> T
 ]=]
 type Destroyable = {
 	Destroy: (self: Destroyable) -> (),
-	[any]: any
+	[any]: any,
 }
 
 --[=[
@@ -174,7 +177,7 @@ type DestroyableMetatable = typeof(
 		{} :: { [any]: any },
 		{} :: {
 			Destroy: (self: DestroyableMetatable) -> (),
-			[any]: any
+			[any]: any,
 		}
 	)
 )
@@ -186,7 +189,7 @@ type DestroyableMetatable = typeof(
 ]=]
 type DestroyableLowercase = {
 	destroy: (self: DestroyableLowercase) -> (),
-	[any]: any
+	[any]: any,
 }
 
 --[=[
@@ -199,7 +202,7 @@ type DestroyableLowercaseMetatable = typeof(setmetatable(
 	{} :: { [any]: any },
 	{} :: {
 		destroy: (self: DestroyableLowercaseMetatable) -> (),
-		[any]: any
+		[any]: any,
 	}
 ))
 
@@ -210,7 +213,7 @@ type DestroyableLowercaseMetatable = typeof(setmetatable(
 ]=]
 type Disconnectable = {
 	Disconnect: (self: Disconnectable) -> (),
-	[any]: any
+	[any]: any,
 }
 
 --[=[
@@ -224,7 +227,7 @@ type DisconectableMetatable = typeof(
 		{} :: { [any]: any },
 		{} :: {
 			Disconnect: (self: DisconectableMetatable) -> (),
-			[any]: any
+			[any]: any,
 		}
 	)
 )
@@ -236,7 +239,7 @@ type DisconectableMetatable = typeof(
 ]=]
 type DisconnectableLowercase = {
 	disconnect: (self: DisconnectableLowercase) -> (),
-	[any]: any
+	[any]: any,
 }
 
 --[=[
@@ -249,7 +252,7 @@ type DisconnectableLowercaseMetatable = typeof(setmetatable(
 	{} :: { [any]: any },
 	{} :: {
 		disconnect: (self: DisconnectableLowercaseMetatable) -> (),
-		[any]: any
+		[any]: any,
 	}
 ))
 
