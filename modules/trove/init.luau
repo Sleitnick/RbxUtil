@@ -10,7 +10,12 @@ export type Trove = {
 		self: Trove,
 		signal: SignalLike | SignalLikeMetatable | RBXScriptSignal,
 		fn: (...any) -> ...any
-	) -> ConnectionLike | ConnectionLikeMetatable,
+	) -> ConnectionLike,
+	Once: (
+		self: Trove,
+		signal: SignalLike | SignalLikeMetatable | RBXScriptSignal,
+		fn: (...any) -> ...any
+	) -> ConnectionLike,
 	BindToRenderStep: (self: Trove, name: string, priority: number, fn: (dt: number) -> ()) -> (),
 	AddPromise: <T>(self: Trove, promise: (T & PromiseLike) | (T & PromiseLikeMetatable)) -> T,
 	Add: <T>(self: Trove, object: T & Trackable, cleanupMethod: string?) -> T,
@@ -63,6 +68,7 @@ export type Trackable =
 type ConnectionLike = {
 	Connected: boolean,
 	Disconnect: (self: ConnectionLike) -> (),
+	[any]: any
 }
 
 --[=[
@@ -73,8 +79,12 @@ type ConnectionLike = {
 	@tag Metatable
 ]=]
 type ConnectionLikeMetatable = typeof(setmetatable(
-	{},
-	{} :: { Connected: boolean, Disconnect: (self: ConnectionLikeMetatable) -> () }
+	{} :: { [any]: any },
+	{} :: {
+		Connected: boolean,
+		Disconnect: (self: ConnectionLikeMetatable) -> (),
+		[any]: any
+	}
 ))
 
 --[=[
@@ -84,8 +94,9 @@ type ConnectionLikeMetatable = typeof(setmetatable(
 	.Once (self, callback: (...any) -> ...any) -> ConnectionLike
 ]=]
 type SignalLike = {
-	Connect: (self: SignalLike, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable,
-	Once: (self: SignalLike, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable,
+	Connect: (self: SignalLike, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable | RBXScriptConnection,
+	Once: (self: SignalLike, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable | RBXScriptConnection,
+	[any]: any
 }
 
 --[=[
@@ -96,10 +107,11 @@ type SignalLike = {
 	@tag Metatable
 ]=]
 type SignalLikeMetatable = typeof(setmetatable(
-	{},
+	{} :: { [any]: any },
 	{} :: {
-		Connect: (self: SignalLikeMetatable, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable,
-		Once: (self: SignalLikeMetatable, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable,
+		Connect: (self: SignalLikeMetatable, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable | RBXScriptConnection,
+		Once: (self: SignalLikeMetatable, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable | RBXScriptConnection,
+		[any]: any
 	}
 ))
 
@@ -114,6 +126,7 @@ type PromiseLike = {
 	getStatus: (self: PromiseLike) -> string,
 	finally: (self: PromiseLike, callback: (...any) -> ...any) -> PromiseLike | PromiseLikeMetatable,
 	cancel: (self: PromiseLike) -> (),
+	[any]: any
 }
 
 --[=[
@@ -125,19 +138,20 @@ type PromiseLike = {
 	@tag Metatable
 ]=]
 type PromiseLikeMetatable = typeof(setmetatable(
-	{},
+	{} :: { [any]: any },
 	{} :: {
 		getStatus: (self: any) -> string,
 		finally: (self: PromiseLikeMetatable, callback: (...any) -> ...any) -> PromiseLike | PromiseLikeMetatable,
 		cancel: (self: PromiseLikeMetatable) -> (),
+		[any]: any
 	}
 ))
 
 --[=[
 	@within Trove
-	@type Constructable { new: (A...) -> T } | (A...) -> T
+	@type Constructable { new: (A...) -> T, [any]: any } | (A...) -> T
 ]=]
-type Constructable<T, A...> = { new: (A...) -> T } | (A...) -> T
+type Constructable<T, A...> = { new: (A...) -> T, [any]: any } | (A...) -> T
 
 --[=[
 	@within Trove
@@ -146,6 +160,7 @@ type Constructable<T, A...> = { new: (A...) -> T } | (A...) -> T
 ]=]
 type Destroyable = {
 	Destroy: (self: Destroyable) -> (),
+	[any]: any
 }
 
 --[=[
@@ -154,7 +169,15 @@ type Destroyable = {
 	.Destroy (self) -> ()
 	@tag Metatable
 ]=]
-type DestroyableMetatable = typeof(setmetatable({}, {} :: { Destroy: (self: DestroyableMetatable) -> () }))
+type DestroyableMetatable = typeof(
+	setmetatable(
+		{} :: { [any]: any },
+		{} :: {
+			Destroy: (self: DestroyableMetatable) -> (),
+			[any]: any
+		}
+	)
+)
 
 --[=[
 	@within Trove
@@ -163,6 +186,7 @@ type DestroyableMetatable = typeof(setmetatable({}, {} :: { Destroy: (self: Dest
 ]=]
 type DestroyableLowercase = {
 	destroy: (self: DestroyableLowercase) -> (),
+	[any]: any
 }
 
 --[=[
@@ -172,8 +196,11 @@ type DestroyableLowercase = {
 	@tag Metatable
 ]=]
 type DestroyableLowercaseMetatable = typeof(setmetatable(
-	{},
-	{} :: { destroy: (self: DestroyableLowercaseMetatable) -> () }
+	{} :: { [any]: any },
+	{} :: {
+		destroy: (self: DestroyableLowercaseMetatable) -> (),
+		[any]: any
+	}
 ))
 
 --[=[
@@ -183,6 +210,7 @@ type DestroyableLowercaseMetatable = typeof(setmetatable(
 ]=]
 type Disconnectable = {
 	Disconnect: (self: Disconnectable) -> (),
+	[any]: any
 }
 
 --[=[
@@ -191,7 +219,15 @@ type Disconnectable = {
 	.Disconnect (self) -> ()
 	@tag Metatable
 ]=]
-type DisconectableMetatable = typeof(setmetatable({}, {} :: { Disconnect: (self: DisconectableMetatable) -> () }))
+type DisconectableMetatable = typeof(
+	setmetatable(
+		{} :: { [any]: any },
+		{} :: {
+			Disconnect: (self: DisconectableMetatable) -> (),
+			[any]: any
+		}
+	)
+)
 
 --[=[
 	@within Trove
@@ -200,6 +236,7 @@ type DisconectableMetatable = typeof(setmetatable({}, {} :: { Disconnect: (self:
 ]=]
 type DisconnectableLowercase = {
 	disconnect: (self: DisconnectableLowercase) -> (),
+	[any]: any
 }
 
 --[=[
@@ -209,8 +246,11 @@ type DisconnectableLowercase = {
 	@tag Metatable
 ]=]
 type DisconnectableLowercaseMetatable = typeof(setmetatable(
-	{},
-	{} :: { disconnect: (self: DisconnectableLowercaseMetatable) -> () }
+	{} :: { [any]: any },
+	{} :: {
+		disconnect: (self: DisconnectableLowercaseMetatable) -> (),
+		[any]: any
+	}
 ))
 
 local FN_MARKER = newproxy()
