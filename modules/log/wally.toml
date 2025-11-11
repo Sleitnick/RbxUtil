@@ -1,8 +1,0 @@
-[package]
-name = "sleitnick/log"
-description = "Log class for logging to PlayFab"
-version = "0.1.2"
-license = "MIT"
-authors = ["Stephen Leitnick"]
-registry = "https://github.com/UpliftGames/wally-index"
-realm = "shared"

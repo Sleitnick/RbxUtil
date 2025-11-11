@@ -1,8 +1,0 @@
-[package]
-name = "sleitnick/enum-list"
-description = "Enum List class"
-version = "2.1.0"
-license = "MIT"
-authors = ["Stephen Leitnick"]
-registry = "https://github.com/UpliftGames/wally-index"
-realm = "shared"
