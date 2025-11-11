@@ -1,0 +1,18 @@
+{
+	"name": "@rbxutil/stream",
+	"version": "0.1.0",
+	"main": "init.luau",
+	"repository": {
+		"url": "git+https://github.com/Sleitnick/RbxUtil.git"
+	},
+	"license": "MIT",
+	"types": "index.d.ts",
+	"files": [
+		"./*",
+		"!*.toml",
+		"!*.json"
+	],
+	"publishConfig": {
+		"access": "public"
+	}
+}

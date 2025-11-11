@@ -214,6 +214,16 @@
       ]
     },
     {
+      "name": "Stream",
+      "description": "Stream abstraction wrapper around buffers",
+      "has_dependencies": false,
+      "version": "0.1.0",
+      "path": "modules/stream",
+      "files": [
+        "init.luau"
+      ]
+    },
+    {
       "name": "Streamable",
       "description": "Streamable class and StreamableUtil",
       "has_dependencies": true,

@@ -1,0 +1,9 @@
+[package]
+name = "sleitnick/stream"
+description = "Stream abstraction wrapper around buffers"
+version = "0.1.0"
+license = "MIT"
+authors = ["Stephen Leitnick"]
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+exclude = ["node_modules", "package.json", "**/*.ts"]
