@@ -1,0 +1,1315 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="plugin-moonwave plugin-id-moonwave" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.7.0">
+<title data-rh="true">stream | RbxUtil</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Sleitnick.github.io/RbxUtil/api/stream"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docusaurus_tag" content="default"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docsearch:docusaurus_tag" content="default"><meta data-rh="true" property="og:title" content="stream | RbxUtil"><meta data-rh="true" name="description" content="The `stream` library allows a stream-like interface abstraction on top of buffers. This is useful
+for reading or writing buffers without having to keep track of the current offset position.
+
+This library is specifically tailored around fixed-length buffers.
+
+```lua
+-- Create an empty stream and write some data:
+local s = stream.create(4)
+stream.writeu8(s, 10)
+stream.writeu8(s, 25)
+stream.writeu8(s, 2)
+stream.writeu8(s, 43)
+
+-- Grab the buffer if needed:
+local buf = stream.buffer(s)
+
+-- Create a stream from an existing buffer:
+local s = stream.from(buf)
+print(stream.readu8()) -- 10
+print(stream.readu8()) -- 25
+print(stream.readu8()) -- 2
+print(stream.readu8()) -- 43
+
+-- Move the cursor:
+stream.seek(s, 1)
+print(stream.readu8()) -- 25
+```"><meta data-rh="true" property="og:description" content="The `stream` library allows a stream-like interface abstraction on top of buffers. This is useful
+for reading or writing buffers without having to keep track of the current offset position.
+
+This library is specifically tailored around fixed-length buffers.
+
+```lua
+-- Create an empty stream and write some data:
+local s = stream.create(4)
+stream.writeu8(s, 10)
+stream.writeu8(s, 25)
+stream.writeu8(s, 2)
+stream.writeu8(s, 43)
+
+-- Grab the buffer if needed:
+local buf = stream.buffer(s)
+
+-- Create a stream from an existing buffer:
+local s = stream.from(buf)
+print(stream.readu8()) -- 10
+print(stream.readu8()) -- 25
+print(stream.readu8()) -- 2
+print(stream.readu8()) -- 43
+
+-- Move the cursor:
+stream.seek(s, 1)
+print(stream.readu8()) -- 25
+```"><link data-rh="true" rel="canonical" href="https://Sleitnick.github.io/RbxUtil/api/stream"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/stream" hreflang="en"><link data-rh="true" rel="alternate" href="https://Sleitnick.github.io/RbxUtil/api/stream" hreflang="x-default"><link rel="stylesheet" href="/RbxUtil/assets/css/styles.5cbed574.css">
+<script src="/RbxUtil/assets/js/runtime~main.6ef2703e.js" defer="defer"></script>
+<script src="/RbxUtil/assets/js/main.b7dc9d07.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<script>!function(){function t(t){document.documentElement.setAttribute("data-theme",t)}var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();null!==e?t(e):window.matchMedia("(prefers-color-scheme: dark)").matches?t("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,t("light"))}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="navbar navbar--fixed-top"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/RbxUtil/"><b class="navbar__title text--truncate">RbxUtil</b></a><a class="navbar__item navbar__link" href="/RbxUtil/docs/intro">Docs</a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/RbxUtil/api/">API</a></div><div class="navbar__items navbar__items--right"><a href="https://github.com/Sleitnick/RbxUtil" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="Switch between dark and light mode (currently light mode)" aria-label="Switch between dark and light mode (currently light mode)" aria-live="polite" aria-pressed="false"><svg viewBox="0 0 24 24" width="24" height="24" class="lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" class="darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search"><span aria-label="expand searchbar" role="button" class="search-icon" tabindex="0"></span><input id="search_input_react" type="search" placeholder="Loading..." aria-label="Search" class="navbar__search-input search-bar" disabled=""></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="main-wrapper mainWrapper_z2l0 docPageContainer_wNNk"><div class="docPage_Dpn1"><div class="docSidebarContainer_o_re"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/RbxUtil/api/BufferUtil">BufferUtil</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/RbxUtil/api/Input">Input</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/RbxUtil/api/Comm">Remote Comm</a></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Component">​Component</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Concur">​Concur</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/EnumList">​Enum​List</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Find">​Find</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Loader">​Loader</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Log">​Log</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Net">​Net</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Option">​Option</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/PID">​P​I​D</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Quaternion">​Quaternion</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Query">​Query</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Sequent">​Sequent</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Ser">​Ser</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Shake">​Shake</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Signal">​Signal</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Silo">​Silo</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Spring">​Spring</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" href="/RbxUtil/api/stream">stream</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Streamable">​Streamable</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/StreamableUtil">​Streamable​Util</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Symbol">​Symbol</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/TableUtil">​Table​Util</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/TaskQueue">​Task​Queue</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Timer">​Timer</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Tree">​Tree</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/Trove">​Trove</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/TypedRemote">​Typed​Remote</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/RbxUtil/api/WaitFor">​Wait​For</a></li></ul></nav></div></div><main class="docMainContainer_HJE1"><div class="container padding-vert--lg"><div class="row"><div class="col docItemCol_MU3C"><div class="docItemContainer_Wv98"><article><div class="member_J0w1 markdown"><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_oUs_"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><header><h1 class="docTitle_mZRt" style="text-decoration:none"><span style="display:inline-block">stream</span></h1><div class="luaClassTags_EipM"></div><div>
+<p>
+  The <code>stream</code> library allows a stream-like interface abstraction on top of buffers. This is useful
+  for reading or writing buffers without having to keep track of the current offset position.
+</p>
+<p>This library is specifically tailored around fixed-length buffers.</p>
+<pre class="language-lua"><code class="language-lua"><span class="token comment">-- Create an empty stream and write some data:</span>
+<span class="token keyword">local</span> s <span class="token operator">=</span> stream<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span>
+stream<span class="token punctuation">.</span><span class="token function">writeu8</span><span class="token punctuation">(</span>s<span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span>
+stream<span class="token punctuation">.</span><span class="token function">writeu8</span><span class="token punctuation">(</span>s<span class="token punctuation">,</span> <span class="token number">25</span><span class="token punctuation">)</span>
+stream<span class="token punctuation">.</span><span class="token function">writeu8</span><span class="token punctuation">(</span>s<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+stream<span class="token punctuation">.</span><span class="token function">writeu8</span><span class="token punctuation">(</span>s<span class="token punctuation">,</span> <span class="token number">43</span><span class="token punctuation">)</span>
+
+<span class="token comment">-- Grab the buffer if needed:</span>
+<span class="token keyword">local</span> buf <span class="token operator">=</span> stream<span class="token punctuation">.</span><span class="token function">buffer</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span>
+
+<span class="token comment">-- Create a stream from an existing buffer:</span>
+<span class="token keyword">local</span> s <span class="token operator">=</span> stream<span class="token punctuation">.</span><span class="token function">from</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span>
+<span class="token function">print</span><span class="token punctuation">(</span>stream<span class="token punctuation">.</span><span class="token function">readu8</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">-- 10</span>
+<span class="token function">print</span><span class="token punctuation">(</span>stream<span class="token punctuation">.</span><span class="token function">readu8</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">-- 25</span>
+<span class="token function">print</span><span class="token punctuation">(</span>stream<span class="token punctuation">.</span><span class="token function">readu8</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">-- 2</span>
+<span class="token function">print</span><span class="token punctuation">(</span>stream<span class="token punctuation">.</span><span class="token function">readu8</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">-- 43</span>
+
+<span class="token comment">-- Move the cursor:</span>
+stream<span class="token punctuation">.</span><span class="token function">seek</span><span class="token punctuation">(</span>s<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+<span class="token function">print</span><span class="token punctuation">(</span>stream<span class="token punctuation">.</span><span class="token function">readu8</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">-- 25</span>
+</code></pre>
+</div></header><h2 class="anchor anchorWithStickyNavbar_LWe7" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="create"><code style="text-decoration:none">create</code><a href="#create" class="hash-link" aria-label="Direct link to create" title="Direct link to create">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L51"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">create</code><code>(</code><code>size<!-- -->: </code><code class="blue_P4bS">number</code><code>) → </code><code class="blue_P4bS">Stream</code></div><div>
+<p>Create a stream around a new buffer with the given size in bytes.</p>
+<p>This is equivalent to <code>stream.frombuffer(buffer.create(size))</code>.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="frombuffer"><code style="text-decoration:none">frombuffer</code><a href="#frombuffer" class="hash-link" aria-label="Direct link to frombuffer" title="Direct link to frombuffer">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L60"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">frombuffer</code><code>(</code><code>buf<!-- -->: </code><code class="blue_P4bS">buffer</code><code>) → </code><code class="blue_P4bS">Stream</code></div><div>
+<p>Create a stream around an existing buffer.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="fromstring"><code style="text-decoration:none">fromstring</code><a href="#fromstring" class="hash-link" aria-label="Direct link to fromstring" title="Direct link to fromstring">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L75"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">fromstring</code><code>(</code><code>str<!-- -->: </code><code class="blue_P4bS">string</code><code>) → </code><code class="blue_P4bS">Stream</code></div><div>
+<p>Create a stream from an existing string.</p>
+<p>This is equivalent to <code>stream.frombuffer(buffer.fromstring(size))</code>.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="readu8"><code style="text-decoration:none">readu8</code><a href="#readu8" class="hash-link" aria-label="Direct link to readu8" title="Direct link to readu8">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L90"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">readu8</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">number</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="readi8"><code style="text-decoration:none">readi8</code><a href="#readi8" class="hash-link" aria-label="Direct link to readi8" title="Direct link to readi8">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L99"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">readi8</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">number</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="readu16"><code style="text-decoration:none">readu16</code><a href="#readu16" class="hash-link" aria-label="Direct link to readu16" title="Direct link to readu16">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L108"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">readu16</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">number</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="readi16"><code style="text-decoration:none">readi16</code><a href="#readi16" class="hash-link" aria-label="Direct link to readi16" title="Direct link to readi16">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L117"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">readi16</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">number</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="readu32"><code style="text-decoration:none">readu32</code><a href="#readu32" class="hash-link" aria-label="Direct link to readu32" title="Direct link to readu32">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L126"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">readu32</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">number</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="readi32"><code style="text-decoration:none">readi32</code><a href="#readi32" class="hash-link" aria-label="Direct link to readi32" title="Direct link to readi32">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L135"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">readi32</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">number</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="readf32"><code style="text-decoration:none">readf32</code><a href="#readf32" class="hash-link" aria-label="Direct link to readf32" title="Direct link to readf32">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L144"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">readf32</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">number</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="readf64"><code style="text-decoration:none">readf64</code><a href="#readf64" class="hash-link" aria-label="Direct link to readf64" title="Direct link to readf64">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L153"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">readf64</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">number</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="readstring"><code style="text-decoration:none">readstring</code><a href="#readstring" class="hash-link" aria-label="Direct link to readstring" title="Direct link to readstring">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L162"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">readstring</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>count<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code class="blue_P4bS">string</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="readlstring"><code style="text-decoration:none">readlstring</code><a href="#readlstring" class="hash-link" aria-label="Direct link to readlstring" title="Direct link to readlstring">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L174"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">readlstring</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">string</code></div><div>
+<p>
+  Reads a string previously written using <code>stream.writelstring</code>. This function
+  assumes that the length of the string is written at the beginning as a u32 int.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="readvector"><code style="text-decoration:none">readvector</code><a href="#readvector" class="hash-link" aria-label="Direct link to readvector" title="Direct link to readvector">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L184"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">readvector</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">vector</code></div><div>
+<p>Equivalent to <code>stream.readvectorf32</code>.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="readvectorf32"><code style="text-decoration:none">readvectorf32</code><a href="#readvectorf32" class="hash-link" aria-label="Direct link to readvectorf32" title="Direct link to readvectorf32">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L197"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">readvectorf32</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">vector</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="readvectoru32"><code style="text-decoration:none">readvectoru32</code><a href="#readvectoru32" class="hash-link" aria-label="Direct link to readvectoru32" title="Direct link to readvectoru32">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L210"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">readvectoru32</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">vector</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="readvectori32"><code style="text-decoration:none">readvectori32</code><a href="#readvectori32" class="hash-link" aria-label="Direct link to readvectori32" title="Direct link to readvectori32">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L223"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">readvectori32</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">vector</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="readvectoru16"><code style="text-decoration:none">readvectoru16</code><a href="#readvectoru16" class="hash-link" aria-label="Direct link to readvectoru16" title="Direct link to readvectoru16">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L236"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">readvectoru16</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">vector</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="readvectori16"><code style="text-decoration:none">readvectori16</code><a href="#readvectori16" class="hash-link" aria-label="Direct link to readvectori16" title="Direct link to readvectori16">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L249"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">readvectori16</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">vector</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="readvectoru8"><code style="text-decoration:none">readvectoru8</code><a href="#readvectoru8" class="hash-link" aria-label="Direct link to readvectoru8" title="Direct link to readvectoru8">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L262"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">readvectoru8</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">vector</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="readvectori8"><code style="text-decoration:none">readvectori8</code><a href="#readvectori8" class="hash-link" aria-label="Direct link to readvectori8" title="Direct link to readvectori8">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L275"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">readvectori8</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">vector</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="writeu8"><code style="text-decoration:none">writeu8</code><a href="#writeu8" class="hash-link" aria-label="Direct link to writeu8" title="Direct link to writeu8">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L291"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">writeu8</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>n<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code>(</code><code>)</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="writei8"><code style="text-decoration:none">writei8</code><a href="#writei8" class="hash-link" aria-label="Direct link to writei8" title="Direct link to writei8">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L299"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">writei8</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>n<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code>(</code><code>)</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="writeu16"><code style="text-decoration:none">writeu16</code><a href="#writeu16" class="hash-link" aria-label="Direct link to writeu16" title="Direct link to writeu16">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L307"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">writeu16</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>n<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code>(</code><code>)</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="writei16"><code style="text-decoration:none">writei16</code><a href="#writei16" class="hash-link" aria-label="Direct link to writei16" title="Direct link to writei16">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L315"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">writei16</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>n<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code>(</code><code>)</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="writeu32"><code style="text-decoration:none">writeu32</code><a href="#writeu32" class="hash-link" aria-label="Direct link to writeu32" title="Direct link to writeu32">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L323"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">writeu32</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>n<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code>(</code><code>)</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="writei32"><code style="text-decoration:none">writei32</code><a href="#writei32" class="hash-link" aria-label="Direct link to writei32" title="Direct link to writei32">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L331"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">writei32</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>n<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code>(</code><code>)</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="writef32"><code style="text-decoration:none">writef32</code><a href="#writef32" class="hash-link" aria-label="Direct link to writef32" title="Direct link to writef32">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L339"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">writef32</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>n<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code>(</code><code>)</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="writef64"><code style="text-decoration:none">writef64</code><a href="#writef64" class="hash-link" aria-label="Direct link to writef64" title="Direct link to writef64">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L347"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">writef64</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>n<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code>(</code><code>)</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="writestring"><code style="text-decoration:none">writestring</code><a href="#writestring" class="hash-link" aria-label="Direct link to writestring" title="Direct link to writestring">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L355"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">writestring</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>str<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code></div><div><code>count<!-- -->: </code><code class="blue_P4bS">number?</code></div></div><code>) → </code><code>(</code><code>)</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="writelstring"><code style="text-decoration:none">writelstring</code><a href="#writelstring" class="hash-link" aria-label="Direct link to writelstring" title="Direct link to writelstring">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L363"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">writelstring</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>str<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code></div><div><code>count<!-- -->: </code><code class="blue_P4bS">number?</code></div></div><code>) → </code><code>(</code><code>)</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="writevector"><code style="text-decoration:none">writevector</code><a href="#writevector" class="hash-link" aria-label="Direct link to writevector" title="Direct link to writevector">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L373"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">writevector</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>v<!-- -->: </code><code class="blue_P4bS">vector</code></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+<p>Equivalent to <code>stream.writevectorf32</code>.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="writevectorf32"><code style="text-decoration:none">writevectorf32</code><a href="#writevectorf32" class="hash-link" aria-label="Direct link to writevectorf32" title="Direct link to writevectorf32">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L385"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">writevectorf32</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>v<!-- -->: </code><code class="blue_P4bS">vector</code></div></div><code>) → </code><code>(</code><code>)</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="writevectoru32"><code style="text-decoration:none">writevectoru32</code><a href="#writevectoru32" class="hash-link" aria-label="Direct link to writevectoru32" title="Direct link to writevectoru32">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L397"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">writevectoru32</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>v<!-- -->: </code><code class="blue_P4bS">vector</code></div></div><code>) → </code><code>(</code><code>)</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="writevectori32"><code style="text-decoration:none">writevectori32</code><a href="#writevectori32" class="hash-link" aria-label="Direct link to writevectori32" title="Direct link to writevectori32">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L409"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">writevectori32</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>v<!-- -->: </code><code class="blue_P4bS">vector</code></div></div><code>) → </code><code>(</code><code>)</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="writevectoru16"><code style="text-decoration:none">writevectoru16</code><a href="#writevectoru16" class="hash-link" aria-label="Direct link to writevectoru16" title="Direct link to writevectoru16">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L421"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">writevectoru16</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>v<!-- -->: </code><code class="blue_P4bS">vector</code></div></div><code>) → </code><code>(</code><code>)</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="writevectori16"><code style="text-decoration:none">writevectori16</code><a href="#writevectori16" class="hash-link" aria-label="Direct link to writevectori16" title="Direct link to writevectori16">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L433"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">writevectori16</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>v<!-- -->: </code><code class="blue_P4bS">vector</code></div></div><code>) → </code><code>(</code><code>)</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="writevectoru8"><code style="text-decoration:none">writevectoru8</code><a href="#writevectoru8" class="hash-link" aria-label="Direct link to writevectoru8" title="Direct link to writevectoru8">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L445"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">writevectoru8</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>v<!-- -->: </code><code class="blue_P4bS">vector</code></div></div><code>) → </code><code>(</code><code>)</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="writevectori8"><code style="text-decoration:none">writevectori8</code><a href="#writevectori8" class="hash-link" aria-label="Direct link to writevectori8" title="Direct link to writevectori8">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L457"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">writevectori8</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>v<!-- -->: </code><code class="blue_P4bS">vector</code></div></div><code>) → </code><code>(</code><code>)</code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="len"><code style="text-decoration:none">len</code><a href="#len" class="hash-link" aria-label="Direct link to len" title="Direct link to len">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L473"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">len</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">number</code></div><div>
+<p>Returns the length of the backing buffer.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="pos"><code style="text-decoration:none">pos</code><a href="#pos" class="hash-link" aria-label="Direct link to pos" title="Direct link to pos">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L482"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">pos</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">number</code></div><div>
+<p>Returns the position of the stream's cursor.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="copy"><code style="text-decoration:none">copy</code><a href="#copy" class="hash-link" aria-label="Direct link to copy" title="Direct link to copy">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L492"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">copy</code><code>(</code><div class="inset_uKQm"><div><code>target<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>source<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>count<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+<p>
+  Copy <code>count</code> bytes from <code>source</code> into <code>target</code>. The provided streams' cursors are
+  incremented by <code>count</code>.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="copytobuffer"><code style="text-decoration:none">copytobuffer</code><a href="#copytobuffer" class="hash-link" aria-label="Direct link to copytobuffer" title="Direct link to copytobuffer">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L504"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">copytobuffer</code><code>(</code><div class="inset_uKQm"><div><code>target<!-- -->: </code><code class="blue_P4bS">buffer</code><code>,</code></div><div><code>targetOffset<!-- -->: </code><code class="blue_P4bS">number</code><code>,</code></div><div><code>source<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>count<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+<p>
+  Copy <code>count</code> bytes from the <code>source</code> stream into the <code>target</code> buffer. The <code>source</code> stream
+  cursor is incremented by <code>count</code>.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="copyfrombuffer"><code style="text-decoration:none">copyfrombuffer</code><a href="#copyfrombuffer" class="hash-link" aria-label="Direct link to copyfrombuffer" title="Direct link to copyfrombuffer">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L515"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">copyfrombuffer</code><code>(</code><div class="inset_uKQm"><div><code>target<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>source<!-- -->: </code><code class="blue_P4bS">buffer</code><code>,</code></div><div><code>sourceOffset<!-- -->: </code><code class="blue_P4bS">number?</code><code>,</code></div><div><code>count<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+<p>
+  Copy <code>count</code> bytes from the <code>source</code> buffer (optionally offset by <code>sourceOffset</code>) into the
+  <code>target</code> stream. The <code>target</code> stream cursor is incremented by <code>count</code>.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="seek"><code style="text-decoration:none">seek</code><a href="#seek" class="hash-link" aria-label="Direct link to seek" title="Direct link to seek">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L525"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">seek</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>offset<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+<p>Moves the cursor relative to the beginning of the stream.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="seekend"><code style="text-decoration:none">seekend</code><a href="#seekend" class="hash-link" aria-label="Direct link to seekend" title="Direct link to seekend">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L537"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">seekend</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>offset<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+<p>Moves the cursor backward relative to the end of the stream.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="seekforward"><code style="text-decoration:none">seekforward</code><a href="#seekforward" class="hash-link" aria-label="Direct link to seekforward" title="Direct link to seekforward">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L549"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">seekforward</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>offset<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+<p>Moves the cursor forward relative to the current cursor position.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="seekbackward"><code style="text-decoration:none">seekbackward</code><a href="#seekbackward" class="hash-link" aria-label="Direct link to seekbackward" title="Direct link to seekbackward">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L561"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">seekbackward</code><code>(</code><div class="inset_uKQm"><div><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>,</code></div><div><code>offset<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+<p>Moves the cursor backward relative to the current cursor position.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="buffer"><code style="text-decoration:none">buffer</code><a href="#buffer" class="hash-link" aria-label="Direct link to buffer" title="Direct link to buffer">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L573"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">buffer</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">buffer</code></div><div>
+<p>Gets the backing buffer for the stream.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="tostring"><code style="text-decoration:none">tostring</code><a href="#tostring" class="hash-link" aria-label="Direct link to tostring" title="Direct link to tostring">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L582"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">tostring</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">string</code></div><div>
+<p>Returns the backing buffer as a string.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="atend"><code style="text-decoration:none">atend</code><a href="#atend" class="hash-link" aria-label="Direct link to atend" title="Direct link to atend">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Sleitnick/RbxUtil/blob/main/modules/stream/init.luau#L591"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>stream<!-- -->.</code><code class="green_DgR4">atend</code><code>(</code><code>s<!-- -->: </code><code class="blue_P4bS">Stream</code><code>) → </code><code class="blue_P4bS">boolean</code></div><div>
+<p>Returns <code>true</code> if the cursor is at the end of the stream.</p>
+</div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
+    &quot;functions&quot;: [
+        {
+            &quot;name&quot;: &quot;create&quot;,
+            &quot;desc&quot;: &quot;Create a stream around a new buffer with the given size in bytes.\n\nThis is equivalent to `stream.frombuffer(buffer.create(size))`.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;size&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 51,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;frombuffer&quot;,
+            &quot;desc&quot;: &quot;Create a stream around an existing buffer.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;buf&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;buffer&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 60,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;fromstring&quot;,
+            &quot;desc&quot;: &quot;Create a stream from an existing string.\n\nThis is equivalent to `stream.frombuffer(buffer.fromstring(size))`.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;str&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 75,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;readu8&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 90,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;readi8&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 99,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;readu16&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 108,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;readi16&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 117,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;readu32&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 126,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;readi32&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 135,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;readf32&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 144,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;readf64&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 153,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;readstring&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;count&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 162,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;readlstring&quot;,
+            &quot;desc&quot;: &quot;Reads a string previously written using `stream.writelstring`. This function\nassumes that the length of the string is written at the beginning as a u32 int.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 174,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;readvector&quot;,
+            &quot;desc&quot;: &quot;Equivalent to `stream.readvectorf32`.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;vector\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 184,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;readvectorf32&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;vector\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 197,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;readvectoru32&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;vector\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 210,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;readvectori32&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;vector\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 223,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;readvectoru16&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;vector\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 236,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;readvectori16&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;vector\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 249,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;readvectoru8&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;vector\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 262,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;readvectori8&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;vector\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 275,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;writeu8&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;n&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 291,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;writei8&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;n&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 299,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;writeu16&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;n&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 307,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;writei16&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;n&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 315,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;writeu32&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;n&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 323,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;writei32&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;n&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 331,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;writef32&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;n&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 339,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;writef64&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;n&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 347,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;writestring&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;str&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;count&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number?&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 355,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;writelstring&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;str&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;count&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number?&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 363,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;writevector&quot;,
+            &quot;desc&quot;: &quot;Equivalent to `stream.writevectorf32`.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;v&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;vector&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 373,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;writevectorf32&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;v&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;vector&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 385,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;writevectoru32&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;v&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;vector&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 397,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;writevectori32&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;v&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;vector&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 409,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;writevectoru16&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;v&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;vector&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 421,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;writevectori16&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;v&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;vector&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 433,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;writevectoru8&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;v&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;vector&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 445,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;writevectori8&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;v&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;vector&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 457,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;len&quot;,
+            &quot;desc&quot;: &quot;Returns the length of the backing buffer.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 473,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;pos&quot;,
+            &quot;desc&quot;: &quot;Returns the position of the stream&#x27;s cursor.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 482,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;copy&quot;,
+            &quot;desc&quot;: &quot;Copy `count` bytes from `source` into `target`. The provided streams&#x27; cursors are\nincremented by `count`.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;target&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;source&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;count&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 492,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;copytobuffer&quot;,
+            &quot;desc&quot;: &quot;Copy `count` bytes from the `source` stream into the `target` buffer. The `source` stream\ncursor is incremented by `count`.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;target&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;buffer&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;targetOffset&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;source&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;count&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 504,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;copyfrombuffer&quot;,
+            &quot;desc&quot;: &quot;Copy `count` bytes from the `source` buffer (optionally offset by `sourceOffset`) into the\n`target` stream. The `target` stream cursor is incremented by `count`.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;target&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;source&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;buffer&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;sourceOffset&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number?&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;count&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 515,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;seek&quot;,
+            &quot;desc&quot;: &quot;Moves the cursor relative to the beginning of the stream.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;offset&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 525,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;seekend&quot;,
+            &quot;desc&quot;: &quot;Moves the cursor backward relative to the end of the stream.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;offset&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 537,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;seekforward&quot;,
+            &quot;desc&quot;: &quot;Moves the cursor forward relative to the current cursor position.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;offset&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 549,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;seekbackward&quot;,
+            &quot;desc&quot;: &quot;Moves the cursor backward relative to the current cursor position.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;offset&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 561,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;buffer&quot;,
+            &quot;desc&quot;: &quot;Gets the backing buffer for the stream.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;buffer\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 573,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;tostring&quot;,
+            &quot;desc&quot;: &quot;Returns the backing buffer as a string.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 582,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;atend&quot;,
+            &quot;desc&quot;: &quot;Returns `true` if the cursor is at the end of the stream.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;s&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Stream&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;boolean\n&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 591,
+                &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+            }
+        }
+    ],
+    &quot;properties&quot;: [],
+    &quot;types&quot;: [],
+    &quot;name&quot;: &quot;stream&quot;,
+    &quot;desc&quot;: &quot;The `stream` library allows a stream-like interface abstraction on top of buffers. This is useful\nfor reading or writing buffers without having to keep track of the current offset position.\n\nThis library is specifically tailored around fixed-length buffers.\n\n```lua\n-- Create an empty stream and write some data:\nlocal s = stream.create(4)\nstream.writeu8(s, 10)\nstream.writeu8(s, 25)\nstream.writeu8(s, 2)\nstream.writeu8(s, 43)\n\n-- Grab the buffer if needed:\nlocal buf = stream.buffer(s)\n\n-- Create a stream from an existing buffer:\nlocal s = stream.from(buf)\nprint(stream.readu8()) -- 10\nprint(stream.readu8()) -- 25\nprint(stream.readu8()) -- 2\nprint(stream.readu8()) -- 43\n\n-- Move the cursor:\nstream.seek(s, 1)\nprint(stream.readu8()) -- 25\n```&quot;,
+    &quot;source&quot;: {
+        &quot;line&quot;: 35,
+        &quot;path&quot;: &quot;modules/stream/init.luau&quot;
+    }
+}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#atend" class="table-of-contents__link toc-highlight">.atend</a></li><li><a href="#buffer" class="table-of-contents__link toc-highlight">.buffer</a></li><li><a href="#copy" class="table-of-contents__link toc-highlight">.copy</a></li><li><a href="#copyfrombuffer" class="table-of-contents__link toc-highlight">.copyfrombuffer</a></li><li><a href="#copytobuffer" class="table-of-contents__link toc-highlight">.copytobuffer</a></li><li><a href="#create" class="table-of-contents__link toc-highlight">.create</a></li><li><a href="#frombuffer" class="table-of-contents__link toc-highlight">.frombuffer</a></li><li><a href="#fromstring" class="table-of-contents__link toc-highlight">.fromstring</a></li><li><a href="#len" class="table-of-contents__link toc-highlight">.len</a></li><li><a href="#pos" class="table-of-contents__link toc-highlight">.pos</a></li><li><a href="#readf32" class="table-of-contents__link toc-highlight">.readf32</a></li><li><a href="#readf64" class="table-of-contents__link toc-highlight">.readf64</a></li><li><a href="#readi16" class="table-of-contents__link toc-highlight">.readi16</a></li><li><a href="#readi32" class="table-of-contents__link toc-highlight">.readi32</a></li><li><a href="#readi8" class="table-of-contents__link toc-highlight">.readi8</a></li><li><a href="#readlstring" class="table-of-contents__link toc-highlight">.readlstring</a></li><li><a href="#readstring" class="table-of-contents__link toc-highlight">.readstring</a></li><li><a href="#readu16" class="table-of-contents__link toc-highlight">.readu16</a></li><li><a href="#readu32" class="table-of-contents__link toc-highlight">.readu32</a></li><li><a href="#readu8" class="table-of-contents__link toc-highlight">.readu8</a></li><li><a href="#readvector" class="table-of-contents__link toc-highlight">.readvector</a></li><li><a href="#readvectorf32" class="table-of-contents__link toc-highlight">.readvectorf32</a></li><li><a href="#readvectori16" class="table-of-contents__link toc-highlight">.readvectori16</a></li><li><a href="#readvectori32" class="table-of-contents__link toc-highlight">.readvectori32</a></li><li><a href="#readvectori8" class="table-of-contents__link toc-highlight">.readvectori8</a></li><li><a href="#readvectoru16" class="table-of-contents__link toc-highlight">.readvectoru16</a></li><li><a href="#readvectoru32" class="table-of-contents__link toc-highlight">.readvectoru32</a></li><li><a href="#readvectoru8" class="table-of-contents__link toc-highlight">.readvectoru8</a></li><li><a href="#seek" class="table-of-contents__link toc-highlight">.seek</a></li><li><a href="#seekbackward" class="table-of-contents__link toc-highlight">.seekbackward</a></li><li><a href="#seekend" class="table-of-contents__link toc-highlight">.seekend</a></li><li><a href="#seekforward" class="table-of-contents__link toc-highlight">.seekforward</a></li><li><a href="#tostring" class="table-of-contents__link toc-highlight">.tostring</a></li><li><a href="#writef32" class="table-of-contents__link toc-highlight">.writef32</a></li><li><a href="#writef64" class="table-of-contents__link toc-highlight">.writef64</a></li><li><a href="#writei16" class="table-of-contents__link toc-highlight">.writei16</a></li><li><a href="#writei32" class="table-of-contents__link toc-highlight">.writei32</a></li><li><a href="#writei8" class="table-of-contents__link toc-highlight">.writei8</a></li><li><a href="#writelstring" class="table-of-contents__link toc-highlight">.writelstring</a></li><li><a href="#writestring" class="table-of-contents__link toc-highlight">.writestring</a></li><li><a href="#writeu16" class="table-of-contents__link toc-highlight">.writeu16</a></li><li><a href="#writeu32" class="table-of-contents__link toc-highlight">.writeu32</a></li><li><a href="#writeu8" class="table-of-contents__link toc-highlight">.writeu8</a></li><li><a href="#writevector" class="table-of-contents__link toc-highlight">.writevector</a></li><li><a href="#writevectorf32" class="table-of-contents__link toc-highlight">.writevectorf32</a></li><li><a href="#writevectori16" class="table-of-contents__link toc-highlight">.writevectori16</a></li><li><a href="#writevectori32" class="table-of-contents__link toc-highlight">.writevectori32</a></li><li><a href="#writevectori8" class="table-of-contents__link toc-highlight">.writevectori8</a></li><li><a href="#writevectoru16" class="table-of-contents__link toc-highlight">.writevectoru16</a></li><li><a href="#writevectoru32" class="table-of-contents__link toc-highlight">.writevectoru32</a></li><li><a href="#writevectoru8" class="table-of-contents__link toc-highlight">.writevectoru8</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 Sleitnick. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
+</body>
+</html>
