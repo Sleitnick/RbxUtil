@@ -374,8 +374,8 @@ function stream.writevector(s: Stream, v: vector)
 	local b = s.b
 	local o = s.o
 	buffer.writef32(b, o + 0, v.x)
-	buffer.writef32(b, o + 4, v.x)
-	buffer.writef32(b, o + 8, v.x)
+	buffer.writef32(b, o + 4, v.y)
+	buffer.writef32(b, o + 8, v.z)
 	s.o += 12
 end
 
@@ -386,8 +386,8 @@ function stream.writevectorf32(s: Stream, v: vector)
 	local b = s.b
 	local o = s.o
 	buffer.writef32(b, o + 0, v.x)
-	buffer.writef32(b, o + 4, v.x)
-	buffer.writef32(b, o + 8, v.x)
+	buffer.writef32(b, o + 4, v.y)
+	buffer.writef32(b, o + 8, v.z)
 	s.o += 12
 end
 
@@ -398,8 +398,8 @@ function stream.writevectoru32(s: Stream, v: vector)
 	local b = s.b
 	local o = s.o
 	buffer.writeu32(b, o + 0, v.x)
-	buffer.writeu32(b, o + 4, v.x)
-	buffer.writeu32(b, o + 8, v.x)
+	buffer.writeu32(b, o + 4, v.y)
+	buffer.writeu32(b, o + 8, v.z)
 	s.o += 12
 end
 
@@ -410,8 +410,8 @@ function stream.writevectori32(s: Stream, v: vector)
 	local b = s.b
 	local o = s.o
 	buffer.writei32(b, o + 0, v.x)
-	buffer.writei32(b, o + 4, v.x)
-	buffer.writei32(b, o + 8, v.x)
+	buffer.writei32(b, o + 4, v.y)
+	buffer.writei32(b, o + 8, v.z)
 	s.o += 12
 end
 
@@ -422,8 +422,8 @@ function stream.writevectoru16(s: Stream, v: vector)
 	local b = s.b
 	local o = s.o
 	buffer.writeu16(b, o + 0, v.x)
-	buffer.writeu16(b, o + 2, v.x)
-	buffer.writeu16(b, o + 4, v.x)
+	buffer.writeu16(b, o + 2, v.y)
+	buffer.writeu16(b, o + 4, v.z)
 	s.o += 6
 end
 
@@ -434,8 +434,8 @@ function stream.writevectori16(s: Stream, v: vector)
 	local b = s.b
 	local o = s.o
 	buffer.writei16(b, o + 0, v.x)
-	buffer.writei16(b, o + 2, v.x)
-	buffer.writei16(b, o + 4, v.x)
+	buffer.writei16(b, o + 2, v.y)
+	buffer.writei16(b, o + 4, v.z)
 	s.o += 6
 end
 
@@ -446,8 +446,8 @@ function stream.writevectoru8(s: Stream, v: vector)
 	local b = s.b
 	local o = s.o
 	buffer.writeu8(b, o + 0, v.x)
-	buffer.writeu8(b, o + 1, v.x)
-	buffer.writeu8(b, o + 2, v.x)
+	buffer.writeu8(b, o + 1, v.y)
+	buffer.writeu8(b, o + 2, v.z)
 	s.o += 3
 end
 
@@ -458,8 +458,8 @@ function stream.writevectori8(s: Stream, v: vector)
 	local b = s.b
 	local o = s.o
 	buffer.writei8(b, o + 0, v.x)
-	buffer.writei8(b, o + 1, v.x)
-	buffer.writei8(b, o + 2, v.x)
+	buffer.writei8(b, o + 1, v.y)
+	buffer.writei8(b, o + 2, v.z)
 	s.o += 3
 end
 

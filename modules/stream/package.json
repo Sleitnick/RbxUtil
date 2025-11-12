@@ -1,6 +1,6 @@
 {
 	"name": "@rbxutil/stream",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"main": "init.luau",
 	"repository": {
 		"url": "git+https://github.com/Sleitnick/RbxUtil.git"
