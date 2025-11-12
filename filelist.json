@@ -217,7 +217,7 @@
       "name": "Stream",
       "description": "Stream abstraction wrapper around buffers",
       "has_dependencies": false,
-      "version": "0.1.0",
+      "version": "0.1.1",
       "path": "modules/stream",
       "files": [
         "init.luau"
