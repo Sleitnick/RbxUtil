@@ -9,7 +9,6 @@ Trove.__index = Trove
 	A Trove is helpful for tracking any sort of object during
 	runtime that needs to get cleaned up at some point.
 ]=]
-
 export type Trove = typeof(setmetatable(
 	{} :: {
 		_objects: { any },
@@ -396,12 +395,8 @@ function Trove.Construct<T, A...>(self: Trove, class: Constructable<T, A...>, ..
 	if self._cleaning then
 		error("Cannot call trove:Construct() while cleaning", 2)
 	end
-
-	-- stylua: ignore
-	local object = if type(class) == "table"
-		then class.new(...)
-		else class(...)
 	
+	local object = if type(class) == "table" then class.new(...) else class(...)
 	return self:Add(object :: any)
 end
 
