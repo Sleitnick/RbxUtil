@@ -682,6 +682,8 @@ function Trove.WrapClean(self: Trove)
 	end
 end
 
+--- INTERNAL FUNCTION, DO NOT USE!
+--  FIXME: Just make this a local function if it isn't used elsewhere? Is it used for testing?
 function Trove._findAndRemoveFromObjects(self: Trove, object: any, cleanup: boolean): boolean
 	local objects = self._objects
 
@@ -702,7 +704,9 @@ function Trove._findAndRemoveFromObjects(self: Trove, object: any, cleanup: bool
 	return false
 end
 
-function Trove._cleanupObject(self: Trove, object: any, cleanupMethod: string?)
+--- INTERNAL FUNCTION, DO NOT USE!
+--  FIXME: Just make this a local function if it isn't used elsewhere? Is it used for testing?
+function Trove._cleanupObject(_self: any, object: any, cleanupMethod: string?)
 	if cleanupMethod == FN_MARKER then
 		task.spawn(object)
 	elseif cleanupMethod == THREAD_MARKER then
