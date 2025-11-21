@@ -395,7 +395,7 @@ function Trove.Construct<T, A...>(self: Trove, class: Constructable<T, A...>, ..
 	if self._cleaning then
 		error("Cannot call trove:Construct() while cleaning", 2)
 	end
-	
+
 	local object = if type(class) == "table" then class.new(...) else class(...)
 	return self:Add(object :: any)
 end
