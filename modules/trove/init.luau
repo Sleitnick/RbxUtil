@@ -1,19 +1,22 @@
 --!strict
 local RunService = game:GetService("RunService")
 
+local Trove = {}
+Trove.__index = Trove
 
 --[=[
 	@class Trove
 	A Trove is helpful for tracking any sort of object during
 	runtime that needs to get cleaned up at some point.
 ]=]
-local Trove = {}
-Trove.__index = Trove
 
-export type Trove = typeof(setmetatable({} :: {
-	_objects: { any },
-	_cleaning: boolean,
-}, Trove))
+export type Trove = typeof(setmetatable(
+	{} :: {
+		_objects: { any },
+		_cleaning: boolean,
+	},
+	Trove
+))
 
 --[=[
 	@within Trove
@@ -81,21 +84,19 @@ type SignalLike<T... = ...any> = {
 	.Once (self: SignalLikeMetatable<T...>, callback: (T...) -> ()) -> ConnectionLike
 	@tag Metatable
 ]=]
-type SignalLikeMetatable<T... = ...any> = typeof(setmetatable({}, {} :: {
-	Connect: (self: SignalLikeMetatable<T...>, callback: (T...) -> ()) -> ConnectionLike,
-	Once: (self: SignalLikeMetatable<T...>, callback: (T...) -> ()) -> ConnectionLike,
-}))
+type SignalLikeMetatable<T... = ...any> = typeof(setmetatable(
+	{},
+	{} :: {
+		Connect: (self: SignalLikeMetatable<T...>, callback: (T...) -> ()) -> ConnectionLike,
+		Once: (self: SignalLikeMetatable<T...>, callback: (T...) -> ()) -> ConnectionLike,
+	}
+))
 
 --[=[
 	@within Trove
-	@type PromiseLikeStatus
+	@type PromiseLikeStatus "Started" | "Resolved" | "Rejected" | "Cancelled" | string
 ]=]
-type PromiseLikeStatus =
-	| "Started"
-	| "Resolved"
-	| "Rejected"
-	| "Cancelled"
-	| string
+type PromiseLikeStatus = "Started" | "Resolved" | "Rejected" | "Cancelled" | string
 
 --[=[
 	@within Trove
@@ -205,7 +206,6 @@ type Cloneable<T = any> = {
 	.Clone (self: T) -> T
 ]=]
 type CloneableMetatable<T = any> = typeof(setmetatable({}, {} :: Cloneable<T>))
-
 
 local FN_MARKER = newproxy()
 local THREAD_MARKER = newproxy()
@@ -397,6 +397,7 @@ function Trove.Construct<T, A...>(self: Trove, class: Constructable<T, A...>, ..
 		error("Cannot call trove:Construct() while cleaning", 2)
 	end
 
+	-- stylua: ignore
 	local object = if type(class) == "table"
 		then class.new(...)
 		else class(...)
