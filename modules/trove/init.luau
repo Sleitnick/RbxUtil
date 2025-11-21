@@ -6,6 +6,7 @@ local RunService = game:GetService("RunService")
 	@interface ConnectionLike<T = any>
 	.Connected boolean
 	.Disconnect (self: T) -> ()
+	.Destroy ((self: T) -> ())?
 ]=]
 type ConnectionLike<T = any> = {
 	Connected: boolean,
@@ -18,15 +19,16 @@ type ConnectionLike<T = any> = {
 	@interface ConnectionLikeMetatable<T = any>
 	.Connected boolean
 	.Disconnect (self: T) -> ()
+	.Destroy ((self: T) -> ())?
 	@tag Metatable
 ]=]
 type ConnectionLikeMetatable<T = any> = typeof(setmetatable({}, {} :: ConnectionLike<T>))
 
 --[=[
 	@within Trove
-	@interface SignalLike<T = any, A... = ...any>
-	.Connect (self: any, callback: (A...) -> ()) -> ConnectionLike
-	.Once (self: any, callback: (A...) -> ()) -> ConnectionLike
+	@interface SignalLike<T... = ...any>
+	.Connect (self: any, callback: (T...) -> ()) -> ConnectionLike
+	.Once (self: any, callback: (T...) -> ()) -> ConnectionLike
 ]=]
 type SignalLike<T... = ...any> = {
 	Connect: (self: any, callback: (T...) -> ()) -> ConnectionLike,
@@ -35,9 +37,9 @@ type SignalLike<T... = ...any> = {
 
 --[=[
 	@within Trove
-	@interface SignalLikeMetatable<T = any, A... = ...any>
-	.Connect (self: T, callback: (T...) -> ()) -> ConnectionLike
-	.Once (self: T, callback: (T...) -> ()) -> ConnectionLike
+	@interface SignalLikeMetatable<T... = ...any>
+	.Connect (self: SignalLikeMetatable<T...>, callback: (T...) -> ()) -> ConnectionLike
+	.Once (self: SignalLikeMetatable<T...>, callback: (T...) -> ()) -> ConnectionLike
 	@tag Metatable
 ]=]
 type SignalLikeMetatable<T... = ...any> = typeof(setmetatable({}, {} :: {
@@ -167,7 +169,7 @@ type CloneableMetatable<T = any> = typeof(setmetatable({}, {} :: Cloneable<T>))
 
 --[=[
 	@within Trove
-	@type Trackable Instance | RBXScriptConnection | ConnectionLike | ConnectLikeMetatable | PromiseLike | PromiseLikeMetatable | thread | ((...any) -> ...any) | Destroyable | DestroyableMetatable | DestroyableLowercase | DestroyableLowercaseMetatable | Disconnectable | DisconnectableMetatable | DisconnectableLowercase | DisconnectableLowercaseMetatable | SignalLike | SignalLikeMetatable
+	@type Trackable<T = any, A... = ...any> Instance | RBXScriptConnection | ConnectionLike<T> | ConnectLikeMetatable<T> | PromiseLike<T> | PromiseLikeMetatable<T> | thread | ((...any) -> ...any) | Destroyable<T> | DestroyableMetatable<T> | DestroyableLowercase<T> | DestroyableLowercaseMetatable<T> | Disconnectable<T> | DisconnectableMetatable<T> | DisconnectableLowercase<T> | DisconnectableLowercaseMetatable<T> | SignalLike<A...> | SignalLikeMetatable<A...>
 	Represents all trackable objects by Trove.
 ]=]
 export type Trackable<T = any, A... = ...any> =
@@ -235,7 +237,7 @@ local function getObjectCleanupFunction(object: any, cleanupMethod: string?)
 	error(`failed to get cleanup function for object {t}: {object}`, 3)
 end
 
-local function cleanupObject(object: any, cleanupMethod: string?)
+function Trove._cleanupObject(self: Trove, object: any, cleanupMethod: string?)
 	if cleanupMethod == FN_MARKER then
 		task.spawn(object)
 	elseif cleanupMethod == THREAD_MARKER then
@@ -245,7 +247,7 @@ local function cleanupObject(object: any, cleanupMethod: string?)
 	end
 end
 
-local function findAndRemoveFromObjects(self: Trove, object: any, cleanup: boolean): boolean
+function Trove._findAndRemoveFromObjects(self: Trove, object: any, cleanup: boolean): boolean
 	local objects = self._objects
 
 	for i, obj in objects do
@@ -255,7 +257,7 @@ local function findAndRemoveFromObjects(self: Trove, object: any, cleanup: boole
 			objects[n] = nil
 
 			if cleanup then
-				cleanupObject(obj[1], obj[2])
+				self:_cleanupObject(obj[1], obj[2])
 			end
 
 			return true
@@ -305,7 +307,7 @@ end
 --[=[
 	@method Add
 	@within Trove
-	@param object any -- Object to track
+	@param object Trackable<T> -- Object to track
 	@param cleanupMethod string? -- Optional cleanup name override
 	@return object: any
 	Adds an object to the trove. Once the trove is cleaned or
@@ -366,7 +368,8 @@ end
 --[=[
 	@method Clone
 	@within Trove
-	@return Instance
+	@return T
+	@param instance Instance | Cloneable<T> | CloneableMetatable<T>
 	Clones the given instance and adds it to the trove. Shorthand for
 	`trove:Add(instance:Clone())`.
 
@@ -566,7 +569,7 @@ function Trove.AddPromise<T>(self: Trove, promise: PromiseLike<T>): T
 				return
 			end
 
-			findAndRemoveFromObjects(self, confirmedPromise, false)
+			self:_findAndRemoveFromObjects(confirmedPromise, false)
 		end)
 
 		self:Add(confirmedPromise, "cancel")
@@ -578,7 +581,7 @@ end
 --[=[
 	@method Remove
 	@within Trove
-	@param object any
+	@param object Trackable<T>
 	Removes the object from the Trove and cleans it up. To remove without
 	cleaning, use the `Pop` method instead.
 
@@ -593,13 +596,13 @@ function Trove.Remove<T>(self: Trove, object: Trackable<T>): boolean
 		error("cannot call trove:Remove() while cleaning", 2)
 	end
 
-	return findAndRemoveFromObjects(self, object, true)
+	return self:_findAndRemoveFromObjects(self, object, true)
 end
 
 --[=[
 	@method Pop
 	@within Trove
-	@param object any
+	@param object Trackable<T>
 	Removes the object from the Trove, but does _not_ clean it up. To
 	clean up the object on removal, use the `Remove` method instead.
 
@@ -615,7 +618,7 @@ function Trove.Pop<T>(self: Trove, object: Trackable<T>): boolean
 		error("cannot call trove:Pop() while cleaning", 2)
 	end
 
-	return findAndRemoveFromObjects(self, object, false)
+	return self:_findAndRemoveFromObjects(self, object, false)
 end
 
 --[=[
@@ -667,7 +670,7 @@ function Trove.Clean(self: Trove)
 	self._cleaning = true
 
 	for _, obj in self._objects do
-		cleanupObject(obj[1], obj[2])
+		self:_cleanupObject(obj[1], obj[2])
 	end
 
 	table.clear(self._objects)
