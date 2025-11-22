@@ -122,16 +122,35 @@ end
 	)
 	```
 ]=]
-function Loader.SpawnAll(loadedModules: { [string]: any }, methodName: string)
+function Loader.SpawnAll(loadedModules: { [string]: any }, methodName: string, ...)
+	local args = {...}
 	for name, mod in loadedModules do
 		local method = mod[methodName]
 		if type(method) == "function" then
 			task.spawn(function()
 				debug.setmemorycategory(name)
-				method(mod)
+				method(mod, table.unpack(args))
 			end)
 		end
 	end
+end
+
+--[=[
+	Connects the specified event to all provided modules that have a method matching `methodName`.
+	When the event fires, the method will be called in all applicable modules using `task.spawn` to
+	avoid yielding the event thread.
+
+	For example:
+	```lua
+	local modules = Loader.LoadDescendants(MyModules, Loader.MatchesName("Service$"))
+	Loader.ConnectFunctions(modules, Players.PlayerAdded, "OnPlayerAdded")
+	```
+	This will call `OnPlayerAdded(player)` in all matched modules whenever a player joins.
+]=]
+function Loader.ConnectFunctions(loadedModules: { [string]: any }, event: RBXScriptSignal, methodName: string)
+	event:Connect(function(...)
+		Loader.SpawnAll(loadedModules, methodName, ...)
+	end)
 end
 
 return Loader
