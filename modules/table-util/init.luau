@@ -264,10 +264,10 @@ end
 	print(t2) --> {A = 20, B = 40, C = 60}
 	```
 ]=]
-local function Map<T, M>(t: { T }, f: (T, number, { T }) -> M): { M }
+local function Map<V, K, M>(t: { [K]: V }, f: (V, K, { [K]: V }) -> M): { [K]: M }
 	assert(type(t) == "table", "First argument must be a table")
 	assert(type(f) == "function", "Second argument must be a function")
-	local newT = table.create(#t)
+	local newT = {}
 	for k, v in t do
 		newT[k] = f(v, k, t)
 	end
