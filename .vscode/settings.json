@@ -2,11 +2,11 @@
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"[lua]": {
 		"editor.defaultFormatter": "JohnnyMorganz.stylua",
-		"editor.formatOnSave": true,
+		"editor.formatOnSave": true
 	},
 	"[luau]": {
 		"editor.defaultFormatter": "JohnnyMorganz.stylua",
-		"editor.formatOnSave": true,
+		"editor.formatOnSave": true
 	},
 	"[typescript]": {
 		"editor.defaultFormatter": "dbaeumer.vscode-eslint",
