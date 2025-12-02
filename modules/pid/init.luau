@@ -1,11 +1,5 @@
 --!native
-
-export type PID = {
-	Reset: (self: PID) -> (),
-	Calculate: (self: PID, setpoint: number, input: number, deltaTime: number) -> number,
-	Debug: (self: PID, name: string, parent: Instance?) -> (),
-	Destroy: (self: PID) -> (),
-}
+--!strict
 
 --[=[
 	@class PID
@@ -20,6 +14,17 @@ export type PID = {
 ]=]
 local PID = {}
 PID.__index = PID
+
+export type PID = setmetatable<{
+	_min: number,
+	_max: number,
+	_kp: number,
+	_ki: number,
+	_kd: number,
+	_lastError: number,
+	_integralSum: number,
+	_debug: Instance?,
+}, typeof(PID)>
 
 --[=[
 	@param min number -- Minimum value the PID can output
@@ -36,30 +41,37 @@ PID.__index = PID
 	```
 ]=]
 function PID.new(min: number, max: number, kp: number, ki: number, kd: number): PID
-	local self = setmetatable({}, PID)
-	self._min = min
-	self._max = max
-	self._kp = kp
-	self._ki = ki
-	self._kd = kd
-	self._lastError = 0 -- Store the last error for derivative calculation
-	self._integralSum = 0 -- Store the sum of errors for integral calculation
+	local self = setmetatable({
+		_min = min,
+		_max = max,
+		_kp = kp,
+		_ki = ki,
+		_kd = kd,
+		_lastError = 0,
+		_integralSum = 0,
+		_debug = nil :: any,
+	}, PID)
+
 	return self
 end
 
 --[=[
-	Resets the PID to a zero start state.
+	@within PID
+	@method Reset
+	Resets the PID to a zero state.
 ]=]
-function PID:Reset()
+function PID.Reset(self: PID)
 	self._lastError = 0
 	self._integralSum = 0
 end
 
 --[=[
+	@within PID
+	@method Calculate
 	@param setpoint number	-- The desired point to reach
 	@param processVariable number	-- The measured value of the system to compare against the setpoint
 	@param deltaTime number	-- Delta time. This is the time between each PID calculation
-	@return output: number
+	@return number
 
 	Calculates the new output based on the setpoint and input. For example,
 	if the PID was being used for a car's throttle control where the throttle
@@ -75,7 +87,7 @@ end
 	end)
 	```
 ]=]
-function PID:Calculate(setpoint: number, processVariable: number, deltaTime: number): number
+function PID.Calculate(self: PID, setpoint: number, processVariable: number, deltaTime: number): number
 	-- Calculate the error e(t) = SP - PV(t)
 	local err = setpoint - processVariable
 
@@ -103,6 +115,8 @@ function PID:Calculate(setpoint: number, processVariable: number, deltaTime: num
 end
 
 --[=[
+	@within PID
+	@method Debug
 	@param name string -- Folder name
 	@param parent Instance? -- Folder parent
 
@@ -114,7 +128,7 @@ end
 	this function will do nothing.
 	:::
 ]=]
-function PID:Debug(name: string, parent: Instance?)
+function PID.Debug(self: PID, name: string, parent: Instance?)
 	if not game:GetService("RunService"):IsStudio() then
 		return
 	end
@@ -127,10 +141,10 @@ function PID:Debug(name: string, parent: Instance?)
 	folder.Name = name
 	folder:AddTag("PIDDebug")
 
-	local function Bind(attrName, propName)
-		folder:SetAttribute(attrName, self[propName])
+	local function Bind(attrName: string, propName: string)
+		folder:SetAttribute(attrName, (self :: any)[propName])
 		folder:GetAttributeChangedSignal(attrName):Connect(function()
-			self[propName] = folder:GetAttribute(attrName)
+			(self :: any)[propName] = folder:GetAttribute(attrName)
 			self:Reset()
 		end)
 	end
@@ -181,15 +195,17 @@ function PID:Debug(name: string, parent: Instance?)
 end
 
 --[=[
+	@within PID
+	@method Destroy
 	Destroys the PID. This is only necessary if calling `PID:Debug`.
 ]=]
-function PID:Destroy()
+function PID.Destroy(self: PID)
 	if self._debug then
 		self._debug:Destroy()
 		self._debug = nil
 	end
 end
 
-return {
+return table.freeze({
 	new = PID.new,
-}
+})
