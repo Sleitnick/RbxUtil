@@ -125,7 +125,7 @@
       "name": "PID",
       "description": "PID Controller class",
       "has_dependencies": false,
-      "version": "2.1.0",
+      "version": "2.1.1",
       "path": "modules/pid",
       "files": [
         "init.luau"
@@ -135,7 +135,7 @@
       "name": "Quaternion",
       "description": "Quaternion class",
       "has_dependencies": false,
-      "version": "0.2.3",
+      "version": "0.2.4",
       "path": "modules/quaternion",
       "files": [
         "init.luau"
@@ -299,7 +299,7 @@
       "name": "TypedRemote",
       "description": "Simple networking package for typed RemoteEvents and RemoteFunctions",
       "has_dependencies": false,
-      "version": "0.3.0",
+      "version": "1.0.0",
       "path": "modules/typed-remote",
       "files": [
         "init.luau"

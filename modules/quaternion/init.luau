@@ -15,25 +15,6 @@
 	Similar to Vector3s, Quaternions are immutable. You cannot manually set the individual properties
 	of a Quaternion. Instead, a new Quaternion must first be constructed.
 ]=]
-export type Quaternion = {
-	X: number,
-	Y: number,
-	Z: number,
-	W: number,
-
-	Dot: (self: Quaternion, other: Quaternion) -> number,
-	Slerp: (self: Quaternion, other: Quaternion, alpha: number) -> Quaternion,
-	Angle: (self: Quaternion, other: Quaternion) -> number,
-	RotateTowards: (self: Quaternion, other: Quaternion, maxRadiansDelta: number) -> Quaternion,
-	ToCFrame: (self: Quaternion, position: Vector3?) -> CFrame,
-	ToEulerAngles: (self: Quaternion) -> Vector3,
-	ToAxisAngle: (self: Quaternion) -> (Vector3, number),
-	Inverse: (self: Quaternion) -> Quaternion,
-	Conjugate: (self: Quaternion) -> Quaternion,
-	Normalize: (self: Quaternion) -> Quaternion,
-	Magnitude: (self: Quaternion) -> number,
-	SqrMagnitude: (self: Quaternion) -> number,
-}
 
 local EPSILON = 1e-5
 
@@ -50,6 +31,13 @@ local EPSILON = 1e-5
 local Quaternion = {}
 Quaternion.__index = Quaternion
 
+export type Quaternion = setmetatable<{
+	read X: number,
+	read Y: number,
+	read Z: number,
+	read W: number,
+}, typeof(Quaternion)>
+
 --[=[
 	Constructs a Quaternion.
 
@@ -64,7 +52,7 @@ function Quaternion.new(x: number, y: number, z: number, w: number): Quaternion
 		Y = y,
 		Z = z,
 		W = w,
-	}, Quaternion) :: any
+	}, Quaternion)
 
 	table.freeze(self)
 
@@ -559,7 +547,7 @@ Quaternion.mul = Quaternion.__mul
 ]=]
 Quaternion.identity = Quaternion.new(0, 0, 0, 1)
 
-return {
+return table.freeze({
 	new = Quaternion.new,
 	euler = Quaternion.euler,
 	axisAngle = Quaternion.axisAngle,
@@ -567,4 +555,4 @@ return {
 	cframe = Quaternion.cframe,
 
 	identity = Quaternion.identity,
-}
+})

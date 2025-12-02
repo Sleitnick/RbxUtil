@@ -23,7 +23,7 @@ type PlayerSignal<T...> = {
 	.FireAllClients (self: Event<T...>, T...) -> (),
 	.FireServer (self: Event<T...>, T...) -> (),
 ]=]
-export type Event<T...> = Instance & {
+export type Event<T...> = {
 	OnClientEvent: Signal<T...>,
 	OnServerEvent: PlayerSignal<T...>,
 	FireClient: (self: Event<T...>, player: Player, T...) -> (),
@@ -42,15 +42,46 @@ export type Event<T...> = Instance & {
 ]=]
 export type UnreliableEvent<T...> = Event<T...>
 
+type function FnInjectFirstArg(first: type, fnOriginal: type)
+	if fnOriginal.tag ~= "function" then
+		print(`expected function type; got {fnOriginal.tag}`)
+		return types.never
+	end
+
+	local params: { type } = {}
+	local paramsTail: type? = nil
+
+	table.insert(params, first)
+
+	local fnOriginalParams = fnOriginal:parameters()
+	if fnOriginalParams.head then
+		for _, param in fnOriginalParams.head do
+			table.insert(params, param)
+		end
+	end
+	paramsTail = fnOriginalParams.tail
+
+	local returns = fnOriginal:returns()
+
+	local fn = types.newfunction({ head = params, tail = paramsTail }, returns)
+
+	return fn
+end
+
 --[=[
 	@within TypedRemote
-	@interface Function<T..., R...>
-	.InvokeServer (self: Function<T..., R...>, T...) -> R...,
-	.OnServerInvoke (player: Player, T...) -> R...,
+	@interface Function<Fn>
+	.InvokeServer (self: Function, FnParams) -> FnReturns,
+	.OnServerInvoke (player: Player, FnParams) -> FnReturns,
+
+	```lua
+	-- A Function type that takes a number and a string and returns a boolean and CFrame
+	type Fn = Function<(number, string) -> (boolean, CFrame)>
+	```
 ]=]
-export type Function<T..., R...> = Instance & {
-	InvokeServer: (self: Function<T..., R...>, T...) -> R...,
-	OnServerInvoke: (player: Player, T...) -> R...,
+export type Function<Fn> = {
+	InvokeServer: FnInjectFirstArg<any, Fn>,
+	OnServerInvoke: FnInjectFirstArg<Player, Fn>,
 }
 
 type CreatorFn<T> = (name: string) -> T
@@ -72,14 +103,14 @@ local IS_SERVER = game:GetService("RunService"):IsServer()
 	local RF, RE, URE = TypedRemote.parent()
 
 	-- Redeclare the TypedRemote types for simplicity:
-	type RF<T..., R...> = TypedRemote.Function<T..., R...>
-	type RE<T...> = TypedRemote.Event<T...>
-	type URE<T...> = TypedRemote.UnreliableEvent<T...>
+	type RF<Fn> = TypedRemote.Function<Fn>
+	type RE<Args...> = TypedRemote.Event<Args...>
+	type URE<Args...> = TypedRemote.UnreliableEvent<Args...>
 
 	-- Define network table:
 	return {
 		-- RemoteFunction that takes two arguments (boolean, string) and returns a number:
-		MyFunc = RF("MyFunc") :: RF<(boolean, string), (number)>,
+		MyFunc = RF("MyFunc") :: RF<(boolean, string) -> number>,
 
 		-- RemoteEvent that takes two arguments - a string and a number:
 		MyEvent = RE("MyEvent") :: RE<string, number>,
@@ -110,14 +141,14 @@ local IS_SERVER = game:GetService("RunService"):IsServer()
 local TypedRemote = {}
 
 --[=[
-	@return ((name: string) -> RemoteFunction, (name: string) -> RemoteEvent)
+	@return ((name: string) -> RemoteFunction, (name: string) -> RemoteEvent, (name: string) -> UnreliableRemoteEvent)
 
 	Creates a memoized version of the `func` and `event` functions that include the `parent`
 	in each call.
 
 	```lua
-	-- Create RF and RE functions that use the current script as the instance parent:
-	local RF, RE = TypedRemote.parent(script)
+	-- Create RF, RE, and URE functions that use the current script as the instance parent:
+	local RF, RE, URE = TypedRemote.parent(script)
 
 	local remoteFunc = RF("RemoteFunc")
 	```
@@ -147,7 +178,7 @@ function TypedRemote.func(name: string, parent: Instance?): RemoteFunction
 		rf.Name = name
 		rf.Parent = if parent then parent else script
 	else
-		rf = (if parent then parent else script):WaitForChild(name)
+		rf = (if parent then parent else script :: Instance):WaitForChild(name) :: RemoteFunction
 		assert(rf:IsA("RemoteFunction"), "expected remote function")
 	end
 	return rf
@@ -166,7 +197,7 @@ function TypedRemote.event(name: string, parent: Instance?): RemoteEvent
 		re.Name = name
 		re.Parent = if parent then parent else script
 	else
-		re = (if parent then parent else script):WaitForChild(name)
+		re = (if parent then parent else script :: Instance):WaitForChild(name) :: RemoteEvent
 		assert(re:IsA("RemoteEvent"), "expected remote event")
 	end
 	return re
@@ -185,12 +216,10 @@ function TypedRemote.unreliableEvent(name: string, parent: Instance?): Unreliabl
 		ure.Name = name
 		ure.Parent = if parent then parent else script
 	else
-		ure = (if parent then parent else script):WaitForChild(name)
+		ure = (if parent then parent else script :: Instance):WaitForChild(name) :: UnreliableRemoteEvent
 		assert(ure:IsA("UnreliableRemoteEvent"), "expected unreliable remote event")
 	end
 	return ure
 end
 
-table.freeze(TypedRemote)
-
-return TypedRemote
+return table.freeze(TypedRemote)
