@@ -1,0 +1,26 @@
+{
+	"languages": {
+		"Luau": {
+			"formatter": {
+				"external": {
+					"command": "stylua",
+					"arguments": ["-"]
+				}
+			}
+		}
+	},
+	"lsp": {
+		"luau-lsp": {
+			"settings": {
+				"luau-lsp": {
+					"sourcemap": {
+						"rojoProjectFile": "dev.project.json"
+					}
+				},
+				"roblox": {
+					"enabled": true
+				}
+			}
+		}
+	}
+}
