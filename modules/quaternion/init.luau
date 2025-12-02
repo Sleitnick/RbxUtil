@@ -547,7 +547,7 @@ Quaternion.mul = Quaternion.__mul
 ]=]
 Quaternion.identity = Quaternion.new(0, 0, 0, 1)
 
-return {
+return table.freeze({
 	new = Quaternion.new,
 	euler = Quaternion.euler,
 	axisAngle = Quaternion.axisAngle,
@@ -555,4 +555,4 @@ return {
 	cframe = Quaternion.cframe,
 
 	identity = Quaternion.identity,
-}
+})
