@@ -1,7 +1,7 @@
 [package]
 name = "sleitnick/quaternion"
 description = "Quaternion class"
-version = "0.2.3"
+version = "0.2.4"
 license = "MIT"
 authors = ["Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"

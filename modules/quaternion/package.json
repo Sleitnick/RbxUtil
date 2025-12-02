@@ -1,6 +1,6 @@
 {
 	"name": "@rbxutil/quaternion",
-	"version": "0.2.3",
+	"version": "0.2.4",
 	"main": "init.luau",
 	"repository": "github:Sleitnick/RbxUtil",
 	"license": "MIT",
