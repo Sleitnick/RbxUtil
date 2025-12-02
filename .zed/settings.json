@@ -19,6 +19,9 @@
 				},
 				"roblox": {
 					"enabled": true
+				},
+				"fflags": {
+					"enable_new_solver": true
 				}
 			}
 		}

@@ -18,6 +18,7 @@
 		"source.fixAll.eslint": "explicit"
 	},
 	"luau-lsp.sourcemap.rojoProjectFile": "dev.project.json",
+	"luau-lsp.fflags.enableNewSolver": true,
 	"eslint.run": "onType",
 	"eslint.format.enable": true,
 	"files.eol": "\n",
