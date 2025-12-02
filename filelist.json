@@ -125,7 +125,7 @@
       "name": "PID",
       "description": "PID Controller class",
       "has_dependencies": false,
-      "version": "2.1.0",
+      "version": "2.1.1",
       "path": "modules/pid",
       "files": [
         "init.luau"
