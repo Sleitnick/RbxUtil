@@ -299,7 +299,7 @@
       "name": "TypedRemote",
       "description": "Simple networking package for typed RemoteEvents and RemoteFunctions",
       "has_dependencies": false,
-      "version": "0.3.0",
+      "version": "1.0.0",
       "path": "modules/typed-remote",
       "files": [
         "init.luau"
