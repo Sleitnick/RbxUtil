@@ -135,7 +135,7 @@
       "name": "Quaternion",
       "description": "Quaternion class",
       "has_dependencies": false,
-      "version": "0.2.3",
+      "version": "0.2.4",
       "path": "modules/quaternion",
       "files": [
         "init.luau"
