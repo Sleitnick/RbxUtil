@@ -36,23 +36,23 @@ type TroveInternal = Trove & {
 ]=]
 export type Trackable =
 	| Instance
-	| RBXScriptConnection
-	| ConnectionLike
-	| ConnectionLikeMetatable
-	| PromiseLike
-	| PromiseLikeMetatable
-	| thread
-	| ((...any) -> ...any)
-	| Destroyable
-	| DestroyableMetatable
-	| DestroyableLowercase
-	| DestroyableLowercaseMetatable
-	| Disconnectable
-	| DisconectableMetatable
-	| DisconnectableLowercase
-	| DisconnectableLowercaseMetatable
-	| SignalLike
-	| SignalLikeMetatable
+| RBXScriptConnection
+| ConnectionLike
+| ConnectionLikeMetatable
+| PromiseLike
+| PromiseLikeMetatable
+| thread
+| ((...any) -> ...any)
+| Destroyable
+| DestroyableMetatable
+| DestroyableLowercase
+| DestroyableLowercaseMetatable
+| Disconnectable
+| DisconectableMetatable
+| DisconnectableLowercase
+| DisconnectableLowercaseMetatable
+| SignalLike
+| SignalLikeMetatable
 
 --[=[
 	@within Trove
@@ -75,7 +75,7 @@ type ConnectionLike = {
 type ConnectionLikeMetatable = typeof(setmetatable(
 	{},
 	{} :: { Connected: boolean, Disconnect: (self: ConnectionLikeMetatable) -> () }
-))
+	))
 
 --[=[
 	@within Trove
@@ -101,7 +101,7 @@ type SignalLikeMetatable = typeof(setmetatable(
 		Connect: (self: SignalLikeMetatable, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable,
 		Once: (self: SignalLikeMetatable, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable,
 	}
-))
+	))
 
 --[=[
 	@within Trove
@@ -131,7 +131,7 @@ type PromiseLikeMetatable = typeof(setmetatable(
 		finally: (self: PromiseLikeMetatable, callback: (...any) -> ...any) -> PromiseLike | PromiseLikeMetatable,
 		cancel: (self: PromiseLikeMetatable) -> (),
 	}
-))
+	))
 
 --[=[
 	@within Trove
@@ -174,7 +174,7 @@ type DestroyableLowercase = {
 type DestroyableLowercaseMetatable = typeof(setmetatable(
 	{},
 	{} :: { destroy: (self: DestroyableLowercaseMetatable) -> () }
-))
+	))
 
 --[=[
 	@within Trove
@@ -211,7 +211,7 @@ type DisconnectableLowercase = {
 type DisconnectableLowercaseMetatable = typeof(setmetatable(
 	{},
 	{} :: { disconnect: (self: DisconnectableLowercaseMetatable) -> () }
-))
+	))
 
 local FN_MARKER = newproxy()
 local THREAD_MARKER = newproxy()
@@ -490,6 +490,39 @@ function Trove.Once(
 	end)
 
 	return self:Add(conn)
+end
+
+--[==[
+	@method Schedule
+	@within Trove
+	@param thread
+	@param delay : number
+	@param fn (...: any) -> ()
+	@return thread
+	
+	Creates a new task.delay thread from the provided arguments.
+	
+	```lua
+	trove:Schedule(5, function()
+		print("5 seconds passed!")
+	end)
+	```
+
+	This is shorthand for `trove:Add(task.delay(delay, fn))`.
+]==]
+function Trove.Schedule(self: TroveInternal, delay : number, fn: (...any) -> any)
+	if self._cleaning then
+		error("Cannot call trove:Schedule while cleaning", 2)
+	end
+
+	local thread 
+
+	thread = self:Add(task.delay(delay, function(...)
+		self:_findAndRemoveFromObjects(thread, false)
+		fn(...)
+	end))
+
+	return thread
 end
 
 --[=[
