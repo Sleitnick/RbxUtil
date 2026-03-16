@@ -76,6 +76,28 @@ function Net:UnreliableRemoteEvent(name: string): UnreliableRemoteEvent
 end
 
 --[=[
+	Gets a BindableEvent with the given name for scripts
+	under the same context to communicate.
+
+	If the BindableEvent does not exist, then it will be
+	created with the given name.
+
+	```lua
+	local bindableEvent = Net:BindableEvent("AwardPoints")
+	```
+]=]
+function Net:BindableEvent(name: string): BindableEvent
+	name = "BE/" .. name
+	local r = script:FindFirstChild(name)
+	if not r then
+		r = Instance.new("BindableEvent")
+		r.Name = name
+		r.Parent = script
+	end
+	return r
+end
+
+--[=[
 	Connects a handler function to the given RemoteEvent.
 
 	```lua
@@ -115,6 +137,19 @@ function Net:ConnectUnreliable(name: string, handler: (...any) -> ()): RBXScript
 	else
 		return self:UnreliableRemoteEvent(name).OnClientEvent:Connect(handler)
 	end
+end
+
+--[=[
+	Connects a handler function to the given BindableEvent.
+
+	```lua
+	Net:ConnectBindable("AwardPoints", function(data)
+		print("Awarding", data, "points...")
+	end)
+	```
+]=]
+function Net:ConnectBindable(name: string, handler: (...any) -> ()): RBXScriptConnection
+	return self:BindableEvent(name).Event:Connect(handler)
 end
 
 --[=[
