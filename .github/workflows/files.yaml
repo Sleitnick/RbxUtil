@@ -1,9 +1,9 @@
 name: Generated Files
 
 on:
-  pull_request:
+  pull_request_target:
     branches:
-      - 'main'
+      - "main"
 
 permissions:
   contents: write
@@ -12,24 +12,43 @@ jobs:
   create-files:
     name: Create Files
     runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Base
+        uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
+          sparse-checkout: |
+            build_readme.py
+            build_list.py
+
+      - name: Checkout Fork
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: fork_content
+
       - name: Install Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      - run: python build_readme.py
-      - run: python build_list.py
-      - name: Git
+
+      - name: Generate Files
+        run: |
+          cp build_readme.py fork_content/
+          cp build_list.py fork_content/
+          cd fork_content
+          python build_readme.py
+          python build_list.py
+
+      - name: Git Push to Fork
         shell: bash
         run: |
+          cd fork_content
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add filelist.json
-          git add README.md
+          git add filelist.json README.md
           if ! git diff --cached --quiet; then
             git commit -m "Automated file generation"
-            git push
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
           fi
