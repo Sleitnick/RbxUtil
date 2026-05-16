@@ -203,7 +203,7 @@ function TestExpect:ToContain(value: any)
 		if t == "table" then
 			condition = table.find(self.Value, value) ~= nil
 		else
-			condition = string.find(self.Value, value) ~= nil
+			condition = string.find(self.Value, value, 1, true) ~= nil
 		end
 	end
 
