@@ -35,7 +35,7 @@ type TroveInternal = Trove & {
 	Represents all trackable objects by Trove.
 ]=]
 export type Trackable =
-	| Instance
+	Instance
 	| RBXScriptConnection
 	| ConnectionLike
 	| ConnectionLikeMetatable
@@ -48,7 +48,7 @@ export type Trackable =
 	| DestroyableLowercase
 	| DestroyableLowercaseMetatable
 	| Disconnectable
-	| DisconectableMetatable
+	| DisconnectableMetatable
 	| DisconnectableLowercase
 	| DisconnectableLowercaseMetatable
 	| SignalLike
@@ -187,11 +187,11 @@ type Disconnectable = {
 
 --[=[
 	@within Trove
-	@interface DisconectableMetatable
+	@interface DisconnectableMetatable
 	.Disconnect (self) -> ()
 	@tag Metatable
 ]=]
-type DisconectableMetatable = typeof(setmetatable({}, {} :: { Disconnect: (self: DisconectableMetatable) -> () }))
+type DisconnectableMetatable = typeof(setmetatable({}, {} :: { Disconnect: (self: DisconnectableMetatable) -> () }))
 
 --[=[
 	@within Trove
