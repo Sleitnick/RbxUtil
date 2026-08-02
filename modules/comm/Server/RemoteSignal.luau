@@ -85,6 +85,21 @@ function RemoteSignal:Connect(fn)
 	end
 end
 
+--[=[
+	@param fn (player: Player, ...: any) -> nil -- The function to connect
+	@return Connection
+	Connect a function to the signal. The connected function will be invoked with the
+	arguments passed by the client once, when matching ClientRemoteSignal
+	on a client fires.
+]=]
+function RemoteSignal:Once(fn)
+	if self._directConnect then
+		return self._re.OnServerEvent:Once(fn)
+	else
+		return self._signal:Once(fn)
+	end
+end
+
 function RemoteSignal:_processOutboundMiddleware(player: Player?, ...: any)
 	if not self._hasOutbound then
 		return ...
