@@ -1,217 +1,210 @@
 --!strict
-
 local RunService = game:GetService("RunService")
 
-export type Trove = {
-	Extend: (self: Trove) -> Trove,
-	Clone: <T>(self: Trove, instance: T & Instance) -> T,
-	Construct: <T, A...>(self: Trove, class: Constructable<T, A...>, A...) -> T,
-	Connect: (
-		self: Trove,
-		signal: SignalLike | SignalLikeMetatable | RBXScriptSignal,
-		fn: (...any) -> ...any
-	) -> ConnectionLike | ConnectionLikeMetatable,
-	BindToRenderStep: (self: Trove, name: string, priority: number, fn: (dt: number) -> ()) -> (),
-	AddPromise: <T>(self: Trove, promise: (T & PromiseLike) | (T & PromiseLikeMetatable)) -> T,
-	Add: <T>(self: Trove, object: T & Trackable, cleanupMethod: string?) -> T,
-	Remove: <T>(self: Trove, object: T & Trackable) -> boolean,
-	Pop: <T>(self: Trove, object: T & Trackable) -> boolean,
-	Clean: (self: Trove) -> (),
-	WrapClean: (self: Trove) -> () -> (),
-	AttachToInstance: (self: Trove, instance: Instance) -> RBXScriptConnection,
-	Destroy: (self: Trove) -> (),
-}
+local Trove = {}
+Trove.__index = Trove
 
-type TroveInternal = Trove & {
-	_objects: { any },
-	_cleaning: boolean,
-	_findAndRemoveFromObjects: (self: TroveInternal, object: any, cleanup: boolean) -> boolean,
-	_cleanupObject: (self: TroveInternal, object: any, cleanupMethod: string?) -> (),
-}
+--[=[
+	@class Trove
+	A Trove is helpful for tracking any sort of object during
+	runtime that needs to get cleaned up at some point.
+]=]
+export type Trove = typeof(setmetatable(
+	{} :: {
+		_objects: { any },
+		_cleaning: boolean,
+	},
+	Trove
+))
 
 --[=[
 	@within Trove
-	@type Trackable Instance | RBXScriptConnection | ConnectionLike | ConnectLikeMetatable | PromiseLike | PromiseLikeMetatable | thread | ((...any) -> ...any) | Destroyable | DestroyableMetatable | DestroyableLowercase | DestroyableLowercaseMetatable | Disconnectable | DisconnectableMetatable | DisconnectableLowercase | DisconnectableLowercaseMetatable | SignalLike | SignalLikeMetatable
+	@type Trackable<T = any, A... = ...any> Instance | RBXScriptConnection | ConnectionLike<T> | ConnectLikeMetatable<T> | PromiseLike<T> | PromiseLikeMetatable<T> | thread | ((...any) -> ...any) | Destroyable<T> | DestroyableMetatable<T> | DestroyableLowercase<T> | DestroyableLowercaseMetatable<T> | Disconnectable<T> | DisconnectableMetatable<T> | DisconnectableLowercase<T> | DisconnectableLowercaseMetatable<T> | SignalLike<A...> | SignalLikeMetatable<A...>
 	Represents all trackable objects by Trove.
 ]=]
-export type Trackable =
+export type Trackable<T = any, A... = ...any> =
 	| Instance
 	| RBXScriptConnection
-	| ConnectionLike
-	| ConnectionLikeMetatable
-	| PromiseLike
-	| PromiseLikeMetatable
+	| ConnectionLike<T>
+	| ConnectionLikeMetatable<T>
+	| PromiseLike<T>
+	| PromiseLikeMetatable<T>
 	| thread
 	| ((...any) -> ...any)
-	| Destroyable
-	| DestroyableMetatable
-	| DestroyableLowercase
-	| DestroyableLowercaseMetatable
-	| Disconnectable
-	| DisconectableMetatable
-	| DisconnectableLowercase
-	| DisconnectableLowercaseMetatable
-	| SignalLike
-	| SignalLikeMetatable
+	| Destroyable<T>
+	| DestroyableMetatable<T>
+	| DestroyableLowercase<T>
+	| DestroyableLowercaseMetatable<T>
+	| Disconnectable<T>
+	| DisconnectableMetatable<T>
+	| DisconnectableLowercase<T>
+	| DisconnectableLowercaseMetatable<T>
+	| SignalLike<A...>
+	| SignalLikeMetatable<A...>
 
 --[=[
 	@within Trove
-	@interface ConnectionLike
+	@interface ConnectionLike<T = any>
 	.Connected boolean
-	.Disconnect (self) -> ()
+	.Disconnect (self: T) -> ()
+	.Destroy ((self: T) -> ())?
 ]=]
-type ConnectionLike = {
+type ConnectionLike<T = any> = {
 	Connected: boolean,
-	Disconnect: (self: ConnectionLike) -> (),
+	Disconnect: (self: T) -> (),
+	Destroy: ((self: T) -> ())?,
 }
 
 --[=[
 	@within Trove
-	@interface ConnectionLikeMetatable
+	@interface ConnectionLikeMetatable<T = any>
 	.Connected boolean
-	.Disconnect (self) -> ()
+	.Disconnect (self: T) -> ()
+	.Destroy ((self: T) -> ())?
 	@tag Metatable
 ]=]
-type ConnectionLikeMetatable = typeof(setmetatable(
-	{},
-	{} :: { Connected: boolean, Disconnect: (self: ConnectionLikeMetatable) -> () }
-))
+type ConnectionLikeMetatable<T = any> = typeof(setmetatable({}, {} :: ConnectionLike<T>))
 
 --[=[
 	@within Trove
-	@interface SignalLike
-	.Connect (self, callback: (...any) -> ...any) -> ConnectionLike
-	.Once (self, callback: (...any) -> ...any) -> ConnectionLike
+	@interface SignalLike<T... = ...any>
+	.Connect (self: any, callback: (T...) -> ()) -> ConnectionLike
+	.Once (self: any, callback: (T...) -> ()) -> ConnectionLike
 ]=]
-type SignalLike = {
-	Connect: (self: SignalLike, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable,
-	Once: (self: SignalLike, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable,
+type SignalLike<T... = ...any> = {
+	Connect: (self: any, callback: (T...) -> ()) -> ConnectionLike,
+	Once: (self: any, callback: (T...) -> ()) -> ConnectionLike,
 }
 
 --[=[
 	@within Trove
-	@interface SignalLikeMetatable
-	.Connect (self, callback: (...any) -> ...any) -> ConnectionLike
-	.Once (self, callback: (...any) -> ...any) -> ConnectionLike
+	@interface SignalLikeMetatable<T... = ...any>
+	.Connect (self: SignalLikeMetatable<T...>, callback: (T...) -> ()) -> ConnectionLike
+	.Once (self: SignalLikeMetatable<T...>, callback: (T...) -> ()) -> ConnectionLike
 	@tag Metatable
 ]=]
-type SignalLikeMetatable = typeof(setmetatable(
+type SignalLikeMetatable<T... = ...any> = typeof(setmetatable(
 	{},
 	{} :: {
-		Connect: (self: SignalLikeMetatable, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable,
-		Once: (self: SignalLikeMetatable, callback: (...any) -> ...any) -> ConnectionLike | ConnectionLikeMetatable,
+		Connect: (self: SignalLikeMetatable<T...>, callback: (T...) -> ()) -> ConnectionLike,
+		Once: (self: SignalLikeMetatable<T...>, callback: (T...) -> ()) -> ConnectionLike,
 	}
 ))
 
 --[=[
 	@within Trove
-	@interface PromiseLike
-	.getStatus (self) -> string
-	.finally (self, callback: (...any) -> ...any) -> PromiseLike
-	.cancel (self) -> ()
+	@type PromiseLikeStatus "Started" | "Resolved" | "Rejected" | "Cancelled" | string
 ]=]
-type PromiseLike = {
-	getStatus: (self: PromiseLike) -> string,
-	finally: (self: PromiseLike, callback: (...any) -> ...any) -> PromiseLike | PromiseLikeMetatable,
-	cancel: (self: PromiseLike) -> (),
+type PromiseLikeStatus = "Started" | "Resolved" | "Rejected" | "Cancelled" | string
+
+--[=[
+	@within Trove
+	@interface PromiseLike<T = any>
+	.getStatus (self: T) -> string | "Started" | "Resolved" | "Rejected" | "Cancelled"
+	.finally (self: T, callback: (...any) -> ...any) -> T
+	.cancel (self: T) -> ()
+]=]
+type PromiseLike<T = any> = {
+	getStatus: (self: T) -> PromiseLikeStatus,
+	finally: (self: T, callback: (...any) -> ...any) -> T,
+	cancel: (self: T) -> (),
 }
 
 --[=[
 	@within Trove
-	@interface PromiseLikeMetatable
-	.getStatus (self) -> string
-	.finally (self, callback: (...any) -> ...any) -> PromiseLike
-	.cancel (self) -> ()
+	@interface PromiseLikeMetatable<T = any>
+	.getStatus (self: T) -> string | "Started" | "Resolved" | "Rejected" | "Cancelled"
+	.finally (self: T, callback: (...any) -> ...any) -> T
+	.cancel (self: T) -> ()
 	@tag Metatable
 ]=]
-type PromiseLikeMetatable = typeof(setmetatable(
-	{},
-	{} :: {
-		getStatus: (self: any) -> string,
-		finally: (self: PromiseLikeMetatable, callback: (...any) -> ...any) -> PromiseLike | PromiseLikeMetatable,
-		cancel: (self: PromiseLikeMetatable) -> (),
-	}
-))
+type PromiseLikeMetatable<T = any> = typeof(setmetatable({}, {} :: PromiseLike<T>))
 
 --[=[
 	@within Trove
-	@type Constructable { new: (A...) -> T } | (A...) -> T
+	@type Constructable<T = any, A... = ...any> { new: (A...) -> T }
 ]=]
-type Constructable<T, A...> = { new: (A...) -> T } | (A...) -> T
+type Constructable<T = any, A... = ...any> = { new: (A...) -> T } | (A...) -> T
 
 --[=[
 	@within Trove
-	@interface Destroyable
-	.Destroy (self) -> ()
+	@interface Destroyable<T = any>
+	.Destroy (self: T) -> ()
 ]=]
-type Destroyable = {
-	Destroy: (self: Destroyable) -> (),
+type Destroyable<T = any> = {
+	Destroy: (self: T) -> (),
 }
 
 --[=[
 	@within Trove
-	@interface DestroyableMetatable
-	.Destroy (self) -> ()
-	@tag Metatable
+	@interface DestroyableMetatable<T = any>
+	.Destroy (self: T) -> ()
 ]=]
-type DestroyableMetatable = typeof(setmetatable({}, {} :: { Destroy: (self: DestroyableMetatable) -> () }))
+type DestroyableMetatable<T = any> = typeof(setmetatable({}, {} :: Destroyable<T>))
 
 --[=[
 	@within Trove
-	@interface DestroyableLowercase
-	.destroy (self) -> ()
+	@interface DestroyableLowercase<T = any>
+	.destroy (self: T) -> ()
 ]=]
-type DestroyableLowercase = {
-	destroy: (self: DestroyableLowercase) -> (),
+type DestroyableLowercase<T = any> = {
+	destroy: (self: T) -> (),
 }
 
 --[=[
 	@within Trove
-	@interface DestroyableLowercaseMetatable
-	.destroy (self) -> ()
-	@tag Metatable
+	@interface DestroyableLowercaseMetatable<T = any>
+	.destroy (self: T) -> ()
 ]=]
-type DestroyableLowercaseMetatable = typeof(setmetatable(
-	{},
-	{} :: { destroy: (self: DestroyableLowercaseMetatable) -> () }
-))
+type DestroyableLowercaseMetatable<T = any> = typeof(setmetatable({}, {} :: DestroyableLowercase<T>))
 
 --[=[
 	@within Trove
-	@interface Disconnectable
-	.Disconnect (self) -> ()
+	@interface Disconnectable<T = any>
+	.Disconnect (self: T) -> ()
 ]=]
-type Disconnectable = {
-	Disconnect: (self: Disconnectable) -> (),
+type Disconnectable<T = any> = {
+	Disconnect: (self: T) -> (),
 }
 
 --[=[
 	@within Trove
-	@interface DisconectableMetatable
-	.Disconnect (self) -> ()
-	@tag Metatable
+	@interface DisconnectableMetatable<T = any>
+	.Disconnect (self: T) -> ()
 ]=]
-type DisconectableMetatable = typeof(setmetatable({}, {} :: { Disconnect: (self: DisconectableMetatable) -> () }))
+type DisconnectableMetatable<T = any> = typeof(setmetatable({}, {} :: Disconnectable<T>))
 
 --[=[
 	@within Trove
-	@interface DisconnectableLowercase
-	.disconnect (self) -> ()
+	@interface DisconnectableLowercase<T = any>
+	.disconnect (self: T) -> ()
 ]=]
-type DisconnectableLowercase = {
-	disconnect: (self: DisconnectableLowercase) -> (),
+type DisconnectableLowercase<T = any> = {
+	disconnect: (self: T) -> (),
 }
 
 --[=[
 	@within Trove
-	@interface DisconnectableLowercaseMetatable
-	.disconnect (self) -> ()
-	@tag Metatable
+	@interface DisconnectableLowercaseMetatable<T = any>
+	.disconnect (self: T) -> ()
 ]=]
-type DisconnectableLowercaseMetatable = typeof(setmetatable(
-	{},
-	{} :: { disconnect: (self: DisconnectableLowercaseMetatable) -> () }
-))
+type DisconnectableLowercaseMetatable<T = any> = typeof(setmetatable({}, {} :: DisconnectableLowercase<T>))
+
+--[=[
+	@within Trove
+	@interface Cloneable<T = any>
+	.Clone (self: T) -> T
+]=]
+type Cloneable<T = any> = {
+	Clone: (self: T) -> T,
+}
+
+--[=[
+	@within Trove
+	@interface CloneableMetatable<T = any>
+	.Clone (self: T) -> T
+]=]
+type CloneableMetatable<T = any> = typeof(setmetatable({}, {} :: Cloneable<T>))
 
 local FN_MARKER = newproxy()
 local THREAD_MARKER = newproxy()
@@ -266,14 +259,6 @@ local function assertSignalLike(object: any)
 end
 
 --[=[
-	@class Trove
-	A Trove is helpful for tracking any sort of object during
-	runtime that needs to get cleaned up at some point.
-]=]
-local Trove = {}
-Trove.__index = Trove
-
---[=[
 	@return Trove
 	Constructs a Trove object.
 
@@ -282,20 +267,20 @@ Trove.__index = Trove
 	```
 ]=]
 function Trove.new(): Trove
-	local self = setmetatable({}, Trove)
+	local self = setmetatable({
+		_objects = {},
+		_cleaning = false,
+	}, Trove)
 
-	self._objects = {}
-	self._cleaning = false
-
-	return (self :: any) :: Trove
+	return self
 end
 
 --[=[
 	@method Add
 	@within Trove
-	@param object any -- Object to track
+	@param object Trackable<T> -- Object to track
 	@param cleanupMethod string? -- Optional cleanup name override
-	@return object: any
+	@return object: T
 	Adds an object to the trove. Once the trove is cleaned or
 	destroyed, the object will also be cleaned up.
 
@@ -340,7 +325,7 @@ end
 	trove:Add(tbl, "DoSomething")
 	```
 ]=]
-function Trove.Add(self: TroveInternal, object: Trackable, cleanupMethod: string?): any
+function Trove.Add<T>(self: Trove, object: Trackable<T>, cleanupMethod: string?): T
 	if self._cleaning then
 		error("cannot call trove:Add() while cleaning", 2)
 	end
@@ -348,26 +333,27 @@ function Trove.Add(self: TroveInternal, object: Trackable, cleanupMethod: string
 	local cleanup = getObjectCleanupFunction(object, cleanupMethod)
 	table.insert(self._objects, { object, cleanup })
 
-	return object
+	return object :: any
 end
 
 --[=[
 	@method Clone
 	@within Trove
-	@return Instance
-	Clones the given instance and adds it to the trove. Shorthand for
-	`trove:Add(instance:Clone())`.
+	@param object Instance | Cloneable<T> | CloneableMetatable<T>
+	@return T
+	Clones the given object and adds it to the trove. Shorthand for
+	`trove:Add(object:Clone())`.
 
 	```lua
 	local clonedPart = trove:Clone(somePart)
 	```
 ]=]
-function Trove.Clone(self: TroveInternal, instance: Instance): Instance
+function Trove.Clone<T>(self: Trove, object: Instance | Cloneable<T> | CloneableMetatable<T>): T
 	if self._cleaning then
 		error("cannot call trove:Clone() while cleaning", 2)
 	end
 
-	return self:Add(instance:Clone())
+	return self:Add((object :: any):Clone())
 end
 
 --[=[
@@ -405,20 +391,13 @@ end
 	local part = trove:Construct(Instance, "Part")
 	```
 ]=]
-function Trove.Construct<T, A...>(self: TroveInternal, class: Constructable<T, A...>, ...: A...)
+function Trove.Construct<T, A...>(self: Trove, class: Constructable<T, A...>, ...: A...): T
 	if self._cleaning then
 		error("Cannot call trove:Construct() while cleaning", 2)
 	end
 
-	local object = nil
-	local t = type(class)
-	if t == "table" then
-		object = (class :: any).new(...)
-	elseif t == "function" then
-		object = (class :: any)(...)
-	end
-
-	return self:Add(object)
+	local object = if type(class) == "table" then class.new(...) else class(...)
+	return self:Add(object :: any)
 end
 
 --[=[
@@ -438,17 +417,17 @@ end
 	end)
 	```
 ]=]
-function Trove.Connect(
-	self: TroveInternal,
-	signal: SignalLike | SignalLikeMetatable | RBXScriptSignal,
-	fn: (...any) -> ...any
-)
+function Trove.Connect<T...>(
+	self: Trove,
+	signal: SignalLike<T...> | SignalLikeMetatable<T...> | RBXScriptSignal<T...>,
+	fn: (T...) -> ()
+): ConnectionLike
 	if self._cleaning then
 		error("Cannot call trove:Connect() while cleaning", 2)
 	end
-	assertSignalLike(signal)
 
-	local confirmedSignal = signal :: SignalLike
+	assertSignalLike(signal)
+	local confirmedSignal = signal :: SignalLike<T...>
 
 	return self:Add(confirmedSignal:Connect(fn))
 end
@@ -471,17 +450,17 @@ end
 	end)
 	```
 ]=]
-function Trove.Once(
-	self: TroveInternal,
-	signal: SignalLike | SignalLikeMetatable | RBXScriptSignal,
-	fn: (...any) -> ...any
-)
+function Trove.Once<T...>(
+	self: Trove,
+	signal: SignalLike<T...> | SignalLikeMetatable<T...> | RBXScriptSignal<T...>,
+	fn: (T...) -> ()
+): ConnectionLike
 	if self._cleaning then
 		error("Cannot call trove:Connect() while cleaning", 2)
 	end
 	assertSignalLike(signal)
 
-	local confirmedSignal = signal :: SignalLike
+	local confirmedSignal = signal :: SignalLike<T...>
 
 	local conn
 	conn = confirmedSignal:Once(function(...)
@@ -507,7 +486,7 @@ end
 	end)
 	```
 ]=]
-function Trove.BindToRenderStep(self: TroveInternal, name: string, priority: number, fn: (dt: number) -> ())
+function Trove.BindToRenderStep(self: Trove, name: string, priority: number, fn: (dt: number) -> ())
 	if self._cleaning then
 		error("cannot call trove:BindToRenderStep() while cleaning", 2)
 	end
@@ -544,10 +523,11 @@ end
 	This is only compatible with the [roblox-lua-promise](https://eryn.io/roblox-lua-promise/) library, version 4.
 	:::
 ]=]
-function Trove.AddPromise(self: TroveInternal, promise: PromiseLike | PromiseLikeMetatable)
+function Trove.AddPromise<T>(self: Trove, promise: PromiseLike<T>): T
 	if self._cleaning then
 		error("cannot call trove:AddPromise() while cleaning", 2)
 	end
+
 	assertPromiseLike(promise)
 	local confirmedPromise = promise :: PromiseLike
 
@@ -556,19 +536,20 @@ function Trove.AddPromise(self: TroveInternal, promise: PromiseLike | PromiseLik
 			if self._cleaning then
 				return
 			end
+
 			self:_findAndRemoveFromObjects(confirmedPromise, false)
 		end)
 
 		self:Add(confirmedPromise, "cancel")
 	end
 
-	return confirmedPromise
+	return confirmedPromise :: any
 end
 
 --[=[
 	@method Remove
 	@within Trove
-	@param object any
+	@param object Trackable<T>
 	Removes the object from the Trove and cleans it up. To remove without
 	cleaning, use the `Pop` method instead.
 
@@ -578,7 +559,7 @@ end
 	trove:Remove(part) -- Part is destroyed
 	```
 ]=]
-function Trove.Remove(self: TroveInternal, object: Trackable): boolean
+function Trove.Remove<T>(self: Trove, object: Trackable<T>): boolean
 	if self._cleaning then
 		error("cannot call trove:Remove() while cleaning", 2)
 	end
@@ -589,7 +570,7 @@ end
 --[=[
 	@method Pop
 	@within Trove
-	@param object any
+	@param object Trackable<T>
 	Removes the object from the Trove, but does _not_ clean it up. To
 	clean up the object on removal, use the `Remove` method instead.
 
@@ -600,7 +581,7 @@ end
 	trove:Clean() -- Part is NOT destroyed
 	```
 ]=]
-function Trove.Pop(self: TroveInternal, object: Trackable): boolean
+function Trove.Pop<T>(self: Trove, object: Trackable<T>): boolean
 	if self._cleaning then
 		error("cannot call trove:Pop() while cleaning", 2)
 	end
@@ -629,7 +610,7 @@ end
 	trove:Clean() -- Cleans up the subTrove too
 	```
 ]=]
-function Trove.Extend(self: TroveInternal)
+function Trove.Extend(self: Trove): Trove
 	if self._cleaning then
 		error("cannot call trove:Extend() while cleaning", 2)
 	end
@@ -649,7 +630,7 @@ end
 	trove:Clean()
 	```
 ]=]
-function Trove.Clean(self: TroveInternal)
+function Trove.Clean(self: Trove)
 	if self._cleaning then
 		return
 	end
@@ -691,13 +672,15 @@ end
 	end)
 	```
 ]=]
-function Trove.WrapClean(self: TroveInternal)
+function Trove.WrapClean(self: Trove)
 	return function()
 		self:Clean()
 	end
 end
 
-function Trove._findAndRemoveFromObjects(self: TroveInternal, object: any, cleanup: boolean): boolean
+--- INTERNAL FUNCTION, DO NOT USE!
+--  FIXME: Just make this a local function if it isn't used elsewhere? Is it used for testing?
+function Trove._findAndRemoveFromObjects(self: Trove, object: any, cleanup: boolean): boolean
 	local objects = self._objects
 
 	for i, obj in objects do
@@ -717,7 +700,9 @@ function Trove._findAndRemoveFromObjects(self: TroveInternal, object: any, clean
 	return false
 end
 
-function Trove._cleanupObject(_self: TroveInternal, object: any, cleanupMethod: string?)
+--- INTERNAL FUNCTION, DO NOT USE!
+--  FIXME: Just make this a local function if it isn't used elsewhere? Is it used for testing?
+function Trove._cleanupObject(_self: any, object: any, cleanupMethod: string?)
 	if cleanupMethod == FN_MARKER then
 		task.spawn(object)
 	elseif cleanupMethod == THREAD_MARKER then
@@ -757,7 +742,7 @@ end
 	somePart:Destroy()
 	```
 ]=]
-function Trove.AttachToInstance(self: TroveInternal, instance: Instance)
+function Trove.AttachToInstance(self: Trove, instance: Instance)
 	if self._cleaning then
 		error("cannot call trove:AttachToInstance() while cleaning", 2)
 	elseif not instance:IsDescendantOf(game) then
@@ -778,7 +763,7 @@ end
 	trove:Destroy()
 	```
 ]=]
-function Trove.Destroy(self: TroveInternal)
+function Trove.Destroy(self: Trove)
 	self:Clean()
 end
 
