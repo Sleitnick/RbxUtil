@@ -211,6 +211,8 @@ end
 	```
 ]=]
 function Signal:Connect(fn)
+	assert(typeof(fn) == "function", "Signal:Connect expects a function.")
+
 	local connection = setmetatable({
 		Connected = true,
 		_signal = self,
@@ -234,6 +236,7 @@ end
 	@return SignalConnection
 ]=]
 function Signal:ConnectOnce(fn)
+	assert(typeof(fn) == "function", "Signal:ConnectOnce expects a function.")
 	return self:Once(fn)
 end
 
@@ -253,6 +256,8 @@ end
 	```
 ]=]
 function Signal:Once(fn)
+	assert(typeof(fn) == "function", "Signal:Once expects a function.")
+
 	local connection
 	local done = false
 
