@@ -1,7 +1,7 @@
 export type Sequent<T> = {
 	Fire: (self: Sequent<T>, T) -> (),
-	Connect: (self: Sequent<T>, callback: (SequentEvent<T>) -> ()) -> SequentConnection,
-	Once: (self: Sequent<T>, callback: (SequentEvent<T>) -> ()) -> SequentConnection,
+	Connect: (self: Sequent<T>, callback: (SequentEvent<T>) -> (), priority: number) -> SequentConnection,
+	Once: (self: Sequent<T>, callback: (SequentEvent<T>) -> (), priority: number) -> SequentConnection,
 	Cancel: (self: Sequent<T>) -> (),
 	Destroy: (self: Sequent<T>) -> (),
 }
