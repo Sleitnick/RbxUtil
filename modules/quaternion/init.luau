@@ -310,7 +310,7 @@ function Quaternion.RotateTowards(self: Quaternion, other: Quaternion, maxRadian
 		return self
 	end
 
-	local alpha = maxRadiansDelta / angle
+	local alpha = math.min(maxRadiansDelta / angle, 1)
 
 	return self:Slerp(other, alpha)
 end
