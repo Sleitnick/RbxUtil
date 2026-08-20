@@ -466,7 +466,7 @@ end
 	This is shorthand for `trove:Add(signal:Once(fn))`.
 
 	```lua
-	trove:Connect(workspace.ChildAdded, function(instance)
+	trove:Once(workspace.ChildAdded, function(instance)
 		print(instance.Name .. " added to workspace")
 	end)
 	```
