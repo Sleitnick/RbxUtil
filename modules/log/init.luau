@@ -279,7 +279,7 @@ function LogItem:Wrap()
 end
 
 function LogItem:Assert(condition, ...)
-	if condition then
+	if not condition then
 		self:Throw():Log(...)
 	end
 end
