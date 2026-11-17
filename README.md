@@ -7,7 +7,7 @@
 | -- | -- | -- |
 | [BufferUtil](https://sleitnick.github.io/RbxUtil/api/BufferUtil) | `BufferUtil = "sleitnick/buffer-util@0.3.2"` | Buffer utilities |
 | [Comm](https://sleitnick.github.io/RbxUtil/api/Comm) | `Comm = "sleitnick/comm@1.0.1"` | Comm library for remote communication |
-| [Component](https://sleitnick.github.io/RbxUtil/api/Component) | `Component = "sleitnick/component@2.4.8"` | Component class |
+| [Component](https://sleitnick.github.io/RbxUtil/api/Component) | `Component = "sleitnick/component@2.4.9"` | Component class |
 | [Concur](https://sleitnick.github.io/RbxUtil/api/Concur) | `Concur = "sleitnick/concur@0.1.2"` | Concurrent task handler |
 | [EnumList](https://sleitnick.github.io/RbxUtil/api/EnumList) | `EnumList = "sleitnick/enum-list@2.1.0"` | Enum List class |
 | [Find](https://sleitnick.github.io/RbxUtil/api/Find) | `Find = "sleitnick/find@1.0.0"` | Utility function for finding an in the data model hierarchy |
@@ -33,5 +33,5 @@
 | [Timer](https://sleitnick.github.io/RbxUtil/api/Timer) | `Timer = "sleitnick/timer@2.0.0"` | Timer class |
 | [Tree](https://sleitnick.github.io/RbxUtil/api/Tree) | `Tree = "sleitnick/tree@1.1.0"` | Utility functions for accessing instances in the game hierarchy |
 | [Trove](https://sleitnick.github.io/RbxUtil/api/Trove) | `Trove = "sleitnick/trove@1.8.0"` | Trove class for tracking and cleaning up objects |
-| [TypedRemote](https://sleitnick.github.io/RbxUtil/api/TypedRemote) | `TypedRemote = "sleitnick/typed-remote@0.3.0"` | Simple networking package for typed RemoteEvents and RemoteFunctions |
+| [TypedRemote](https://sleitnick.github.io/RbxUtil/api/TypedRemote) | `TypedRemote = "sleitnick/typed-remote@1.0.0"` | Simple networking package for typed RemoteFunctions, RemoteEvents, and UnreliableRemoteEvents |
 | [WaitFor](https://sleitnick.github.io/RbxUtil/api/WaitFor) | `WaitFor = "sleitnick/wait-for@1.0.0"` | WaitFor class for awaiting instances |
