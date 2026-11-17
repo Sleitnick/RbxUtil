@@ -1,5 +1,4 @@
 {
-	"typescript.tsdk": "node_modules/typescript/lib",
 	"[lua]": {
 		"editor.defaultFormatter": "JohnnyMorganz.stylua",
 		"editor.formatOnSave": true
@@ -18,6 +17,7 @@
 		"source.fixAll.eslint": "explicit"
 	},
 	"luau-lsp.sourcemap.rojoProjectFile": "dev.project.json",
+	"luau-lsp.fflags.enableNewSolver": true,
 	"eslint.run": "onType",
 	"eslint.format.enable": true,
 	"files.eol": "\n",
