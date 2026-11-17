@@ -442,6 +442,10 @@ function Component:_setup()
 		task.defer(function()
 			local component = SafeConstruct(instance, id)
 			if not component then
+				local lock = self[KEY_LOCK_CONSTRUCT][instance]
+				if lock == id then
+					self[KEY_LOCK_CONSTRUCT][instance] = nil
+				end
 				return
 			end
 			self[KEY_INST_TO_COMPONENTS][instance] = component
