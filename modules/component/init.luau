@@ -386,7 +386,7 @@ function Component:_setup()
 	local function StopComponent(component)
 		if component[KEY_STARTING] then
 			-- Stop the component during its start method invocation:
-			local startThread = component[KEY_STARTING]
+			local startThread = component[KEY_STARTING] :: thread
 			if coroutine.status(startThread) ~= "normal" then
 				pcall(function()
 					task.cancel(startThread)
