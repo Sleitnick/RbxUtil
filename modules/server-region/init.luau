@@ -3,9 +3,40 @@
 
 -- This code was auto-generated. Do not modify.
 
+--[=[
+	@class ServerRegion
+	@server
+
+	Extra information about a game server's region, referenced by `game.ServerRegion`, such as geographic coordinates
+	and country.
+
+	Since this is a server-only module, ensure to list the package under `[server-dependencies]` within your
+	`wally.toml` file.
+
+	:::warning Memory Usage
+	Due to how Luau works, this module uses upwards of 7MB of heap memory. Therefore, it is recommended to use the
+	`getAndDestroy()` function, which will destroy the ModuleScript after fetching the region information. This will
+	free up the heap memory used. Call this function once and cache the result.
+	```lua
+	-- Custom ServerRegion ModuleScript which proxies the one-time call to getAndDestroy
+	return require(ServerStorage.ServerPackages.ServerRegion).getAndDestroy()
+	```
+	:::
+]=]
+
+--[=[
+	@within ServerRegion
+	@interface Region
+	.Lat number -- Latitude
+	.Lon number -- Longitude
+	.Continent string
+	.Country string
+	.IATA string -- Three-letter location identifier
+]=]
+
 const RunService = game:GetService("RunService")
 
-export type ServerRegion = {
+export type Region = {
 	read Lat: number,
 	read Lon: number,
 	read Continent: string,
@@ -13,7 +44,7 @@ export type ServerRegion = {
 	read IATA: string,
 }
 
-const regions: { [string]: ServerRegion } = {
+const regions: { [string]: Region } = {
 	["UTK"] = table.freeze({ Lat = 11.222219, Lon = 169.851429, Continent = "OC", Country = "MH", IATA = "UTK" }),
 	["OCA"] = table.freeze({ Lat = 25.325399, Lon = -80.274803, Continent = "NA", Country = "US", IATA = "OCA" }),
 	["CSE"] = table.freeze({ Lat = 38.851918, Lon = -106.928341, Continent = "NA", Country = "US", IATA = "CSE" }),
@@ -9072,20 +9103,26 @@ table.freeze(regions)
 
 const ServerRegion = {}
 
-function ServerRegion.get(): ServerRegion
+--[=[
+	@within ServerRegion
+
+	Gets the server region.
+]=]
+function ServerRegion.get(): Region
 	const region = game.ServerRegion
 	assert(RunService:IsServer(), "ServerRegion.get() can only be called from the server")
 	return regions[region]
 end
 
-function ServerRegion.getAndDestroy(): ServerRegion
+--[=[
+	@within ServerRegion
+
+	Gets the server region, and then destroys the source ModuleScript to free up heap memory.
+]=]
+function ServerRegion.getAndDestroy(): Region
 	const region = ServerRegion.get()
 	task.defer(function() script:Destroy() end)
 	return region
-end
-
-function ServerRegion.findByIATA(iataCode: string): ServerRegion?
-	return regions[iataCode]
 end
 
 return table.freeze(ServerRegion)

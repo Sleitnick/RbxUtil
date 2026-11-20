@@ -158,9 +158,40 @@ const sourceBuf = {
 	"",
 	"-- This code was auto-generated. Do not modify.",
 	"",
+	"--[=[",
+	"\t@class ServerRegion",
+	"\t@server",
+	"",
+	"\tExtra information about a game server's region, referenced by `game.ServerRegion`, such as geographic coordinates",
+	"\tand country.",
+	"",
+	"\tSince this is a server-only module, ensure to list the package under `[server-dependencies]` within your",
+	"\t`wally.toml` file.",
+	"",
+	"\t:::warning Memory Usage",
+	"\tDue to how Luau works, this module uses upwards of 7MB of heap memory. Therefore, it is recommended to use the",
+	"\t`getAndDestroy()` function, which will destroy the ModuleScript after fetching the region information. This will",
+	"\tfree up the heap memory used. Call this function once and cache the result.",
+	"\t```lua",
+	"\t-- Custom ServerRegion ModuleScript which proxies the one-time call to getAndDestroy",
+	"\treturn require(ServerStorage.ServerPackages.ServerRegion).getAndDestroy()",
+	"\t```",
+	"\t:::",
+	"]=]",
+	"",
+	"--[=[",
+	"\t@within ServerRegion",
+	"\t@interface Region",
+	"\t.Lat number -- Latitude",
+	"\t.Lon number -- Longitude",
+	"\t.Continent string",
+	"\t.Country string",
+	"\t.IATA string -- Three-letter location identifier",
+	"]=]",
+	"",
 	'const RunService = game:GetService("RunService")',
 	"",
-	"export type ServerRegion = {",
+	"export type Region = {",
 	"\tread Lat: number,",
 	"\tread Lon: number,",
 	"\tread Continent: string,",
@@ -168,7 +199,7 @@ const sourceBuf = {
 	"\tread IATA: string,",
 	"}",
 	"",
-	"const regions: { [string]: ServerRegion } = {",
+	"const regions: { [string]: Region } = {",
 }
 
 for i, airport in airports do
@@ -183,20 +214,26 @@ table.insert(sourceBuf, "table.freeze(regions)")
 table.insert(sourceBuf, "")
 table.insert(sourceBuf, "const ServerRegion = {}")
 table.insert(sourceBuf, "")
-table.insert(sourceBuf, "function ServerRegion.get(): ServerRegion")
+table.insert(sourceBuf, "--[=[")
+table.insert(sourceBuf, "\t@within ServerRegion")
+table.insert(sourceBuf, "")
+table.insert(sourceBuf, "\tGets the server region.")
+table.insert(sourceBuf, "]=]")
+table.insert(sourceBuf, "function ServerRegion.get(): Region")
 table.insert(sourceBuf, "\tconst region = game.ServerRegion")
 table.insert(sourceBuf, '\tassert(RunService:IsServer(), "ServerRegion.get() can only be called from the server")')
 table.insert(sourceBuf, "\treturn regions[region]")
 table.insert(sourceBuf, "end")
 table.insert(sourceBuf, "")
-table.insert(sourceBuf, "function ServerRegion.getAndDestroy(): ServerRegion")
+table.insert(sourceBuf, "--[=[")
+table.insert(sourceBuf, "\t@within ServerRegion")
+table.insert(sourceBuf, "")
+table.insert(sourceBuf, "\tGets the server region, and then destroys the source ModuleScript to free up heap memory.")
+table.insert(sourceBuf, "]=]")
+table.insert(sourceBuf, "function ServerRegion.getAndDestroy(): Region")
 table.insert(sourceBuf, "\tconst region = ServerRegion.get()")
 table.insert(sourceBuf, "\ttask.defer(function() script:Destroy() end)")
 table.insert(sourceBuf, "\treturn region")
-table.insert(sourceBuf, "end")
-table.insert(sourceBuf, "")
-table.insert(sourceBuf, "function ServerRegion.findByIATA(iataCode: string): ServerRegion?")
-table.insert(sourceBuf, "\treturn regions[iataCode]")
 table.insert(sourceBuf, "end")
 table.insert(sourceBuf, "")
 table.insert(sourceBuf, "return table.freeze(ServerRegion)")
