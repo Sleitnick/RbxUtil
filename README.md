@@ -21,6 +21,7 @@
 | [Query](https://sleitnick.github.io/RbxUtil/api/Query) | `Query = "sleitnick/query@0.2.0"` | Query instances |
 | [Sequent](https://sleitnick.github.io/RbxUtil/api/Sequent) | `Sequent = "sleitnick/sequent@0.1.0"` | Sequent class |
 | [Ser](https://sleitnick.github.io/RbxUtil/api/Ser) | `Ser = "sleitnick/ser@1.0.5"` | Ser class for serialization and deserialization |
+| [ServerRegion](https://sleitnick.github.io/RbxUtil/api/ServerRegion) | `ServerRegion = "sleitnick/server-region@1.0.0"` | Server region information |
 | [Shake](https://sleitnick.github.io/RbxUtil/api/Shake) | `Shake = "sleitnick/shake@1.1.0"` | Shake class for making things shake |
 | [Signal](https://sleitnick.github.io/RbxUtil/api/Signal) | `Signal = "sleitnick/signal@2.0.3"` | Signal class |
 | [Silo](https://sleitnick.github.io/RbxUtil/api/Silo) | `Silo = "sleitnick/silo@0.2.0"` | State container class |
