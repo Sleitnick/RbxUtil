@@ -2,7 +2,7 @@
 --!strict
 
 --[=[
-	@class stream
+	@class Stream
 
 	The `stream` library allows a stream-like interface abstraction on top of buffers. This is useful
 	for reading or writing buffers without having to keep track of the current offset position.
@@ -42,7 +42,7 @@ export type Stream = {
 local stream = {}
 
 --[=[
-	@within stream
+	@within Stream
 
 	Create a stream around a new buffer with the given size in bytes.
 	
@@ -53,7 +53,7 @@ function stream.create(size: number): Stream
 end
 
 --[=[
-	@within stream
+	@within Stream
 
 	Create a stream around an existing buffer.
 ]=]
@@ -66,7 +66,7 @@ function stream.frombuffer(buf: buffer): Stream
 end
 
 --[=[
-	@within stream
+	@within Stream
 
 	Create a stream from an existing string.
 	
@@ -85,7 +85,7 @@ end
 -- Read
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.readu8(s: Stream): number
 	local n = buffer.readu8(s.b, s.o)
@@ -94,7 +94,7 @@ function stream.readu8(s: Stream): number
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.readi8(s: Stream): number
 	local n = buffer.readi8(s.b, s.o)
@@ -103,7 +103,7 @@ function stream.readi8(s: Stream): number
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.readu16(s: Stream): number
 	local n = buffer.readu16(s.b, s.o)
@@ -112,7 +112,7 @@ function stream.readu16(s: Stream): number
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.readi16(s: Stream): number
 	local n = buffer.readi16(s.b, s.o)
@@ -121,7 +121,7 @@ function stream.readi16(s: Stream): number
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.readu32(s: Stream): number
 	local n = buffer.readu32(s.b, s.o)
@@ -130,7 +130,7 @@ function stream.readu32(s: Stream): number
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.readi32(s: Stream): number
 	local n = buffer.readi32(s.b, s.o)
@@ -139,7 +139,7 @@ function stream.readi32(s: Stream): number
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.readf32(s: Stream): number
 	local n = buffer.readf32(s.b, s.o)
@@ -148,7 +148,7 @@ function stream.readf32(s: Stream): number
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.readf64(s: Stream): number
 	local n = buffer.readf64(s.b, s.o)
@@ -157,7 +157,7 @@ function stream.readf64(s: Stream): number
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.readstring(s: Stream, count: number): string
 	local str = buffer.readstring(s.b, s.o, count)
@@ -166,7 +166,7 @@ function stream.readstring(s: Stream, count: number): string
 end
 
 --[=[
-	@within stream
+	@within Stream
 
 	Reads a string previously written using `stream.writelstring`. This function
 	assumes that the length of the string is written at the beginning as a u32 int.
@@ -177,7 +177,7 @@ function stream.readlstring(s: Stream): string
 end
 
 --[=[
-	@within stream
+	@within Stream
 
 	Equivalent to `stream.readvectorf32`.
 ]=]
@@ -192,7 +192,7 @@ function stream.readvector(s: Stream): vector
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.readvectorf32(s: Stream): vector
 	local b = s.b
@@ -205,7 +205,7 @@ function stream.readvectorf32(s: Stream): vector
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.readvectoru32(s: Stream): vector
 	local b = s.b
@@ -218,7 +218,7 @@ function stream.readvectoru32(s: Stream): vector
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.readvectori32(s: Stream): vector
 	local b = s.b
@@ -231,7 +231,7 @@ function stream.readvectori32(s: Stream): vector
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.readvectoru16(s: Stream): vector
 	local b = s.b
@@ -244,7 +244,7 @@ function stream.readvectoru16(s: Stream): vector
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.readvectori16(s: Stream): vector
 	local b = s.b
@@ -257,7 +257,7 @@ function stream.readvectori16(s: Stream): vector
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.readvectoru8(s: Stream): vector
 	local b = s.b
@@ -270,7 +270,7 @@ function stream.readvectoru8(s: Stream): vector
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.readvectori8(s: Stream): vector
 	local b = s.b
@@ -286,7 +286,7 @@ end
 -- Write
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.writeu8(s: Stream, n: number)
 	buffer.writeu8(s.b, s.o, n)
@@ -294,7 +294,7 @@ function stream.writeu8(s: Stream, n: number)
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.writei8(s: Stream, n: number)
 	buffer.writei8(s.b, s.o, n)
@@ -302,7 +302,7 @@ function stream.writei8(s: Stream, n: number)
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.writeu16(s: Stream, n: number)
 	buffer.writeu16(s.b, s.o, n)
@@ -310,7 +310,7 @@ function stream.writeu16(s: Stream, n: number)
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.writei16(s: Stream, n: number)
 	buffer.writei16(s.b, s.o, n)
@@ -318,7 +318,7 @@ function stream.writei16(s: Stream, n: number)
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.writeu32(s: Stream, n: number)
 	buffer.writeu32(s.b, s.o, n)
@@ -326,7 +326,7 @@ function stream.writeu32(s: Stream, n: number)
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.writei32(s: Stream, n: number)
 	buffer.writei32(s.b, s.o, n)
@@ -334,7 +334,7 @@ function stream.writei32(s: Stream, n: number)
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.writef32(s: Stream, n: number)
 	buffer.writef32(s.b, s.o, n)
@@ -342,7 +342,7 @@ function stream.writef32(s: Stream, n: number)
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.writef64(s: Stream, n: number)
 	buffer.writef64(s.b, s.o, n)
@@ -350,7 +350,7 @@ function stream.writef64(s: Stream, n: number)
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.writestring(s: Stream, str: string, count: number?)
 	buffer.writestring(s.b, s.o, str, count)
@@ -358,7 +358,7 @@ function stream.writestring(s: Stream, str: string, count: number?)
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.writelstring(s: Stream, str: string, count: number?)
 	stream.writeu32(s, count or #str)
@@ -366,7 +366,7 @@ function stream.writelstring(s: Stream, str: string, count: number?)
 end
 
 --[=[
-	@within stream
+	@within Stream
 
 	Equivalent to `stream.writevectorf32`.
 ]=]
@@ -380,7 +380,7 @@ function stream.writevector(s: Stream, v: vector)
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.writevectorf32(s: Stream, v: vector)
 	local b = s.b
@@ -392,7 +392,7 @@ function stream.writevectorf32(s: Stream, v: vector)
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.writevectoru32(s: Stream, v: vector)
 	local b = s.b
@@ -404,7 +404,7 @@ function stream.writevectoru32(s: Stream, v: vector)
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.writevectori32(s: Stream, v: vector)
 	local b = s.b
@@ -416,7 +416,7 @@ function stream.writevectori32(s: Stream, v: vector)
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.writevectoru16(s: Stream, v: vector)
 	local b = s.b
@@ -428,7 +428,7 @@ function stream.writevectoru16(s: Stream, v: vector)
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.writevectori16(s: Stream, v: vector)
 	local b = s.b
@@ -440,7 +440,7 @@ function stream.writevectori16(s: Stream, v: vector)
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.writevectoru8(s: Stream, v: vector)
 	local b = s.b
@@ -452,7 +452,7 @@ function stream.writevectoru8(s: Stream, v: vector)
 end
 
 --[=[
-	@within stream
+	@within Stream
 ]=]
 function stream.writevectori8(s: Stream, v: vector)
 	local b = s.b
@@ -466,7 +466,7 @@ end
 -------------------------------------------------------------------------
 
 --[=[
-	@within stream
+	@within Stream
 
 	Returns the length of the backing buffer.
 ]=]
@@ -475,7 +475,7 @@ function stream.len(s: Stream): number
 end
 
 --[=[
-	@within stream
+	@within Stream
 
 	Returns the position of the stream's cursor.
 ]=]
@@ -484,7 +484,7 @@ function stream.pos(s: Stream): number
 end
 
 --[=[
-	@within stream
+	@within Stream
 
 	Copy `count` bytes from `source` into `target`. The provided streams' cursors are
 	incremented by `count`.
@@ -496,7 +496,7 @@ function stream.copy(target: Stream, source: Stream, count: number)
 end
 
 --[=[
-	@within stream
+	@within Stream
 
 	Copy `count` bytes from the `source` stream into the `target` buffer. The `source` stream
 	cursor is incremented by `count`.
@@ -507,7 +507,7 @@ function stream.copytobuffer(target: buffer, targetOffset: number, source: Strea
 end
 
 --[=[
-	@within stream
+	@within Stream
 
 	Copy `count` bytes from the `source` buffer (optionally offset by `sourceOffset`) into the
 	`target` stream. The `target` stream cursor is incremented by `count`.
@@ -518,7 +518,7 @@ function stream.copyfrombuffer(target: Stream, source: buffer, sourceOffset: num
 end
 
 --[=[
-	@within stream
+	@within Stream
 
 	Moves the cursor relative to the beginning of the stream.
 ]=]
@@ -530,7 +530,7 @@ function stream.seek(s: Stream, offset: number)
 end
 
 --[=[
-	@within stream
+	@within Stream
 
 	Moves the cursor backward relative to the end of the stream.
 ]=]
@@ -542,7 +542,7 @@ function stream.seekend(s: Stream, offset: number)
 end
 
 --[=[
-	@within stream
+	@within Stream
 
 	Moves the cursor forward relative to the current cursor position.
 ]=]
@@ -554,7 +554,7 @@ function stream.seekforward(s: Stream, offset: number)
 end
 
 --[=[
-	@within stream
+	@within Stream
 
 	Moves the cursor backward relative to the current cursor position.
 ]=]
@@ -566,7 +566,7 @@ function stream.seekbackward(s: Stream, offset: number)
 end
 
 --[=[
-	@within stream
+	@within Stream
 
 	Gets the backing buffer for the stream.
 ]=]
@@ -575,7 +575,7 @@ function stream.buffer(s: Stream): buffer
 end
 
 --[=[
-	@within stream
+	@within Stream
 
 	Returns the backing buffer as a string.
 ]=]
@@ -584,7 +584,7 @@ function stream.tostring(s: Stream): string
 end
 
 --[=[
-	@within stream
+	@within Stream
 
 	Returns `true` if the cursor is at the end of the stream.
 ]=]
