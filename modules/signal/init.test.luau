@@ -16,6 +16,15 @@ local function AwaitCondition(predicate: () -> boolean, timeout: number?)
 	end
 end
 
+local function DeferCondition(predicate: () -> any)
+	local thread = coroutine.running()
+	task.defer(function()
+		local result = predicate()
+		task.spawn(thread, result)
+	end)
+	return coroutine.yield()
+end
+
 return function(ctx: Test.TestContext)
 	local Signal = require(script.Parent)
 
@@ -67,9 +76,9 @@ return function(ctx: Test.TestContext)
 				value = v
 			end)
 			signal:FireDeferred(send)
-			ctx:Expect(AwaitCondition(function()
+			ctx:Expect(DeferCondition(function()
 				return (send == value)
-			end, 1)):ToBe(true)
+			end)):ToBe(true)
 		end)
 
 		ctx:Test("should be able to fire a reference based argument", function()
@@ -79,9 +88,9 @@ return function(ctx: Test.TestContext)
 				value = v
 			end)
 			signal:FireDeferred(send)
-			ctx:Expect(AwaitCondition(function()
+			ctx:Expect(DeferCondition(function()
 				return (send == value)
-			end, 1)):ToBe(true)
+			end)):ToBe(true)
 		end)
 	end)
 
@@ -141,6 +150,19 @@ return function(ctx: Test.TestContext)
 			signal:DisconnectAll()
 			ctx:Expect(NumConns()):ToBe(0)
 		end)
+
+		ctx:Test("should not fire deferred to all connections disconnected during the same resumption cycle", function()
+			local a = 0
+			signal:Connect(function()
+				a += 1
+			end)
+			signal:Fire()
+			signal:FireDeferred()
+			signal:DisconnectAll()
+			ctx:Expect(DeferCondition(function()
+				return a
+			end)):ToBe(1)
+		end)
 	end)
 
 	ctx:Describe("Disconnect", function()
@@ -182,9 +204,39 @@ return function(ctx: Test.TestContext)
 				a += 1
 			end)
 			signal:FireDeferred()
-			ctx:Expect(AwaitCondition(function()
-				return a == 3
-			end)):ToBe(true)
+			ctx:Expect(DeferCondition(function()
+				return a
+			end)):ToBe(3)
+		end)
+
+		ctx:Test("should not fire deferred to connections disconnected during the same resumption cycle", function()
+			local a = 0
+			local c = signal:Connect(function()
+				a += 1
+			end)
+			signal:Fire()
+			signal:FireDeferred()
+			c:Disconnect()
+			ctx:Expect(DeferCondition(function()
+				return a
+			end)):ToBe(1)
+		end)
+	end)
+
+	ctx:Describe("Destroy", function()
+		ctx:Test("should only fire to connections before the signal is destroyed", function()
+			local a = ""
+			signal:Connect(function(s: string)
+				a ..= s
+			end)
+			signal:Fire("a")
+			signal:FireDeferred("b")
+			signal:Destroy()
+			signal:Fire("c")
+			signal:FireDeferred("d")
+			ctx:Expect(DeferCondition(function()
+				return a
+			end)):ToBe("ab")
 		end)
 	end)
 end
