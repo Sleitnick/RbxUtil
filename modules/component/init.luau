@@ -309,6 +309,16 @@ function Component.new(config: ComponentConfig)
 	customComponent[KEY_TROVE] = Trove.new()
 	customComponent[KEY_EXTENSIONS] = config.Extensions or {}
 	customComponent[KEY_STARTED] = false
+	local hasShouldExtend = false
+	for _, extension in customComponent[KEY_EXTENSIONS] do
+		if type(extension.ShouldExtend) == "function" then
+			hasShouldExtend = true
+			break
+		end
+	end
+	if not hasShouldExtend then
+		customComponent[KEY_ACTIVE_EXTENSIONS] = customComponent[KEY_EXTENSIONS]
+	end
 	customComponent.Tag = config.Tag
 	customComponent.Started = customComponent[KEY_TROVE]:Construct(Signal)
 	customComponent.Stopped = customComponent[KEY_TROVE]:Construct(Signal)
@@ -320,7 +330,9 @@ end
 function Component:_instantiate(instance: Instance)
 	local component = setmetatable({}, self)
 	component.Instance = instance
-	component[KEY_ACTIVE_EXTENSIONS] = GetActiveExtensions(component, self[KEY_EXTENSIONS])
+	if self[KEY_ACTIVE_EXTENSIONS] == nil then
+		component[KEY_ACTIVE_EXTENSIONS] = GetActiveExtensions(component, self[KEY_EXTENSIONS])
+	end
 	if not ShouldConstruct(component) then
 		return nil
 	end
@@ -477,27 +489,27 @@ function Component:_setup()
 		end
 	end
 
+	local function IsInAncestorList(instance: Instance): boolean
+		for _, parent in ipairs(self[KEY_ANCESTORS]) do
+			if instance:IsDescendantOf(parent) then
+				return true
+			end
+		end
+		return false
+	end
+
 	local function StartWatchingInstance(instance)
 		if watchingInstances[instance] then
 			return
 		end
-		local function IsInAncestorList(): boolean
-			for _, parent in ipairs(self[KEY_ANCESTORS]) do
-				if instance:IsDescendantOf(parent) then
-					return true
-				end
-			end
-			return false
-		end
-		local ancestryChangedHandle = self[KEY_TROVE]:Connect(instance.AncestryChanged, function(_, parent)
-			if parent and IsInAncestorList() then
+		watchingInstances[instance] = instance.AncestryChanged:Connect(function(_, parent)
+			if parent and IsInAncestorList(instance) then
 				TryConstructComponent(instance)
 			else
 				TryDeconstructComponent(instance)
 			end
 		end)
-		watchingInstances[instance] = ancestryChangedHandle
-		if IsInAncestorList() then
+		if IsInAncestorList(instance) then
 			TryConstructComponent(instance)
 		end
 	end
@@ -510,11 +522,17 @@ function Component:_setup()
 		local watchHandle = watchingInstances[instance]
 		if watchHandle then
 			watchingInstances[instance] = nil
-			self[KEY_TROVE]:Remove(watchHandle)
+			watchHandle:Disconnect()
 		end
 		TryDeconstructComponent(instance)
 	end
 
+	self[KEY_TROVE]:Add(function()
+		for _, watchHandle in watchingInstances do
+			watchHandle:Disconnect()
+		end
+		table.clear(watchingInstances)
+	end)
 	self[KEY_TROVE]:Connect(CollectionService:GetInstanceAddedSignal(self.Tag), InstanceTagged)
 	self[KEY_TROVE]:Connect(CollectionService:GetInstanceRemovedSignal(self.Tag), InstanceUntagged)
 
