@@ -117,7 +117,7 @@ for i, v in header do
 		break
 	end
 end
-assert(iataIdx ~= 0)
+assert(iataIdx ~= 0, "IATA index not found")
 
 const airports = {}
 
@@ -202,7 +202,7 @@ const sourceBuf = {
 	"const regions: { [string]: Region } = {",
 }
 
-for i, airport in airports do
+for _, airport in airports do
 	table.insert(
 		sourceBuf,
 		`\t["{airport.IATA}"] = table.freeze(\{ Lat = {airport.Lat}, Lon = {airport.Lon}, Continent = "{airport.Continent}", Country = "{airport.Country}", IATA = "{airport.IATA}" }),`
@@ -232,7 +232,9 @@ table.insert(sourceBuf, "\tGets the server region, and then destroys the source 
 table.insert(sourceBuf, "]=]")
 table.insert(sourceBuf, "function ServerRegion.getAndDestroy(): Region")
 table.insert(sourceBuf, "\tconst region = ServerRegion.get()")
-table.insert(sourceBuf, "\ttask.defer(function() script:Destroy() end)")
+table.insert(sourceBuf, "\ttask.defer(function()")
+table.insert(sourceBuf, "\t\tscript:Destroy()")
+table.insert(sourceBuf, "\tend)")
 table.insert(sourceBuf, "\treturn region")
 table.insert(sourceBuf, "end")
 table.insert(sourceBuf, "")

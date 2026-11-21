@@ -18,7 +18,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Setup Rokit
-      uses: CompeyDev/setup-rokit@v0.1.2
+      uses: CompeyDev/setup-rokit@v0.2.1
 
     - name: Lint
       run: |
@@ -30,10 +30,10 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    - uses: JohnnyMorganz/stylua-action@v4
+    - uses: JohnnyMorganz/stylua-action@v5
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        version: v2.3.0
+        version: v2.6.0
         args: --check ./modules
   
   # tests:

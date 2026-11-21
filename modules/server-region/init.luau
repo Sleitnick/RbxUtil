@@ -9121,7 +9121,9 @@ end
 ]=]
 function ServerRegion.getAndDestroy(): Region
 	const region = ServerRegion.get()
-	task.defer(function() script:Destroy() end)
+	task.defer(function()
+		script:Destroy()
+	end)
 	return region
 end
 
