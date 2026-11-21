@@ -30,7 +30,7 @@
       "name": "Component",
       "description": "Component class",
       "has_dependencies": true,
-      "version": "2.4.8",
+      "version": "2.4.9",
       "path": "modules/component",
       "files": [
         "init.luau"
@@ -172,6 +172,17 @@
       ]
     },
     {
+      "name": "ServerRegion",
+      "description": "Server region information",
+      "has_dependencies": false,
+      "version": "1.0.0",
+      "path": "modules/server-region",
+      "files": [
+        "_codegen.luau",
+        "init.luau"
+      ]
+    },
+    {
       "name": "Shake",
       "description": "Shake class for making things shake",
       "has_dependencies": false,
@@ -297,9 +308,9 @@
     },
     {
       "name": "TypedRemote",
-      "description": "Simple networking package for typed RemoteEvents and RemoteFunctions",
+      "description": "Simple networking package for typed RemoteFunctions, RemoteEvents, and UnreliableRemoteEvents",
       "has_dependencies": false,
-      "version": "0.3.0",
+      "version": "1.0.0",
       "path": "modules/typed-remote",
       "files": [
         "init.luau"
